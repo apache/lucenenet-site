@@ -1,0 +1,25 @@
+var searchData=
+[
+  ['ignoringsingleprefixorsuffixshinglebydefault',['IgnoringSinglePrefixOrSuffixShingleByDefault',['../df/d20/class_lucene_1_1_net_1_1_analysis_1_1_shingle_1_1_shingle_matrix_filter.html#affcc6c28d33ed4f37664fcfebb8f785c',1,'Lucene::Net::Analysis::Shingle::ShingleMatrixFilter']]],
+  ['image',['image',['../de/d58/class_lucene_1_1_net_1_1_query_parsers_1_1_token.html#a44af6117c864fba2aba5bd9b7ac791ae',1,'Lucene.Net.QueryParsers.Token.image()'],['../d7/d4e/class_lucene_1_1_net_1_1_demo_1_1_html_1_1_token.html#af0703e98d4a765467758250333ddd54c',1,'Lucene.Net.Demo.Html.Token.image()']]],
+  ['includedocs',['includeDocs',['../d4/dea/class_lucene_1_1_net_1_1_index_1_1_field_enumerator_3_01_t_01_4.html#ae6765a92d1ed66f04689cdb54d3c1f1f',1,'Lucene::Net::Index::FieldEnumerator&lt; T &gt;']]],
+  ['index_5fextensions',['INDEX_EXTENSIONS',['../d0/d52/class_lucene_1_1_net_1_1_index_1_1_index_file_names.html#aeff5ebb5f5df4bf98a25feaec1cc1bee',1,'Lucene::Net::Index::IndexFileNames']]],
+  ['index_5fextensions_5fin_5fcompound_5ffile',['INDEX_EXTENSIONS_IN_COMPOUND_FILE',['../d0/d52/class_lucene_1_1_net_1_1_index_1_1_index_file_names.html#a623dbb922a68910d98fe83639a1607b5',1,'Lucene::Net::Index::IndexFileNames']]],
+  ['indexed',['INDEXED',['../da/d4d/class_lucene_1_1_net_1_1_index_1_1_index_reader_1_1_field_option.html#a914f367359614ee720cf9bbd5071689e',1,'Lucene::Net::Index::IndexReader::FieldOption']]],
+  ['indexed_5fno_5ftermvector',['INDEXED_NO_TERMVECTOR',['../da/d4d/class_lucene_1_1_net_1_1_index_1_1_index_reader_1_1_field_option.html#a9b0831095ca12039319ec4bcff7c8b99',1,'Lucene::Net::Index::IndexReader::FieldOption']]],
+  ['indexed_5fwith_5ftermvector',['INDEXED_WITH_TERMVECTOR',['../da/d4d/class_lucene_1_1_net_1_1_index_1_1_index_reader_1_1_field_option.html#a904597b437bc1e075fcd99f9d9854066',1,'Lucene::Net::Index::IndexReader::FieldOption']]],
+  ['indexorder',['INDEXORDER',['../d1/da9/class_lucene_1_1_net_1_1_search_1_1_sort.html#a378a01bda54bbfb4ba860a069c76de39',1,'Lucene::Net::Search::Sort']]],
+  ['information_5fseparator_5fmarker',['INFORMATION_SEPARATOR_MARKER',['../d8/d2f/class_lucene_1_1_net_1_1_analysis_1_1_reverse_1_1_reverse_string_filter.html#a08c6d71c36fbee28fb16ee0eb21774f7',1,'Lucene::Net::Analysis::Reverse::ReverseStringFilter']]],
+  ['instances',['Instances',['../d9/de9/class_lucene_1_1_net_1_1_support_1_1_closeable_thread_local_profiler.html#a798278c3e13ff0f1455afcff60591330',1,'Lucene::Net::Support::CloseableThreadLocalProfiler']]],
+  ['int',['INT',['../d3/d7e/class_lucene_1_1_net_1_1_search_1_1_function_1_1_field_score_query_1_1_type.html#a0bed4cfe167cec1b6fb0bd2c4f4dfb1e',1,'Lucene.Net.Search.Function.FieldScoreQuery.Type.INT()'],['../d7/da5/class_lucene_1_1_net_1_1_search_1_1_sort_field.html#a65ce58b6d75a00f7b64282fdc93cdaaf',1,'Lucene.Net.Search.SortField.INT()']]],
+  ['internaldoc',['internalDoc',['../d5/d25/class_lucene_1_1_net_1_1_index_1_1_abstract_all_term_docs.html#a6106b99c25cf3e83360e2f9dc7b4d98a',1,'Lucene::Net::Index::AbstractAllTermDocs']]],
+  ['internalnocfsratio',['internalNoCFSRatio',['../db/d3e/class_lucene_1_1_net_1_1_index_1_1_log_merge_policy.html#ad787f9167234411197eb1d575dba1d01',1,'Lucene::Net::Index::LogMergePolicy']]],
+  ['internalsizeinbytes',['internalSizeInBytes',['../da/dc7/class_lucene_1_1_net_1_1_store_1_1_r_a_m_directory.html#a4a2ece5829a67a817e57d837fc3b075d',1,'Lucene::Net::Store::RAMDirectory']]],
+  ['interner',['interner',['../d4/d2c/class_lucene_1_1_net_1_1_util_1_1_string_helper.html#ae6948619f86491bedcfb4a65fc65afa2',1,'Lucene::Net::Util::StringHelper']]],
+  ['intersects',['Intersects',['../df/d5c/class_lucene_1_1_net_1_1_spatial_1_1_queries_1_1_spatial_operation.html#ace38f3b265b17f2b4fbdd3adf0f08bd6',1,'Lucene::Net::Spatial::Queries::SpatialOperation']]],
+  ['intoffset',['intOffset',['../d4/dc3/class_lucene_1_1_net_1_1_index_1_1_int_block_pool.html#a22d365e39d1b99ef34f6616a514590b1',1,'Lucene::Net::Index::IntBlockPool']]],
+  ['intupto',['intUpto',['../d4/dc3/class_lucene_1_1_net_1_1_index_1_1_int_block_pool.html#a602c33b17d94375400072c62398bf389',1,'Lucene::Net::Index::IntBlockPool']]],
+  ['isdisjointto',['IsDisjointTo',['../df/d5c/class_lucene_1_1_net_1_1_spatial_1_1_queries_1_1_spatial_operation.html#ae90f99aa7557469f794d91837e9a0a6f',1,'Lucene::Net::Spatial::Queries::SpatialOperation']]],
+  ['isequalto',['IsEqualTo',['../df/d5c/class_lucene_1_1_net_1_1_spatial_1_1_queries_1_1_spatial_operation.html#aef2a2454a5c75ff772575555791c9c6c',1,'Lucene::Net::Spatial::Queries::SpatialOperation']]],
+  ['iswithin',['IsWithin',['../df/d5c/class_lucene_1_1_net_1_1_spatial_1_1_queries_1_1_spatial_operation.html#a44b2abfd6c808de38e79aff8b640aa42',1,'Lucene::Net::Spatial::Queries::SpatialOperation']]]
+];

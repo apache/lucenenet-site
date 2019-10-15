@@ -1,0 +1,9 @@
+var searchData=
+[
+  ['hasattributes',['HasAttributes',['../d9/de7/class_lucene_1_1_net_1_1_util_1_1_attribute_source.html#a7335286469fdd008e4a7d40cc97056ab',1,'Lucene::Net::Util::AttributeSource']]],
+  ['haschanged',['HasChanged',['../d9/d53/class_lucene_1_1_net_1_1_distributed_1_1_configuration_1_1_current_index.html#a10f541d40e0575473ed1a332c2292120',1,'Lucene::Net::Distributed::Configuration::CurrentIndex']]],
+  ['hasdeletions',['HasDeletions',['../de/d11/class_lucene_1_1_net_1_1_index_1_1_directory_reader.html#aa45d3065823ff607c17a05c3551e9f23',1,'Lucene.Net.Index.DirectoryReader.HasDeletions()'],['../db/dc4/class_lucene_1_1_net_1_1_index_1_1_filter_index_reader.html#a26ecc8aec2710b246fe61e8ef79b92dc',1,'Lucene.Net.Index.FilterIndexReader.HasDeletions()'],['../d6/d27/class_lucene_1_1_net_1_1_index_1_1_index_reader.html#ae5873f4e3a1253dd2cad0849eb74d9e0',1,'Lucene.Net.Index.IndexReader.HasDeletions()'],['../d6/d9d/class_lucene_1_1_net_1_1_index_1_1_multi_reader.html#a1d7b9a7e74ab33572dad94758dc15120',1,'Lucene.Net.Index.MultiReader.HasDeletions()'],['../d3/d17/class_lucene_1_1_net_1_1_index_1_1_parallel_reader.html#ab6878ba1e2fdbafbde12aeed28056802',1,'Lucene.Net.Index.ParallelReader.HasDeletions()'],['../dc/d8f/class_lucene_1_1_net_1_1_index_1_1_segment_reader.html#a12bf3b313403b46f8d9824823e319b96',1,'Lucene.Net.Index.SegmentReader.HasDeletions()']]],
+  ['hasprox',['HasProx',['../d7/d6c/class_lucene_1_1_net_1_1_index_1_1_segment_info.html#a9ebf983a9a59015c254cd4c78e186139',1,'Lucene::Net::Index::SegmentInfo']]],
+  ['hitcount',['HitCount',['../d9/dca/class_lucene_1_1_net_1_1_search_1_1_simple_faceted_search_1_1_hits_per_facet.html#a0dc27120435d17491e977fe5a1174353',1,'Lucene::Net::Search::SimpleFacetedSearch::HitsPerFacet']]],
+  ['hitsperfacet',['HitsPerFacet',['../de/d2d/class_lucene_1_1_net_1_1_search_1_1_simple_faceted_search_1_1_hits.html#aea495b139805038c77e62eb49643a2da',1,'Lucene::Net::Search::SimpleFacetedSearch::Hits']]]
+];
