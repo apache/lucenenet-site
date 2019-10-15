@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['kaf',['KAF',['../d8/d50/class_lucene_1_1_net_1_1_analysis_1_1_a_r_1_1_arabic_stemmer.html#ab15a948b06e597bafd1f680fe2c5f708',1,'Lucene.Net.Analysis.AR.ArabicStemmer.KAF()'],['../dc/dd1/class_lucene_1_1_net_1_1_analysis_1_1_fa_1_1_persian_normalizer.html#a8de867e616a9609d6b5f2ad2ac78446d',1,'Lucene.Net.Analysis.Fa.PersianNormalizer.KAF()']]],
+  ['kasra',['KASRA',['../de/d99/class_lucene_1_1_net_1_1_analysis_1_1_a_r_1_1_arabic_normalizer.html#a6d3b7b1fc9fc0a71345dbc35d3ff7190',1,'Lucene::Net::Analysis::AR::ArabicNormalizer']]],
+  ['kasratan',['KASRATAN',['../de/d99/class_lucene_1_1_net_1_1_analysis_1_1_a_r_1_1_arabic_normalizer.html#a67cc8e78008c02ac92b62c4332739fc1',1,'Lucene::Net::Analysis::AR::ArabicNormalizer']]],
+  ['keepmode',['KeepMode',['../d7/d17/class_lucene_1_1_net_1_1_search_1_1_duplicate_filter.html#a715517d2e145c442512fe9bd8108d3e9',1,'Lucene::Net::Search::DuplicateFilter']]],
+  ['keeponlylastcommitdeletionpolicy',['KeepOnlyLastCommitDeletionPolicy',['../d8/d88/class_lucene_1_1_net_1_1_index_1_1_keep_only_last_commit_deletion_policy.html',1,'Lucene::Net::Index']]],
+  ['keeponlylastcommitdeletionpolicy_2ecs',['KeepOnlyLastCommitDeletionPolicy.cs',['../d9/d05/_keep_only_last_commit_deletion_policy_8cs.html',1,'']]],
+  ['keheh',['KEHEH',['../dc/dd1/class_lucene_1_1_net_1_1_analysis_1_1_fa_1_1_persian_normalizer.html#a6f88296d573f2eae8367d1e417935683',1,'Lucene::Net::Analysis::Fa::PersianNormalizer']]],
+  ['key',['Key',['../d1/d5c/interface_lucene_1_1_net_1_1_messages_1_1_message.html#a8e8cba4265f86a00f5d7f14c1bd0bb77',1,'Lucene.Net.Messages.Message.Key()'],['../db/d8d/class_lucene_1_1_net_1_1_messages_1_1_message_impl.html#a54ba52792c6505c1fe0cd28ed903325b',1,'Lucene.Net.Messages.MessageImpl.Key()']]],
+  ['keycomparer_3c_20tkey_2c_20tvalue_20_3e',['KeyComparer&lt; TKey, TValue &gt;',['../d4/d00/class_lucene_1_1_net_1_1_index_1_1_memory_1_1_term_comparer.html#a8dc091ea0a3616af5b09414b872b2ab9',1,'Lucene::Net::Index::Memory::TermComparer']]],
+  ['keycount',['KeyCount',['../dc/d21/class_lucene_1_1_net_1_1_util_1_1_cache_1_1_segment_cache_3_01_t_01_4.html#aa77f8b41d021438180735e7cc9a29b34',1,'Lucene::Net::Util::Cache::SegmentCache&lt; T &gt;']]],
+  ['keys',['Keys',['../df/d05/class_lucene_1_1_net_1_1_support_1_1_hash_map_3_01_t_key_00_01_t_value_01_4.html#ae70897c4d190b88a25b908d1d8769e53',1,'Lucene.Net.Support.HashMap&lt; TKey, TValue &gt;.Keys()'],['../da/d81/class_lucene_1_1_net_1_1_support_1_1_weak_dictionary_3_01_t_key_00_01_t_value_01_4.html#ac6806f89e811bc72388b9230c63af491',1,'Lucene.Net.Support.WeakDictionary&lt; TKey, TValue &gt;.Keys()']]],
+  ['keyset',['KeySet',['../d7/de7/class_lucene_1_1_net_1_1_util_1_1_cache_1_1_simple_map_cache_3_01_t_key_00_01_t_value_01_4.html#abaa06d4d7917ecfc68ad12a4e6a10eea',1,'Lucene::Net::Util::Cache::SimpleMapCache&lt; TKey, TValue &gt;']]],
+  ['keywordanalyzer',['KeywordAnalyzer',['../df/d85/class_lucene_1_1_net_1_1_analysis_1_1_keyword_analyzer.html',1,'Lucene::Net::Analysis']]],
+  ['keywordanalyzer',['KeywordAnalyzer',['../df/d85/class_lucene_1_1_net_1_1_analysis_1_1_keyword_analyzer.html#ae8dfedf5d71b7bd2a3bdf5317dd4cb08',1,'Lucene::Net::Analysis::KeywordAnalyzer']]],
+  ['keywordanalyzer_2ecs',['KeywordAnalyzer.cs',['../d9/dfb/_keyword_analyzer_8cs.html',1,'']]],
+  ['keywordtokenizer',['KeywordTokenizer',['../d7/d3a/class_lucene_1_1_net_1_1_analysis_1_1_keyword_tokenizer.html#a423746f4ec5de24112109cda90962b82',1,'Lucene.Net.Analysis.KeywordTokenizer.KeywordTokenizer(System.IO.TextReader input)'],['../d7/d3a/class_lucene_1_1_net_1_1_analysis_1_1_keyword_tokenizer.html#a0071eebe48412a5b27ebaa2fca5c6eb4',1,'Lucene.Net.Analysis.KeywordTokenizer.KeywordTokenizer(System.IO.TextReader input, int bufferSize)'],['../d7/d3a/class_lucene_1_1_net_1_1_analysis_1_1_keyword_tokenizer.html#a978a10cf937c2850a7699d4f6357a250',1,'Lucene.Net.Analysis.KeywordTokenizer.KeywordTokenizer(AttributeSource source, System.IO.TextReader input, int bufferSize)'],['../d7/d3a/class_lucene_1_1_net_1_1_analysis_1_1_keyword_tokenizer.html#aa3fb99956cc8a91796261295450c89b2',1,'Lucene.Net.Analysis.KeywordTokenizer.KeywordTokenizer(AttributeFactory factory, System.IO.TextReader input, int bufferSize)']]],
+  ['keywordtokenizer',['KeywordTokenizer',['../d7/d3a/class_lucene_1_1_net_1_1_analysis_1_1_keyword_tokenizer.html',1,'Lucene::Net::Analysis']]],
+  ['keywordtokenizer_2ecs',['KeywordTokenizer.cs',['../d0/dbb/_keyword_tokenizer_8cs.html',1,'']]],
+  ['keywordtokenstream_2ecs',['KeywordTokenStream.cs',['../dc/d0f/_keyword_token_stream_8cs.html',1,'']]],
+  ['kind',['kind',['../de/d58/class_lucene_1_1_net_1_1_query_parsers_1_1_token.html#a3f99a183fba330c95d9a04bc62b74805',1,'Lucene.Net.QueryParsers.Token.kind()'],['../d7/d4e/class_lucene_1_1_net_1_1_demo_1_1_html_1_1_token.html#aace4ade58b2af1232adcc46ed8c96f59',1,'Lucene.Net.Demo.Html.Token.kind()']]],
+  ['km_5fuse_5ffirst_5foccurrence',['KM_USE_FIRST_OCCURRENCE',['../d7/d17/class_lucene_1_1_net_1_1_search_1_1_duplicate_filter.html#a9f3e5f8696a70f0e07992b2aa75cf2fd',1,'Lucene::Net::Search::DuplicateFilter']]],
+  ['km_5fuse_5flast_5foccurrence',['KM_USE_LAST_OCCURRENCE',['../d7/d17/class_lucene_1_1_net_1_1_search_1_1_duplicate_filter.html#a8f2af9aa9abcecae2d8d9e7ec2d703b9',1,'Lucene::Net::Search::DuplicateFilter']]],
+  ['kpstemmer',['KpStemmer',['../db/da5/class_s_f_1_1_snowball_1_1_ext_1_1_kp_stemmer.html#a9d6f4a22206fd2c434cad31adac434d5',1,'SF::Snowball::Ext::KpStemmer']]],
+  ['kpstemmer',['KpStemmer',['../db/da5/class_s_f_1_1_snowball_1_1_ext_1_1_kp_stemmer.html',1,'SF::Snowball::Ext']]],
+  ['kpstemmer_2ecs',['KpStemmer.cs',['../de/de3/_kp_stemmer_8cs.html',1,'']]]
+];
