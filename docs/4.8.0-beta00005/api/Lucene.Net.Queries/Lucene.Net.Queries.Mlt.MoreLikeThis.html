@@ -1,0 +1,1507 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class MoreLikeThis
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class MoreLikeThis
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis">
+  
+  
+  <h1 id="Lucene_Net_Queries_Mlt_MoreLikeThis" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis" class="text-break">Class MoreLikeThis
+  </h1>
+  <div class="markdown level0 summary"><p>Generate &quot;more like this&quot; similarity queries.
+Based on this mail:</p>
+<pre><code>Lucene does let you access the document frequency of terms, with <a class="xref" href="../Lucene.Net/Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_DocFreq_Lucene_Net_Index_Term_">DocFreq(Term)</a>.
+Term frequencies can be computed by re-tokenizing the text, which, for a single document,
+is usually fast enough.  But looking up the <a class="xref" href="../Lucene.Net/Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_DocFreq_Lucene_Net_Index_Term_">DocFreq(Term)</a> of every term in the document is
+probably too slow.
+<p>
+You can use some heuristics to prune the set of terms, to avoid calling <a class="xref" href="../Lucene.Net/Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_DocFreq_Lucene_Net_Index_Term_">DocFreq(Term)</a> too much,
+or at all.  Since you&apos;re trying to maximize a tf*idf score, you&apos;re probably most interested
+in terms with a high tf. Choosing a tf threshold even as low as two or three will radically
+reduce the number of terms under consideration.  Another heuristic is that terms with a
+high idf (i.e., a low df) tend to be longer.  So you could threshold the terms by the
+number of characters, not selecting anything less than, e.g., six or seven characters.
+With these sorts of heuristics you can usually find small set of, e.g., ten or fewer terms
+that do a pretty good job of characterizing a document.
+<p>
+It all depends on what you&apos;re trying to do.  If you&apos;re trying to eek out that last percent
+of precision and recall regardless of computational difficulty so that you can win a TREC
+competition, then the techniques I mention above are useless.  But if you&apos;re trying to
+provide a &quot;more like this&quot; button on a search results page that does a decent job and has
+good performance, such techniques might be useful.
+<p>
+An efficient, effective &quot;more-like-this&quot; query generator would be a great contribution, if
+anyone&apos;s interested.  I&apos;d imagine that it would take a Reader or a String (the document&apos;s
+text), analyzer Analyzer, and return a set of representative terms using heuristics like those
+above.  The frequency and length thresholds could be parameters, etc.
+<p>
+Doug</code></pre>
+<p><p>
+<p>
+<p>
+<strong>Initial Usage</strong>
+<p>
+This class has lots of options to try to make it efficient and flexible.
+The simplest possible usage is as follows. The bold
+fragment is specific to this class.
+<p>
+<pre><code>IndexReader ir = ...
+IndexSearcher is = ...
+
+MoreLikeThis mlt = new MoreLikeThis(ir);
+TextReader target = ... // orig source of doc you want to find similarities to
+Query query = mlt.Like(target);
+
+Hits hits = is.Search(query);
+// now the usual iteration thru &apos;hits&apos; - the only thing to watch for is to make sure
+//you ignore the doc if it matches your &apos;target&apos; document, as it should be similar to itself</code></pre>
+<p><p>
+Thus you:
+<ul><li>do your normal, Lucene setup for searching,</li><li>create a MoreLikeThis,</li><li>get the text of the doc you want to find similarities to</li><li>then call one of the <a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_Like_System_IO_TextReader_System_String_">Like(TextReader, String)</a> calls to generate a similarity query</li><li>call the searcher to find the similar docs</li></ul>
+<p>
+<strong>More Advanced Usage</strong>
+<p>
+You may want to use the setter for <a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_FieldNames">FieldNames</a> so you can examine
+multiple fields (e.g. body and title) for similarity.
+<p>
+<p>
+Depending on the size of your index and the size and makeup of your documents you
+may want to call the other set methods to control how the similarity queries are
+generated:
+<ul><li><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_MinTermFreq">MinTermFreq</a></li><li><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_MinDocFreq">MinDocFreq</a></li><li><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_MaxDocFreq">MaxDocFreq</a></li><li><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_SetMaxDocFreqPct_System_Int32_">SetMaxDocFreqPct(Int32)</a></li><li><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_MinWordLen">MinWordLen</a></li><li><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_MaxWordLen">MaxWordLen</a></li><li><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_MaxQueryTerms">MaxQueryTerms</a></li><li><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_MaxNumTokensParsed">MaxNumTokensParsed</a></li><li><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_StopWords">StopWords</a></li></ul></p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">MoreLikeThis</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Queries.Mlt.html">Lucene.Net.Queries.Mlt</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Queries.dll</h6>
+  <h5 id="Lucene_Net_Queries_Mlt_MoreLikeThis_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class MoreLikeThis</code></pre>
+  </div>
+  <h5 id="Lucene_Net_Queries_Mlt_MoreLikeThis_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>Changes: Mark Harwood 29/02/04
+Some bugfixing, some refactoring, some optimisation.</p>
+<ul>
+<li>bugfix: retrieveTerms(int docNum) was not working for indexes without a termvector -added missing code</li>
+<li>bugfix: No significant terms being created for fields with a termvector - because
+was only counting one occurrence per term/field pair in calculations(ie not including frequency info from TermVector)</li>
+<li>refactor: moved common code into isNoiseWord()</li>
+<li>optimise: when no termvector support available - used maxNumTermsParsed to limit amount of tokenization</li>
+</ul>
+</div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis__ctor_Lucene_Net_Index_IndexReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.%23ctor(Lucene.Net.Index.IndexReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L225">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis__ctor_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.#ctor*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis__ctor_Lucene_Net_Index_IndexReader_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.#ctor(Lucene.Net.Index.IndexReader)">MoreLikeThis(IndexReader)</h4>
+  <div class="markdown level1 summary"><p>Constructor requiring an <a class="xref" href="../Lucene.Net/Lucene.Net.Index.IndexReader.html">IndexReader</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MoreLikeThis(IndexReader ir)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Index.IndexReader.html">IndexReader</a></td>
+        <td><span class="parametername">ir</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis__ctor_Lucene_Net_Index_IndexReader_Lucene_Net_Search_Similarities_TFIDFSimilarity_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.%23ctor(Lucene.Net.Index.IndexReader%2CLucene.Net.Search.Similarities.TFIDFSimilarity)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L230">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis__ctor_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.#ctor*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis__ctor_Lucene_Net_Index_IndexReader_Lucene_Net_Search_Similarities_TFIDFSimilarity_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.#ctor(Lucene.Net.Index.IndexReader,Lucene.Net.Search.Similarities.TFIDFSimilarity)">MoreLikeThis(IndexReader, TFIDFSimilarity)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public MoreLikeThis(IndexReader ir, TFIDFSimilarity sim)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Index.IndexReader.html">IndexReader</a></td>
+        <td><span class="parametername">ir</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Search.Similarities.TFIDFSimilarity.html">TFIDFSimilarity</a></td>
+        <td><span class="parametername">sim</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_BOOST.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_BOOST%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L157">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_BOOST" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_BOOST">DEFAULT_BOOST</h4>
+  <div class="markdown level1 summary"><p>Boost terms in query based on score.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly bool DEFAULT_BOOST</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_BOOST_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_ApplyBoost">ApplyBoost</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_FIELD_NAMES.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_FIELD_NAMES%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L163">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_FIELD_NAMES" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_FIELD_NAMES">DEFAULT_FIELD_NAMES</h4>
+  <div class="markdown level1 summary"><p>Default field names. Null is used to specify that the field names should be looked
+up at runtime from the provided reader.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly string[] DEFAULT_FIELD_NAMES</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_DOC_FREQ.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_MAX_DOC_FREQ%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L151">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_DOC_FREQ" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_MAX_DOC_FREQ">DEFAULT_MAX_DOC_FREQ</h4>
+  <div class="markdown level1 summary"><p>Ignore words which occur in more than this many docs.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int DEFAULT_MAX_DOC_FREQ</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_DOC_FREQ_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_MaxDocFreq">MaxDocFreq</a></div>
+      <div><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_SetMaxDocFreqPct_System_Int32_">SetMaxDocFreqPct(Int32)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_NUM_TOKENS_PARSED.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_MAX_NUM_TOKENS_PARSED%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L132">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_NUM_TOKENS_PARSED" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_MAX_NUM_TOKENS_PARSED">DEFAULT_MAX_NUM_TOKENS_PARSED</h4>
+  <div class="markdown level1 summary"><p>Default maximum number of tokens to parse in each example doc field that is not stored with TermVector support.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int DEFAULT_MAX_NUM_TOKENS_PARSED</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_NUM_TOKENS_PARSED_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_MaxNumTokensParsed">MaxNumTokensParsed</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_QUERY_TERMS.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_MAX_QUERY_TERMS%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L189">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_QUERY_TERMS" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_MAX_QUERY_TERMS">DEFAULT_MAX_QUERY_TERMS</h4>
+  <div class="markdown level1 summary"><p>Return a Query with no more than this many terms.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int DEFAULT_MAX_QUERY_TERMS</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_QUERY_TERMS_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="../Lucene.Net/Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a></div>
+      <div><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_MaxQueryTerms">MaxQueryTerms</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_WORD_LENGTH.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_MAX_WORD_LENGTH%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L175">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_WORD_LENGTH" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_MAX_WORD_LENGTH">DEFAULT_MAX_WORD_LENGTH</h4>
+  <div class="markdown level1 summary"><p>Ignore words greater than this length or if 0 then this has no effect.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int DEFAULT_MAX_WORD_LENGTH</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_WORD_LENGTH_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_MaxWordLen">MaxWordLen</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MIN_DOC_FREQ.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_MIN_DOC_FREQ%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L144">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MIN_DOC_FREQ" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_MIN_DOC_FREQ">DEFAULT_MIN_DOC_FREQ</h4>
+  <div class="markdown level1 summary"><p>Ignore words which do not occur in at least this many docs.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int DEFAULT_MIN_DOC_FREQ</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MIN_DOC_FREQ_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_MinDocFreq">MinDocFreq</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MIN_TERM_FREQ.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_MIN_TERM_FREQ%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L138">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MIN_TERM_FREQ" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_MIN_TERM_FREQ">DEFAULT_MIN_TERM_FREQ</h4>
+  <div class="markdown level1 summary"><p>Ignore terms with less than this frequency in the source doc.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int DEFAULT_MIN_TERM_FREQ</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MIN_TERM_FREQ_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_MinTermFreq">MinTermFreq</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MIN_WORD_LENGTH.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_MIN_WORD_LENGTH%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L169">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MIN_WORD_LENGTH" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_MIN_WORD_LENGTH">DEFAULT_MIN_WORD_LENGTH</h4>
+  <div class="markdown level1 summary"><p>Ignore words less than this length or if 0 then this has no effect.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int DEFAULT_MIN_WORD_LENGTH</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MIN_WORD_LENGTH_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_MinWordLen">MinWordLen</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_STOP_WORDS.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_STOP_WORDS%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L182">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_STOP_WORDS" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.DEFAULT_STOP_WORDS">DEFAULT_STOP_WORDS</h4>
+  <div class="markdown level1 summary"><p>Default set of stopwords.
+If null means to allow stop words.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly ISet&lt;string&gt; DEFAULT_STOP_WORDS</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ISet</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_STOP_WORDS_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_StopWords">StopWords</a></div>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_Analyzer.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.Analyzer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L259">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_Analyzer_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.Analyzer*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_Analyzer" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.Analyzer">Analyzer</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets an analyzer that will be used to parse source doc with. The default analyzer
+is not set. An analyzer is not required for generating a query with the 
+<a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_Like_System_Int32_">Like(Int32)</a> method, all other &apos;like&apos; methods require an analyzer.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Analyzer Analyzer { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Analyzer.html">Analyzer</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_ApplyBoost.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.ApplyBoost%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L300">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_ApplyBoost_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.ApplyBoost*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_ApplyBoost" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.ApplyBoost">ApplyBoost</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets whether to boost terms in query based on &quot;score&quot; or not. The default is
+<a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_BOOST">DEFAULT_BOOST</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool ApplyBoost { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_BoostFactor.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.BoostFactor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L209">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_BoostFactor_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.BoostFactor*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_BoostFactor" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.BoostFactor">BoostFactor</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the boost factor used when boosting terms</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public float BoostFactor { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_FieldNames.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.FieldNames%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L309">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_FieldNames_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.FieldNames*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_FieldNames" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.FieldNames">FieldNames</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the field names that will be used when generating the &apos;More Like This&apos; query.
+The default field names that will be used is <a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_FIELD_NAMES">DEFAULT_FIELD_NAMES</a>. 
+Set this to null for the field names to be determined at runtime from the <a class="xref" href="../Lucene.Net/Lucene.Net.Index.IndexReader.html">IndexReader</a>
+provided in the constructor.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string[] FieldNames { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_MaxDocFreq.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.MaxDocFreq%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L281">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_MaxDocFreq_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.MaxDocFreq*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_MaxDocFreq" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.MaxDocFreq">MaxDocFreq</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the maximum frequency in which words may still appear.
+Words that appear in more than this many docs will be ignored. The default frequency is
+<a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_DOC_FREQ">DEFAULT_MAX_DOC_FREQ</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int MaxDocFreq { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_MaxNumTokensParsed.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.MaxNumTokensParsed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L345">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_MaxNumTokensParsed_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.MaxNumTokensParsed*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_MaxNumTokensParsed" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.MaxNumTokensParsed">MaxNumTokensParsed</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int MaxNumTokensParsed { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>Gets or Sets the maximum number of tokens to parse in each example doc field that is not stored with TermVector support </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Queries_Mlt_MoreLikeThis_MaxNumTokensParsed_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_NUM_TOKENS_PARSED">DEFAULT_MAX_NUM_TOKENS_PARSED</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_MaxQueryTerms.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.MaxQueryTerms%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L340">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_MaxQueryTerms_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.MaxQueryTerms*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_MaxQueryTerms" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.MaxQueryTerms">MaxQueryTerms</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the maximum number of query terms that will be included in any generated query.
+The default is <a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_QUERY_TERMS">DEFAULT_MAX_QUERY_TERMS</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int MaxQueryTerms { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_MaxWordLen.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.MaxWordLen%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L325">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_MaxWordLen_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.MaxWordLen*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_MaxWordLen" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.MaxWordLen">MaxWordLen</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the maximum word length above which words will be ignored. Set this to 0 for no
+maximum word length. The default is <a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MAX_WORD_LENGTH">DEFAULT_MAX_WORD_LENGTH</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int MaxWordLen { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_MinDocFreq.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.MinDocFreq%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L273">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_MinDocFreq_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.MinDocFreq*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_MinDocFreq" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.MinDocFreq">MinDocFreq</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the frequency at which words will be ignored which do not occur in at least this
+many docs. The default frequency is <a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MIN_DOC_FREQ">DEFAULT_MIN_DOC_FREQ</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int MinDocFreq { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_MinTermFreq.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.MinTermFreq%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L266">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_MinTermFreq_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.MinTermFreq*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_MinTermFreq" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.MinTermFreq">MinTermFreq</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the frequency below which terms will be ignored in the source doc. The default
+frequency is the <a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MIN_TERM_FREQ">DEFAULT_MIN_TERM_FREQ</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int MinTermFreq { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_MinWordLen.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.MinWordLen%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L318">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_MinWordLen_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.MinWordLen*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_MinWordLen" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.MinWordLen">MinWordLen</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the minimum word length below which words will be ignored. Set this to 0 for no
+minimum word length. The default is <a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_DEFAULT_MIN_WORD_LENGTH">DEFAULT_MIN_WORD_LENGTH</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int MinWordLen { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_Similarity.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.Similarity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L251">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_Similarity_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.Similarity*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_Similarity" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.Similarity">Similarity</h4>
+  <div class="markdown level1 summary"><p>For idf() calculations.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TFIDFSimilarity Similarity { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Search.Similarities.TFIDFSimilarity.html">TFIDFSimilarity</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_StopWords.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.StopWords%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L334">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_StopWords_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.StopWords*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_StopWords" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.StopWords">StopWords</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the set of stopwords.
+Any word in this set is considered &quot;uninteresting&quot; and ignored.
+Even if your <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Analyzer.html">Analyzer</a> allows stopwords, you might want to tell the <a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html">MoreLikeThis</a> code to ignore them, as
+for the purposes of document similarity it seems reasonable to assume that &quot;a stop word is never interesting&quot;.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ISet&lt;string&gt; StopWords { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ISet</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_DescribeParams.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.DescribeParams%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L476">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_DescribeParams_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.DescribeParams*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_DescribeParams" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.DescribeParams">DescribeParams()</h4>
+  <div class="markdown level1 summary"><p>Describe the parameters that control how the &quot;more like this&quot; query is formed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string DescribeParams()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_Like_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.Like(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L354">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_Like_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.Like*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_Like_System_Int32_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.Like(System.Int32)">Like(Int32)</h4>
+  <div class="markdown level1 summary"><p>Return a query that will return docs like the passed lucene document ID.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Query Like(int docNum)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">docNum</span></td>
+        <td><p>the documentID of the lucene doc to generate the &apos;More Like This&quot; query for. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Search.Query.html">Query</a></td>
+        <td><p>a query that will return docs like the passed lucene document ID. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_Like_System_IO_TextReader_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.Like(System.IO.TextReader%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L370">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_Like_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.Like*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_Like_System_IO_TextReader_System_String_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.Like(System.IO.TextReader,System.String)">Like(TextReader, String)</h4>
+  <div class="markdown level1 summary"><p>Return a query that will return docs like the passed <span class="xref">System.IO.TextReader</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Query Like(TextReader r, string fieldName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">r</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Search.Query.html">Query</a></td>
+        <td><p>a query that will return docs like the passed <span class="xref">System.IO.TextReader</span>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveInterestingTerms_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.RetrieveInterestingTerms(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L677">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveInterestingTerms_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.RetrieveInterestingTerms*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveInterestingTerms_System_Int32_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.RetrieveInterestingTerms(System.Int32)">RetrieveInterestingTerms(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string[] RetrieveInterestingTerms(int docNum)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">docNum</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveInterestingTerms_System_Int32__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveInterestingTerms_System_IO_TextReader_System_String_">RetrieveInterestingTerms(TextReader, String)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveInterestingTerms_System_IO_TextReader_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.RetrieveInterestingTerms(System.IO.TextReader%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L701">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveInterestingTerms_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.RetrieveInterestingTerms*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveInterestingTerms_System_IO_TextReader_System_String_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.RetrieveInterestingTerms(System.IO.TextReader,System.String)">RetrieveInterestingTerms(TextReader, String)</h4>
+  <div class="markdown level1 summary"><p>Convenience routine to make it easy to return the most interesting words in a document.
+More advanced users will call <a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveTerms_System_IO_TextReader_System_String_">RetrieveTerms(TextReader, String)</a> directly.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string[] RetrieveInterestingTerms(TextReader r, string fieldName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">r</span></td>
+        <td><p>the source document </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>field passed to analyzer to use when analyzing the content </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><p>the most interesting words in the document </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveInterestingTerms_System_IO_TextReader_System_String__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveTerms_System_IO_TextReader_System_String_">RetrieveTerms(TextReader, String)</a></div>
+      <div><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_MaxQueryTerms">MaxQueryTerms</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveTerms_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.RetrieveTerms(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L501">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveTerms_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.RetrieveTerms*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveTerms_System_Int32_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.RetrieveTerms(System.Int32)">RetrieveTerms(Int32)</h4>
+  <div class="markdown level1 summary"><p>Find words for a more-like-this query former.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PriorityQueue&lt;object[]&gt; RetrieveTerms(int docNum)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">docNum</span></td>
+        <td><p>the id of the lucene document from which to find terms </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Util.PriorityQueue-1.html">PriorityQueue</a>&lt;<span class="xref">System.Object</span>[]&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveTerms_System_IO_TextReader_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.RetrieveTerms(System.IO.TextReader%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L669">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveTerms_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.RetrieveTerms*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveTerms_System_IO_TextReader_System_String_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.RetrieveTerms(System.IO.TextReader,System.String)">RetrieveTerms(TextReader, String)</h4>
+  <div class="markdown level1 summary"><p>Find words for a more-like-this query former.
+The result is a priority queue of arrays with one entry for <strong>every word</strong> in the document.
+Each array has 6 elements.
+The elements are:
+<ul><li>The word (<span class="xref">System.String</span>)</li><li>The top field that this word comes from (<span class="xref">System.String</span>)</li><li>The score for this word (<span class="xref">System.Single</span>)</li><li>The IDF value (<span class="xref">System.Single</span>)</li><li>The frequency of this word in the index (<span class="xref">System.Int32</span>)</li><li>The frequency of this word in the source document (<span class="xref">System.Int32</span>)</li></ul>
+This is a somewhat &quot;advanced&quot; routine, and in general only the 1st entry in the array is of interest.
+This method is exposed so that you can identify the &quot;interesting words&quot; in a document.
+For an easier method to call see <a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveInterestingTerms_System_IO_TextReader_System_String_">RetrieveInterestingTerms(TextReader, String)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PriorityQueue&lt;object[]&gt; RetrieveTerms(TextReader r, string fieldName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">r</span></td>
+        <td><p>the reader that has the content of the document </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>field passed to the analyzer to use when analyzing the content </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Util.PriorityQueue-1.html">PriorityQueue</a>&lt;<span class="xref">System.Object</span>[]&gt;</td>
+        <td><p>the most interesting words in the document ordered by score, with the highest scoring, or best entry, first </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveTerms_System_IO_TextReader_System_String__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Queries.Mlt.MoreLikeThis.html#Lucene_Net_Queries_Mlt_MoreLikeThis_RetrieveInterestingTerms_System_IO_TextReader_System_String_">RetrieveInterestingTerms(TextReader, String)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis_SetMaxDocFreqPct_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis.SetMaxDocFreqPct(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L290">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_Mlt_MoreLikeThis_SetMaxDocFreqPct_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.SetMaxDocFreqPct*"></a>
+  <h4 id="Lucene_Net_Queries_Mlt_MoreLikeThis_SetMaxDocFreqPct_System_Int32_" data-uid="Lucene.Net.Queries.Mlt.MoreLikeThis.SetMaxDocFreqPct(System.Int32)">SetMaxDocFreqPct(Int32)</h4>
+  <div class="markdown level1 summary"><p>Set the maximum percentage in which words may still appear. Words that appear
+in more than this many percent of all docs will be ignored.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetMaxDocFreqPct(int maxPercentage)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxPercentage</span></td>
+        <td><p>the maximum percentage of documents (0-100) that a term may appear
+in to be still considered relevant </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_Mlt_MoreLikeThis.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.Mlt.MoreLikeThis%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Queries/Mlt/MoreLikeThis.cs/#L126" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

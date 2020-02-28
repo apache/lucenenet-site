@@ -1,0 +1,528 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class CharTokenizer
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class CharTokenizer
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Analysis.Util.CharTokenizer">
+  
+  
+  <h1 id="Lucene_Net_Analysis_Util_CharTokenizer" data-uid="Lucene.Net.Analysis.Util.CharTokenizer" class="text-break">Class CharTokenizer
+  </h1>
+  <div class="markdown level0 summary"><p>An abstract base class for simple, character-oriented tokenizers. 
+<p>
+You must specify the required <a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a> compatibility
+when creating <a class="xref" href="Lucene.Net.Analysis.Util.CharTokenizer.html">CharTokenizer</a>:
+<ul><li>As of 3.1, <a class="xref" href="Lucene.Net.Analysis.Util.CharTokenizer.html">CharTokenizer</a> uses an int based API to normalize and
+        detect token codepoints. See <a class="xref" href="Lucene.Net.Analysis.Util.CharTokenizer.html#Lucene_Net_Analysis_Util_CharTokenizer_IsTokenChar_System_Int32_">IsTokenChar(Int32)</a> and
+<a class="xref" href="Lucene.Net.Analysis.Util.CharTokenizer.html#Lucene_Net_Analysis_Util_CharTokenizer_Normalize_System_Int32_">Normalize(Int32)</a> for details.</li></ul>
+</p>
+<p>
+A new <a class="xref" href="Lucene.Net.Analysis.Util.CharTokenizer.html">CharTokenizer</a> API has been introduced with Lucene 3.1. This API
+moved from UTF-16 code units to UTF-32 codepoints to eventually add support
+for <a href="http://java.sun.com/j2se/1.5.0/docs/api/java/lang/Character.html#supplementary">supplementary characters</a>. The old <em>char</em> based API has been
+deprecated and should be replaced with the <em>int</em> based methods
+<a class="xref" href="Lucene.Net.Analysis.Util.CharTokenizer.html#Lucene_Net_Analysis_Util_CharTokenizer_IsTokenChar_System_Int32_">IsTokenChar(Int32)</a> and <a class="xref" href="Lucene.Net.Analysis.Util.CharTokenizer.html#Lucene_Net_Analysis_Util_CharTokenizer_Normalize_System_Int32_">Normalize(Int32)</a>.
+</p>
+<p>
+As of Lucene 3.1 each <a class="xref" href="Lucene.Net.Analysis.Util.CharTokenizer.html">CharTokenizer</a> - constructor expects a
+<a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a> argument. Based on the given <a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a> either the new
+API or a backwards compatibility layer is used at runtime. For
+<a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a> &lt; 3.1 the backwards compatibility layer ensures correct
+behavior even for indexes build with previous versions of Lucene. If a
+<a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a> &gt;= 3.1 is used <a class="xref" href="Lucene.Net.Analysis.Util.CharTokenizer.html">CharTokenizer</a> requires the new API to
+be implemented by the instantiated class. Yet, the old <em>char</em> based API
+is not required anymore even if backwards compatibility must be preserved.
+<a class="xref" href="Lucene.Net.Analysis.Util.CharTokenizer.html">CharTokenizer</a> subclasses implementing the new API are fully backwards
+compatible if instantiated with <a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a> &lt; 3.1.
+</p>
+<p>
+<strong>Note:</strong> If you use a subclass of <a class="xref" href="Lucene.Net.Analysis.Util.CharTokenizer.html">CharTokenizer</a> with <a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a> &gt;=
+3.1 on an index build with a version &lt; 3.1, created tokens might not be
+compatible with the terms in your index.
+</p></p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html">AttributeSource</a></div>
+    <div class="level2"><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenStream.html">TokenStream</a></div>
+    <div class="level3"><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a></div>
+    <div class="level4"><span class="xref">CharTokenizer</span></div>
+      <div class="level5"><a class="xref" href="Lucene.Net.Analysis.Core.LetterTokenizer.html">LetterTokenizer</a></div>
+      <div class="level5"><a class="xref" href="Lucene.Net.Analysis.Core.WhitespaceTokenizer.html">WhitespaceTokenizer</a></div>
+      <div class="level5"><a class="xref" href="Lucene.Net.Analysis.In.IndicTokenizer.html">IndicTokenizer</a></div>
+      <div class="level5"><a class="xref" href="Lucene.Net.Analysis.Ru.RussianLetterTokenizer.html">RussianLetterTokenizer</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Tokenizer.html#Lucene_Net_Analysis_Tokenizer_m_input">Tokenizer.m_input</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Tokenizer.html#Lucene_Net_Analysis_Tokenizer_Dispose_System_Boolean_">Tokenizer.Dispose(Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Tokenizer.html#Lucene_Net_Analysis_Tokenizer_CorrectOffset_System_Int32_">Tokenizer.CorrectOffset(Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Tokenizer.html#Lucene_Net_Analysis_Tokenizer_SetReader_System_IO_TextReader_">Tokenizer.SetReader(TextReader)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_Dispose">TokenStream.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_GetAttributeFactory">AttributeSource.GetAttributeFactory()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_GetAttributeClassesEnumerator">AttributeSource.GetAttributeClassesEnumerator()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_GetAttributeImplsEnumerator">AttributeSource.GetAttributeImplsEnumerator()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_AddAttributeImpl_Lucene_Net_Util_Attribute_">AttributeSource.AddAttributeImpl(Attribute)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_AddAttribute__1">AttributeSource.AddAttribute&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_HasAttributes">AttributeSource.HasAttributes</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_HasAttribute__1">AttributeSource.HasAttribute&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_GetAttribute__1">AttributeSource.GetAttribute&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_ClearAttributes">AttributeSource.ClearAttributes()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_CaptureState">AttributeSource.CaptureState()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_RestoreState_Lucene_Net_Util_AttributeSource_State_">AttributeSource.RestoreState(AttributeSource.State)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_GetHashCode">AttributeSource.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_Equals_System_Object_">AttributeSource.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_ReflectAsString_System_Boolean_">AttributeSource.ReflectAsString(Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_ReflectWith_Lucene_Net_Util_IAttributeReflector_">AttributeSource.ReflectWith(IAttributeReflector)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_CloneAttributes">AttributeSource.CloneAttributes()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_CopyTo_Lucene_Net_Util_AttributeSource_">AttributeSource.CopyTo(AttributeSource)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_ToString">AttributeSource.ToString()</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Analysis.Util.html">Lucene.Net.Analysis.Util</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Analysis.Common.dll</h6>
+  <h5 id="Lucene_Net_Analysis_Util_CharTokenizer_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class CharTokenizer : Tokenizer, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharTokenizer__ctor_Lucene_Net_Util_LuceneVersion_Lucene_Net_Util_AttributeSource_AttributeFactory_System_IO_TextReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharTokenizer.%23ctor(Lucene.Net.Util.LuceneVersion%2CLucene.Net.Util.AttributeSource.AttributeFactory%2CSystem.IO.TextReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Util/CharTokenizer.cs/#L88">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharTokenizer__ctor_" data-uid="Lucene.Net.Analysis.Util.CharTokenizer.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharTokenizer__ctor_Lucene_Net_Util_LuceneVersion_Lucene_Net_Util_AttributeSource_AttributeFactory_System_IO_TextReader_" data-uid="Lucene.Net.Analysis.Util.CharTokenizer.#ctor(Lucene.Net.Util.LuceneVersion,Lucene.Net.Util.AttributeSource.AttributeFactory,System.IO.TextReader)">CharTokenizer(LuceneVersion, AttributeSource.AttributeFactory, TextReader)</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Analysis.Util.CharTokenizer.html">CharTokenizer</a> instance</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CharTokenizer(LuceneVersion matchVersion, AttributeSource.AttributeFactory factory, TextReader input)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a></td>
+        <td><span class="parametername">matchVersion</span></td>
+        <td><p>Lucene version to match </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.AttributeFactory.html">AttributeSource.AttributeFactory</a></td>
+        <td><span class="parametername">factory</span></td>
+        <td><p>the attribute factory to use for this <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a> </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">input</span></td>
+        <td><p>the input to split up into tokens </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharTokenizer__ctor_Lucene_Net_Util_LuceneVersion_System_IO_TextReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharTokenizer.%23ctor(Lucene.Net.Util.LuceneVersion%2CSystem.IO.TextReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Util/CharTokenizer.cs/#L73">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharTokenizer__ctor_" data-uid="Lucene.Net.Analysis.Util.CharTokenizer.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharTokenizer__ctor_Lucene_Net_Util_LuceneVersion_System_IO_TextReader_" data-uid="Lucene.Net.Analysis.Util.CharTokenizer.#ctor(Lucene.Net.Util.LuceneVersion,System.IO.TextReader)">CharTokenizer(LuceneVersion, TextReader)</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Analysis.Util.CharTokenizer.html">CharTokenizer</a> instance</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CharTokenizer(LuceneVersion matchVersion, TextReader input)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a></td>
+        <td><span class="parametername">matchVersion</span></td>
+        <td><p>Lucene version to match </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">input</span></td>
+        <td><p>the input to split up into tokens </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharTokenizer_End.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharTokenizer.End%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Util/CharTokenizer.cs/#L199">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharTokenizer_End_" data-uid="Lucene.Net.Analysis.Util.CharTokenizer.End*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharTokenizer_End" data-uid="Lucene.Net.Analysis.Util.CharTokenizer.End">End()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override sealed void End()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_End">TokenStream.End()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharTokenizer_IncrementToken.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharTokenizer.IncrementToken%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Util/CharTokenizer.cs/#L134">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharTokenizer_IncrementToken_" data-uid="Lucene.Net.Analysis.Util.CharTokenizer.IncrementToken*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharTokenizer_IncrementToken" data-uid="Lucene.Net.Analysis.Util.CharTokenizer.IncrementToken">IncrementToken()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override sealed bool IncrementToken()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_IncrementToken">TokenStream.IncrementToken()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharTokenizer_IsTokenChar_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharTokenizer.IsTokenChar(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Util/CharTokenizer.cs/#L122">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharTokenizer_IsTokenChar_" data-uid="Lucene.Net.Analysis.Util.CharTokenizer.IsTokenChar*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharTokenizer_IsTokenChar_System_Int32_" data-uid="Lucene.Net.Analysis.Util.CharTokenizer.IsTokenChar(System.Int32)">IsTokenChar(Int32)</h4>
+  <div class="markdown level1 summary"><p>Returns true iff a codepoint should be included in a token. This tokenizer
+generates as tokens adjacent sequences of codepoints which satisfy this
+predicate. Codepoints for which this is false are used to define token
+boundaries and are not included in tokens.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract bool IsTokenChar(int c)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">c</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharTokenizer_Normalize_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharTokenizer.Normalize(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Util/CharTokenizer.cs/#L129">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharTokenizer_Normalize_" data-uid="Lucene.Net.Analysis.Util.CharTokenizer.Normalize*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharTokenizer_Normalize_System_Int32_" data-uid="Lucene.Net.Analysis.Util.CharTokenizer.Normalize(System.Int32)">Normalize(Int32)</h4>
+  <div class="markdown level1 summary"><p>Called on each token character to normalize it before it is added to the
+token. The default implementation does nothing. Subclasses may use this to,
+e.g., lowercase tokens.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual int Normalize(int c)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">c</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharTokenizer_Reset.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharTokenizer.Reset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Util/CharTokenizer.cs/#L206">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharTokenizer_Reset_" data-uid="Lucene.Net.Analysis.Util.CharTokenizer.Reset*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharTokenizer_Reset" data-uid="Lucene.Net.Analysis.Util.CharTokenizer.Reset">Reset()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Reset()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Tokenizer.html#Lucene_Net_Analysis_Tokenizer_Reset">Tokenizer.Reset()</a></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharTokenizer.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharTokenizer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Util/CharTokenizer.cs/#L64" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,1031 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ParallelAtomicReader
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ParallelAtomicReader
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Index.ParallelAtomicReader">
+  
+  
+  <h1 id="Lucene_Net_Index_ParallelAtomicReader" data-uid="Lucene.Net.Index.ParallelAtomicReader" class="text-break">Class ParallelAtomicReader
+  </h1>
+  <div class="markdown level0 summary"><p>An <a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a> which reads multiple, parallel indexes.  Each index
+added must have the same number of documents, but typically each contains
+different fields. Deletions are taken from the first reader.
+Each document contains the union of the fields of all documents
+with the same document number.  When searching, matches for a
+query term are from the first index added that has the field.</p>
+<p><p>This is useful, e.g., with collections that have large fields which
+change rarely and small fields that change more frequently.  The smaller
+fields may be re-indexed in a new index and both indexes may be searched
+together.</p>
+<p><p><strong>Warning:</strong> It is up to you to make sure all indexes
+are created and modified the same way. For example, if you add
+documents to one index, you need to add the same documents in the
+same order to the other indexes. <em>Failure to do so will result in
+undefined behavior</em>.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a></div>
+    <div class="level2"><a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a></div>
+    <div class="level3"><span class="xref">ParallelAtomicReader</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_Context">AtomicReader.Context</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_AtomicContext">AtomicReader.AtomicContext</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_HasNorms_System_String_">AtomicReader.HasNorms(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_DocFreq_Lucene_Net_Index_Term_">AtomicReader.DocFreq(Term)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_TotalTermFreq_Lucene_Net_Index_Term_">AtomicReader.TotalTermFreq(Term)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_GetSumDocFreq_System_String_">AtomicReader.GetSumDocFreq(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_GetDocCount_System_String_">AtomicReader.GetDocCount(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_GetSumTotalTermFreq_System_String_">AtomicReader.GetSumTotalTermFreq(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_GetTerms_System_String_">AtomicReader.GetTerms(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_GetTermDocsEnum_Lucene_Net_Index_Term_">AtomicReader.GetTermDocsEnum(Term)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_GetTermPositionsEnum_Lucene_Net_Index_Term_">AtomicReader.GetTermPositionsEnum(Term)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_AddReaderClosedListener_Lucene_Net_Index_IndexReader_IReaderClosedListener_">IndexReader.AddReaderClosedListener(IndexReader.IReaderClosedListener)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_RemoveReaderClosedListener_Lucene_Net_Index_IndexReader_IReaderClosedListener_">IndexReader.RemoveReaderClosedListener(IndexReader.IReaderClosedListener)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_RegisterParentReader_Lucene_Net_Index_IndexReader_">IndexReader.RegisterParentReader(IndexReader)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_RefCount">IndexReader.RefCount</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_IncRef">IndexReader.IncRef()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_TryIncRef">IndexReader.TryIncRef()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_DecRef">IndexReader.DecRef()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_EnsureOpen">IndexReader.EnsureOpen()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Equals_System_Object_">IndexReader.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_GetHashCode">IndexReader.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Open_Lucene_Net_Store_Directory_">IndexReader.Open(Directory)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Open_Lucene_Net_Store_Directory_System_Int32_">IndexReader.Open(Directory, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Open_Lucene_Net_Index_IndexWriter_System_Boolean_">IndexReader.Open(IndexWriter, Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Open_Lucene_Net_Index_IndexCommit_">IndexReader.Open(IndexCommit)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Open_Lucene_Net_Index_IndexCommit_System_Int32_">IndexReader.Open(IndexCommit, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_GetTermVector_System_Int32_System_String_">IndexReader.GetTermVector(Int32, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_NumDeletedDocs">IndexReader.NumDeletedDocs</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Document_System_Int32_">IndexReader.Document(Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Document_System_Int32_System_Collections_Generic_ISet_System_String__">IndexReader.Document(Int32, ISet&lt;String&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_HasDeletions">IndexReader.HasDeletions</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Dispose">IndexReader.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Dispose_System_Boolean_">IndexReader.Dispose(Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Leaves">IndexReader.Leaves</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_CoreCacheKey">IndexReader.CoreCacheKey</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_CombinedCoreAndDeletesKey">IndexReader.CombinedCoreAndDeletesKey</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Index.html">Lucene.Net.Index</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Index_ParallelAtomicReader_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class ParallelAtomicReader : AtomicReader, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader__ctor_Lucene_Net_Index_AtomicReader___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.%23ctor(Lucene.Net.Index.AtomicReader%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L70">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader__ctor_" data-uid="Lucene.Net.Index.ParallelAtomicReader.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader__ctor_Lucene_Net_Index_AtomicReader___" data-uid="Lucene.Net.Index.ParallelAtomicReader.#ctor(Lucene.Net.Index.AtomicReader[])">ParallelAtomicReader(AtomicReader[])</h4>
+  <div class="markdown level1 summary"><p>Create a <a class="xref" href="Lucene.Net.Index.ParallelAtomicReader.html">ParallelAtomicReader</a> based on the provided
+readers; auto-disposes the given <code data-dev-comment-type="paramref" class="paramref">readers</code> on <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Dispose">Dispose()</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ParallelAtomicReader(params AtomicReader[] readers)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a>[]</td>
+        <td><span class="parametername">readers</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader__ctor_System_Boolean_Lucene_Net_Index_AtomicReader___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.%23ctor(System.Boolean%2CLucene.Net.Index.AtomicReader%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L79">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader__ctor_" data-uid="Lucene.Net.Index.ParallelAtomicReader.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader__ctor_System_Boolean_Lucene_Net_Index_AtomicReader___" data-uid="Lucene.Net.Index.ParallelAtomicReader.#ctor(System.Boolean,Lucene.Net.Index.AtomicReader[])">ParallelAtomicReader(Boolean, AtomicReader[])</h4>
+  <div class="markdown level1 summary"><p>Create a <a class="xref" href="Lucene.Net.Index.ParallelAtomicReader.html">ParallelAtomicReader</a> based on the provided
+<code data-dev-comment-type="paramref" class="paramref">readers</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ParallelAtomicReader(bool closeSubReaders, params AtomicReader[] readers)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">closeSubReaders</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a>[]</td>
+        <td><span class="parametername">readers</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader__ctor_System_Boolean_Lucene_Net_Index_AtomicReader___Lucene_Net_Index_AtomicReader___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.%23ctor(System.Boolean%2CLucene.Net.Index.AtomicReader%5B%5D%2CLucene.Net.Index.AtomicReader%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L89">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader__ctor_" data-uid="Lucene.Net.Index.ParallelAtomicReader.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader__ctor_System_Boolean_Lucene_Net_Index_AtomicReader___Lucene_Net_Index_AtomicReader___" data-uid="Lucene.Net.Index.ParallelAtomicReader.#ctor(System.Boolean,Lucene.Net.Index.AtomicReader[],Lucene.Net.Index.AtomicReader[])">ParallelAtomicReader(Boolean, AtomicReader[], AtomicReader[])</h4>
+  <div class="markdown level1 summary"><p>Expert: create a <a class="xref" href="Lucene.Net.Index.ParallelAtomicReader.html">ParallelAtomicReader</a> based on the provided
+<code data-dev-comment-type="paramref" class="paramref">readers</code> and <code data-dev-comment-type="paramref" class="paramref">storedFieldsReaders</code>; when a document is
+loaded, only <code data-dev-comment-type="paramref" class="paramref">storedFieldsReaders</code> will be used.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ParallelAtomicReader(bool closeSubReaders, AtomicReader[] readers, AtomicReader[] storedFieldsReaders)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">closeSubReaders</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a>[]</td>
+        <td><span class="parametername">readers</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a>[]</td>
+        <td><span class="parametername">storedFieldsReaders</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_FieldInfos.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.FieldInfos%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L237">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_FieldInfos_" data-uid="Lucene.Net.Index.ParallelAtomicReader.FieldInfos*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_FieldInfos" data-uid="Lucene.Net.Index.ParallelAtomicReader.FieldInfos">FieldInfos</h4>
+  <div class="markdown level1 summary"><p>Get the <a class="xref" href="Lucene.Net.Index.FieldInfos.html">FieldInfos</a> describing all fields in
+this reader.
+<p>
+NOTE: the returned field numbers will likely not
+correspond to the actual field numbers in the underlying
+readers, and codec metadata (<a class="xref" href="Lucene.Net.Index.FieldInfo.html#Lucene_Net_Index_FieldInfo_GetAttribute_System_String_">GetAttribute(String)</a>
+will be unavailable.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override FieldInfos FieldInfos { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.FieldInfos.html">FieldInfos</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_FieldInfos">AtomicReader.FieldInfos</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_Fields.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.Fields%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L254">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_Fields_" data-uid="Lucene.Net.Index.ParallelAtomicReader.Fields*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_Fields" data-uid="Lucene.Net.Index.ParallelAtomicReader.Fields">Fields</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Fields Fields { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.Fields.html">Fields</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_Fields">AtomicReader.Fields</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_LiveDocs.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.LiveDocs%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L245">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_LiveDocs_" data-uid="Lucene.Net.Index.ParallelAtomicReader.LiveDocs*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_LiveDocs" data-uid="Lucene.Net.Index.ParallelAtomicReader.LiveDocs">LiveDocs</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IBits LiveDocs { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_LiveDocs">AtomicReader.LiveDocs</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_MaxDoc.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.MaxDoc%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L272">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_MaxDoc_" data-uid="Lucene.Net.Index.ParallelAtomicReader.MaxDoc*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_MaxDoc" data-uid="Lucene.Net.Index.ParallelAtomicReader.MaxDoc">MaxDoc</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int MaxDoc { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_MaxDoc">IndexReader.MaxDoc</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_NumDocs.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.NumDocs%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L263">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_NumDocs_" data-uid="Lucene.Net.Index.ParallelAtomicReader.NumDocs*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_NumDocs" data-uid="Lucene.Net.Index.ParallelAtomicReader.NumDocs">NumDocs</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int NumDocs { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_NumDocs">IndexReader.NumDocs</a></div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_CheckIntegrity.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.CheckIntegrity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L392">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_CheckIntegrity_" data-uid="Lucene.Net.Index.ParallelAtomicReader.CheckIntegrity*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_CheckIntegrity" data-uid="Lucene.Net.Index.ParallelAtomicReader.CheckIntegrity">CheckIntegrity()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void CheckIntegrity()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_CheckIntegrity">AtomicReader.CheckIntegrity()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_DoClose.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.DoClose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L311">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_DoClose_" data-uid="Lucene.Net.Index.ParallelAtomicReader.DoClose*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_DoClose" data-uid="Lucene.Net.Index.ParallelAtomicReader.DoClose">DoClose()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void DoClose()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_DoClose">IndexReader.DoClose()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_Document_System_Int32_Lucene_Net_Index_StoredFieldVisitor_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.Document(System.Int32%2CLucene.Net.Index.StoredFieldVisitor)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L281">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_Document_" data-uid="Lucene.Net.Index.ParallelAtomicReader.Document*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_Document_System_Int32_Lucene_Net_Index_StoredFieldVisitor_" data-uid="Lucene.Net.Index.ParallelAtomicReader.Document(System.Int32,Lucene.Net.Index.StoredFieldVisitor)">Document(Int32, StoredFieldVisitor)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Document(int docID, StoredFieldVisitor visitor)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">docID</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.StoredFieldVisitor.html">StoredFieldVisitor</a></td>
+        <td><span class="parametername">visitor</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Document_System_Int32_Lucene_Net_Index_StoredFieldVisitor_">IndexReader.Document(Int32, StoredFieldVisitor)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_GetBinaryDocValues_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.GetBinaryDocValues(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L352">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_GetBinaryDocValues_" data-uid="Lucene.Net.Index.ParallelAtomicReader.GetBinaryDocValues*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_GetBinaryDocValues_System_String_" data-uid="Lucene.Net.Index.ParallelAtomicReader.GetBinaryDocValues(System.String)">GetBinaryDocValues(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override BinaryDocValues GetBinaryDocValues(string field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.BinaryDocValues.html">BinaryDocValues</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_GetBinaryDocValues_System_String_">AtomicReader.GetBinaryDocValues(String)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_GetDocsWithField_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.GetDocsWithField(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L373">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_GetDocsWithField_" data-uid="Lucene.Net.Index.ParallelAtomicReader.GetDocsWithField*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_GetDocsWithField_System_String_" data-uid="Lucene.Net.Index.ParallelAtomicReader.GetDocsWithField(System.String)">GetDocsWithField(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IBits GetDocsWithField(string field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_GetDocsWithField_System_String_">AtomicReader.GetDocsWithField(String)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_GetNormValues_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.GetNormValues(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L380">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_GetNormValues_" data-uid="Lucene.Net.Index.ParallelAtomicReader.GetNormValues*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_GetNormValues_System_String_" data-uid="Lucene.Net.Index.ParallelAtomicReader.GetNormValues(System.String)">GetNormValues(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override NumericDocValues GetNormValues(string field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.NumericDocValues.html">NumericDocValues</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_GetNormValues_System_String_">AtomicReader.GetNormValues(String)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_GetNumericDocValues_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.GetNumericDocValues(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L345">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_GetNumericDocValues_" data-uid="Lucene.Net.Index.ParallelAtomicReader.GetNumericDocValues*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_GetNumericDocValues_System_String_" data-uid="Lucene.Net.Index.ParallelAtomicReader.GetNumericDocValues(System.String)">GetNumericDocValues(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override NumericDocValues GetNumericDocValues(string field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.NumericDocValues.html">NumericDocValues</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_GetNumericDocValues_System_String_">AtomicReader.GetNumericDocValues(String)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_GetSortedDocValues_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.GetSortedDocValues(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L359">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_GetSortedDocValues_" data-uid="Lucene.Net.Index.ParallelAtomicReader.GetSortedDocValues*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_GetSortedDocValues_System_String_" data-uid="Lucene.Net.Index.ParallelAtomicReader.GetSortedDocValues(System.String)">GetSortedDocValues(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override SortedDocValues GetSortedDocValues(string field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SortedDocValues.html">SortedDocValues</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_GetSortedDocValues_System_String_">AtomicReader.GetSortedDocValues(String)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_GetSortedSetDocValues_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.GetSortedSetDocValues(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L366">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_GetSortedSetDocValues_" data-uid="Lucene.Net.Index.ParallelAtomicReader.GetSortedSetDocValues*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_GetSortedSetDocValues_System_String_" data-uid="Lucene.Net.Index.ParallelAtomicReader.GetSortedSetDocValues(System.String)">GetSortedSetDocValues(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override SortedSetDocValues GetSortedSetDocValues(string field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SortedSetDocValues.html">SortedSetDocValues</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_GetSortedSetDocValues_System_String_">AtomicReader.GetSortedSetDocValues(String)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_GetTermVectors_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.GetTermVectors(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L290">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_GetTermVectors_" data-uid="Lucene.Net.Index.ParallelAtomicReader.GetTermVectors*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_GetTermVectors_System_Int32_" data-uid="Lucene.Net.Index.ParallelAtomicReader.GetTermVectors(System.Int32)">GetTermVectors(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Fields GetTermVectors(int docID)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">docID</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.Fields.html">Fields</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_GetTermVectors_System_Int32_">IndexReader.GetTermVectors(Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L173">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ParallelAtomicReader_ToString_" data-uid="Lucene.Net.Index.ParallelAtomicReader.ToString*"></a>
+  <h4 id="Lucene_Net_Index_ParallelAtomicReader_ToString" data-uid="Lucene.Net.Index.ParallelAtomicReader.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Support.Number.html#Lucene_Net_Support_Number_IsNumber_System_Object_">Number.IsNumber(Object)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ParallelAtomicReader.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ParallelAtomicReader%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Index/ParallelAtomicReader.cs/#L47" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

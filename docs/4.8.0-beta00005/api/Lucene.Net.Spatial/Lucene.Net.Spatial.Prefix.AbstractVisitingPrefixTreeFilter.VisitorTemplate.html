@@ -1,0 +1,727 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class AbstractVisitingPrefixTreeFilter.VisitorTemplate
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class AbstractVisitingPrefixTreeFilter.VisitorTemplate
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate">
+  
+  
+  <h1 id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate" class="text-break">Class AbstractVisitingPrefixTreeFilter.VisitorTemplate
+  </h1>
+  <div class="markdown level0 summary"><p>An abstract class designed to make it easy to implement predicates or
+other operations on a <a class="xref" href="Lucene.Net.Spatial.Prefix.Tree.SpatialPrefixTree.html">SpatialPrefixTree</a> indexed field. An instance
+of this class is not designed to be re-used across AtomicReaderContext
+instances so simply create a new one for each call to, say a
+<a class="xref" href="../Lucene.Net/Lucene.Net.Search.Filter.html#Lucene_Net_Search_Filter_GetDocIdSet_Lucene_Net_Index_AtomicReaderContext_Lucene_Net_Util_IBits_">GetDocIdSet(AtomicReaderContext, IBits)</a>.
+The <a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.html#Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_GetDocIdSet">GetDocIdSet()</a> method here starts the work. It first checks
+that there are indexed terms; if not it quickly returns null. Then it calls
+<a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.html#Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_Start">Start()</a> so a subclass can set up a return value, like an
+<a class="xref" href="../Lucene.Net/Lucene.Net.Util.FixedBitSet.html">FixedBitSet</a>. Then it starts the traversal
+process, calling <a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.html#Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_FindSubCellsToVisit_Lucene_Net_Spatial_Prefix_Tree_Cell_">FindSubCellsToVisit(Cell)</a>
+which by default finds the top cells that intersect <code>queryShape</code>. If
+there isn&apos;t an indexed cell for a corresponding cell returned for this
+method then it&apos;s short-circuited until it finds one, at which point
+<a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.html#Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_Visit_Lucene_Net_Spatial_Prefix_Tree_Cell_">Visit(Cell)</a> is called. At
+some depths, of the tree, the algorithm switches to a scanning mode that
+calls <a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.html#Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_VisitScanned_Lucene_Net_Spatial_Prefix_Tree_Cell_">VisitScanned(Cell)</a>
+for each leaf cell found.</p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractPrefixTreeFilter.BaseTermsEnumTraverser.html">AbstractPrefixTreeFilter.BaseTermsEnumTraverser</a></div>
+    <div class="level2"><span class="xref">AbstractVisitingPrefixTreeFilter.VisitorTemplate</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractPrefixTreeFilter.BaseTermsEnumTraverser.html#Lucene_Net_Spatial_Prefix_AbstractPrefixTreeFilter_BaseTermsEnumTraverser_m_outerInstance">AbstractPrefixTreeFilter.BaseTermsEnumTraverser.m_outerInstance</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractPrefixTreeFilter.BaseTermsEnumTraverser.html#Lucene_Net_Spatial_Prefix_AbstractPrefixTreeFilter_BaseTermsEnumTraverser_m_context">AbstractPrefixTreeFilter.BaseTermsEnumTraverser.m_context</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractPrefixTreeFilter.BaseTermsEnumTraverser.html#Lucene_Net_Spatial_Prefix_AbstractPrefixTreeFilter_BaseTermsEnumTraverser_m_acceptDocs">AbstractPrefixTreeFilter.BaseTermsEnumTraverser.m_acceptDocs</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractPrefixTreeFilter.BaseTermsEnumTraverser.html#Lucene_Net_Spatial_Prefix_AbstractPrefixTreeFilter_BaseTermsEnumTraverser_m_maxDoc">AbstractPrefixTreeFilter.BaseTermsEnumTraverser.m_maxDoc</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractPrefixTreeFilter.BaseTermsEnumTraverser.html#Lucene_Net_Spatial_Prefix_AbstractPrefixTreeFilter_BaseTermsEnumTraverser_m_termsEnum">AbstractPrefixTreeFilter.BaseTermsEnumTraverser.m_termsEnum</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractPrefixTreeFilter.BaseTermsEnumTraverser.html#Lucene_Net_Spatial_Prefix_AbstractPrefixTreeFilter_BaseTermsEnumTraverser_m_docsEnum">AbstractPrefixTreeFilter.BaseTermsEnumTraverser.m_docsEnum</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractPrefixTreeFilter.BaseTermsEnumTraverser.html#Lucene_Net_Spatial_Prefix_AbstractPrefixTreeFilter_BaseTermsEnumTraverser_CollectDocs_Lucene_Net_Util_FixedBitSet_">AbstractPrefixTreeFilter.BaseTermsEnumTraverser.CollectDocs(FixedBitSet)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Spatial.Prefix.html">Lucene.Net.Spatial.Prefix</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Spatial.dll</h6>
+  <h5 id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class VisitorTemplate : AbstractPrefixTreeFilter.BaseTermsEnumTraverser</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate__ctor_Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_Lucene_Net_Index_AtomicReaderContext_Lucene_Net_Util_IBits_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.%23ctor(Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter%2CLucene.Net.Index.AtomicReaderContext%2CLucene.Net.Util.IBits%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Spatial/Prefix/AbstractVisitingPrefixTreeFilter.cs/#L127">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate__ctor_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.#ctor*"></a>
+  <h4 id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate__ctor_Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_Lucene_Net_Index_AtomicReaderContext_Lucene_Net_Util_IBits_System_Boolean_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.#ctor(Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter,Lucene.Net.Index.AtomicReaderContext,Lucene.Net.Util.IBits,System.Boolean)">VisitorTemplate(AbstractVisitingPrefixTreeFilter, AtomicReaderContext, IBits, Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public VisitorTemplate(AbstractVisitingPrefixTreeFilter outerInstance, AtomicReaderContext context, IBits acceptDocs, bool hasIndexedLeaves)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.html">AbstractVisitingPrefixTreeFilter</a></td>
+        <td><span class="parametername">outerInstance</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td><span class="parametername">acceptDocs</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">hasIndexedLeaves</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_m_hasIndexedLeaves.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.m_hasIndexedLeaves%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Spatial/Prefix/AbstractVisitingPrefixTreeFilter.cs/#L119">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_m_hasIndexedLeaves" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.m_hasIndexedLeaves">m_hasIndexedLeaves</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly bool m_hasIndexedLeaves</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_FindSubCellsToVisit_Lucene_Net_Spatial_Prefix_Tree_Cell_.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.FindSubCellsToVisit(Lucene.Net.Spatial.Prefix.Tree.Cell)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Spatial/Prefix/AbstractVisitingPrefixTreeFilter.cs/#L307">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_FindSubCellsToVisit_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.FindSubCellsToVisit*"></a>
+  <h4 id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_FindSubCellsToVisit_Lucene_Net_Spatial_Prefix_Tree_Cell_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.FindSubCellsToVisit(Lucene.Net.Spatial.Prefix.Tree.Cell)">FindSubCellsToVisit(Cell)</h4>
+  <div class="markdown level1 summary"><p>Called when doing a divide &amp; conquer to find the next intersecting cells
+of the query shape that are beneath <code data-dev-comment-type="paramref" class="paramref">cell</code>. <code data-dev-comment-type="paramref" class="paramref">cell</code> is
+guaranteed to have an intersection and thus this must return some number
+of nodes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual IEnumerator&lt;Cell&gt; FindSubCellsToVisit(Cell cell)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Spatial.Prefix.Tree.Cell.html">Cell</a></td>
+        <td><span class="parametername">cell</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<a class="xref" href="Lucene.Net.Spatial.Prefix.Tree.Cell.html">Cell</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_Finish.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.Finish%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Spatial/Prefix/AbstractVisitingPrefixTreeFilter.cs/#L429">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_Finish_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.Finish*"></a>
+  <h4 id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_Finish" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.Finish">Finish()</h4>
+  <div class="markdown level1 summary"><p>Called last to return the result.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract DocIdSet Finish()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Search.DocIdSet.html">DocIdSet</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_GetDocIdSet.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.GetDocIdSet%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Spatial/Prefix/AbstractVisitingPrefixTreeFilter.cs/#L134">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_GetDocIdSet_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.GetDocIdSet*"></a>
+  <h4 id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_GetDocIdSet" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.GetDocIdSet">GetDocIdSet()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual DocIdSet GetDocIdSet()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Search.DocIdSet.html">DocIdSet</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_PostSiblings_Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VNode_.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.PostSiblings(Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VNode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Spatial/Prefix/AbstractVisitingPrefixTreeFilter.cs/#L463">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_PostSiblings_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.PostSiblings*"></a>
+  <h4 id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_PostSiblings_Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VNode_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.PostSiblings(Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VNode)">PostSiblings(AbstractVisitingPrefixTreeFilter.VNode)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void PostSiblings(AbstractVisitingPrefixTreeFilter.VNode vNode)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VNode.html">AbstractVisitingPrefixTreeFilter.VNode</a></td>
+        <td><span class="parametername">vNode</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_PreSiblings_Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VNode_.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.PreSiblings(Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VNode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Spatial/Prefix/AbstractVisitingPrefixTreeFilter.cs/#L459">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_PreSiblings_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.PreSiblings*"></a>
+  <h4 id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_PreSiblings_Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VNode_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.PreSiblings(Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VNode)">PreSiblings(AbstractVisitingPrefixTreeFilter.VNode)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void PreSiblings(AbstractVisitingPrefixTreeFilter.VNode vNode)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VNode.html">AbstractVisitingPrefixTreeFilter.VNode</a></td>
+        <td><span class="parametername">vNode</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_Scan_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.Scan(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Spatial/Prefix/AbstractVisitingPrefixTreeFilter.cs/#L319">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_Scan_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.Scan*"></a>
+  <h4 id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_Scan_System_Int32_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.Scan(System.Int32)">Scan(Int32)</h4>
+  <div class="markdown level1 summary"><p>Scans (<code>termsEnum.Next()</code>) terms until a term is found that does
+not start with curVNode&apos;s cell. If it finds a leaf cell or a cell at
+level <code data-dev-comment-type="paramref" class="paramref">scanDetailLevel</code> then it calls
+<a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.html#Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_VisitScanned_Lucene_Net_Spatial_Prefix_Tree_Cell_">VisitScanned(Cell)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void Scan(int scanDetailLevel)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">scanDetailLevel</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_Start.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.Start%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Spatial/Prefix/AbstractVisitingPrefixTreeFilter.cs/#L425">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_Start_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.Start*"></a>
+  <h4 id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_Start" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.Start">Start()</h4>
+  <div class="markdown level1 summary"><p>Called first to setup things.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void Start()</code></pre>
+  </div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_Visit_Lucene_Net_Spatial_Prefix_Tree_Cell_.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.Visit(Lucene.Net.Spatial.Prefix.Tree.Cell)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Spatial/Prefix/AbstractVisitingPrefixTreeFilter.cs/#L441">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_Visit_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.Visit*"></a>
+  <h4 id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_Visit_Lucene_Net_Spatial_Prefix_Tree_Cell_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.Visit(Lucene.Net.Spatial.Prefix.Tree.Cell)">Visit(Cell)</h4>
+  <div class="markdown level1 summary"><p>Visit an indexed cell returned from
+<a class="xref" href="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.html#Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_FindSubCellsToVisit_Lucene_Net_Spatial_Prefix_Tree_Cell_">FindSubCellsToVisit(Cell)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract bool Visit(Cell cell)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Spatial.Prefix.Tree.Cell.html">Cell</a></td>
+        <td><span class="parametername">cell</span></td>
+        <td><p>An intersecting cell.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true to descend to more levels. It is an error to return true
+if cell.Level == detailLevel</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_VisitLeaf_Lucene_Net_Spatial_Prefix_Tree_Cell_.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.VisitLeaf(Lucene.Net.Spatial.Prefix.Tree.Cell)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Spatial/Prefix/AbstractVisitingPrefixTreeFilter.cs/#L450">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_VisitLeaf_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.VisitLeaf*"></a>
+  <h4 id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_VisitLeaf_Lucene_Net_Spatial_Prefix_Tree_Cell_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.VisitLeaf(Lucene.Net.Spatial.Prefix.Tree.Cell)">VisitLeaf(Cell)</h4>
+  <div class="markdown level1 summary"><p>Called after visit() returns true and an indexed leaf cell is found.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void VisitLeaf(Cell cell)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Spatial.Prefix.Tree.Cell.html">Cell</a></td>
+        <td><span class="parametername">cell</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_VisitLeaf_Lucene_Net_Spatial_Prefix_Tree_Cell__remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>Called after Visit() returns true and an indexed leaf cell is found. An
+indexed leaf cell means associated documents generally won&apos;t be found at
+further detail levels.</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_VisitScanned_Lucene_Net_Spatial_Prefix_Tree_Cell_.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.VisitScanned(Lucene.Net.Spatial.Prefix.Tree.Cell)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Spatial/Prefix/AbstractVisitingPrefixTreeFilter.cs/#L457">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_VisitScanned_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.VisitScanned*"></a>
+  <h4 id="Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate_VisitScanned_Lucene_Net_Spatial_Prefix_Tree_Cell_" data-uid="Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate.VisitScanned(Lucene.Net.Spatial.Prefix.Tree.Cell)">VisitScanned(Cell)</h4>
+  <div class="markdown level1 summary"><p>The cell is either indexed as a leaf or is the last level of detail. It
+might not even intersect the query shape, so be sure to check for that.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void VisitScanned(Cell cell)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Spatial.Prefix.Tree.Cell.html">Cell</a></td>
+        <td><span class="parametername">cell</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Spatial_Prefix_AbstractVisitingPrefixTreeFilter_VisitorTemplate.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter.VisitorTemplate%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Spatial/Prefix/AbstractVisitingPrefixTreeFilter.cs/#L97" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

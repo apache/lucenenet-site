@@ -1,0 +1,584 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class WAH8DocIdSet
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class WAH8DocIdSet
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Util.WAH8DocIdSet">
+  
+  
+  <h1 id="Lucene_Net_Util_WAH8DocIdSet" data-uid="Lucene.Net.Util.WAH8DocIdSet" class="text-break">Class WAH8DocIdSet
+  </h1>
+  <div class="markdown level0 summary"><p><a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a> implementation based on word-aligned hybrid encoding on
+words of 8 bits.
+<p>This implementation doesn&apos;t support random-access but has a fast
+<a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html">DocIdSetIterator</a> which can advance in logarithmic time thanks to
+an index.</p>
+<p>The compression scheme is simplistic and should work well with sparse and
+very dense doc id sets while being only slightly larger than a
+<a class="xref" href="Lucene.Net.Util.FixedBitSet.html">FixedBitSet</a> for incompressible sets (overhead&lt;2% in the worst
+case) in spite of the index.</p>
+<p><strong>Format</strong>: The format is byte-aligned. An 8-bits word is either clean,
+meaning composed only of zeros or ones, or dirty, meaning that it contains
+between 1 and 7 bits set. The idea is to encode sequences of clean words
+using run-length encoding and to leave sequences of dirty words as-is.</p>
+<table><thead><tr><th>TokenClean length+Dirty length+Dirty words</th><th></th></tr></thead><tbody><tr><td>1 byte0-n bytes0-n bytes0-n bytes</td><td></td></tr></tbody></table>
+<ul><li><strong>Token</strong> encodes whether clean means full of zeros or ones in the
+        first bit, the number of clean words minus 2 on the next 3 bits and the
+        number of dirty words on the last 4 bits. The higher-order bit is a
+        continuation bit, meaning that the number is incomplete and needs additional
+        bytes to be read.</li><li><strong>Clean length+</strong>: If clean length has its higher-order bit set,
+        you need to read a vint (<a class="xref" href="Lucene.Net.Store.DataInput.html#Lucene_Net_Store_DataInput_ReadVInt32">ReadVInt32()</a>), shift it by 3 bits on
+        the left side and add it to the 3 bits which have been read in the token.</li><li><strong>Dirty length+</strong> works the same way as <strong>Clean length+</strong> but
+        on 4 bits and for the length of dirty words.</li><li><strong>Dirty words</strong>are the dirty words, there are <strong>Dirty length</strong>
+        of them.</li></ul>
+<p>This format cannot encode sequences of less than 2 clean words and 0 dirty
+word. The reason is that if you find a single clean word, you should rather
+encode it as a dirty word. This takes the same space as starting a new
+sequence (since you need one byte for the token) but will be lighter to
+decode. There is however an exception for the first sequence. Since the first
+sequence may start directly with a dirty word, the clean length is encoded
+directly, without subtracting 2.</p>
+<p>There is an additional restriction on the format: the sequence of dirty
+words is not allowed to contain two consecutive clean words. This restriction
+exists to make sure no space is wasted and to make sure iterators can read
+the next doc ID by reading at most 2 dirty words.</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a></div>
+    <div class="level2"><span class="xref">WAH8DocIdSet</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_Bits">DocIdSet.Bits</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_NewAnonymous_System_Func_Lucene_Net_Search_DocIdSetIterator__">DocIdSet.NewAnonymous(Func&lt;DocIdSetIterator&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_NewAnonymous_System_Func_Lucene_Net_Search_DocIdSetIterator__System_Func_Lucene_Net_Util_IBits__">DocIdSet.NewAnonymous(Func&lt;DocIdSetIterator&gt;, Func&lt;IBits&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_NewAnonymous_System_Func_Lucene_Net_Search_DocIdSetIterator__System_Func_System_Boolean__">DocIdSet.NewAnonymous(Func&lt;DocIdSetIterator&gt;, Func&lt;Boolean&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_NewAnonymous_System_Func_Lucene_Net_Search_DocIdSetIterator__System_Func_Lucene_Net_Util_IBits__System_Func_System_Boolean__">DocIdSet.NewAnonymous(Func&lt;DocIdSetIterator&gt;, Func&lt;IBits&gt;, Func&lt;Boolean&gt;)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Util.html">Lucene.Net.Util</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Util_WAH8DocIdSet_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class WAH8DocIdSet : DocIdSet</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WAH8DocIdSet_DEFAULT_INDEX_INTERVAL.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WAH8DocIdSet.DEFAULT_INDEX_INTERVAL%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WAH8DocIdSet.cs/#L88">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_WAH8DocIdSet_DEFAULT_INDEX_INTERVAL" data-uid="Lucene.Net.Util.WAH8DocIdSet.DEFAULT_INDEX_INTERVAL">DEFAULT_INDEX_INTERVAL</h4>
+  <div class="markdown level1 summary"><p>Default index interval. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int DEFAULT_INDEX_INTERVAL = 24</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WAH8DocIdSet_IsCacheable.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WAH8DocIdSet.IsCacheable%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WAH8DocIdSet.cs/#L599">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WAH8DocIdSet_IsCacheable_" data-uid="Lucene.Net.Util.WAH8DocIdSet.IsCacheable*"></a>
+  <h4 id="Lucene_Net_Util_WAH8DocIdSet_IsCacheable" data-uid="Lucene.Net.Util.WAH8DocIdSet.IsCacheable">IsCacheable</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool IsCacheable { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_IsCacheable">DocIdSet.IsCacheable</a></div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WAH8DocIdSet_Cardinality.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WAH8DocIdSet.Cardinality%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WAH8DocIdSet.cs/#L896">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WAH8DocIdSet_Cardinality_" data-uid="Lucene.Net.Util.WAH8DocIdSet.Cardinality*"></a>
+  <h4 id="Lucene_Net_Util_WAH8DocIdSet_Cardinality" data-uid="Lucene.Net.Util.WAH8DocIdSet.Cardinality">Cardinality()</h4>
+  <div class="markdown level1 summary"><p>Return the number of documents in this <a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a> in constant time. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Cardinality()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WAH8DocIdSet_GetIterator.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WAH8DocIdSet.GetIterator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WAH8DocIdSet.cs/#L607">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WAH8DocIdSet_GetIterator_" data-uid="Lucene.Net.Util.WAH8DocIdSet.GetIterator*"></a>
+  <h4 id="Lucene_Net_Util_WAH8DocIdSet_GetIterator" data-uid="Lucene.Net.Util.WAH8DocIdSet.GetIterator">GetIterator()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override DocIdSetIterator GetIterator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html">DocIdSetIterator</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_GetIterator">DocIdSet.GetIterator()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WAH8DocIdSet_Intersect_System_Collections_Generic_ICollection_Lucene_Net_Util_WAH8DocIdSet__.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WAH8DocIdSet.Intersect(System.Collections.Generic.ICollection%7BLucene.Net.Util.WAH8DocIdSet%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WAH8DocIdSet.cs/#L117">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WAH8DocIdSet_Intersect_" data-uid="Lucene.Net.Util.WAH8DocIdSet.Intersect*"></a>
+  <h4 id="Lucene_Net_Util_WAH8DocIdSet_Intersect_System_Collections_Generic_ICollection_Lucene_Net_Util_WAH8DocIdSet__" data-uid="Lucene.Net.Util.WAH8DocIdSet.Intersect(System.Collections.Generic.ICollection{Lucene.Net.Util.WAH8DocIdSet})">Intersect(ICollection&lt;WAH8DocIdSet&gt;)</h4>
+  <div class="markdown level1 summary"><p>Same as <a class="xref" href="Lucene.Net.Util.WAH8DocIdSet.html#Lucene_Net_Util_WAH8DocIdSet_Intersect_System_Collections_Generic_ICollection_Lucene_Net_Util_WAH8DocIdSet__System_Int32_">Intersect(ICollection&lt;WAH8DocIdSet&gt;, Int32)</a> with the default index interval. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static WAH8DocIdSet Intersect(ICollection&lt;WAH8DocIdSet&gt; docIdSets)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Lucene.Net.Util.WAH8DocIdSet.html">WAH8DocIdSet</a>&gt;</td>
+        <td><span class="parametername">docIdSets</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.WAH8DocIdSet.html">WAH8DocIdSet</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WAH8DocIdSet_Intersect_System_Collections_Generic_ICollection_Lucene_Net_Util_WAH8DocIdSet__System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WAH8DocIdSet.Intersect(System.Collections.Generic.ICollection%7BLucene.Net.Util.WAH8DocIdSet%7D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WAH8DocIdSet.cs/#L126">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WAH8DocIdSet_Intersect_" data-uid="Lucene.Net.Util.WAH8DocIdSet.Intersect*"></a>
+  <h4 id="Lucene_Net_Util_WAH8DocIdSet_Intersect_System_Collections_Generic_ICollection_Lucene_Net_Util_WAH8DocIdSet__System_Int32_" data-uid="Lucene.Net.Util.WAH8DocIdSet.Intersect(System.Collections.Generic.ICollection{Lucene.Net.Util.WAH8DocIdSet},System.Int32)">Intersect(ICollection&lt;WAH8DocIdSet&gt;, Int32)</h4>
+  <div class="markdown level1 summary"><p>Compute the intersection of the provided sets. This method is much faster than
+computing the intersection manually since it operates directly at the byte level.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static WAH8DocIdSet Intersect(ICollection&lt;WAH8DocIdSet&gt; docIdSets, int indexInterval)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Lucene.Net.Util.WAH8DocIdSet.html">WAH8DocIdSet</a>&gt;</td>
+        <td><span class="parametername">docIdSets</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">indexInterval</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.WAH8DocIdSet.html">WAH8DocIdSet</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WAH8DocIdSet_RamBytesUsed.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WAH8DocIdSet.RamBytesUsed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WAH8DocIdSet.cs/#L903">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WAH8DocIdSet_RamBytesUsed_" data-uid="Lucene.Net.Util.WAH8DocIdSet.RamBytesUsed*"></a>
+  <h4 id="Lucene_Net_Util_WAH8DocIdSet_RamBytesUsed" data-uid="Lucene.Net.Util.WAH8DocIdSet.RamBytesUsed">RamBytesUsed()</h4>
+  <div class="markdown level1 summary"><p>Return the memory usage of this class in bytes. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public long RamBytesUsed()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WAH8DocIdSet_Union_System_Collections_Generic_ICollection_Lucene_Net_Util_WAH8DocIdSet__.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WAH8DocIdSet.Union(System.Collections.Generic.ICollection%7BLucene.Net.Util.WAH8DocIdSet%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WAH8DocIdSet.cs/#L189">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WAH8DocIdSet_Union_" data-uid="Lucene.Net.Util.WAH8DocIdSet.Union*"></a>
+  <h4 id="Lucene_Net_Util_WAH8DocIdSet_Union_System_Collections_Generic_ICollection_Lucene_Net_Util_WAH8DocIdSet__" data-uid="Lucene.Net.Util.WAH8DocIdSet.Union(System.Collections.Generic.ICollection{Lucene.Net.Util.WAH8DocIdSet})">Union(ICollection&lt;WAH8DocIdSet&gt;)</h4>
+  <div class="markdown level1 summary"><p>Same as <a class="xref" href="Lucene.Net.Util.WAH8DocIdSet.html#Lucene_Net_Util_WAH8DocIdSet_Union_System_Collections_Generic_ICollection_Lucene_Net_Util_WAH8DocIdSet__System_Int32_">Union(ICollection&lt;WAH8DocIdSet&gt;, Int32)</a> with the default index interval. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static WAH8DocIdSet Union(ICollection&lt;WAH8DocIdSet&gt; docIdSets)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Lucene.Net.Util.WAH8DocIdSet.html">WAH8DocIdSet</a>&gt;</td>
+        <td><span class="parametername">docIdSets</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.WAH8DocIdSet.html">WAH8DocIdSet</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WAH8DocIdSet_Union_System_Collections_Generic_ICollection_Lucene_Net_Util_WAH8DocIdSet__System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WAH8DocIdSet.Union(System.Collections.Generic.ICollection%7BLucene.Net.Util.WAH8DocIdSet%7D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WAH8DocIdSet.cs/#L198">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WAH8DocIdSet_Union_" data-uid="Lucene.Net.Util.WAH8DocIdSet.Union*"></a>
+  <h4 id="Lucene_Net_Util_WAH8DocIdSet_Union_System_Collections_Generic_ICollection_Lucene_Net_Util_WAH8DocIdSet__System_Int32_" data-uid="Lucene.Net.Util.WAH8DocIdSet.Union(System.Collections.Generic.ICollection{Lucene.Net.Util.WAH8DocIdSet},System.Int32)">Union(ICollection&lt;WAH8DocIdSet&gt;, Int32)</h4>
+  <div class="markdown level1 summary"><p>Compute the union of the provided sets. This method is much faster than
+computing the union manually since it operates directly at the byte level.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static WAH8DocIdSet Union(ICollection&lt;WAH8DocIdSet&gt; docIdSets, int indexInterval)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Lucene.Net.Util.WAH8DocIdSet.html">WAH8DocIdSet</a>&gt;</td>
+        <td><span class="parametername">docIdSets</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">indexInterval</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.WAH8DocIdSet.html">WAH8DocIdSet</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Support.Number.html#Lucene_Net_Support_Number_IsNumber_System_Object_">Number.IsNumber(Object)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WAH8DocIdSet.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WAH8DocIdSet%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WAH8DocIdSet.cs/#L77" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

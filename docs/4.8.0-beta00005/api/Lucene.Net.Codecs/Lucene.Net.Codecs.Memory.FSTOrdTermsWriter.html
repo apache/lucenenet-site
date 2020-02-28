@@ -1,0 +1,480 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class FSTOrdTermsWriter
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class FSTOrdTermsWriter
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.Memory.FSTOrdTermsWriter">
+  
+  
+  <h1 id="Lucene_Net_Codecs_Memory_FSTOrdTermsWriter" data-uid="Lucene.Net.Codecs.Memory.FSTOrdTermsWriter" class="text-break">Class FSTOrdTermsWriter
+  </h1>
+  <div class="markdown level0 summary"><p>FST-based term dict, using ord as FST output.
+<p>
+The FST holds the mapping between &lt;term, ord&gt;, and 
+term&apos;s metadata is delta encoded into a single byte block.
+<p>
+Typically the byte block consists of four parts:
+<ol><li>term statistics: docFreq, totalTermFreq;</li><li>monotonic long[], e.g. the pointer to the postings list for that term;</li><li>generic byte[], e.g. other information customized by postings base.</li><li>single-level skip list to speed up metadata decoding by ord.</li></ol>
+<p>
+<p>
+Files:
+<ul><li><code>.tix</code>: <a href="#Termindex">Term Index</a></li><li><code>.tbk</code>: <a href="#Termblock">Term Block</a></li></ul>
+</p></p>
+<p><a name="Termindex" id="Termindex"></a>
+<h3>Term Index</h3>
+<p>
+ The .tix contains a list of FSTs, one for each field.
+ The FST maps a term to its corresponding order in current field.
+</p></p>
+<ul><li>TermIndex(.tix) --&gt; Header, TermFST<sup>NumFields</sup>, Footer</li><li>TermFST --&gt; <a class="xref" href="../Lucene.Net/Lucene.Net.Util.Fst.FST-1.html">FST&lt;T&gt;</a></li><li>Header --&gt; CodecHeader (<a class="xref" href="../Lucene.Net/Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>Footer --&gt; CodecFooter (<a class="xref" href="../Lucene.Net/Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteFooter_Lucene_Net_Store_IndexOutput_">WriteFooter(IndexOutput)</a>) </li></ul>
+
+<p>Notes:</p>
+<ul><li>
+ Since terms are already sorted before writing to <a href="#Termblock">Term Block</a>, 
+ their ords can directly used to seek term metadata from term block.
+</li></ul>
+
+<a name="Termblock" id="Termblock"></a>
+<h3>Term Block</h3>
+<p>
+The .tbk contains all the statistics and metadata for terms, along with field summary (e.g. 
+per-field data like number of documents in current field). For each field, there are four blocks:
+<ul><li>statistics bytes block: contains term statistics; </li><li>metadata longs block: delta-encodes monotonic part of metadata; </li><li>metadata bytes block: encodes other parts of metadata; </li><li>skip block: contains skip data, to speed up metadata seeking and decoding</li></ul>
+</p>
+
+<p><p>File Format:</p>
+<ul><li>TermBlock(.tbk) --&gt; Header, <em>PostingsHeader</em>, FieldSummary, DirOffset</li><li>FieldSummary --&gt; NumFields, &lt;FieldNumber, NumTerms, SumTotalTermFreq?, SumDocFreq,
+                                        DocCount, LongsSize, DataBlock &gt; <sup>NumFields</sup>, Footer</li><li>DataBlock --&gt; StatsBlockLength, MetaLongsBlockLength, MetaBytesBlockLength, 
+                      SkipBlock, StatsBlock, MetaLongsBlock, MetaBytesBlock </li><li>SkipBlock --&gt; &lt; StatsFPDelta, MetaLongsSkipFPDelta, MetaBytesSkipFPDelta, 
+                           MetaLongsSkipDelta<sup>LongsSize</sup> &gt;<sup>NumTerms</sup></li><li>StatsBlock --&gt; &lt; DocFreq[Same?], (TotalTermFreq-DocFreq) ? &gt; <sup>NumTerms</sup></li><li>MetaLongsBlock --&gt; &lt; LongDelta<sup>LongsSize</sup>, BytesSize &gt; <sup>NumTerms</sup></li><li>MetaBytesBlock --&gt; Byte <sup>MetaBytesBlockLength</sup></li><li>Header --&gt; CodecHeader (<a class="xref" href="../Lucene.Net/Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>DirOffset --&gt; Uint64 (<a class="xref" href="../Lucene.Net/Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a>) </li><li>NumFields, FieldNumber, DocCount, DocFreq, LongsSize, 
+       FieldNumber, DocCount --&gt; VInt (<a class="xref" href="../Lucene.Net/Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>NumTerms, SumTotalTermFreq, SumDocFreq, StatsBlockLength, MetaLongsBlockLength, MetaBytesBlockLength,
+       StatsFPDelta, MetaLongsSkipFPDelta, MetaBytesSkipFPDelta, MetaLongsSkipStart, TotalTermFreq, 
+       LongDelta,--&gt; VLong (<a class="xref" href="../Lucene.Net/Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt64_System_Int64_">WriteVInt64(Int64)</a>) </li><li>Footer --&gt; CodecFooter (<a class="xref" href="../Lucene.Net/Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteFooter_Lucene_Net_Store_IndexOutput_">WriteFooter(IndexOutput)</a>) </li></ul>
+<p>Notes: </p>
+<ul><li>
+  The format of PostingsHeader and MetaBytes are customized by the specific postings implementation:
+  they contain arbitrary per-file data (such as parameters or versioning information), and per-term data 
+  (non-monotonic ones like pulsed postings data).
+</li><li>
+ During initialization the reader will load all the blocks into memory. SkipBlock will be decoded, so that during seek
+ term dict can lookup file pointers directly. StatsFPDelta, MetaLongsSkipFPDelta, etc. are file offset
+ for every SkipInterval&apos;s term. MetaLongsSkipDelta is the difference from previous one, which indicates
+ the value of preceding metadata longs for every SkipInterval&apos;s term.
+</li><li>
+ DocFreq is the count of documents which contain the term. TotalTermFreq is the total number of occurrences of the term. 
+ Usually these two values are the same for long tail terms, therefore one bit is stole from DocFreq to check this case,
+ so that encoding of TotalTermFreq may be omitted.
+</li></ul>
+<p>
+@lucene.experimental </p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="../Lucene.Net/Lucene.Net.Codecs.FieldsConsumer.html">FieldsConsumer</a></div>
+    <div class="level2"><span class="xref">FSTOrdTermsWriter</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Codecs.FieldsConsumer.html#Lucene_Net_Codecs_FieldsConsumer_Dispose">FieldsConsumer.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Codecs.FieldsConsumer.html#Lucene_Net_Codecs_FieldsConsumer_Merge_Lucene_Net_Index_MergeState_Lucene_Net_Index_Fields_">FieldsConsumer.Merge(MergeState, Fields)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Codecs.Memory.html">Lucene.Net.Codecs.Memory</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Codecs.dll</h6>
+  <h5 id="Lucene_Net_Codecs_Memory_FSTOrdTermsWriter_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class FSTOrdTermsWriter : FieldsConsumer, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Memory_FSTOrdTermsWriter__ctor_Lucene_Net_Index_SegmentWriteState_Lucene_Net_Codecs_PostingsWriterBase_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.%23ctor(Lucene.Net.Index.SegmentWriteState%2CLucene.Net.Codecs.PostingsWriterBase)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Codecs/Memory/FSTOrdTermsWriter.cs/#L156">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Memory_FSTOrdTermsWriter__ctor_" data-uid="Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_Memory_FSTOrdTermsWriter__ctor_Lucene_Net_Index_SegmentWriteState_Lucene_Net_Codecs_PostingsWriterBase_" data-uid="Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.#ctor(Lucene.Net.Index.SegmentWriteState,Lucene.Net.Codecs.PostingsWriterBase)">FSTOrdTermsWriter(SegmentWriteState, PostingsWriterBase)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FSTOrdTermsWriter(SegmentWriteState state, PostingsWriterBase postingsWriter)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Index.SegmentWriteState.html">SegmentWriteState</a></td>
+        <td><span class="parametername">state</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Codecs.PostingsWriterBase.html">PostingsWriterBase</a></td>
+        <td><span class="parametername">postingsWriter</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Memory_FSTOrdTermsWriter_SKIP_INTERVAL.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.SKIP_INTERVAL%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Codecs/Memory/FSTOrdTermsWriter.cs/#L148">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_Memory_FSTOrdTermsWriter_SKIP_INTERVAL" data-uid="Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.SKIP_INTERVAL">SKIP_INTERVAL</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int SKIP_INTERVAL = 8</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Memory_FSTOrdTermsWriter_TERMS_VERSION_CHECKSUM.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.TERMS_VERSION_CHECKSUM%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Codecs/Memory/FSTOrdTermsWriter.cs/#L146">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_Memory_FSTOrdTermsWriter_TERMS_VERSION_CHECKSUM" data-uid="Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.TERMS_VERSION_CHECKSUM">TERMS_VERSION_CHECKSUM</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int TERMS_VERSION_CHECKSUM = 1</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Memory_FSTOrdTermsWriter_TERMS_VERSION_CURRENT.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.TERMS_VERSION_CURRENT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Codecs/Memory/FSTOrdTermsWriter.cs/#L147">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_Memory_FSTOrdTermsWriter_TERMS_VERSION_CURRENT" data-uid="Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.TERMS_VERSION_CURRENT">TERMS_VERSION_CURRENT</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int TERMS_VERSION_CURRENT = 1</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Memory_FSTOrdTermsWriter_TERMS_VERSION_START.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.TERMS_VERSION_START%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Codecs/Memory/FSTOrdTermsWriter.cs/#L145">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_Memory_FSTOrdTermsWriter_TERMS_VERSION_START" data-uid="Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.TERMS_VERSION_START">TERMS_VERSION_START</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int TERMS_VERSION_START = 0</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Memory_FSTOrdTermsWriter_AddField_Lucene_Net_Index_FieldInfo_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.AddField(Lucene.Net.Index.FieldInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Codecs/Memory/FSTOrdTermsWriter.cs/#L185">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Memory_FSTOrdTermsWriter_AddField_" data-uid="Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.AddField*"></a>
+  <h4 id="Lucene_Net_Codecs_Memory_FSTOrdTermsWriter_AddField_Lucene_Net_Index_FieldInfo_" data-uid="Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.AddField(Lucene.Net.Index.FieldInfo)">AddField(FieldInfo)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override TermsConsumer AddField(FieldInfo field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Index.FieldInfo.html">FieldInfo</a></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Codecs.TermsConsumer.html">TermsConsumer</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="../Lucene.Net/Lucene.Net.Codecs.FieldsConsumer.html#Lucene_Net_Codecs_FieldsConsumer_AddField_Lucene_Net_Index_FieldInfo_">FieldsConsumer.AddField(FieldInfo)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Memory_FSTOrdTermsWriter_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Codecs/Memory/FSTOrdTermsWriter.cs/#L190">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Memory_FSTOrdTermsWriter_Dispose_" data-uid="Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.Dispose*"></a>
+  <h4 id="Lucene_Net_Codecs_Memory_FSTOrdTermsWriter_Dispose_System_Boolean_" data-uid="Lucene.Net.Codecs.Memory.FSTOrdTermsWriter.Dispose(System.Boolean)">Dispose(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">disposing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="../Lucene.Net/Lucene.Net.Codecs.FieldsConsumer.html#Lucene_Net_Codecs_FieldsConsumer_Dispose_System_Boolean_">FieldsConsumer.Dispose(Boolean)</a></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Memory_FSTOrdTermsWriter.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Memory.FSTOrdTermsWriter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Codecs/Memory/FSTOrdTermsWriter.cs/#L140" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

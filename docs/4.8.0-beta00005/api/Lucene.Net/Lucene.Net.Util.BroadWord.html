@@ -1,0 +1,651 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class BroadWord
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class BroadWord
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Util.BroadWord">
+  
+  
+  <h1 id="Lucene_Net_Util_BroadWord" data-uid="Lucene.Net.Util.BroadWord" class="text-break">Class BroadWord
+  </h1>
+  <div class="markdown level0 summary"><p>Methods and constants inspired by the article
+&quot;Broadword Implementation of Rank/Select Queries&quot; by Sebastiano Vigna, January 30, 2012:
+<ul><li>algorithm 1: <span class="xref">Lucene.Net.Util.BroadWord.BitCount(System.Int64)</span>, count of set bits in a <span class="xref">System.Int64</span></li><li>algorithm 2: <a class="xref" href="Lucene.Net.Util.BroadWord.html#Lucene_Net_Util_BroadWord_Select_System_Int64_System_Int32_">Select(Int64, Int32)</a>, selection of a set bit in a <span class="xref">System.Int64</span>,</li><li>bytewise signed smaller &lt;<sub><small>8</small></sub> operator: <a class="xref" href="Lucene.Net.Util.BroadWord.html#Lucene_Net_Util_BroadWord_SmallerUpTo7_8_System_Int64_System_Int64_">SmallerUpTo7_8(Int64, Int64)</a>.</li><li>shortwise signed smaller &lt;<sub><small>16</small></sub> operator: <a class="xref" href="Lucene.Net.Util.BroadWord.html#Lucene_Net_Util_BroadWord_SmallerUpto15_16_System_Int64_System_Int64_">SmallerUpto15_16(Int64, Int64)</a>.</li><li>some of the Lk and Hk constants that are used by the above:
+        L8 <a class="xref" href="Lucene.Net.Util.BroadWord.html#Lucene_Net_Util_BroadWord_L8_L">L8_L</a>, H8 <a class="xref" href="Lucene.Net.Util.BroadWord.html#Lucene_Net_Util_BroadWord_H8_L">H8_L</a>, L9 <a class="xref" href="Lucene.Net.Util.BroadWord.html#Lucene_Net_Util_BroadWord_L9_L">L9_L</a>, L16 <a class="xref" href="Lucene.Net.Util.BroadWord.html#Lucene_Net_Util_BroadWord_L16_L">L16_L</a>and H16 <a class="xref" href="Lucene.Net.Util.BroadWord.html#Lucene_Net_Util_BroadWord_H8_L">H8_L</a>.</li></ul></p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">BroadWord</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Util.html">Lucene.Net.Util</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Util_BroadWord_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class BroadWord</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BroadWord_H16_L.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BroadWord.H16_L%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/BroadWord.cs/#L147">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_BroadWord_H16_L" data-uid="Lucene.Net.Util.BroadWord.H16_L">H16_L</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly long H16_L</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BroadWord_H8_L.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BroadWord.H8_L%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/BroadWord.cs/#L145">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_BroadWord_H8_L" data-uid="Lucene.Net.Util.BroadWord.H8_L">H8_L</h4>
+  <div class="markdown level1 summary"><p>Hk = Lk &lt;&lt; (k-1) .
+These contain the high bit of each group of k bits.
+The suffix _L indicates the <span class="xref">System.Int64</span> implementation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly long H8_L</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BroadWord_L16_L.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BroadWord.L16_L%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/BroadWord.cs/#L138">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_BroadWord_L16_L" data-uid="Lucene.Net.Util.BroadWord.L16_L">L16_L</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const long L16_L = 281479271743489L</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BroadWord_L8_L.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BroadWord.L8_L%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/BroadWord.cs/#L135">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_BroadWord_L8_L" data-uid="Lucene.Net.Util.BroadWord.L8_L">L8_L</h4>
+  <div class="markdown level1 summary"><p>Lk denotes the constant whose ones are in position 0, k, 2k, . . .
+These contain the low bit of each group of k bits.
+The suffix _L indicates the <span class="xref">System.Int64</span> implementation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const long L8_L = 72340172838076673L</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BroadWord_L9_L.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BroadWord.L9_L%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/BroadWord.cs/#L137">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_BroadWord_L9_L" data-uid="Lucene.Net.Util.BroadWord.L9_L">L9_L</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const long L9_L = -9205322385119247871L</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BroadWord_NotEquals0_8_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BroadWord.NotEquals0_8(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/BroadWord.cs/#L115">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BroadWord_NotEquals0_8_" data-uid="Lucene.Net.Util.BroadWord.NotEquals0_8*"></a>
+  <h4 id="Lucene_Net_Util_BroadWord_NotEquals0_8_System_Int64_" data-uid="Lucene.Net.Util.BroadWord.NotEquals0_8(System.Int64)">NotEquals0_8(Int64)</h4>
+  <div class="markdown level1 summary"><p>An unsigned bytewise not equals 0 operator.
+This uses the following numbers of basic <span class="xref">System.Int64</span> operations: 2 or, 1 and, 1 minus. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static long NotEquals0_8(long x)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">x</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><p>A <span class="xref">System.Int64</span> with bits set in the <a class="xref" href="Lucene.Net.Util.BroadWord.html#Lucene_Net_Util_BroadWord_H8_L">H8_L</a> positions corresponding to each unsigned byte that does not equal 0. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BroadWord_Select_System_Int64_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BroadWord.Select(System.Int64%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/BroadWord.cs/#L63">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BroadWord_Select_" data-uid="Lucene.Net.Util.BroadWord.Select*"></a>
+  <h4 id="Lucene_Net_Util_BroadWord_Select_System_Int64_System_Int32_" data-uid="Lucene.Net.Util.BroadWord.Select(System.Int64,System.Int32)">Select(Int64, Int32)</h4>
+  <div class="markdown level1 summary"><p>Select a 1-bit from a <span class="xref">System.Int64</span>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int Select(long x, int r)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">x</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">r</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The index of the r-th 1 bit in x, or if no such bit exists, 72. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BroadWord_SelectNaive_System_Int64_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BroadWord.SelectNaive(System.Int64%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/BroadWord.cs/#L153">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BroadWord_SelectNaive_" data-uid="Lucene.Net.Util.BroadWord.SelectNaive*"></a>
+  <h4 id="Lucene_Net_Util_BroadWord_SelectNaive_System_Int64_System_Int32_" data-uid="Lucene.Net.Util.BroadWord.SelectNaive(System.Int64,System.Int32)">SelectNaive(Int64, Int32)</h4>
+  <div class="markdown level1 summary"><p>Naive implementation of <a class="xref" href="Lucene.Net.Util.BroadWord.html#Lucene_Net_Util_BroadWord_Select_System_Int64_System_Int32_">Select(Int64, Int32)</a>, using <a class="xref" href="Lucene.Net.Support.Number.html#Lucene_Net_Support_Number_NumberOfLeadingZeros_System_Int64_">NumberOfLeadingZeros(Int64)</a> repetitively.
+Works relatively fast for low ranks. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int SelectNaive(long x, int r)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">x</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">r</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The index of the r-th 1 bit in x, or if no such bit exists, 72. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BroadWord_Smalleru_8_System_Int64_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BroadWord.Smalleru_8(System.Int64%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/BroadWord.cs/#L105">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BroadWord_Smalleru_8_" data-uid="Lucene.Net.Util.BroadWord.Smalleru_8*"></a>
+  <h4 id="Lucene_Net_Util_BroadWord_Smalleru_8_System_Int64_System_Int64_" data-uid="Lucene.Net.Util.BroadWord.Smalleru_8(System.Int64,System.Int64)">Smalleru_8(Int64, Int64)</h4>
+  <div class="markdown level1 summary"><p>An unsigned bytewise smaller &lt;<sub><small>8</small></sub> operator.
+This uses the following numbers of basic <span class="xref">System.Int64</span> operations: 3 or, 2 and, 2 xor, 1 minus, 1 not. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static long Smalleru_8(long x, long y)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">x</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">y</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><p>A <span class="xref">System.Int64</span> with bits set in the <a class="xref" href="Lucene.Net.Util.BroadWord.html#Lucene_Net_Util_BroadWord_H8_L">H8_L</a> positions corresponding to each input unsigned byte pair that compares smaller. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BroadWord_SmallerUpto15_16_System_Int64_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BroadWord.SmallerUpto15_16(System.Int64%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/BroadWord.cs/#L125">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BroadWord_SmallerUpto15_16_" data-uid="Lucene.Net.Util.BroadWord.SmallerUpto15_16*"></a>
+  <h4 id="Lucene_Net_Util_BroadWord_SmallerUpto15_16_System_Int64_System_Int64_" data-uid="Lucene.Net.Util.BroadWord.SmallerUpto15_16(System.Int64,System.Int64)">SmallerUpto15_16(Int64, Int64)</h4>
+  <div class="markdown level1 summary"><p>A bytewise smaller &lt;<sub><small>16</small></sub> operator.
+This uses the following numbers of basic <span class="xref">System.Int64</span> operations: 1 or, 2 and, 2 xor, 1 minus, 1 not. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static long SmallerUpto15_16(long x, long y)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">x</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">y</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><p>A <span class="xref">System.Int64</span> with bits set in the <a class="xref" href="Lucene.Net.Util.BroadWord.html#Lucene_Net_Util_BroadWord_H16_L">H16_L</a> positions corresponding to each input signed short pair that compares smaller. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BroadWord_SmallerUpTo7_8_System_Int64_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BroadWord.SmallerUpTo7_8(System.Int64%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/BroadWord.cs/#L95">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BroadWord_SmallerUpTo7_8_" data-uid="Lucene.Net.Util.BroadWord.SmallerUpTo7_8*"></a>
+  <h4 id="Lucene_Net_Util_BroadWord_SmallerUpTo7_8_System_Int64_System_Int64_" data-uid="Lucene.Net.Util.BroadWord.SmallerUpTo7_8(System.Int64,System.Int64)">SmallerUpTo7_8(Int64, Int64)</h4>
+  <div class="markdown level1 summary"><p>A signed bytewise smaller &lt;<sub><small>8</small></sub> operator, for operands 0L&lt;= x, y &lt;=0x7L.
+This uses the following numbers of basic <span class="xref">System.Int64</span> operations: 1 or, 2 and, 2 xor, 1 minus, 1 not. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static long SmallerUpTo7_8(long x, long y)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">x</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">y</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><p>A <span class="xref">System.Int64</span> with bits set in the <a class="xref" href="Lucene.Net.Util.BroadWord.html#Lucene_Net_Util_BroadWord_H8_L">H8_L</a> positions corresponding to each input signed byte pair that compares smaller. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Support.Number.html#Lucene_Net_Support_Number_IsNumber_System_Object_">Number.IsNumber(Object)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BroadWord.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BroadWord%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/BroadWord.cs/#L36" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
