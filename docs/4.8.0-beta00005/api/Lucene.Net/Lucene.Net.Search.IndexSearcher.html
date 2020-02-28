@@ -1,0 +1,2747 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class IndexSearcher
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class IndexSearcher
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.IndexSearcher">
+  
+  
+  <h1 id="Lucene_Net_Search_IndexSearcher" data-uid="Lucene.Net.Search.IndexSearcher" class="text-break">Class IndexSearcher
+  </h1>
+  <div class="markdown level0 summary"><p>Implements search over a single <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a>.</p>
+<p>Applications usually need only call the inherited
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_System_Int32_">Search(Query, Int32)</a>
+or <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_">Search(Query, Filter, Int32)</a> methods. For
+performance reasons, if your index is unchanging, you
+should share a single <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> instance across
+multiple searches instead of creating a new one
+per-search.  If your index has changed and you wish to
+see the changes reflected in searching, you should
+use <a class="xref" href="Lucene.Net.Index.DirectoryReader.html#Lucene_Net_Index_DirectoryReader_OpenIfChanged_Lucene_Net_Index_DirectoryReader_">OpenIfChanged(DirectoryReader)</a>
+to obtain a new reader and
+then create a new <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> from that.  Also, for
+low-latency turnaround it&apos;s best to use a near-real-time
+reader (<a class="xref" href="Lucene.Net.Index.DirectoryReader.html#Lucene_Net_Index_DirectoryReader_Open_Lucene_Net_Index_IndexWriter_System_Boolean_">Open(IndexWriter, Boolean)</a>).
+Once you have a new <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a>, it&apos;s relatively
+cheap to create a new <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> from it.
+
+<p><a name="thread-safety"></a><p><strong>NOTE</strong>: 
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> instances are completely
+thread safe, meaning multiple threads can call any of its
+methods, concurrently.  If your application requires
+external synchronization, you should <strong>not</strong>
+synchronize on the <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> instance;
+use your own (non-Lucene) objects instead.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">IndexSearcher</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Search.html">Lucene.Net.Search</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Search_IndexSearcher_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class IndexSearcher</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher__ctor_Lucene_Net_Index_IndexReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.%23ctor(Lucene.Net.Index.IndexReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L111">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher__ctor_" data-uid="Lucene.Net.Search.IndexSearcher.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher__ctor_Lucene_Net_Index_IndexReader_" data-uid="Lucene.Net.Search.IndexSearcher.#ctor(Lucene.Net.Index.IndexReader)">IndexSearcher(IndexReader)</h4>
+  <div class="markdown level1 summary"><p>Creates a searcher searching the provided index. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IndexSearcher(IndexReader r)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a></td>
+        <td><span class="parametername">r</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher__ctor_Lucene_Net_Index_IndexReader_System_Threading_Tasks_TaskScheduler_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.%23ctor(Lucene.Net.Index.IndexReader%2CSystem.Threading.Tasks.TaskScheduler)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L124">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher__ctor_" data-uid="Lucene.Net.Search.IndexSearcher.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher__ctor_Lucene_Net_Index_IndexReader_System_Threading_Tasks_TaskScheduler_" data-uid="Lucene.Net.Search.IndexSearcher.#ctor(Lucene.Net.Index.IndexReader,System.Threading.Tasks.TaskScheduler)">IndexSearcher(IndexReader, TaskScheduler)</h4>
+  <div class="markdown level1 summary"><p>Runs searches for each segment separately, using the
+provided <span class="xref">System.Threading.Tasks.TaskScheduler</span>.  <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> will not
+shutdown/awaitTermination this <span class="xref">System.Threading.Tasks.TaskScheduler</span> on
+dispose; you must do so, eventually, on your own.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IndexSearcher(IndexReader r, TaskScheduler executor)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a></td>
+        <td><span class="parametername">r</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.TaskScheduler</span></td>
+        <td><span class="parametername">executor</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher__ctor_Lucene_Net_Index_IndexReaderContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.%23ctor(Lucene.Net.Index.IndexReaderContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L158">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher__ctor_" data-uid="Lucene.Net.Search.IndexSearcher.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher__ctor_Lucene_Net_Index_IndexReaderContext_" data-uid="Lucene.Net.Search.IndexSearcher.#ctor(Lucene.Net.Index.IndexReaderContext)">IndexSearcher(IndexReaderContext)</h4>
+  <div class="markdown level1 summary"><p>Creates a searcher searching the provided top-level <a class="xref" href="Lucene.Net.Index.IndexReaderContext.html">IndexReaderContext</a>.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IndexSearcher(IndexReaderContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexReaderContext.html">IndexReaderContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Search_IndexSearcher__ctor_Lucene_Net_Index_IndexReaderContext__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.IndexReaderContext.html">IndexReaderContext</a></div>
+      <div><a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Context">Context</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher__ctor_Lucene_Net_Index_IndexReaderContext_System_Threading_Tasks_TaskScheduler_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.%23ctor(Lucene.Net.Index.IndexReaderContext%2CSystem.Threading.Tasks.TaskScheduler)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L141">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher__ctor_" data-uid="Lucene.Net.Search.IndexSearcher.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher__ctor_Lucene_Net_Index_IndexReaderContext_System_Threading_Tasks_TaskScheduler_" data-uid="Lucene.Net.Search.IndexSearcher.#ctor(Lucene.Net.Index.IndexReaderContext,System.Threading.Tasks.TaskScheduler)">IndexSearcher(IndexReaderContext, TaskScheduler)</h4>
+  <div class="markdown level1 summary"><p>Creates a searcher searching the provided top-level <a class="xref" href="Lucene.Net.Index.IndexReaderContext.html">IndexReaderContext</a>.
+<p>
+Given a non-<code>null</code> <span class="xref">System.Threading.Tasks.TaskScheduler</span> this method runs
+searches for each segment separately, using the provided <span class="xref">System.Threading.Tasks.TaskScheduler</span>.
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> will not shutdown/awaitTermination this <span class="xref">System.Threading.Tasks.TaskScheduler</span> on
+close; you must do so, eventually, on your own.
+<p>
+@lucene.experimental </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IndexSearcher(IndexReaderContext context, TaskScheduler executor)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexReaderContext.html">IndexReaderContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Threading.Tasks.TaskScheduler</span></td>
+        <td><span class="parametername">executor</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Search_IndexSearcher__ctor_Lucene_Net_Index_IndexReaderContext_System_Threading_Tasks_TaskScheduler__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.IndexReaderContext.html">IndexReaderContext</a></div>
+      <div><a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Context">Context</a></div>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_m_leafContexts.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.m_leafContexts%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L77">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_IndexSearcher_m_leafContexts" data-uid="Lucene.Net.Search.IndexSearcher.m_leafContexts">m_leafContexts</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly IList&lt;AtomicReaderContext&gt; m_leafContexts</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_m_leafSlices.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.m_leafSlices%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L81">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_IndexSearcher_m_leafSlices" data-uid="Lucene.Net.Search.IndexSearcher.m_leafSlices">m_leafSlices</h4>
+  <div class="markdown level1 summary"><p>Used with executor - each slice holds a set of leafs executed within one thread </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly IndexSearcher.LeafSlice[] m_leafSlices</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.IndexSearcher.LeafSlice.html">IndexSearcher.LeafSlice</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_m_readerContext.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.m_readerContext%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L75">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_IndexSearcher_m_readerContext" data-uid="Lucene.Net.Search.IndexSearcher.m_readerContext">m_readerContext</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly IndexReaderContext m_readerContext</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexReaderContext.html">IndexReaderContext</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_DefaultSimilarity.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.DefaultSimilarity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L97">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_DefaultSimilarity_" data-uid="Lucene.Net.Search.IndexSearcher.DefaultSimilarity*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_DefaultSimilarity" data-uid="Lucene.Net.Search.IndexSearcher.DefaultSimilarity">DefaultSimilarity</h4>
+  <div class="markdown level1 summary"><p>Expert: returns a default <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a> instance.
+In general, this method is only called to initialize searchers and writers.
+User code and query implementations should respect
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Similarity">Similarity</a>.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Similarity DefaultSimilarity { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_IndexReader.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.IndexReader%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L180">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_IndexReader_" data-uid="Lucene.Net.Search.IndexSearcher.IndexReader*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_IndexReader" data-uid="Lucene.Net.Search.IndexSearcher.IndexReader">IndexReader</h4>
+  <div class="markdown level1 summary"><p>Return the <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> this searches. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IndexReader IndexReader { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Similarity.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Similarity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L222">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Similarity_" data-uid="Lucene.Net.Search.IndexSearcher.Similarity*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Similarity" data-uid="Lucene.Net.Search.IndexSearcher.Similarity">Similarity</h4>
+  <div class="markdown level1 summary"><p>Expert: Set the <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a> implementation used by this IndexSearcher.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Similarity Similarity { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_TopReaderContext.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.TopReaderContext%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L736">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_TopReaderContext_" data-uid="Lucene.Net.Search.IndexSearcher.TopReaderContext*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_TopReaderContext" data-uid="Lucene.Net.Search.IndexSearcher.TopReaderContext">TopReaderContext</h4>
+  <div class="markdown level1 summary"><p>Returns this searchers the top-level <a class="xref" href="Lucene.Net.Index.IndexReaderContext.html">IndexReaderContext</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IndexReaderContext TopReaderContext { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexReaderContext.html">IndexReaderContext</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Search_IndexSearcher_TopReaderContext_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Context">Context</a></div>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_CollectionStatistics_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.CollectionStatistics(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L995">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_CollectionStatistics_" data-uid="Lucene.Net.Search.IndexSearcher.CollectionStatistics*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_CollectionStatistics_System_String_" data-uid="Lucene.Net.Search.IndexSearcher.CollectionStatistics(System.String)">CollectionStatistics(String)</h4>
+  <div class="markdown level1 summary"><p>Returns <a class="xref" href="Lucene.Net.Search.CollectionStatistics.html">CollectionStatistics</a> for a field.
+<p>
+This can be overridden for example, to return a field&apos;s statistics
+across a distributed collection.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual CollectionStatistics CollectionStatistics(string field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.CollectionStatistics.html">CollectionStatistics</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_CreateNormalizedWeight_Lucene_Net_Search_Query_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.CreateNormalizedWeight(Lucene.Net.Search.Query)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L717">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_CreateNormalizedWeight_" data-uid="Lucene.Net.Search.IndexSearcher.CreateNormalizedWeight*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_CreateNormalizedWeight_Lucene_Net_Search_Query_" data-uid="Lucene.Net.Search.IndexSearcher.CreateNormalizedWeight(Lucene.Net.Search.Query)">CreateNormalizedWeight(Query)</h4>
+  <div class="markdown level1 summary"><p>Creates a normalized weight for a top-level <a class="xref" href="Lucene.Net.Search.Query.html">Query</a>.
+The query is rewritten by this method and <a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_CreateWeight_Lucene_Net_Search_IndexSearcher_">CreateWeight(IndexSearcher)</a> called,
+afterwards the <a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a> is normalized. The returned <a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a>
+can then directly be used to get a <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a>.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Weight CreateNormalizedWeight(Query query)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Doc_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Doc(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L191">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Doc_" data-uid="Lucene.Net.Search.IndexSearcher.Doc*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Doc_System_Int32_" data-uid="Lucene.Net.Search.IndexSearcher.Doc(System.Int32)">Doc(Int32)</h4>
+  <div class="markdown level1 summary"><p>Sugar for <pre><code>.IndexReader.Document(docID)</code></pre> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Document Doc(int docID)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">docID</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.Document.html">Document</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Search_IndexSearcher_Doc_System_Int32__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Document_System_Int32_">Document</a>(<span class="xref">System.Int32</span>)</div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Doc_System_Int32_Lucene_Net_Index_StoredFieldVisitor_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Doc(System.Int32%2CLucene.Net.Index.StoredFieldVisitor)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L199">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Doc_" data-uid="Lucene.Net.Search.IndexSearcher.Doc*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Doc_System_Int32_Lucene_Net_Index_StoredFieldVisitor_" data-uid="Lucene.Net.Search.IndexSearcher.Doc(System.Int32,Lucene.Net.Index.StoredFieldVisitor)">Doc(Int32, StoredFieldVisitor)</h4>
+  <div class="markdown level1 summary"><p>Sugar for <pre><code>.IndexReader.Document(docID, fieldVisitor)</code></pre> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Doc(int docID, StoredFieldVisitor fieldVisitor)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">docID</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.StoredFieldVisitor.html">StoredFieldVisitor</a></td>
+        <td><span class="parametername">fieldVisitor</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Search_IndexSearcher_Doc_System_Int32_Lucene_Net_Index_StoredFieldVisitor__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Document_System_Int32_Lucene_Net_Index_StoredFieldVisitor_">Document</a>(<span class="xref">System.Int32</span>, <a class="xref" href="Lucene.Net.Index.StoredFieldVisitor.html">StoredFieldVisitor</a>)</div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Doc_System_Int32_System_Collections_Generic_ISet_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Doc(System.Int32%2CSystem.Collections.Generic.ISet%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L207">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Doc_" data-uid="Lucene.Net.Search.IndexSearcher.Doc*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Doc_System_Int32_System_Collections_Generic_ISet_System_String__" data-uid="Lucene.Net.Search.IndexSearcher.Doc(System.Int32,System.Collections.Generic.ISet{System.String})">Doc(Int32, ISet&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"><p>Sugar for <pre><code>.IndexReader.Document(docID, fieldsToLoad)</code></pre> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Document Doc(int docID, ISet&lt;string&gt; fieldsToLoad)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">docID</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ISet</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">fieldsToLoad</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.Document.html">Document</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Search_IndexSearcher_Doc_System_Int32_System_Collections_Generic_ISet_System_String___seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Document_System_Int32_System_Collections_Generic_ISet_System_String__">Document</a>(<span class="xref">System.Int32</span>, <span class="xref">System.Collections.Generic.ISet</span>&lt;<span class="xref">System.String</span>&gt;)</div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Document_System_Int32_System_Collections_Generic_ISet_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Document(System.Int32%2CSystem.Collections.Generic.ISet%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L213">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Document_" data-uid="Lucene.Net.Search.IndexSearcher.Document*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Document_System_Int32_System_Collections_Generic_ISet_System_String__" data-uid="Lucene.Net.Search.IndexSearcher.Document(System.Int32,System.Collections.Generic.ISet{System.String})">Document(Int32, ISet&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use &lt;seealso cref=#doc(int, java.util.Set)/&gt; instead.&quot;)]
+public Document Document(int docID, ISet&lt;string&gt; fieldsToLoad)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">docID</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ISet</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">fieldsToLoad</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.Document.html">Document</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Explain_Lucene_Net_Search_Query_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Explain(Lucene.Net.Search.Query%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L683">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Explain_" data-uid="Lucene.Net.Search.IndexSearcher.Explain*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Explain_Lucene_Net_Search_Query_System_Int32_" data-uid="Lucene.Net.Search.IndexSearcher.Explain(Lucene.Net.Search.Query,System.Int32)">Explain(Query, Int32)</h4>
+  <div class="markdown level1 summary"><p>Returns an <a class="xref" href="Lucene.Net.Search.Explanation.html">Explanation</a> that describes how <code data-dev-comment-type="paramref" class="paramref">doc</code> scored against
+<code data-dev-comment-type="paramref" class="paramref">query</code>.</p>
+<p><p>This is intended to be used in developing <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a> implementations,
+and, for good performance, should not be displayed with every hit.
+Computing an explanation is as expensive as executing the query over the
+entire index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Explanation Explain(Query query, int doc)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">doc</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Explanation.html">Explanation</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Explain_Lucene_Net_Search_Weight_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Explain(Lucene.Net.Search.Weight%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L700">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Explain_" data-uid="Lucene.Net.Search.IndexSearcher.Explain*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Explain_Lucene_Net_Search_Weight_System_Int32_" data-uid="Lucene.Net.Search.IndexSearcher.Explain(Lucene.Net.Search.Weight,System.Int32)">Explain(Weight, Int32)</h4>
+  <div class="markdown level1 summary"><p>Expert: low-level implementation method
+Returns an <a class="xref" href="Lucene.Net.Search.Explanation.html">Explanation</a> that describes how <code data-dev-comment-type="paramref" class="paramref">doc</code> scored against
+<code data-dev-comment-type="paramref" class="paramref">weight</code>.</p>
+<p><p>This is intended to be used in developing <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a> implementations,
+and, for good performance, should not be displayed with every hit.
+Computing an explanation is as expensive as executing the query over the
+entire index.
+<p>Applications should call <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Explain_Lucene_Net_Search_Query_System_Int32_">Explain(Query, Int32)</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual Explanation Explain(Weight weight, int doc)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a></td>
+        <td><span class="parametername">weight</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">doc</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Explanation.html">Explanation</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Rewrite_Lucene_Net_Search_Query_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Rewrite(Lucene.Net.Search.Query)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L664">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Rewrite_" data-uid="Lucene.Net.Search.IndexSearcher.Rewrite*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Rewrite_Lucene_Net_Search_Query_" data-uid="Lucene.Net.Search.IndexSearcher.Rewrite(Lucene.Net.Search.Query)">Rewrite(Query)</h4>
+  <div class="markdown level1 summary"><p>Expert: called to re-write queries into primitive queries. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Query Rewrite(Query original)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">original</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_Lucene_Net_Search_ICollector_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Query%2CLucene.Net.Search.Filter%2CLucene.Net.Search.ICollector)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L306">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Search_" data-uid="Lucene.Net.Search.IndexSearcher.Search*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_Lucene_Net_Search_ICollector_" data-uid="Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Query,Lucene.Net.Search.Filter,Lucene.Net.Search.ICollector)">Search(Query, Filter, ICollector)</h4>
+  <div class="markdown level1 summary"><p>Lower-level search API.</p>
+<p><p><a class="xref" href="Lucene.Net.Search.ICollector.html#Lucene_Net_Search_ICollector_Collect_System_Int32_">Collect(Int32)</a> is called for every matching
+document.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Search(Query query, Filter filter, ICollector results)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td><p>To match documents </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a></td>
+        <td><span class="parametername">filter</span></td>
+        <td><p>Ef non-null, used to permit documents to be collected. </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a></td>
+        <td><span class="parametername">results</span></td>
+        <td><p>To receive hits </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Query%2CLucene.Net.Search.Filter%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L290">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Search_" data-uid="Lucene.Net.Search.IndexSearcher.Search*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_" data-uid="Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Query,Lucene.Net.Search.Filter,System.Int32)">Search(Query, Filter, Int32)</h4>
+  <div class="markdown level1 summary"><p>Finds the top <code data-dev-comment-type="paramref" class="paramref">n</code>
+hits for <code data-dev-comment-type="paramref" class="paramref">query</code>, applying <code data-dev-comment-type="paramref" class="paramref">filter</code> if non-null.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TopDocs Search(Query query, Filter filter, int n)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a></td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">n</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_Lucene_Net_Search_Sort_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Query%2CLucene.Net.Search.Filter%2CSystem.Int32%2CLucene.Net.Search.Sort)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L335">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Search_" data-uid="Lucene.Net.Search.IndexSearcher.Search*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_Lucene_Net_Search_Sort_" data-uid="Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Query,Lucene.Net.Search.Filter,System.Int32,Lucene.Net.Search.Sort)">Search(Query, Filter, Int32, Sort)</h4>
+  <div class="markdown level1 summary"><p>Search implementation with arbitrary sorting.  Finds
+the top <code data-dev-comment-type="paramref" class="paramref">n</code> hits for <code data-dev-comment-type="paramref" class="paramref">query</code>, applying
+<code data-dev-comment-type="paramref" class="paramref">filter</code> if non-null, and sorting the hits by the criteria in
+<code data-dev-comment-type="paramref" class="paramref">sort</code>.</p>
+<p><p>NOTE: this does not compute scores by default; use
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_Lucene_Net_Search_Sort_System_Boolean_System_Boolean_">Search(Query, Filter, Int32, Sort, Boolean, Boolean)</a> to
+control scoring.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TopFieldDocs Search(Query query, Filter filter, int n, Sort sort)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a></td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">n</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a></td>
+        <td><span class="parametername">sort</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TopFieldDocs.html">TopFieldDocs</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_Lucene_Net_Search_Sort_System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Query%2CLucene.Net.Search.Filter%2CSystem.Int32%2CLucene.Net.Search.Sort%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L354">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Search_" data-uid="Lucene.Net.Search.IndexSearcher.Search*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_Lucene_Net_Search_Sort_System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Query,Lucene.Net.Search.Filter,System.Int32,Lucene.Net.Search.Sort,System.Boolean,System.Boolean)">Search(Query, Filter, Int32, Sort, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Search implementation with arbitrary sorting, plus
+control over whether hit scores and max score
+should be computed.  Finds
+the top <code data-dev-comment-type="paramref" class="paramref">n</code> hits for <code data-dev-comment-type="paramref" class="paramref">query</code>, applying
+<code data-dev-comment-type="paramref" class="paramref">filter</code> if non-null, and sorting the hits by the criteria in
+<code data-dev-comment-type="paramref" class="paramref">sort</code>.  If <code data-dev-comment-type="paramref" class="paramref">doDocScores</code> is <code>true</code>
+then the score of each hit will be computed and
+returned.  If <code data-dev-comment-type="paramref" class="paramref">doMaxScore</code> is
+<code>true</code> then the maximum score over all
+collected hits will be computed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TopFieldDocs Search(Query query, Filter filter, int n, Sort sort, bool doDocScores, bool doMaxScore)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a></td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">n</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a></td>
+        <td><span class="parametername">sort</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">doDocScores</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">doMaxScore</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TopFieldDocs.html">TopFieldDocs</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_ICollector_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Query%2CLucene.Net.Search.ICollector)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L318">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Search_" data-uid="Lucene.Net.Search.IndexSearcher.Search*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_ICollector_" data-uid="Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Query,Lucene.Net.Search.ICollector)">Search(Query, ICollector)</h4>
+  <div class="markdown level1 summary"><p>Lower-level search API.</p>
+<p><p><a class="xref" href="Lucene.Net.Search.ICollector.html#Lucene_Net_Search_ICollector_Collect_System_Int32_">Collect(Int32)</a> is called for every matching document.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Search(Query query, ICollector results)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a></td>
+        <td><span class="parametername">results</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Query%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L279">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Search_" data-uid="Lucene.Net.Search.IndexSearcher.Search*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_System_Int32_" data-uid="Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Query,System.Int32)">Search(Query, Int32)</h4>
+  <div class="markdown level1 summary"><p>Finds the top <code data-dev-comment-type="paramref" class="paramref">n</code>
+hits for <code data-dev-comment-type="paramref" class="paramref">query</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TopDocs Search(Query query, int n)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">n</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_System_Int32_Lucene_Net_Search_Sort_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Query%2CSystem.Int32%2CLucene.Net.Search.Sort)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L388">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Search_" data-uid="Lucene.Net.Search.IndexSearcher.Search*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_System_Int32_Lucene_Net_Search_Sort_" data-uid="Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Query,System.Int32,Lucene.Net.Search.Sort)">Search(Query, Int32, Sort)</h4>
+  <div class="markdown level1 summary"><p>Search implementation with arbitrary sorting and no filter. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TopFieldDocs Search(Query query, int n, Sort sort)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td><p>The query to search for </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">n</span></td>
+        <td><p>Return only the top n results </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a></td>
+        <td><span class="parametername">sort</span></td>
+        <td><p>The <a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a> object </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TopFieldDocs.html">TopFieldDocs</a></td>
+        <td><p>The top docs, sorted according to the supplied <a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a> instance </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>if there is a low-level I/O error </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Weight_Lucene_Net_Search_FieldDoc_System_Int32_Lucene_Net_Search_Sort_System_Boolean_System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Weight%2CLucene.Net.Search.FieldDoc%2CSystem.Int32%2CLucene.Net.Search.Sort%2CSystem.Boolean%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L543">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Search_" data-uid="Lucene.Net.Search.IndexSearcher.Search*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Weight_Lucene_Net_Search_FieldDoc_System_Int32_Lucene_Net_Search_Sort_System_Boolean_System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Weight,Lucene.Net.Search.FieldDoc,System.Int32,Lucene.Net.Search.Sort,System.Boolean,System.Boolean,System.Boolean)">Search(Weight, FieldDoc, Int32, Sort, Boolean, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Just like <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Weight_System_Int32_Lucene_Net_Search_Sort_System_Boolean_System_Boolean_">Search(Weight, Int32, Sort, Boolean, Boolean)</a>, but you choose
+whether or not the fields in the returned <a class="xref" href="Lucene.Net.Search.FieldDoc.html">FieldDoc</a> instances should
+be set by specifying <code data-dev-comment-type="paramref" class="paramref">fillFields</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual TopFieldDocs Search(Weight weight, FieldDoc after, int nDocs, Sort sort, bool fillFields, bool doDocScores, bool doMaxScore)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a></td>
+        <td><span class="parametername">weight</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldDoc.html">FieldDoc</a></td>
+        <td><span class="parametername">after</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">nDocs</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a></td>
+        <td><span class="parametername">sort</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">fillFields</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">doDocScores</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">doMaxScore</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TopFieldDocs.html">TopFieldDocs</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Weight_Lucene_Net_Search_ScoreDoc_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Weight%2CLucene.Net.Search.ScoreDoc%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L450">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Search_" data-uid="Lucene.Net.Search.IndexSearcher.Search*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Weight_Lucene_Net_Search_ScoreDoc_System_Int32_" data-uid="Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Weight,Lucene.Net.Search.ScoreDoc,System.Int32)">Search(Weight, ScoreDoc, Int32)</h4>
+  <div class="markdown level1 summary"><p>Expert: Low-level search implementation.  Finds the top <code data-dev-comment-type="paramref" class="paramref">nDocs</code>
+hits for <code>query</code>, applying <code>filter</code> if non-null.</p>
+<p><p>Applications should usually call <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_System_Int32_">Search(Query, Int32)</a> or
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_">Search(Query, Filter, Int32)</a> instead. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual TopDocs Search(Weight weight, ScoreDoc after, int nDocs)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a></td>
+        <td><span class="parametername">weight</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.ScoreDoc.html">ScoreDoc</a></td>
+        <td><span class="parametername">after</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">nDocs</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Weight_System_Int32_Lucene_Net_Search_Sort_System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Weight%2CSystem.Int32%2CLucene.Net.Search.Sort%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L533">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Search_" data-uid="Lucene.Net.Search.IndexSearcher.Search*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Weight_System_Int32_Lucene_Net_Search_Sort_System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.IndexSearcher.Search(Lucene.Net.Search.Weight,System.Int32,Lucene.Net.Search.Sort,System.Boolean,System.Boolean)">Search(Weight, Int32, Sort, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Expert: Low-level search implementation with arbitrary
+sorting and control over whether hit scores and max
+score should be computed.  Finds
+the top <code data-dev-comment-type="paramref" class="paramref">nDocs</code> hits for <code>query</code> and sorting the hits
+by the criteria in <code data-dev-comment-type="paramref" class="paramref">sort</code>.</p>
+<p><p>Applications should usually call 
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_Lucene_Net_Search_Sort_">Search(Query, Filter, Int32, Sort)</a> instead.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual TopFieldDocs Search(Weight weight, int nDocs, Sort sort, bool doDocScores, bool doMaxScore)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a></td>
+        <td><span class="parametername">weight</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">nDocs</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a></td>
+        <td><span class="parametername">sort</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">doDocScores</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">doMaxScore</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TopFieldDocs.html">TopFieldDocs</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Search_System_Collections_Generic_IList_Lucene_Net_Index_AtomicReaderContext__Lucene_Net_Search_Weight_Lucene_Net_Search_FieldDoc_System_Int32_Lucene_Net_Search_Sort_System_Boolean_System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Search(System.Collections.Generic.IList%7BLucene.Net.Index.AtomicReaderContext%7D%2CLucene.Net.Search.Weight%2CLucene.Net.Search.FieldDoc%2CSystem.Int32%2CLucene.Net.Search.Sort%2CSystem.Boolean%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L594">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Search_" data-uid="Lucene.Net.Search.IndexSearcher.Search*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Search_System_Collections_Generic_IList_Lucene_Net_Index_AtomicReaderContext__Lucene_Net_Search_Weight_Lucene_Net_Search_FieldDoc_System_Int32_Lucene_Net_Search_Sort_System_Boolean_System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.IndexSearcher.Search(System.Collections.Generic.IList{Lucene.Net.Index.AtomicReaderContext},Lucene.Net.Search.Weight,Lucene.Net.Search.FieldDoc,System.Int32,Lucene.Net.Search.Sort,System.Boolean,System.Boolean,System.Boolean)">Search(IList&lt;AtomicReaderContext&gt;, Weight, FieldDoc, Int32, Sort, Boolean, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Just like <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Weight_System_Int32_Lucene_Net_Search_Sort_System_Boolean_System_Boolean_">Search(Weight, Int32, Sort, Boolean, Boolean)</a>, but you choose
+whether or not the fields in the returned <a class="xref" href="Lucene.Net.Search.FieldDoc.html">FieldDoc</a> instances should
+be set by specifying <code data-dev-comment-type="paramref" class="paramref">fillFields</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual TopFieldDocs Search(IList&lt;AtomicReaderContext&gt; leaves, Weight weight, FieldDoc after, int nDocs, Sort sort, bool fillFields, bool doDocScores, bool doMaxScore)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a>&gt;</td>
+        <td><span class="parametername">leaves</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a></td>
+        <td><span class="parametername">weight</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldDoc.html">FieldDoc</a></td>
+        <td><span class="parametername">after</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">nDocs</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a></td>
+        <td><span class="parametername">sort</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">fillFields</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">doDocScores</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">doMaxScore</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TopFieldDocs.html">TopFieldDocs</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Search_System_Collections_Generic_IList_Lucene_Net_Index_AtomicReaderContext__Lucene_Net_Search_Weight_Lucene_Net_Search_ICollector_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Search(System.Collections.Generic.IList%7BLucene.Net.Index.AtomicReaderContext%7D%2CLucene.Net.Search.Weight%2CLucene.Net.Search.ICollector)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L627">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Search_" data-uid="Lucene.Net.Search.IndexSearcher.Search*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Search_System_Collections_Generic_IList_Lucene_Net_Index_AtomicReaderContext__Lucene_Net_Search_Weight_Lucene_Net_Search_ICollector_" data-uid="Lucene.Net.Search.IndexSearcher.Search(System.Collections.Generic.IList{Lucene.Net.Index.AtomicReaderContext},Lucene.Net.Search.Weight,Lucene.Net.Search.ICollector)">Search(IList&lt;AtomicReaderContext&gt;, Weight, ICollector)</h4>
+  <div class="markdown level1 summary"><p>Lower-level search API.</p>
+<p><p>
+<a class="xref" href="Lucene.Net.Search.ICollector.html#Lucene_Net_Search_ICollector_Collect_System_Int32_">Collect(Int32)</a> is called for every document. </p>
+<p><p>
+NOTE: this method executes the searches on all given leaves exclusively.
+To search across all the searchers leaves use <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_m_leafContexts">m_leafContexts</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void Search(IList&lt;AtomicReaderContext&gt; leaves, Weight weight, ICollector collector)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a>&gt;</td>
+        <td><span class="parametername">leaves</span></td>
+        <td><p>The searchers leaves to execute the searches on </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a></td>
+        <td><span class="parametername">weight</span></td>
+        <td><p>To match documents </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a></td>
+        <td><span class="parametername">collector</span></td>
+        <td><p>To receive hits </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Search_System_Collections_Generic_IList_Lucene_Net_Index_AtomicReaderContext__Lucene_Net_Search_Weight_Lucene_Net_Search_ScoreDoc_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Search(System.Collections.Generic.IList%7BLucene.Net.Index.AtomicReaderContext%7D%2CLucene.Net.Search.Weight%2CLucene.Net.Search.ScoreDoc%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L507">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Search_" data-uid="Lucene.Net.Search.IndexSearcher.Search*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Search_System_Collections_Generic_IList_Lucene_Net_Index_AtomicReaderContext__Lucene_Net_Search_Weight_Lucene_Net_Search_ScoreDoc_System_Int32_" data-uid="Lucene.Net.Search.IndexSearcher.Search(System.Collections.Generic.IList{Lucene.Net.Index.AtomicReaderContext},Lucene.Net.Search.Weight,Lucene.Net.Search.ScoreDoc,System.Int32)">Search(IList&lt;AtomicReaderContext&gt;, Weight, ScoreDoc, Int32)</h4>
+  <div class="markdown level1 summary"><p>Expert: Low-level search implementation.  Finds the top <pre><code>n</code></pre>
+hits for <code>query</code>.</p>
+<p><p>Applications should usually call <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_System_Int32_">Search(Query, Int32)</a> or
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_">Search(Query, Filter, Int32)</a> instead. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual TopDocs Search(IList&lt;AtomicReaderContext&gt; leaves, Weight weight, ScoreDoc after, int nDocs)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a>&gt;</td>
+        <td><span class="parametername">leaves</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a></td>
+        <td><span class="parametername">weight</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.ScoreDoc.html">ScoreDoc</a></td>
+        <td><span class="parametername">after</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">nDocs</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_SearchAfter_Lucene_Net_Search_ScoreDoc_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.SearchAfter(Lucene.Net.Search.ScoreDoc%2CLucene.Net.Search.Query%2CLucene.Net.Search.Filter%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L268">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_SearchAfter_" data-uid="Lucene.Net.Search.IndexSearcher.SearchAfter*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_SearchAfter_Lucene_Net_Search_ScoreDoc_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_" data-uid="Lucene.Net.Search.IndexSearcher.SearchAfter(Lucene.Net.Search.ScoreDoc,Lucene.Net.Search.Query,Lucene.Net.Search.Filter,System.Int32)">SearchAfter(ScoreDoc, Query, Filter, Int32)</h4>
+  <div class="markdown level1 summary"><p>Finds the top <code data-dev-comment-type="paramref" class="paramref">n</code>
+hits for <code data-dev-comment-type="paramref" class="paramref">query</code>, applying <code data-dev-comment-type="paramref" class="paramref">filter</code> if non-null,
+where all results are after a previous result (<code data-dev-comment-type="paramref" class="paramref">after</code>).
+<p>
+By passing the bottom result from a previous page as <code data-dev-comment-type="paramref" class="paramref">after</code>,
+this method can be used for efficient &apos;deep-paging&apos; across potentially
+large result sets.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TopDocs SearchAfter(ScoreDoc after, Query query, Filter filter, int n)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.ScoreDoc.html">ScoreDoc</a></td>
+        <td><span class="parametername">after</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a></td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">n</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_SearchAfter_Lucene_Net_Search_ScoreDoc_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_Lucene_Net_Search_Sort_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.SearchAfter(Lucene.Net.Search.ScoreDoc%2CLucene.Net.Search.Query%2CLucene.Net.Search.Filter%2CSystem.Int32%2CLucene.Net.Search.Sort)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L370">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_SearchAfter_" data-uid="Lucene.Net.Search.IndexSearcher.SearchAfter*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_SearchAfter_Lucene_Net_Search_ScoreDoc_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_Lucene_Net_Search_Sort_" data-uid="Lucene.Net.Search.IndexSearcher.SearchAfter(Lucene.Net.Search.ScoreDoc,Lucene.Net.Search.Query,Lucene.Net.Search.Filter,System.Int32,Lucene.Net.Search.Sort)">SearchAfter(ScoreDoc, Query, Filter, Int32, Sort)</h4>
+  <div class="markdown level1 summary"><p>Finds the top <code data-dev-comment-type="paramref" class="paramref">n</code>
+hits for <code data-dev-comment-type="paramref" class="paramref">query</code>, applying <code data-dev-comment-type="paramref" class="paramref">filter</code> if non-null,
+where all results are after a previous result (<code data-dev-comment-type="paramref" class="paramref">after</code>).
+<p>
+By passing the bottom result from a previous page as <code data-dev-comment-type="paramref" class="paramref">after</code>,
+this method can be used for efficient &apos;deep-paging&apos; across potentially
+large result sets.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TopDocs SearchAfter(ScoreDoc after, Query query, Filter filter, int n, Sort sort)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.ScoreDoc.html">ScoreDoc</a></td>
+        <td><span class="parametername">after</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a></td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">n</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a></td>
+        <td><span class="parametername">sort</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_SearchAfter_Lucene_Net_Search_ScoreDoc_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_Lucene_Net_Search_Sort_System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.SearchAfter(Lucene.Net.Search.ScoreDoc%2CLucene.Net.Search.Query%2CLucene.Net.Search.Filter%2CSystem.Int32%2CLucene.Net.Search.Sort%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L431">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_SearchAfter_" data-uid="Lucene.Net.Search.IndexSearcher.SearchAfter*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_SearchAfter_Lucene_Net_Search_ScoreDoc_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_Lucene_Net_Search_Sort_System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.IndexSearcher.SearchAfter(Lucene.Net.Search.ScoreDoc,Lucene.Net.Search.Query,Lucene.Net.Search.Filter,System.Int32,Lucene.Net.Search.Sort,System.Boolean,System.Boolean)">SearchAfter(ScoreDoc, Query, Filter, Int32, Sort, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Finds the top <code data-dev-comment-type="paramref" class="paramref">n</code>
+hits for <code data-dev-comment-type="paramref" class="paramref">query</code> where all results are after a previous
+result (<code data-dev-comment-type="paramref" class="paramref">after</code>), allowing control over
+whether hit scores and max score should be computed.
+<p>
+By passing the bottom result from a previous page as <code data-dev-comment-type="paramref" class="paramref">after</code>,
+this method can be used for efficient &apos;deep-paging&apos; across potentially
+large result sets.  If <code data-dev-comment-type="paramref" class="paramref">doDocScores</code> is <code>true</code>
+then the score of each hit will be computed and
+returned.  If <code data-dev-comment-type="paramref" class="paramref">doMaxScore</code> is
+<code>true</code> then the maximum score over all
+collected hits will be computed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TopDocs SearchAfter(ScoreDoc after, Query query, Filter filter, int n, Sort sort, bool doDocScores, bool doMaxScore)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.ScoreDoc.html">ScoreDoc</a></td>
+        <td><span class="parametername">after</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a></td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">n</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a></td>
+        <td><span class="parametername">sort</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">doDocScores</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">doMaxScore</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_SearchAfter_Lucene_Net_Search_ScoreDoc_Lucene_Net_Search_Query_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.SearchAfter(Lucene.Net.Search.ScoreDoc%2CLucene.Net.Search.Query%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L252">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_SearchAfter_" data-uid="Lucene.Net.Search.IndexSearcher.SearchAfter*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_SearchAfter_Lucene_Net_Search_ScoreDoc_Lucene_Net_Search_Query_System_Int32_" data-uid="Lucene.Net.Search.IndexSearcher.SearchAfter(Lucene.Net.Search.ScoreDoc,Lucene.Net.Search.Query,System.Int32)">SearchAfter(ScoreDoc, Query, Int32)</h4>
+  <div class="markdown level1 summary"><p>Finds the top <code data-dev-comment-type="paramref" class="paramref">n</code>
+hits for top <code data-dev-comment-type="paramref" class="paramref">query</code> where all results are after a previous
+result (top <code data-dev-comment-type="paramref" class="paramref">after</code>).
+<p>
+By passing the bottom result from a previous page as <code data-dev-comment-type="paramref" class="paramref">after</code>,
+this method can be used for efficient &apos;deep-paging&apos; across potentially
+large result sets.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TopDocs SearchAfter(ScoreDoc after, Query query, int n)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.ScoreDoc.html">ScoreDoc</a></td>
+        <td><span class="parametername">after</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">n</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_SearchAfter_Lucene_Net_Search_ScoreDoc_Lucene_Net_Search_Query_System_Int32_Lucene_Net_Search_Sort_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.SearchAfter(Lucene.Net.Search.ScoreDoc%2CLucene.Net.Search.Query%2CSystem.Int32%2CLucene.Net.Search.Sort)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L404">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_SearchAfter_" data-uid="Lucene.Net.Search.IndexSearcher.SearchAfter*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_SearchAfter_Lucene_Net_Search_ScoreDoc_Lucene_Net_Search_Query_System_Int32_Lucene_Net_Search_Sort_" data-uid="Lucene.Net.Search.IndexSearcher.SearchAfter(Lucene.Net.Search.ScoreDoc,Lucene.Net.Search.Query,System.Int32,Lucene.Net.Search.Sort)">SearchAfter(ScoreDoc, Query, Int32, Sort)</h4>
+  <div class="markdown level1 summary"><p>Finds the top <code data-dev-comment-type="paramref" class="paramref">n</code>
+hits for <code data-dev-comment-type="paramref" class="paramref">query</code> where all results are after a previous
+result (<code data-dev-comment-type="paramref" class="paramref">after</code>).
+<p>
+By passing the bottom result from a previous page as <code data-dev-comment-type="paramref" class="paramref">after</code>,
+this method can be used for efficient &apos;deep-paging&apos; across potentially
+large result sets.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TopDocs SearchAfter(ScoreDoc after, Query query, int n, Sort sort)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.ScoreDoc.html">ScoreDoc</a></td>
+        <td><span class="parametername">after</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">n</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a></td>
+        <td><span class="parametername">sort</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If a query would exceed
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_Slices_System_Collections_Generic_IList_Lucene_Net_Index_AtomicReaderContext__.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.Slices(System.Collections.Generic.IList%7BLucene.Net.Index.AtomicReaderContext%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L168">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_Slices_" data-uid="Lucene.Net.Search.IndexSearcher.Slices*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_Slices_System_Collections_Generic_IList_Lucene_Net_Index_AtomicReaderContext__" data-uid="Lucene.Net.Search.IndexSearcher.Slices(System.Collections.Generic.IList{Lucene.Net.Index.AtomicReaderContext})">Slices(IList&lt;AtomicReaderContext&gt;)</h4>
+  <div class="markdown level1 summary"><p>Expert: Creates an array of leaf slices each holding a subset of the given leaves.
+Each <a class="xref" href="Lucene.Net.Search.IndexSearcher.LeafSlice.html">IndexSearcher.LeafSlice</a> is executed in a single thread. By default there
+will be one <a class="xref" href="Lucene.Net.Search.IndexSearcher.LeafSlice.html">IndexSearcher.LeafSlice</a> per leaf (<a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a>).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual IndexSearcher.LeafSlice[] Slices(IList&lt;AtomicReaderContext&gt; leaves)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a>&gt;</td>
+        <td><span class="parametername">leaves</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.IndexSearcher.LeafSlice.html">IndexSearcher.LeafSlice</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_TermStatistics_Lucene_Net_Index_Term_Lucene_Net_Index_TermContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.TermStatistics(Lucene.Net.Index.Term%2CLucene.Net.Index.TermContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L982">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_TermStatistics_" data-uid="Lucene.Net.Search.IndexSearcher.TermStatistics*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_TermStatistics_Lucene_Net_Index_Term_Lucene_Net_Index_TermContext_" data-uid="Lucene.Net.Search.IndexSearcher.TermStatistics(Lucene.Net.Index.Term,Lucene.Net.Index.TermContext)">TermStatistics(Term, TermContext)</h4>
+  <div class="markdown level1 summary"><p>Returns <a class="xref" href="Lucene.Net.Search.TermStatistics.html">TermStatistics</a> for a term.
+<p>
+This can be overridden for example, to return a term&apos;s statistics
+across a distributed collection.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TermStatistics TermStatistics(Term term, TermContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.Term.html">Term</a></td>
+        <td><span class="parametername">term</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermContext.html">TermContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TermStatistics.html">TermStatistics</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L969">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_ToString_" data-uid="Lucene.Net.Search.IndexSearcher.ToString*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_ToString" data-uid="Lucene.Net.Search.IndexSearcher.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher_WrapFilter_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher.WrapFilter(Lucene.Net.Search.Query%2CLucene.Net.Search.Filter)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L236">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_IndexSearcher_WrapFilter_" data-uid="Lucene.Net.Search.IndexSearcher.WrapFilter*"></a>
+  <h4 id="Lucene_Net_Search_IndexSearcher_WrapFilter_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_" data-uid="Lucene.Net.Search.IndexSearcher.WrapFilter(Lucene.Net.Search.Query,Lucene.Net.Search.Filter)">WrapFilter(Query, Filter)</h4>
+  <div class="markdown level1 summary"><p>@lucene.internal </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual Query WrapFilter(Query query, Filter filter)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a></td>
+        <td><span class="parametername">filter</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Support.Number.html#Lucene_Net_Support_Number_IsNumber_System_Object_">Number.IsNumber(Object)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_IndexSearcher.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.IndexSearcher%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Search/IndexSearcher.cs/#L69" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

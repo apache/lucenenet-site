@@ -1,0 +1,784 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class WeakIdentityMap&lt;TKey, TValue&gt;
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class WeakIdentityMap&lt;TKey, TValue&gt;
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Util.WeakIdentityMap`2">
+  
+  
+  <h1 id="Lucene_Net_Util_WeakIdentityMap_2" data-uid="Lucene.Net.Util.WeakIdentityMap`2" class="text-break">Class WeakIdentityMap&lt;TKey, TValue&gt;
+  </h1>
+  <div class="markdown level0 summary"><p>Implements a combination of <code>java.util.WeakHashMap</code> and
+<code>java.util.IdentityHashMap</code>.
+Useful for caches that need to key off of a <code>==</code> comparison
+instead of a <code>.Equals(object)</code>.</p>
+<p><p>This class is not a general-purpose <span class="xref">System.Collections.Generic.IDictionary&lt;TKey, TValue&gt;</span>
+implementation! It intentionally violates
+<span class="xref">System.Collections.Generic.IDictionary&lt;TKey, TValue&gt;</span>&apos;s general contract, which mandates the use of the <span class="xref">System.Object.Equals(System.Object)</span> method
+when comparing objects. This class is designed for use only in the
+rare cases wherein reference-equality semantics are required.</p>
+<p><p>This implementation was forked from <a href="http://cxf.apache.org/">Apache CXF</a>
+but modified to <strong>not</strong> implement the <span class="xref">System.Collections.Generic.IDictionary&lt;TKey, TValue&gt;</span> interface and
+without any set views on it, as those are error-prone and inefficient,
+if not implemented carefully. The map only contains <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;.GetEnumerator()</span> implementations
+on the values and not-GCed keys. Lucene&apos;s implementation also supports <code>null</code>
+keys, but those are never weak!</p>
+<p><p><a name="reapInfo"></a>The map supports two modes of operation:
+<ul><li><code>reapOnRead = true</code>: This behaves identical to a <code>java.util.WeakHashMap</code>
+        where it also cleans up the reference queue on every read operation (<a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html#Lucene_Net_Util_WeakIdentityMap_2_Get_System_Object_">Get(Object)</a>,
+<a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html#Lucene_Net_Util_WeakIdentityMap_2_ContainsKey_System_Object_">ContainsKey(Object)</a>, <a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html#Lucene_Net_Util_WeakIdentityMap_2_Count">Count</a>, <a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html#Lucene_Net_Util_WeakIdentityMap_2_GetValueEnumerator">GetValueEnumerator()</a>), freeing map entries
+of already GCed keys.</li><li><code>reapOnRead = false</code>: This mode does not call <a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html#Lucene_Net_Util_WeakIdentityMap_2_Reap">Reap()</a> on every read
+operation. In this case, the reference queue is only cleaned up on write operations
+(like <a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html#Lucene_Net_Util_WeakIdentityMap_2_Put__0__1_">Put(TKey, TValue)</a>). This is ideal for maps with few entries where
+the keys are unlikely be garbage collected, but there are lots of <a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html#Lucene_Net_Util_WeakIdentityMap_2_Get_System_Object_">Get(Object)</a>
+operations. The code can still call <a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html#Lucene_Net_Util_WeakIdentityMap_2_Reap">Reap()</a> to manually clean up the queue without
+doing a write operation.</li></ul>
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">WeakIdentityMap&lt;TKey, TValue&gt;</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Util.html">Lucene.Net.Util</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Util_WeakIdentityMap_2_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class WeakIdentityMap&lt;TKey, TValue&gt;
+
+    where TKey : class</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TKey</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="parametername">TValue</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2_Count.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602.Count%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L241">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WeakIdentityMap_2_Count_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Count*"></a>
+  <h4 id="Lucene_Net_Util_WeakIdentityMap_2_Count" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Count">Count</h4>
+  <div class="markdown level1 summary"><p>Returns the number of key-value mappings in this map. This result is a snapshot,
+and may not reflect unprocessed entries that will be removed before next
+attempted access because they are no longer referenced.
+<p>
+NOTE: This was size() in Lucene.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2_IsEmpty.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602.IsEmpty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L213">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WeakIdentityMap_2_IsEmpty_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.IsEmpty*"></a>
+  <h4 id="Lucene_Net_Util_WeakIdentityMap_2_IsEmpty" data-uid="Lucene.Net.Util.WeakIdentityMap`2.IsEmpty">IsEmpty</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if this map contains no key-value mappings. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsEmpty { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2_Keys.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602.Keys%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L163">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WeakIdentityMap_2_Keys_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Keys*"></a>
+  <h4 id="Lucene_Net_Util_WeakIdentityMap_2_Keys" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Keys">Keys</h4>
+  <div class="markdown level1 summary"><p>Gets an <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span> object containing the keys of the <a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html">WeakIdentityMap&lt;TKey, TValue&gt;</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;TKey&gt; Keys { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TKey&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2_Values.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602.Values%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L202">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WeakIdentityMap_2_Values_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Values*"></a>
+  <h4 id="Lucene_Net_Util_WeakIdentityMap_2_Values" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Values">Values</h4>
+  <div class="markdown level1 summary"><p>Gets an <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span> object containing the values of the <a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html">WeakIdentityMap&lt;TKey, TValue&gt;</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;TValue&gt; Values { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;TValue&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2_Clear.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602.Clear%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L112">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WeakIdentityMap_2_Clear_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Clear*"></a>
+  <h4 id="Lucene_Net_Util_WeakIdentityMap_2_Clear" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Removes all of the mappings from this map. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2_ContainsKey_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602.ContainsKey(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L120">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WeakIdentityMap_2_ContainsKey_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.ContainsKey*"></a>
+  <h4 id="Lucene_Net_Util_WeakIdentityMap_2_ContainsKey_System_Object_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.ContainsKey(System.Object)">ContainsKey(Object)</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if this map contains a mapping for the specified key. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool ContainsKey(object key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2_Get_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602.Get(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L131">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WeakIdentityMap_2_Get_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Get*"></a>
+  <h4 id="Lucene_Net_Util_WeakIdentityMap_2_Get_System_Object_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Get(System.Object)">Get(Object)</h4>
+  <div class="markdown level1 summary"><p>Returns the value to which the specified key is mapped. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TValue Get(object key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TValue</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2_GetValueEnumerator.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602.GetValueEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L324">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WeakIdentityMap_2_GetValueEnumerator_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.GetValueEnumerator*"></a>
+  <h4 id="Lucene_Net_Util_WeakIdentityMap_2_GetValueEnumerator" data-uid="Lucene.Net.Util.WeakIdentityMap`2.GetValueEnumerator">GetValueEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an iterator over all values of this map.
+This iterator may return values whose key is already
+garbage collected while iterator is consumed,
+especially if <span class="xref">Lucene.Net.Util.WeakIdentityMap`2.reapOnRead</span> is <code>false</code>.
+<p>
+NOTE: This was valueIterator() in Lucene.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerator&lt;TValue&gt; GetValueEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;TValue&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2_NewConcurrentHashMap.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602.NewConcurrentHashMap%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L89">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WeakIdentityMap_2_NewConcurrentHashMap_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.NewConcurrentHashMap*"></a>
+  <h4 id="Lucene_Net_Util_WeakIdentityMap_2_NewConcurrentHashMap" data-uid="Lucene.Net.Util.WeakIdentityMap`2.NewConcurrentHashMap">NewConcurrentHashMap()</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html">WeakIdentityMap&lt;TKey, TValue&gt;</a> based on a <span class="xref">System.Collections.Concurrent.ConcurrentDictionary&lt;TKey, TValue&gt;</span>.
+The map <a href="#reapInfo">cleans up the reference queue on every read operation</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static WeakIdentityMap&lt;TKey, TValue&gt; NewConcurrentHashMap()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html">WeakIdentityMap</a>&lt;TKey, TValue&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2_NewConcurrentHashMap_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602.NewConcurrentHashMap(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L97">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WeakIdentityMap_2_NewConcurrentHashMap_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.NewConcurrentHashMap*"></a>
+  <h4 id="Lucene_Net_Util_WeakIdentityMap_2_NewConcurrentHashMap_System_Boolean_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.NewConcurrentHashMap(System.Boolean)">NewConcurrentHashMap(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html">WeakIdentityMap&lt;TKey, TValue&gt;</a> based on a <span class="xref">System.Collections.Concurrent.ConcurrentDictionary&lt;TKey, TValue&gt;</span>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static WeakIdentityMap&lt;TKey, TValue&gt; NewConcurrentHashMap(bool reapOnRead)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">reapOnRead</span></td>
+        <td><p>controls if the map <a href="#reapInfo">cleans up the reference queue on every read operation</a>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html">WeakIdentityMap</a>&lt;TKey, TValue&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2_NewHashMap.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602.NewHashMap%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L72">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WeakIdentityMap_2_NewHashMap_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.NewHashMap*"></a>
+  <h4 id="Lucene_Net_Util_WeakIdentityMap_2_NewHashMap" data-uid="Lucene.Net.Util.WeakIdentityMap`2.NewHashMap">NewHashMap()</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html">WeakIdentityMap&lt;TKey, TValue&gt;</a> based on a non-synchronized <span class="xref">System.Collections.Generic.Dictionary`2</span>.
+The map <a href="#reapInfo">cleans up the reference queue on every read operation</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static WeakIdentityMap&lt;TKey, TValue&gt; NewHashMap()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html">WeakIdentityMap</a>&lt;TKey, TValue&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2_NewHashMap_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602.NewHashMap(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L80">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WeakIdentityMap_2_NewHashMap_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.NewHashMap*"></a>
+  <h4 id="Lucene_Net_Util_WeakIdentityMap_2_NewHashMap_System_Boolean_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.NewHashMap(System.Boolean)">NewHashMap(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html">WeakIdentityMap&lt;TKey, TValue&gt;</a> based on a non-synchronized <span class="xref">System.Collections.Generic.Dictionary`2</span>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static WeakIdentityMap&lt;TKey, TValue&gt; NewHashMap(bool reapOnRead)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">reapOnRead</span></td>
+        <td><p>controls if the map <a href="#reapInfo">cleans up the reference queue on every read operation</a>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.WeakIdentityMap-2.html">WeakIdentityMap</a>&lt;TKey, TValue&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2_Put__0__1_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602.Put(%600%2C%601)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L154">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WeakIdentityMap_2_Put_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Put*"></a>
+  <h4 id="Lucene_Net_Util_WeakIdentityMap_2_Put__0__1_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Put(`0,`1)">Put(TKey, TValue)</h4>
+  <div class="markdown level1 summary"><p>Associates the specified value with the specified key in this map.
+If the map previously contained a mapping for this key, the old value
+is replaced.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TValue Put(TKey key, TValue value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TKey</span></td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">TValue</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TValue</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2_Reap.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602.Reap%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L340">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WeakIdentityMap_2_Reap_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Reap*"></a>
+  <h4 id="Lucene_Net_Util_WeakIdentityMap_2_Reap" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Reap">Reap()</h4>
+  <div class="markdown level1 summary"><p>This method manually cleans up the reference queue to remove all garbage
+collected key/value pairs from the map. Calling this method is not needed
+if <code>reapOnRead = true</code>. Otherwise it might be a good idea
+to call this method when there is spare time (e.g. from a background thread). 
+<a href="#reapInfo">Information about the <code>reapOnRead</code> setting</a>       </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Reap()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2_Remove_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602.Remove(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L228">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_WeakIdentityMap_2_Remove_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Remove*"></a>
+  <h4 id="Lucene_Net_Util_WeakIdentityMap_2_Remove_System_Object_" data-uid="Lucene.Net.Util.WeakIdentityMap`2.Remove(System.Object)">Remove(Object)</h4>
+  <div class="markdown level1 summary"><p>Removes the mapping for a key from this weak hash map if it is present.
+Returns the value to which this map previously associated the key,
+or <code>null</code> if the map contained no mapping for the key.
+A return value of <code>null</code> does not necessarily indicate that
+the map contained.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool Remove(object key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Support.Number.html#Lucene_Net_Support_Number_IsNumber_System_Object_">Number.IsNumber(Object)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_WeakIdentityMap_2.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.WeakIdentityMap%602%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Util/WeakIdentityMap.cs/#L61" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

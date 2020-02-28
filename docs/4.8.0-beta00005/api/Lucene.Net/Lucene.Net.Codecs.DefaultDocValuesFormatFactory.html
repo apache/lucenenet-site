@@ -1,0 +1,645 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class DefaultDocValuesFormatFactory
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class DefaultDocValuesFormatFactory
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory">
+  
+  
+  <h1 id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory" class="text-break">Class DefaultDocValuesFormatFactory
+  </h1>
+  <div class="markdown level0 summary"><p>LUCENENET specific class that implements the default functionality for the 
+<a class="xref" href="Lucene.Net.Codecs.IDocValuesFormatFactory.html">IDocValuesFormatFactory</a>.
+<p>
+The most common use cases are:
+<ul><li>Initialize <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html">DefaultDocValuesFormatFactory</a> with a set of <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_CustomDocValuesFormatTypes">CustomDocValuesFormatTypes</a>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html">DefaultDocValuesFormatFactory</a> and override
+<a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormat_System_Type_">GetDocValuesFormat(Type)</a> so an external dependency injection
+container can be used to supply the instances (lifetime should be singleton). Note that you could 
+alternately use the &quot;named type&quot; feature that many DI containers have to supply the type based on name by 
+overriding <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormat_System_String_">GetDocValuesFormat(String)</a>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html">DefaultDocValuesFormatFactory</a> and override
+<a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormatType_System_String_">GetDocValuesFormatType(String)</a> so a type new type can be
+supplied that is not in the <span class="xref">Lucene.Net.Codecs.DefaultDocValuesFormatFactory.docValuesFormatNameToTypeMap</span>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html">DefaultDocValuesFormatFactory</a> to add new or override the default <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> 
+types by overriding <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_Initialize">Initialize()</a> and calling <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_PutDocValuesFormatType_System_Type_">PutDocValuesFormatType(Type)</a>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html">DefaultDocValuesFormatFactory</a> to scan additional assemblies for <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a>
+subclasses in by overriding <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_Initialize">Initialize()</a> and calling <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_ScanForDocValuesFormats_System_Reflection_Assembly_">ScanForDocValuesFormats(Assembly)</a>. 
+For performance reasons, the default behavior only loads Lucene.Net codecs.</li></ul>
+<p>
+To set the <a class="xref" href="Lucene.Net.Codecs.IDocValuesFormatFactory.html">IDocValuesFormatFactory</a>, call <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html#Lucene_Net_Codecs_DocValuesFormat_SetDocValuesFormatFactory_Lucene_Net_Codecs_IDocValuesFormatFactory_">SetDocValuesFormatFactory(IDocValuesFormatFactory)</a>.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Util.NamedServiceFactory-1.html">NamedServiceFactory</a>&lt;<a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a>&gt;</div>
+    <div class="level2"><span class="xref">DefaultDocValuesFormatFactory</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lucene.Net.Codecs.IDocValuesFormatFactory.html">IDocValuesFormatFactory</a></div>
+    <div><a class="xref" href="Lucene.Net.Util.IServiceListable.html">IServiceListable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.NamedServiceFactory-1.html#Lucene_Net_Util_NamedServiceFactory_1_m_initializationLock">NamedServiceFactory&lt;DocValuesFormat&gt;.m_initializationLock</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.NamedServiceFactory-1.html#Lucene_Net_Util_NamedServiceFactory_1_EnsureInitialized">NamedServiceFactory&lt;DocValuesFormat&gt;.EnsureInitialized()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.NamedServiceFactory-1.html#Lucene_Net_Util_NamedServiceFactory_1_CodecsAssembly">NamedServiceFactory&lt;DocValuesFormat&gt;.CodecsAssembly</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.NamedServiceFactory-1.html#Lucene_Net_Util_NamedServiceFactory_1_IsServiceType_System_Type_">NamedServiceFactory&lt;DocValuesFormat&gt;.IsServiceType(Type)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.NamedServiceFactory-1.html#Lucene_Net_Util_NamedServiceFactory_1_GetServiceName_System_Type_">NamedServiceFactory&lt;DocValuesFormat&gt;.GetServiceName(Type)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.NamedServiceFactory-1.html#Lucene_Net_Util_NamedServiceFactory_1_GetCanonicalName_System_Type_">NamedServiceFactory&lt;DocValuesFormat&gt;.GetCanonicalName(Type)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.NamedServiceFactory-1.html#Lucene_Net_Util_NamedServiceFactory_1_IsFullyTrusted">NamedServiceFactory&lt;DocValuesFormat&gt;.IsFullyTrusted</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Codecs.html">Lucene.Net.Codecs</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class DefaultDocValuesFormatFactory : NamedServiceFactory&lt;DocValuesFormat&gt;, IDocValuesFormatFactory, IServiceListable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_DefaultDocValuesFormatFactory__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.DefaultDocValuesFormatFactory.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Support/Codecs/DefaultDocValuesFormatFactory.cs/#L67">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory__ctor_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory__ctor" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.#ctor">DefaultDocValuesFormatFactory()</h4>
+  <div class="markdown level1 summary"><p>Creates a new instance of <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html">DefaultDocValuesFormatFactory</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DefaultDocValuesFormatFactory()</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_DefaultDocValuesFormatFactory_AvailableServices.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.DefaultDocValuesFormatFactory.AvailableServices%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Support/Codecs/DefaultDocValuesFormatFactory.cs/#L242">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_AvailableServices_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.AvailableServices*"></a>
+  <h4 id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_AvailableServices" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.AvailableServices">AvailableServices</h4>
+  <div class="markdown level1 summary"><p>Gets a list of the available <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a>s (by name).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual ICollection&lt;string&gt; AvailableServices { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><p>A <span class="xref">ICollection{string}</span> of <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> names.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_DefaultDocValuesFormatFactory_CustomDocValuesFormatTypes.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.DefaultDocValuesFormatFactory.CustomDocValuesFormatTypes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Support/Codecs/DefaultDocValuesFormatFactory.cs/#L82">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_CustomDocValuesFormatTypes_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.CustomDocValuesFormatTypes*"></a>
+  <h4 id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_CustomDocValuesFormatTypes" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.CustomDocValuesFormatTypes">CustomDocValuesFormatTypes</h4>
+  <div class="markdown level1 summary"><p>An array of custom <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a>-derived types to be registered. This property
+can be initialized during construction of <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html">DefaultDocValuesFormatFactory</a>
+to make your custom codecs known to Lucene.
+<p>
+These types will be registered after the default Lucene types, so if a custom type has the same
+name as a Lucene <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> (via <a class="xref" href="Lucene.Net.Codecs.DocValuesFormatNameAttribute.html">DocValuesFormatNameAttribute</a>) 
+the custom type will replace the Lucene type with the same name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable&lt;Type&gt; CustomDocValuesFormatTypes { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Type</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormat_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.DefaultDocValuesFormatFactory.GetDocValuesFormat(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Support/Codecs/DefaultDocValuesFormatFactory.cs/#L172">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormat_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.GetDocValuesFormat*"></a>
+  <h4 id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormat_System_String_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.GetDocValuesFormat(System.String)">GetDocValuesFormat(String)</h4>
+  <div class="markdown level1 summary"><p>Gets the <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> instance from the provided <code data-dev-comment-type="paramref" class="paramref">name</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual DocValuesFormat GetDocValuesFormat(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> instance to retrieve.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a></td>
+        <td><p>The <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormat_System_Type_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.DefaultDocValuesFormatFactory.GetDocValuesFormat(System.Type)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Support/Codecs/DefaultDocValuesFormatFactory.cs/#L187">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormat_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.GetDocValuesFormat*"></a>
+  <h4 id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormat_System_Type_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.GetDocValuesFormat(System.Type)">GetDocValuesFormat(Type)</h4>
+  <div class="markdown level1 summary"><p>Gets the <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> instance from the provided <code data-dev-comment-type="paramref" class="paramref">type</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual DocValuesFormat GetDocValuesFormat(Type type)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Type</span></td>
+        <td><span class="parametername">type</span></td>
+        <td><p>The <span class="xref">System.Type</span> of <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> to retrieve.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a></td>
+        <td><p>The <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormatType_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.DefaultDocValuesFormatFactory.GetDocValuesFormatType(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Support/Codecs/DefaultDocValuesFormatFactory.cs/#L221">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormatType_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.GetDocValuesFormatType*"></a>
+  <h4 id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormatType_System_String_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.GetDocValuesFormatType(System.String)">GetDocValuesFormatType(String)</h4>
+  <div class="markdown level1 summary"><p>Gets the <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> <span class="xref">System.Type</span> from the provided <code data-dev-comment-type="paramref" class="paramref">name</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual Type GetDocValuesFormatType(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> <span class="xref">System.Type</span> to retrieve.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Type</span></td>
+        <td><p>The <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> <span class="xref">System.Type</span>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_DefaultDocValuesFormatFactory_Initialize.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.DefaultDocValuesFormatFactory.Initialize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Support/Codecs/DefaultDocValuesFormatFactory.cs/#L93">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_Initialize_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.Initialize*"></a>
+  <h4 id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_Initialize" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.Initialize">Initialize()</h4>
+  <div class="markdown level1 summary"><p>Initializes the doc values type cache with the known <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> types.
+Override this method (and optionally call <code>base.Initialize()</code>) to add your
+own <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> types by calling <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_PutDocValuesFormatType_System_Type_">PutDocValuesFormatType(Type)</a> 
+or <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_ScanForDocValuesFormats_System_Reflection_Assembly_">ScanForDocValuesFormats(Assembly)</a>.
+<p>
+If two types have the same name by using the <a class="xref" href="Lucene.Net.Codecs.DocValuesFormatNameAttribute.html">DocValuesFormatNameAttribute</a>, the
+last one registered wins.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Initialize()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Util.NamedServiceFactory&lt;Lucene.Net.Codecs.DocValuesFormat&gt;.Initialize()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_DefaultDocValuesFormatFactory_NewDocValuesFormat_System_Type_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.DefaultDocValuesFormatFactory.NewDocValuesFormat(System.Type)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Support/Codecs/DefaultDocValuesFormatFactory.cs/#L211">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_NewDocValuesFormat_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.NewDocValuesFormat*"></a>
+  <h4 id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_NewDocValuesFormat_System_Type_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.NewDocValuesFormat(System.Type)">NewDocValuesFormat(Type)</h4>
+  <div class="markdown level1 summary"><p>Instantiates a <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> based on the provided <code data-dev-comment-type="paramref" class="paramref">type</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual DocValuesFormat NewDocValuesFormat(Type type)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Type</span></td>
+        <td><span class="parametername">type</span></td>
+        <td><p>The <span class="xref">System.Type</span> of <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> to instantiate.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a></td>
+        <td><p>The new instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_DefaultDocValuesFormatFactory_PutDocValuesFormatType_System_Type_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.DefaultDocValuesFormatFactory.PutDocValuesFormatType(System.Type)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Support/Codecs/DefaultDocValuesFormatFactory.cs/#L148">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_PutDocValuesFormatType_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.PutDocValuesFormatType*"></a>
+  <h4 id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_PutDocValuesFormatType_System_Type_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.PutDocValuesFormatType(System.Type)">PutDocValuesFormatType(Type)</h4>
+  <div class="markdown level1 summary"><p>Adds a <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> type to the <span class="xref">Lucene.Net.Codecs.DefaultDocValuesFormatFactory.docValuesFormatNameToTypeMap</span>, using 
+the name provided in the <a class="xref" href="Lucene.Net.Codecs.DocValuesFormatNameAttribute.html">DocValuesFormatNameAttribute</a>, if present, or the name
+of the codec class minus the &quot;DocValuesFormat&quot; suffix as the name by default.
+<p>
+Note that if a <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> with the same name already exists in the map,
+calling this method will update it to the new type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void PutDocValuesFormatType(Type docValuesFormat)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Type</span></td>
+        <td><span class="parametername">docValuesFormat</span></td>
+        <td><p>A type that subclasses <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_DefaultDocValuesFormatFactory_ScanForDocValuesFormats_System_Collections_Generic_IEnumerable_System_Reflection_Assembly__.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.DefaultDocValuesFormatFactory.ScanForDocValuesFormats(System.Collections.Generic.IEnumerable%7BSystem.Reflection.Assembly%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Support/Codecs/DefaultDocValuesFormatFactory.cs/#L112">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_ScanForDocValuesFormats_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.ScanForDocValuesFormats*"></a>
+  <h4 id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_ScanForDocValuesFormats_System_Collections_Generic_IEnumerable_System_Reflection_Assembly__" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.ScanForDocValuesFormats(System.Collections.Generic.IEnumerable{System.Reflection.Assembly})">ScanForDocValuesFormats(IEnumerable&lt;Assembly&gt;)</h4>
+  <div class="markdown level1 summary"><p>Scans the given <code data-dev-comment-type="paramref" class="paramref">assemblies</code> for subclasses of <a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a>
+and adds their names to the <span class="xref">Lucene.Net.Codecs.DefaultDocValuesFormatFactory.docValuesFormatNameToTypeMap</span>. Note that names will be
+automatically overridden if the <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> name appears multiple times - the last match wins.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void ScanForDocValuesFormats(IEnumerable&lt;Assembly&gt; assemblies)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Reflection.Assembly</span>&gt;</td>
+        <td><span class="parametername">assemblies</span></td>
+        <td><p>A list of assemblies to scan. The assemblies will be scanned from first to last, 
+and the last match for each <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> name wins.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_DefaultDocValuesFormatFactory_ScanForDocValuesFormats_System_Reflection_Assembly_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.DefaultDocValuesFormatFactory.ScanForDocValuesFormats(System.Reflection.Assembly)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Support/Codecs/DefaultDocValuesFormatFactory.cs/#L126">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_ScanForDocValuesFormats_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.ScanForDocValuesFormats*"></a>
+  <h4 id="Lucene_Net_Codecs_DefaultDocValuesFormatFactory_ScanForDocValuesFormats_System_Reflection_Assembly_" data-uid="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.ScanForDocValuesFormats(System.Reflection.Assembly)">ScanForDocValuesFormats(Assembly)</h4>
+  <div class="markdown level1 summary"><p>Scans the given <code data-dev-comment-type="paramref" class="paramref">assembly</code> for subclasses of <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a>
+and adds their names to the <span class="xref">Lucene.Net.Codecs.DefaultDocValuesFormatFactory.docValuesFormatNameToTypeMap</span>. Note that names will be
+automatically overridden if the <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> name appears multiple times - the last match wins.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void ScanForDocValuesFormats(Assembly assembly)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Reflection.Assembly</span></td>
+        <td><span class="parametername">assembly</span></td>
+        <td><p>The assembly to scan.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Codecs.IDocValuesFormatFactory.html">IDocValuesFormatFactory</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Util.IServiceListable.html">IServiceListable</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Support.Number.html#Lucene_Net_Support_Number_IsNumber_System_Object_">Number.IsNumber(Object)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_DefaultDocValuesFormatFactory.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.DefaultDocValuesFormatFactory%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Support/Codecs/DefaultDocValuesFormatFactory.cs/#L49" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

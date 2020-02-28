@@ -1,0 +1,611 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class WordDelimiterFilter
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class WordDelimiterFilter
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter">
+  
+  
+  <h1 id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter" class="text-break">Class WordDelimiterFilter
+  </h1>
+  <div class="markdown level0 summary"><p>Splits words into subwords and performs optional transformations on subword
+groups. Words are split into subwords with the following rules:
+<ul><li>split on intra-word delimiters (by default, all non alpha-numeric
+        characters): <code>&quot;Wi-Fi&quot;</code> → <code>&quot;Wi&quot;, &quot;Fi&quot;</code></li><li>split on case transitions: <code>&quot;PowerShot&quot;</code> →
+<code>&quot;Power&quot;, &quot;Shot&quot;</code></li><li>split on letter-number transitions: <code>&quot;SD500&quot;</code> →
+<code>&quot;SD&quot;, &quot;500&quot;</code></li><li>leading and trailing intra-word delimiters on each subword are ignored:
+<code>&quot;//hello---there, &apos;dude&apos;&quot;</code> →
+<code>&quot;hello&quot;, &quot;there&quot;, &quot;dude&quot;</code></li><li>trailing &quot;&apos;s&quot; are removed for each subword: <code>&quot;O&apos;Neil&apos;s&quot;</code>
+→ <code>&quot;O&quot;, &quot;Neil&quot;</code>
+<ul>
+<item>Note: this step isn&apos;t performed in a separate filter because of possible
+    subword combinations.</item>
+</ul>
+</li></ul>
+<p>
+The <strong>combinations</strong> parameter affects how subwords are combined:
+<ul><li>combinations=&quot;0&quot; causes no subword combinations: <pre><code>&quot;PowerShot&quot;</code></pre>
+        → <code>0:&quot;Power&quot;, 1:&quot;Shot&quot;</code> (0 and 1 are the token positions)</li><li>combinations=&quot;1&quot; means that in addition to the subwords, maximum runs of
+        non-numeric subwords are catenated and produced at the same position of the
+        last subword in the run:
+<ul>
+<item><code>&quot;PowerShot&quot;</code> →
+<code>0:&quot;Power&quot;, 1:&quot;Shot&quot; 1:&quot;PowerShot&quot;</code></item>
+<item><code>&quot;A&apos;s+B&apos;s&amp;C&apos;s&quot;</code> -gt; <code>0:&quot;A&quot;, 1:&quot;B&quot;, 2:&quot;C&quot;, 2:&quot;ABC&quot;</code>
+</item>
+<item><code>&quot;Super-Duper-XL500-42-AutoCoder!&quot;</code> →
+<code>0:&quot;Super&quot;, 1:&quot;Duper&quot;, 2:&quot;XL&quot;, 2:&quot;SuperDuperXL&quot;, 3:&quot;500&quot; 4:&quot;42&quot;, 5:&quot;Auto&quot;, 6:&quot;Coder&quot;, 6:&quot;AutoCoder&quot;</code>
+</item>
+</ul>
+</li></ul>
+<p>
+One use for <a class="xref" href="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.html">WordDelimiterFilter</a> is to help match words with different
+subword delimiters. For example, if the source text contained &quot;wi-fi&quot; one may
+want &quot;wifi&quot; &quot;WiFi&quot; &quot;wi-fi&quot; &quot;wi+fi&quot; queries to all match. One way of doing so
+is to specify combinations=&quot;1&quot; in the analyzer used for indexing, and
+combinations=&quot;0&quot; (the default) in the analyzer used for querying. Given that
+the current <a class="xref" href="Lucene.Net.Analysis.Standard.StandardTokenizer.html">StandardTokenizer</a> immediately removes many intra-word
+delimiters, it is recommended that this filter be used after a tokenizer that
+does not do this (such as <a class="xref" href="Lucene.Net.Analysis.Core.WhitespaceTokenizer.html">WhitespaceTokenizer</a>).</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html">AttributeSource</a></div>
+    <div class="level2"><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenStream.html">TokenStream</a></div>
+    <div class="level3"><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a></div>
+    <div class="level4"><span class="xref">WordDelimiterFilter</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenFilter.html#Lucene_Net_Analysis_TokenFilter_m_input">TokenFilter.m_input</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenFilter.html#Lucene_Net_Analysis_TokenFilter_End">TokenFilter.End()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenFilter.html#Lucene_Net_Analysis_TokenFilter_Dispose_System_Boolean_">TokenFilter.Dispose(Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_Dispose">TokenStream.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_GetAttributeFactory">AttributeSource.GetAttributeFactory()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_GetAttributeClassesEnumerator">AttributeSource.GetAttributeClassesEnumerator()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_GetAttributeImplsEnumerator">AttributeSource.GetAttributeImplsEnumerator()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_AddAttributeImpl_Lucene_Net_Util_Attribute_">AttributeSource.AddAttributeImpl(Attribute)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_AddAttribute__1">AttributeSource.AddAttribute&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_HasAttributes">AttributeSource.HasAttributes</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_HasAttribute__1">AttributeSource.HasAttribute&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_GetAttribute__1">AttributeSource.GetAttribute&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_ClearAttributes">AttributeSource.ClearAttributes()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_CaptureState">AttributeSource.CaptureState()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_RestoreState_Lucene_Net_Util_AttributeSource_State_">AttributeSource.RestoreState(AttributeSource.State)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_GetHashCode">AttributeSource.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_Equals_System_Object_">AttributeSource.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_ReflectAsString_System_Boolean_">AttributeSource.ReflectAsString(Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_ReflectWith_Lucene_Net_Util_IAttributeReflector_">AttributeSource.ReflectWith(IAttributeReflector)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_CloneAttributes">AttributeSource.CloneAttributes()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_CopyTo_Lucene_Net_Util_AttributeSource_">AttributeSource.CopyTo(AttributeSource)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_ToString">AttributeSource.ToString()</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Analysis.Miscellaneous.html">Lucene.Net.Analysis.Miscellaneous</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Analysis.Common.dll</h6>
+  <h5 id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class WordDelimiterFilter : TokenFilter, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter__ctor_Lucene_Net_Util_LuceneVersion_Lucene_Net_Analysis_TokenStream_Lucene_Net_Analysis_Miscellaneous_WordDelimiterFlags_Lucene_Net_Analysis_Util_CharArraySet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.%23ctor(Lucene.Net.Util.LuceneVersion%2CLucene.Net.Analysis.TokenStream%2CLucene.Net.Analysis.Miscellaneous.WordDelimiterFlags%2CLucene.Net.Analysis.Util.CharArraySet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/WordDelimiterFilter.cs/#L245">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter__ctor_" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter__ctor_Lucene_Net_Util_LuceneVersion_Lucene_Net_Analysis_TokenStream_Lucene_Net_Analysis_Miscellaneous_WordDelimiterFlags_Lucene_Net_Analysis_Util_CharArraySet_" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.#ctor(Lucene.Net.Util.LuceneVersion,Lucene.Net.Analysis.TokenStream,Lucene.Net.Analysis.Miscellaneous.WordDelimiterFlags,Lucene.Net.Analysis.Util.CharArraySet)">WordDelimiterFilter(LuceneVersion, TokenStream, WordDelimiterFlags, CharArraySet)</h4>
+  <div class="markdown level1 summary"><p>Creates a new WordDelimiterFilter using <a class="xref" href="Lucene.Net.Analysis.Miscellaneous.WordDelimiterIterator.html#Lucene_Net_Analysis_Miscellaneous_WordDelimiterIterator_DEFAULT_WORD_DELIM_TABLE">DEFAULT_WORD_DELIM_TABLE</a>
+as its charTypeTable</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public WordDelimiterFilter(LuceneVersion matchVersion, TokenStream in, WordDelimiterFlags configurationFlags, CharArraySet protWords)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a></td>
+        <td><span class="parametername">matchVersion</span></td>
+        <td><p>lucene compatibility version </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenStream.html">TokenStream</a></td>
+        <td><span class="parametername">in</span></td>
+        <td><p><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenStream.html">TokenStream</a> to be filtered </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFlags.html">WordDelimiterFlags</a></td>
+        <td><span class="parametername">configurationFlags</span></td>
+        <td><p>Flags configuring the filter </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a></td>
+        <td><span class="parametername">protWords</span></td>
+        <td><p>If not null is the set of tokens to protect from being delimited </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter__ctor_Lucene_Net_Util_LuceneVersion_Lucene_Net_Analysis_TokenStream_System_Byte___Lucene_Net_Analysis_Miscellaneous_WordDelimiterFlags_Lucene_Net_Analysis_Util_CharArraySet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.%23ctor(Lucene.Net.Util.LuceneVersion%2CLucene.Net.Analysis.TokenStream%2CSystem.Byte%5B%5D%2CLucene.Net.Analysis.Miscellaneous.WordDelimiterFlags%2CLucene.Net.Analysis.Util.CharArraySet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/WordDelimiterFilter.cs/#L214">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter__ctor_" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter__ctor_Lucene_Net_Util_LuceneVersion_Lucene_Net_Analysis_TokenStream_System_Byte___Lucene_Net_Analysis_Miscellaneous_WordDelimiterFlags_Lucene_Net_Analysis_Util_CharArraySet_" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.#ctor(Lucene.Net.Util.LuceneVersion,Lucene.Net.Analysis.TokenStream,System.Byte[],Lucene.Net.Analysis.Miscellaneous.WordDelimiterFlags,Lucene.Net.Analysis.Util.CharArraySet)">WordDelimiterFilter(LuceneVersion, TokenStream, Byte[], WordDelimiterFlags, CharArraySet)</h4>
+  <div class="markdown level1 summary"><p>Creates a new WordDelimiterFilter</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public WordDelimiterFilter(LuceneVersion matchVersion, TokenStream in, byte[] charTypeTable, WordDelimiterFlags configurationFlags, CharArraySet protWords)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a></td>
+        <td><span class="parametername">matchVersion</span></td>
+        <td><p>lucene compatibility version </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenStream.html">TokenStream</a></td>
+        <td><span class="parametername">in</span></td>
+        <td><p>TokenStream to be filtered </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">charTypeTable</span></td>
+        <td><p>table containing character types </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFlags.html">WordDelimiterFlags</a></td>
+        <td><span class="parametername">configurationFlags</span></td>
+        <td><p>Flags configuring the filter </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a></td>
+        <td><span class="parametername">protWords</span></td>
+        <td><p>If not null is the set of tokens to protect from being delimited </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_ALPHA.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.ALPHA%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/WordDelimiterFilter.cs/#L157">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_ALPHA" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.ALPHA">ALPHA</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int ALPHA = 3</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_ALPHANUM.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.ALPHANUM%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/WordDelimiterFilter.cs/#L158">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_ALPHANUM" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.ALPHANUM">ALPHANUM</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int ALPHANUM = 7</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_DIGIT.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.DIGIT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/WordDelimiterFilter.cs/#L153">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_DIGIT" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.DIGIT">DIGIT</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int DIGIT = 4</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_LOWER.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.LOWER%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/WordDelimiterFilter.cs/#L151">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_LOWER" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.LOWER">LOWER</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int LOWER = 1</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_SUBWORD_DELIM.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.SUBWORD_DELIM%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/WordDelimiterFilter.cs/#L154">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_SUBWORD_DELIM" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.SUBWORD_DELIM">SUBWORD_DELIM</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int SUBWORD_DELIM = 8</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_UPPER.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.UPPER%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/WordDelimiterFilter.cs/#L152">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_UPPER" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.UPPER">UPPER</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int UPPER = 2</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_IncrementToken.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.IncrementToken%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/WordDelimiterFilter.cs/#L250">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_IncrementToken_" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.IncrementToken*"></a>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_IncrementToken" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.IncrementToken">IncrementToken()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool IncrementToken()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_IncrementToken">TokenStream.IncrementToken()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_Reset.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.Reset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/WordDelimiterFilter.cs/#L403">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_Reset_" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.Reset*"></a>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter_Reset" data-uid="Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter.Reset">Reset()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Reset()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenFilter.html#Lucene_Net_Analysis_TokenFilter_Reset">TokenFilter.Reset()</a></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_WordDelimiterFilter.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.WordDelimiterFilter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/WordDelimiterFilter.cs/#L147" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,1922 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Token
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Token
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Analysis.Token">
+  
+  
+  <h1 id="Lucene_Net_Analysis_Token" data-uid="Lucene.Net.Analysis.Token" class="text-break">Class Token
+  </h1>
+  <div class="markdown level0 summary"><p>A <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> is an occurrence of a term from the text of a field.  It consists of
+a term&apos;s text, the start and end offset of the term in the text of the field,
+and a type string.
+<p>
+The start and end offsets permit applications to re-associate a token with
+its source text, e.g., to display highlighted query terms in a document
+browser, or to show matching text fragments in a KWIC (KeyWord In Context)
+display, etc.
+<p>
+The type is a string, assigned by a lexical analyzer
+(a.k.a. tokenizer), naming the lexical or syntactic class that the token
+belongs to.  For example an end of sentence marker token might be implemented
+with type &quot;eos&quot;.  The default token type is &quot;word&quot;.
+<p>
+A Token can optionally have metadata (a.k.a. payload) in the form of a variable
+length byte array. Use <a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html#Lucene_Net_Index_DocsAndPositionsEnum_GetPayload">GetPayload()</a> to retrieve the
+payloads from the index.</p>
+<p><p>
+
+<p><strong>NOTE:</strong> As of 2.9, Token implements all <a class="xref" href="Lucene.Net.Util.IAttribute.html">IAttribute</a> interfaces
+that are part of core Lucene and can be found in the <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.html">Lucene.Net.Analysis.TokenAttributes</a> namespace.
+Even though it is not necessary to use <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> anymore, with the new <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> API it can
+be used as convenience class that implements all <a class="xref" href="Lucene.Net.Util.IAttribute.html">IAttribute</a>s, which is especially useful
+to easily switch from the old to the new <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> API.
+
+<p><p>
+
+<p><a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a>s and <a class="xref" href="Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a>s should try to re-use a <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a>
+instance when possible for best performance, by
+implementing the <a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_IncrementToken">IncrementToken()</a> API.
+Failing that, to create a new <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> you should first use
+one of the constructors that starts with null text.  To load
+the token from a char[] use <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_CopyBuffer_System_Char___System_Int32_System_Int32_">CopyBuffer(Char[], Int32, Int32)</a>.
+To load from a <span class="xref">System.String</span> use <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_SetEmpty">SetEmpty()</a> followed by 
+<a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_Append_System_String_">Append(String)</a> or <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_Append_System_String_System_Int32_System_Int32_">Append(String, Int32, Int32)</a>.
+Alternatively you can get the <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a>&apos;s termBuffer by calling either <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_Buffer">Buffer</a>,
+if you know that your text is shorter than the capacity of the termBuffer
+or <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_ResizeBuffer_System_Int32_">ResizeBuffer(Int32)</a>, if there is any possibility
+that you may need to grow the buffer. Fill in the characters of your term into this
+buffer, with <span class="xref">System.String.ToCharArray(System.Int32,System.Int32)</span> if loading from a string,
+or with <span class="xref">System.Array.Copy(System.Array,System.Int32,System.Array,System.Int32,System.Int32)</span>, 
+and finally call <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_SetLength_System_Int32_">SetLength(Int32)</a> to
+set the length of the term text.  See <a target="_top" href="https://issues.apache.org/jira/browse/LUCENE-969">LUCENE-969</a>
+for details.</p>
+<p>Typical Token reuse patterns:
+<ul><li> Copying text from a string (type is reset to <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.TypeAttribute.html#Lucene_Net_Analysis_TokenAttributes_TypeAttribute_DEFAULT_TYPE">DEFAULT_TYPE</a> if not specified):
+<pre><code>    return reusableToken.Reinit(string, startOffset, endOffset[, type]);</code></pre>
+</li><li> Copying some text from a string (type is reset to <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.TypeAttribute.html#Lucene_Net_Analysis_TokenAttributes_TypeAttribute_DEFAULT_TYPE">DEFAULT_TYPE</a> if not specified):
+<pre><code>    return reusableToken.Reinit(string, 0, string.Length, startOffset, endOffset[, type]);</code></pre>
+</li><li> Copying text from char[] buffer (type is reset to <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.TypeAttribute.html#Lucene_Net_Analysis_TokenAttributes_TypeAttribute_DEFAULT_TYPE">DEFAULT_TYPE</a> if not specified):
+<pre><code>    return reusableToken.Reinit(buffer, 0, buffer.Length, startOffset, endOffset[, type]);</code></pre>
+</li><li> Copying some text from a char[] buffer (type is reset to <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.TypeAttribute.html#Lucene_Net_Analysis_TokenAttributes_TypeAttribute_DEFAULT_TYPE">DEFAULT_TYPE</a> if not specified):
+<pre><code>    return reusableToken.Reinit(buffer, start, end - start, startOffset, endOffset[, type]);</code></pre>
+</li><li> Copying from one one <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> to another (type is reset to <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.TypeAttribute.html#Lucene_Net_Analysis_TokenAttributes_TypeAttribute_DEFAULT_TYPE">DEFAULT_TYPE</a> if not specified):
+<pre><code>    return reusableToken.Reinit(source.Buffer, 0, source.Length, source.StartOffset, source.EndOffset[, source.Type]);</code></pre>
+</li></ul>
+A few things to note:
+<ul><li><a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_Clear">Clear()</a> initializes all of the fields to default values. this was changed in contrast to Lucene 2.4, but should affect no one.</li><li>Because <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>s can be chained, one cannot assume that the <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a>&apos;s current type is correct.</li><li>The startOffset and endOffset represent the start and offset in the source text, so be careful in adjusting them.</li><li>When caching a reusable token, clone it. When injecting a cached token into a stream that can be reset, clone it again.</li></ul>
+</p>
+<p>
+<strong>Please note:</strong> With Lucene 3.1, the <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_ToString">ToString()</a> method had to be changed to match the
+<a class="xref" href="Lucene.Net.Support.ICharSequence.html">ICharSequence</a> interface introduced by the interface <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html">ICharTermAttribute</a>.
+this method now only prints the term text, no additional information anymore.
+</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Util.Attribute.html">Attribute</a></div>
+    <div class="level2"><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html">CharTermAttribute</a></div>
+    <div class="level3"><span class="xref">Token</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html">ICharTermAttribute</a></div>
+    <div><a class="xref" href="Lucene.Net.Support.ICharSequence.html">ICharSequence</a></div>
+    <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ITermToBytesRefAttribute.html">ITermToBytesRefAttribute</a></div>
+    <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ITypeAttribute.html">ITypeAttribute</a></div>
+    <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IPositionIncrementAttribute.html">IPositionIncrementAttribute</a></div>
+    <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IFlagsAttribute.html">IFlagsAttribute</a></div>
+    <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IOffsetAttribute.html">IOffsetAttribute</a></div>
+    <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IPayloadAttribute.html">IPayloadAttribute</a></div>
+    <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IPositionLengthAttribute.html">IPositionLengthAttribute</a></div>
+    <div><a class="xref" href="Lucene.Net.Util.IAttribute.html">IAttribute</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_CopyBuffer_System_Char___System_Int32_System_Int32_">CharTermAttribute.CopyBuffer(Char[], Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Buffer">CharTermAttribute.Buffer</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_ResizeBuffer_System_Int32_">CharTermAttribute.ResizeBuffer(Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Length">CharTermAttribute.Length</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_SetLength_System_Int32_">CharTermAttribute.SetLength(Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_SetEmpty">CharTermAttribute.SetEmpty()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_FillBytesRef">CharTermAttribute.FillBytesRef()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_BytesRef">CharTermAttribute.BytesRef</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Item_System_Int32_">CharTermAttribute.Item[Int32]</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_SubSequence_System_Int32_System_Int32_">CharTermAttribute.SubSequence(Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Append_System_String_System_Int32_System_Int32_">CharTermAttribute.Append(String, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Append_System_Char_">CharTermAttribute.Append(Char)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Append_System_Char___">CharTermAttribute.Append(Char[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Append_System_Char___System_Int32_System_Int32_">CharTermAttribute.Append(Char[], Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Append_System_String_">CharTermAttribute.Append(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Append_System_Text_StringBuilder_">CharTermAttribute.Append(StringBuilder)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Append_System_Text_StringBuilder_System_Int32_System_Int32_">CharTermAttribute.Append(StringBuilder, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Append_Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_">CharTermAttribute.Append(ICharTermAttribute)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Append_Lucene_Net_Support_ICharSequence_">CharTermAttribute.Append(ICharSequence)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Append_Lucene_Net_Support_ICharSequence_System_Int32_System_Int32_">CharTermAttribute.Append(ICharSequence, Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_ToString">CharTermAttribute.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.Attribute.html#Lucene_Net_Util_Attribute_ReflectAsString_System_Boolean_">Attribute.ReflectAsString(Boolean)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Analysis.html">Lucene.Net.Analysis</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Analysis_Token_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Token : CharTermAttribute, ICharTermAttribute, ICharSequence, ITermToBytesRefAttribute, ITypeAttribute, IPositionIncrementAttribute, IFlagsAttribute, IOffsetAttribute, IPayloadAttribute, IPositionLengthAttribute, IAttribute</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L131">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token__ctor_" data-uid="Lucene.Net.Analysis.Token.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Token__ctor" data-uid="Lucene.Net.Analysis.Token.#ctor">Token()</h4>
+  <div class="markdown level1 summary"><p>Constructs a <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> will null text. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Token()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token__ctor_System_Char___System_Int32_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.%23ctor(System.Char%5B%5D%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L239">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token__ctor_" data-uid="Lucene.Net.Analysis.Token.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Token__ctor_System_Char___System_Int32_System_Int32_System_Int32_System_Int32_" data-uid="Lucene.Net.Analysis.Token.#ctor(System.Char[],System.Int32,System.Int32,System.Int32,System.Int32)">Token(Char[], Int32, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Constructs a <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> with the given term buffer (offset
+&amp; length), start and end offsets</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Token(char[] startTermBuffer, int termBufferOffset, int termBufferLength, int start, int end)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">startTermBuffer</span></td>
+        <td><p>buffer containing term text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">termBufferOffset</span></td>
+        <td><p>the index in the buffer of the first character </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">termBufferLength</span></td>
+        <td><p>number of valid characters in the buffer </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">start</span></td>
+        <td><p>start offset in the source text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">end</span></td>
+        <td><p>end offset in the source text </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token__ctor_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.%23ctor(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L142">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token__ctor_" data-uid="Lucene.Net.Analysis.Token.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Token__ctor_System_Int32_System_Int32_" data-uid="Lucene.Net.Analysis.Token.#ctor(System.Int32,System.Int32)">Token(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Constructs a <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> with null text and start &amp; end
+offsets. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Token(int start, int end)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">start</span></td>
+        <td><p>start offset in the source text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">end</span></td>
+        <td><p>end offset in the source text  </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token__ctor_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.%23ctor(System.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L169">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token__ctor_" data-uid="Lucene.Net.Analysis.Token.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Token__ctor_System_Int32_System_Int32_System_Int32_" data-uid="Lucene.Net.Analysis.Token.#ctor(System.Int32,System.Int32,System.Int32)">Token(Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Constructs a <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> with null text and start &amp; end
+offsets plus flags. NOTE: flags is EXPERIMENTAL. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Token(int start, int end, int flags)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">start</span></td>
+        <td><p>start offset in the source text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">end</span></td>
+        <td><p>end offset in the source text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">flags</span></td>
+        <td><p>The bits to set for this token </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token__ctor_System_Int32_System_Int32_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.%23ctor(System.Int32%2CSystem.Int32%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L155">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token__ctor_" data-uid="Lucene.Net.Analysis.Token.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Token__ctor_System_Int32_System_Int32_System_String_" data-uid="Lucene.Net.Analysis.Token.#ctor(System.Int32,System.Int32,System.String)">Token(Int32, Int32, String)</h4>
+  <div class="markdown level1 summary"><p>Constructs a <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> with null text and start &amp; end
+offsets plus the <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> type. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Token(int start, int end, string typ)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">start</span></td>
+        <td><p>start offset in the source text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">end</span></td>
+        <td><p>end offset in the source text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">typ</span></td>
+        <td><p>the lexical type of this <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a>  </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token__ctor_System_String_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.%23ctor(System.String%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L186">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token__ctor_" data-uid="Lucene.Net.Analysis.Token.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Token__ctor_System_String_System_Int32_System_Int32_" data-uid="Lucene.Net.Analysis.Token.#ctor(System.String,System.Int32,System.Int32)">Token(String, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Constructs a <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> with the given term text, and start
+&amp; end offsets.  The type defaults to &quot;word.&quot;
+<strong>NOTE:</strong> for better indexing speed you should
+instead use the char[] termBuffer methods to set the
+term text. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Token(string text, int start, int end)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">text</span></td>
+        <td><p>term text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">start</span></td>
+        <td><p>start offset in the source text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">end</span></td>
+        <td><p>end offset in the source text </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token__ctor_System_String_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.%23ctor(System.String%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L221">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token__ctor_" data-uid="Lucene.Net.Analysis.Token.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Token__ctor_System_String_System_Int32_System_Int32_System_Int32_" data-uid="Lucene.Net.Analysis.Token.#ctor(System.String,System.Int32,System.Int32,System.Int32)">Token(String, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Constructs a <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> with the given text, start and end
+offsets, &amp; type.  <strong>NOTE:</strong> for better indexing
+speed you should instead use the char[] termBuffer
+methods to set the term text. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Token(string text, int start, int end, int flags)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">text</span></td>
+        <td><p>term text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">start</span></td>
+        <td><p>start offset in the source text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">end</span></td>
+        <td><p>end offset in the source text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">flags</span></td>
+        <td><p>token type bits </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token__ctor_System_String_System_Int32_System_Int32_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.%23ctor(System.String%2CSystem.Int32%2CSystem.Int32%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L203">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token__ctor_" data-uid="Lucene.Net.Analysis.Token.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Token__ctor_System_String_System_Int32_System_Int32_System_String_" data-uid="Lucene.Net.Analysis.Token.#ctor(System.String,System.Int32,System.Int32,System.String)">Token(String, Int32, Int32, String)</h4>
+  <div class="markdown level1 summary"><p>Constructs a <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> with the given text, start and end
+offsets, &amp; type.  <strong>NOTE:</strong> for better indexing
+speed you should instead use the char[] termBuffer
+methods to set the term text. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Token(string text, int start, int end, string typ)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">text</span></td>
+        <td><p>term text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">start</span></td>
+        <td><p>start offset in the source text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">end</span></td>
+        <td><p>end offset in the source text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">typ</span></td>
+        <td><p>token type </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_TOKEN_ATTRIBUTE_FACTORY.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.TOKEN_ATTRIBUTE_FACTORY%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L673">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Token_TOKEN_ATTRIBUTE_FACTORY" data-uid="Lucene.Net.Analysis.Token.TOKEN_ATTRIBUTE_FACTORY">TOKEN_ATTRIBUTE_FACTORY</h4>
+  <div class="markdown level1 summary"><p>Convenience factory that returns <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> as implementation for the basic
+attributes and return the default impl (with &quot;Impl&quot; appended) for all other
+attributes.
+@since 3.0</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly AttributeSource.AttributeFactory TOKEN_ATTRIBUTE_FACTORY</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.AttributeSource.AttributeFactory.html">AttributeSource.AttributeFactory</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_EndOffset.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.EndOffset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L311">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_EndOffset_" data-uid="Lucene.Net.Analysis.Token.EndOffset*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_EndOffset" data-uid="Lucene.Net.Analysis.Token.EndOffset">EndOffset</h4>
+  <div class="markdown level1 summary"><p>Returns this <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a>&apos;s ending offset, one greater than the position of the
+last character corresponding to this token in the source text. The length
+of the token in the source text is (<pre><code>EndOffset</code></pre> - <a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_StartOffset">StartOffset</a>).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int EndOffset { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Analysis_Token_EndOffset_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_SetOffset_System_Int32_System_Int32_">SetOffset(Int32, Int32)</a></div>
+      <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IOffsetAttribute.html">IOffsetAttribute</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Flags.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Flags%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L346">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Flags_" data-uid="Lucene.Net.Analysis.Token.Flags*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Flags" data-uid="Lucene.Net.Analysis.Token.Flags">Flags</h4>
+  <div class="markdown level1 summary"><p>Get the bitset for any bits that have been set.
+<p>
+This is completely distinct from <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ITypeAttribute.html#Lucene_Net_Analysis_TokenAttributes_ITypeAttribute_Type">Type</a>, although they do share similar purposes.
+The flags can be used to encode information about the token for use by other <a class="xref" href="Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a>s.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int Flags { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Analysis_Token_Flags_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IFlagsAttribute.html">IFlagsAttribute</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Payload.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Payload%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L362">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Payload_" data-uid="Lucene.Net.Analysis.Token.Payload*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Payload" data-uid="Lucene.Net.Analysis.Token.Payload">Payload</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets this <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a>&apos;s payload.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual BytesRef Payload { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Analysis_Token_Payload_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IPayloadAttribute.html">IPayloadAttribute</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_PositionIncrement.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.PositionIncrement%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L252">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_PositionIncrement_" data-uid="Lucene.Net.Analysis.Token.PositionIncrement*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_PositionIncrement" data-uid="Lucene.Net.Analysis.Token.PositionIncrement">PositionIncrement</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the position increment (the distance from the prior term). The default value is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int PositionIncrement { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>if value is set to a negative value. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Analysis_Token_PositionIncrement_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IPositionIncrementAttribute.html">IPositionIncrementAttribute</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_PositionLength.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.PositionLength%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L277">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_PositionLength_" data-uid="Lucene.Net.Analysis.Token.PositionLength*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_PositionLength" data-uid="Lucene.Net.Analysis.Token.PositionLength">PositionLength</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the position length of this <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> (how many positions this token
+spans).
+<p>
+The default value is one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int PositionLength { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>if value
+       is set to zero or negative. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Analysis_Token_PositionLength_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IPositionLengthAttribute.html">IPositionLengthAttribute</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_StartOffset.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.StartOffset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L299">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_StartOffset_" data-uid="Lucene.Net.Analysis.Token.StartOffset*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_StartOffset" data-uid="Lucene.Net.Analysis.Token.StartOffset">StartOffset</h4>
+  <div class="markdown level1 summary"><p>Returns this <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a>&apos;s starting offset, the position of the first character
+corresponding to this token in the source text.
+<p>
+Note that the difference between <a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_EndOffset">EndOffset</a> and <a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_StartOffset">StartOffset</a>
+may not be equal to termText.Length, as the term text may have been altered by a
+stemmer or some other filter.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int StartOffset { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Analysis_Token_StartOffset_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_SetOffset_System_Int32_System_Int32_">SetOffset(Int32, Int32)</a></div>
+      <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IOffsetAttribute.html">IOffsetAttribute</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Type.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Type%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L333">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Type_" data-uid="Lucene.Net.Analysis.Token.Type*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Type" data-uid="Lucene.Net.Analysis.Token.Type">Type</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets this <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a>&apos;s lexical type.  Defaults to &quot;word&quot;. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Type { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Clear.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Clear%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L378">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Clear_" data-uid="Lucene.Net.Analysis.Token.Clear*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Clear" data-uid="Lucene.Net.Analysis.Token.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Resets the term text, payload, flags, and positionIncrement,
+startOffset, endOffset and token type to default.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Clear()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Clear">CharTermAttribute.Clear()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Clone.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L388">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Clone_" data-uid="Lucene.Net.Analysis.Token.Clone*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Clone" data-uid="Lucene.Net.Analysis.Token.Clone">Clone()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override object Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Clone">CharTermAttribute.Clone()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Clone_System_Char___System_Int32_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Clone(System.Char%5B%5D%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L406">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Clone_" data-uid="Lucene.Net.Analysis.Token.Clone*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Clone_System_Char___System_Int32_System_Int32_System_Int32_System_Int32_" data-uid="Lucene.Net.Analysis.Token.Clone(System.Char[],System.Int32,System.Int32,System.Int32,System.Int32)">Clone(Char[], Int32, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Makes a clone, but replaces the term buffer &amp;
+start/end offset in the process.  This is more
+efficient than doing a full clone (and then calling
+<a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_CopyBuffer_System_Char___System_Int32_System_Int32_">CopyBuffer(Char[], Int32, Int32)</a>) because it saves a wasted copy of the old
+termBuffer.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Token Clone(char[] newTermBuffer, int newTermOffset, int newTermLength, int newStartOffset, int newEndOffset)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">newTermBuffer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newTermOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newTermLength</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newStartOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newEndOffset</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_CopyTo_Lucene_Net_Util_IAttribute_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.CopyTo(Lucene.Net.Util.IAttribute)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L625">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_CopyTo_" data-uid="Lucene.Net.Analysis.Token.CopyTo*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_CopyTo_Lucene_Net_Util_IAttribute_" data-uid="Lucene.Net.Analysis.Token.CopyTo(Lucene.Net.Util.IAttribute)">CopyTo(IAttribute)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void CopyTo(IAttribute target)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IAttribute.html">IAttribute</a></td>
+        <td><span class="parametername">target</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_CopyTo_Lucene_Net_Util_IAttribute_">CharTermAttribute.CopyTo(IAttribute)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L421">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Equals_" data-uid="Lucene.Net.Analysis.Token.Equals*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Equals_System_Object_" data-uid="Lucene.Net.Analysis.Token.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_Equals_System_Object_">CharTermAttribute.Equals(Object)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_GetHashCode.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L447">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_GetHashCode_" data-uid="Lucene.Net.Analysis.Token.GetHashCode*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_GetHashCode" data-uid="Lucene.Net.Analysis.Token.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_GetHashCode">CharTermAttribute.GetHashCode()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_ReflectWith_Lucene_Net_Util_IAttributeReflector_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.ReflectWith(Lucene.Net.Util.IAttributeReflector)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L648">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_ReflectWith_" data-uid="Lucene.Net.Analysis.Token.ReflectWith*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_ReflectWith_Lucene_Net_Util_IAttributeReflector_" data-uid="Lucene.Net.Analysis.Token.ReflectWith(Lucene.Net.Util.IAttributeReflector)">ReflectWith(IAttributeReflector)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void ReflectWith(IAttributeReflector reflector)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IAttributeReflector.html">IAttributeReflector</a></td>
+        <td><span class="parametername">reflector</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_ReflectWith_Lucene_Net_Util_IAttributeReflector_">CharTermAttribute.ReflectWith(IAttributeReflector)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Reinit_Lucene_Net_Analysis_Token_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Reinit(Lucene.Net.Analysis.Token)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L582">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Reinit_" data-uid="Lucene.Net.Analysis.Token.Reinit*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Reinit_Lucene_Net_Analysis_Token_" data-uid="Lucene.Net.Analysis.Token.Reinit(Lucene.Net.Analysis.Token)">Reinit(Token)</h4>
+  <div class="markdown level1 summary"><p>Copy the prototype token&apos;s fields into this one. Note: Payloads are shared. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Reinit(Token prototype)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a></td>
+        <td><span class="parametername">prototype</span></td>
+        <td><p>source <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> to copy fields from </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Reinit_Lucene_Net_Analysis_Token_System_Char___System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Reinit(Lucene.Net.Analysis.Token%2CSystem.Char%5B%5D%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L614">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Reinit_" data-uid="Lucene.Net.Analysis.Token.Reinit*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Reinit_Lucene_Net_Analysis_Token_System_Char___System_Int32_System_Int32_" data-uid="Lucene.Net.Analysis.Token.Reinit(Lucene.Net.Analysis.Token,System.Char[],System.Int32,System.Int32)">Reinit(Token, Char[], Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Copy the prototype token&apos;s fields into this one, with a different term. Note: Payloads are shared. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Reinit(Token prototype, char[] newTermBuffer, int offset, int length)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a></td>
+        <td><span class="parametername">prototype</span></td>
+        <td><p>existing <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">newTermBuffer</span></td>
+        <td><p>buffer containing new term text </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td><p>the index in the buffer of the first character </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">length</span></td>
+        <td><p>number of valid characters in the buffer </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Reinit_Lucene_Net_Analysis_Token_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Reinit(Lucene.Net.Analysis.Token%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L597">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Reinit_" data-uid="Lucene.Net.Analysis.Token.Reinit*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Reinit_Lucene_Net_Analysis_Token_System_String_" data-uid="Lucene.Net.Analysis.Token.Reinit(Lucene.Net.Analysis.Token,System.String)">Reinit(Token, String)</h4>
+  <div class="markdown level1 summary"><p>Copy the prototype token&apos;s fields into this one, with a different term. Note: Payloads are shared. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Reinit(Token prototype, string newTerm)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a></td>
+        <td><span class="parametername">prototype</span></td>
+        <td><p>existing <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">newTerm</span></td>
+        <td><p>new term text </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Reinit_System_Char___System_Int32_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Reinit(System.Char%5B%5D%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L500">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Reinit_" data-uid="Lucene.Net.Analysis.Token.Reinit*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Reinit_System_Char___System_Int32_System_Int32_System_Int32_System_Int32_" data-uid="Lucene.Net.Analysis.Token.Reinit(System.Char[],System.Int32,System.Int32,System.Int32,System.Int32)">Reinit(Char[], Int32, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Shorthand for calling <a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_Clear">Clear()</a>,
+<a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_CopyBuffer_System_Char___System_Int32_System_Int32_">CopyBuffer(Char[], Int32, Int32)</a>,
+<a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_SetOffset_System_Int32_System_Int32_">SetOffset(Int32, Int32)</a>,
+<a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_Type">Type</a> (set) on <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.TypeAttribute.html#Lucene_Net_Analysis_TokenAttributes_TypeAttribute_DEFAULT_TYPE">DEFAULT_TYPE</a> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Token Reinit(char[] newTermBuffer, int newTermOffset, int newTermLength, int newStartOffset, int newEndOffset)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">newTermBuffer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newTermOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newTermLength</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newStartOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newEndOffset</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a></td>
+        <td><p>this <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> instance  </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Reinit_System_Char___System_Int32_System_Int32_System_Int32_System_Int32_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Reinit(System.Char%5B%5D%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L481">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Reinit_" data-uid="Lucene.Net.Analysis.Token.Reinit*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Reinit_System_Char___System_Int32_System_Int32_System_Int32_System_Int32_System_String_" data-uid="Lucene.Net.Analysis.Token.Reinit(System.Char[],System.Int32,System.Int32,System.Int32,System.Int32,System.String)">Reinit(Char[], Int32, Int32, Int32, Int32, String)</h4>
+  <div class="markdown level1 summary"><p>Shorthand for calling <a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_Clear">Clear()</a>,
+<a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_CopyBuffer_System_Char___System_Int32_System_Int32_">CopyBuffer(Char[], Int32, Int32)</a>,
+<a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_SetOffset_System_Int32_System_Int32_">SetOffset(Int32, Int32)</a>,
+<a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_Type">Type</a> (set) </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Token Reinit(char[] newTermBuffer, int newTermOffset, int newTermLength, int newStartOffset, int newEndOffset, string newType)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">newTermBuffer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newTermOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newTermLength</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newStartOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newEndOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">newType</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a></td>
+        <td><p>this <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> instance  </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Reinit_System_String_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Reinit(System.String%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L551">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Reinit_" data-uid="Lucene.Net.Analysis.Token.Reinit*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Reinit_System_String_System_Int32_System_Int32_" data-uid="Lucene.Net.Analysis.Token.Reinit(System.String,System.Int32,System.Int32)">Reinit(String, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Shorthand for calling <a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_Clear">Clear()</a>,
+<a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_Append_System_String_">Append(String)</a>,
+<a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_SetOffset_System_Int32_System_Int32_">SetOffset(Int32, Int32)</a>,
+<a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_Type">Type</a> (set) on <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.TypeAttribute.html#Lucene_Net_Analysis_TokenAttributes_TypeAttribute_DEFAULT_TYPE">DEFAULT_TYPE</a> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Token Reinit(string newTerm, int newStartOffset, int newEndOffset)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">newTerm</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newStartOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newEndOffset</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a></td>
+        <td><p>this <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> instance  </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Reinit_System_String_System_Int32_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Reinit(System.String%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L568">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Reinit_" data-uid="Lucene.Net.Analysis.Token.Reinit*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Reinit_System_String_System_Int32_System_Int32_System_Int32_System_Int32_" data-uid="Lucene.Net.Analysis.Token.Reinit(System.String,System.Int32,System.Int32,System.Int32,System.Int32)">Reinit(String, Int32, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Shorthand for calling <a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_Clear">Clear()</a>,
+<a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_Append_System_String_System_Int32_System_Int32_">Append(String, Int32, Int32)</a>,
+<a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_SetOffset_System_Int32_System_Int32_">SetOffset(Int32, Int32)</a>,
+<a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_Type">Type</a> (set) on <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.TypeAttribute.html#Lucene_Net_Analysis_TokenAttributes_TypeAttribute_DEFAULT_TYPE">DEFAULT_TYPE</a> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Token Reinit(string newTerm, int newTermOffset, int newTermLength, int newStartOffset, int newEndOffset)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">newTerm</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newTermOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newTermLength</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newStartOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newEndOffset</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a></td>
+        <td><p>this <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> instance  </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Reinit_System_String_System_Int32_System_Int32_System_Int32_System_Int32_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Reinit(System.String%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L534">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Reinit_" data-uid="Lucene.Net.Analysis.Token.Reinit*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Reinit_System_String_System_Int32_System_Int32_System_Int32_System_Int32_System_String_" data-uid="Lucene.Net.Analysis.Token.Reinit(System.String,System.Int32,System.Int32,System.Int32,System.Int32,System.String)">Reinit(String, Int32, Int32, Int32, Int32, String)</h4>
+  <div class="markdown level1 summary"><p>Shorthand for calling <a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_Clear">Clear()</a>,
+<a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_Append_System_String_System_Int32_System_Int32_">Append(String, Int32, Int32)</a>,
+<a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_SetOffset_System_Int32_System_Int32_">SetOffset(Int32, Int32)</a>,
+<a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_Type">Type</a> (set) </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Token Reinit(string newTerm, int newTermOffset, int newTermLength, int newStartOffset, int newEndOffset, string newType)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">newTerm</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newTermOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newTermLength</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newStartOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newEndOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">newType</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a></td>
+        <td><p>this <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> instance  </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_Reinit_System_String_System_Int32_System_Int32_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.Reinit(System.String%2CSystem.Int32%2CSystem.Int32%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L517">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_Reinit_" data-uid="Lucene.Net.Analysis.Token.Reinit*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_Reinit_System_String_System_Int32_System_Int32_System_String_" data-uid="Lucene.Net.Analysis.Token.Reinit(System.String,System.Int32,System.Int32,System.String)">Reinit(String, Int32, Int32, String)</h4>
+  <div class="markdown level1 summary"><p>Shorthand for calling <a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_Clear">Clear()</a>,
+<a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_Append_System_String_">Append(String)</a>,
+<a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_SetOffset_System_Int32_System_Int32_">SetOffset(Int32, Int32)</a>,
+<a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_Type">Type</a> (set) </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Token Reinit(string newTerm, int newStartOffset, int newEndOffset, string newType)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">newTerm</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newStartOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newEndOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">newType</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a></td>
+        <td><p>this <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> instance  </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token_SetOffset_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token.SetOffset(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L325">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Token_SetOffset_" data-uid="Lucene.Net.Analysis.Token.SetOffset*"></a>
+  <h4 id="Lucene_Net_Analysis_Token_SetOffset_System_Int32_System_Int32_" data-uid="Lucene.Net.Analysis.Token.SetOffset(System.Int32,System.Int32)">SetOffset(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Set the starting and ending offset.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetOffset(int startOffset, int endOffset)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">endOffset</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>If <code data-dev-comment-type="paramref" class="paramref">startOffset</code> or <code data-dev-comment-type="paramref" class="paramref">endOffset</code>
+       are negative, or if <code data-dev-comment-type="paramref" class="paramref">startOffset</code> is greater than
+<code data-dev-comment-type="paramref" class="paramref">endOffset</code> </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Analysis_Token_SetOffset_System_Int32_System_Int32__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_StartOffset">StartOffset</a></div>
+      <div><a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_EndOffset">EndOffset</a></div>
+      <div><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IOffsetAttribute.html">IOffsetAttribute</a></div>
+  </div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html">ICharTermAttribute</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Support.ICharSequence.html">ICharSequence</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ITermToBytesRefAttribute.html">ITermToBytesRefAttribute</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ITypeAttribute.html">ITypeAttribute</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IPositionIncrementAttribute.html">IPositionIncrementAttribute</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IFlagsAttribute.html">IFlagsAttribute</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IOffsetAttribute.html">IOffsetAttribute</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IPayloadAttribute.html">IPayloadAttribute</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.IPositionLengthAttribute.html">IPositionLengthAttribute</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Util.IAttribute.html">IAttribute</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Support.Number.html#Lucene_Net_Support_Number_IsNumber_System_Object_">Number.IsNumber(Object)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Token.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Token%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Analysis/Token.cs/#L120" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

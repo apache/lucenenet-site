@@ -1,0 +1,454 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Lucene42DocValuesFormat
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Lucene42DocValuesFormat
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat">
+  
+  
+  <h1 id="Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat" class="text-break">Class Lucene42DocValuesFormat
+  </h1>
+  <div class="markdown level0 summary"><p>Lucene 4.2 DocValues format.
+<p>
+Encodes the four per-document value types (Numeric,Binary,Sorted,SortedSet) with seven basic strategies.
+<p>
+<ul><li>Delta-compressed Numerics: per-document integers written in blocks of 4096. For each block
+       the minimum value is encoded, and each entry is a delta from that minimum value.</li><li>Table-compressed Numerics: when the number of unique values is very small, a lookup table
+       is written instead. Each per-document entry is instead the ordinal to this table.</li><li>Uncompressed Numerics: when all values would fit into a single byte, and the
+<code>acceptableOverheadRatio</code> would pack values into 8 bits per value anyway, they
+are written as absolute values (with no indirection or packing) for performance.</li><li>GCD-compressed Numerics: when all numbers share a common divisor, such as dates, the greatest
+common denominator (GCD) is computed, and quotients are stored using Delta-compressed Numerics.</li><li>Fixed-width Binary: one large concatenated byte[] is written, along with the fixed length.
+Each document&apos;s value can be addressed by <code>maxDoc*length</code>.</li><li>Variable-width Binary: one large concatenated byte[] is written, along with end addresses
+for each document. The addresses are written in blocks of 4096, with the current absolute
+start for the block, and the average (expected) delta per entry. For each document the
+deviation from the delta (actual - expected) is written.</li><li>Sorted: an FST mapping deduplicated terms to ordinals is written, along with the per-document
+ordinals written using one of the numeric strategies above.</li><li>SortedSet: an FST mapping deduplicated terms to ordinals is written, along with the per-document
+ordinal list written using one of the binary strategies above.</li></ul>
+<p>
+Files:
+<ol><li><code>.dvd</code>: DocValues data</li><li><code>.dvm</code>: DocValues metadata</li></ol>
+<ol><li><a name="dvm" id="dvm"></a>
+<p>The DocValues metadata or .dvm file.</p>
+<p>For DocValues field, this stores metadata, such as the offset into the
+   DocValues data (.dvd)</p>
+<p>DocValues metadata (.dvm) --&gt; Header,&lt;FieldNumber,EntryType,Entry&gt;<sup>NumFields</sup>,Footer</p>
+<ul><li>Entry --&gt; NumericEntry | BinaryEntry | SortedEntry</li><li>NumericEntry --&gt; DataOffset,CompressionType,PackedVersion</li><li>BinaryEntry --&gt; DataOffset,DataLength,MinLength,MaxLength,PackedVersion?,BlockSize?</li><li>SortedEntry --&gt; DataOffset,ValueCount</li><li>FieldNumber,PackedVersion,MinLength,MaxLength,BlockSize,ValueCount --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>DataOffset,DataLength --&gt; Int64  (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a>) </li><li>EntryType,CompressionType --&gt; Byte  (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) </li><li>Header --&gt; CodecHeader  (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>Footer --&gt; CodecFooter  (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteFooter_Lucene_Net_Store_IndexOutput_">WriteFooter(IndexOutput)</a>) </li></ul>
+<p>Sorted fields have two entries: a SortedEntry with the FST metadata,
+   and an ordinary NumericEntry for the document-to-ord metadata.</p>
+<p>SortedSet fields have two entries: a SortedEntry with the FST metadata,
+   and an ordinary BinaryEntry for the document-to-ord-list metadata.</p>
+<p>FieldNumber of -1 indicates the end of metadata.</p>
+<p>EntryType is a 0 (NumericEntry), 1 (BinaryEntry, or 2 (SortedEntry)</p>
+<p>DataOffset is the pointer to the start of the data in the DocValues data (.dvd)</p>
+<p>CompressionType indicates how Numeric values will be compressed:
+<ul><li>0 --&gt; delta-compressed. For each block of 4096 integers, every integer is delta-encoded
+       from the minimum value within the block.</li><li>1 --&gt; table-compressed. When the number of unique numeric values is small and it would save space,
+       a lookup table of unique values is written, followed by the ordinal for each document.</li><li>2 --&gt; uncompressed. When the <code>acceptableOverheadRatio</code> parameter would upgrade the number
+       of bits required to 8, and all values fit in a byte, these are written as absolute binary values
+       for performance.</li><li>3 --&gt; gcd-compressed. When all integers share a common divisor, only quotients are stored
+       using blocks of delta-encoded ints.</li></ul>
+<p>MinLength and MaxLength represent the min and max byte[] value lengths for Binary values.
+   If they are equal, then all values are of a fixed size, and can be addressed as <code>DataOffset + (docID * length)</code>.
+   Otherwise, the binary values are of variable size, and packed integer metadata (PackedVersion,BlockSize)
+   is written for the addresses.</li><li><a name="dvd" id="dvd"></a>
+<p>The DocValues data or .dvd file.</p>
+<p>For DocValues field, this stores the actual per-document data (the heavy-lifting)</p>
+<p>DocValues data (.dvd) --&gt; Header,&lt;NumericData | BinaryData | SortedData&gt;<sup>NumFields</sup>,Footer</p>
+<ul><li>NumericData --&gt; DeltaCompressedNumerics | TableCompressedNumerics | UncompressedNumerics | GCDCompressedNumerics</li><li>BinaryData --&gt; Byte  (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) <sup>DataLength</sup>,Addresses</li><li>SortedData --&gt; FST&lt;Int64&gt; (<a class="xref" href="Lucene.Net.Util.Fst.FST-1.html">FST&lt;T&gt;</a>) </li><li>DeltaCompressedNumerics --&gt; BlockPackedInts(blockSize=4096) (<a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>) </li><li>TableCompressedNumerics --&gt; TableSize, Int64 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a>) <sup>TableSize</sup>, PackedInts (<a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html">PackedInt32s</a>) </li><li>UncompressedNumerics --&gt; Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) <sup>maxdoc</sup></li><li>Addresses --&gt; MonotonicBlockPackedInts(blockSize=4096) (<a class="xref" href="Lucene.Net.Util.Packed.MonotonicBlockPackedWriter.html">MonotonicBlockPackedWriter</a>) </li><li>Footer --&gt; CodecFooter (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteFooter_Lucene_Net_Store_IndexOutput_">WriteFooter(IndexOutput)</a></li></ul>
+<p>SortedSet entries store the list of ordinals in their BinaryData as a
+   sequences of increasing vLongs (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt64_System_Int64_">WriteVInt64(Int64)</a>), delta-encoded.</p></li></ol>
+<p>
+Limitations:
+<ul><li> Binary doc values can be at most <a class="xref" href="Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.html#Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat_MAX_BINARY_FIELD_LENGTH">MAX_BINARY_FIELD_LENGTH</a> in length.</li></ul> </p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a></div>
+    <div class="level2"><span class="xref">Lucene42DocValuesFormat</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html#Lucene_Net_Codecs_DocValuesFormat_SetDocValuesFormatFactory_Lucene_Net_Codecs_IDocValuesFormatFactory_">DocValuesFormat.SetDocValuesFormatFactory(IDocValuesFormatFactory)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html#Lucene_Net_Codecs_DocValuesFormat_GetDocValuesFormatFactory">DocValuesFormat.GetDocValuesFormatFactory()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html#Lucene_Net_Codecs_DocValuesFormat_Name">DocValuesFormat.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html#Lucene_Net_Codecs_DocValuesFormat_ToString">DocValuesFormat.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html#Lucene_Net_Codecs_DocValuesFormat_ForName_System_String_">DocValuesFormat.ForName(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html#Lucene_Net_Codecs_DocValuesFormat_AvailableDocValuesFormats">DocValuesFormat.AvailableDocValuesFormats</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Codecs.Lucene42.html">Lucene.Net.Codecs.Lucene42</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Only for reading old 4.2 segments&quot;)]
+[DocValuesFormatName(&quot;Lucene42&quot;)]
+public class Lucene42DocValuesFormat : DocValuesFormat</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Codecs/Lucene42/Lucene42DocValuesFormat.cs/#L134">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat__ctor_" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat__ctor" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.#ctor">Lucene42DocValuesFormat()</h4>
+  <div class="markdown level1 summary"><p>Calls <code>Lucene42DocValuesFormat(PackedInts.DEFAULT)</code> (<a class="xref" href="Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.html#Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat__ctor_System_Single_">Lucene42DocValuesFormat(Single)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Lucene42DocValuesFormat()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat__ctor_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.%23ctor(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Codecs/Lucene42/Lucene42DocValuesFormat.cs/#L147">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat__ctor_" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat__ctor_System_Single_" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.#ctor(System.Single)">Lucene42DocValuesFormat(Single)</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.html">Lucene42DocValuesFormat</a> with the specified
+<code data-dev-comment-type="paramref" class="paramref">acceptableOverheadRatio</code> for <a class="xref" href="Lucene.Net.Index.NumericDocValues.html">NumericDocValues</a>. 
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Lucene42DocValuesFormat(float acceptableOverheadRatio)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">acceptableOverheadRatio</span></td>
+        <td><p>Compression parameter for numerics.
+      Currently this is only used when the number of unique values is small.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat_m_acceptableOverheadRatio.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.m_acceptableOverheadRatio%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Codecs/Lucene42/Lucene42DocValuesFormat.cs/#L129">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat_m_acceptableOverheadRatio" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.m_acceptableOverheadRatio">m_acceptableOverheadRatio</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly float m_acceptableOverheadRatio</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat_MAX_BINARY_FIELD_LENGTH.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.MAX_BINARY_FIELD_LENGTH%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Codecs/Lucene42/Lucene42DocValuesFormat.cs/#L127">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat_MAX_BINARY_FIELD_LENGTH" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.MAX_BINARY_FIELD_LENGTH">MAX_BINARY_FIELD_LENGTH</h4>
+  <div class="markdown level1 summary"><p>Maximum length for each binary doc values field. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int MAX_BINARY_FIELD_LENGTH</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat_FieldsConsumer_Lucene_Net_Index_SegmentWriteState_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.FieldsConsumer(Lucene.Net.Index.SegmentWriteState)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Codecs/Lucene42/Lucene42DocValuesFormat.cs/#L153">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat_FieldsConsumer_" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.FieldsConsumer*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat_FieldsConsumer_Lucene_Net_Index_SegmentWriteState_" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.FieldsConsumer(Lucene.Net.Index.SegmentWriteState)">FieldsConsumer(SegmentWriteState)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override DocValuesConsumer FieldsConsumer(SegmentWriteState state)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentWriteState.html">SegmentWriteState</a></td>
+        <td><span class="parametername">state</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.DocValuesConsumer.html">DocValuesConsumer</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html#Lucene_Net_Codecs_DocValuesFormat_FieldsConsumer_Lucene_Net_Index_SegmentWriteState_">DocValuesFormat.FieldsConsumer(SegmentWriteState)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat_FieldsProducer_Lucene_Net_Index_SegmentReadState_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.FieldsProducer(Lucene.Net.Index.SegmentReadState)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Codecs/Lucene42/Lucene42DocValuesFormat.cs/#L158">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat_FieldsProducer_" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.FieldsProducer*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat_FieldsProducer_Lucene_Net_Index_SegmentReadState_" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat.FieldsProducer(Lucene.Net.Index.SegmentReadState)">FieldsProducer(SegmentReadState)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override DocValuesProducer FieldsProducer(SegmentReadState state)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentReadState.html">SegmentReadState</a></td>
+        <td><span class="parametername">state</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.DocValuesProducer.html">DocValuesProducer</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html#Lucene_Net_Codecs_DocValuesFormat_FieldsProducer_Lucene_Net_Index_SegmentReadState_">DocValuesFormat.FieldsProducer(SegmentReadState)</a></div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Support.Number.html#Lucene_Net_Support_Number_IsNumber_System_Object_">Number.IsNumber(Object)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene42_Lucene42DocValuesFormat.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene42.Lucene42DocValuesFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net/Codecs/Lucene42/Lucene42DocValuesFormat.cs/#L121" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
