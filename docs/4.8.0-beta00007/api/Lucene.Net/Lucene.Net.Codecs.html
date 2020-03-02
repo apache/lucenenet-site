@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace Lucene.Net.Codecs
    | Apache Lucene.NET 4.8.0 Documentation ">
-    <meta name="generator" content="docfx 2.47.0.0">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="../../logo/favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
@@ -98,7 +98,13 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<p>Codecs for testing (simulate old disk formats, wacky theoretical use cases, etc)</p>
+<p>Codecs API: API for customization of the encoding and structure of the index.</p>
+<p> The Codec API allows you to customise the way the following pieces of index information are stored: * Postings lists - see <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a> * DocValues - see <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> * Stored fields - see <a class="xref" href="Lucene.Net.Codecs.StoredFieldsFormat.html">StoredFieldsFormat</a> * Term vectors - see <a class="xref" href="Lucene.Net.Codecs.TermVectorsFormat.html">TermVectorsFormat</a> * FieldInfos - see <a class="xref" href="Lucene.Net.Codecs.FieldInfosFormat.html">FieldInfosFormat</a> * SegmentInfo - see <a class="xref" href="Lucene.Net.Codecs.SegmentInfoFormat.html">SegmentInfoFormat</a> * Norms - see <a class="xref" href="Lucene.Net.Codecs.NormsFormat.html">NormsFormat</a> * Live documents - see <a class="xref" href="Lucene.Net.Codecs.LiveDocsFormat.html">LiveDocsFormat</a> </p>
+<p>  For some concrete implementations beyond Lucene&#39;s official index format, see
+  the <a href="{@docRoot}/../codecs/overview-summary.html">Codecs module</a>.</p>
+<p> Codecs are identified by name through the Java Service Provider Interface. To create your own codec, extend <a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a> and pass the new codec&#39;s name to the super() constructor: public class MyCodec extends Codec { public MyCodec() { super(&quot;MyCodecName&quot;); } ... } You will need to register the Codec class so that the {@link java.util.ServiceLoader ServiceLoader} can find it, by including a META-INF/services/org.apache.lucene.codecs.Codec file on your classpath that contains the package-qualified name of your codec. </p>
+<p> If you just want to customise the <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a>, or use different postings formats for different fields, then you can register your custom postings format in the same way (in META-INF/services/org.apache.lucene.codecs.PostingsFormat), and then extend the default <a class="xref" href="Lucene.Net.Codecs.Lucene46.Lucene46Codec.html">Lucene46Codec</a> and override <a class="xref" href="Lucene.Net.Codecs.Lucene46.Lucene46Codec.html">#getPostingsFormatForField(String)</a> to return your custom postings format. </p>
+<p> Similarly, if you just want to customise the <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> per-field, have a look at <a class="xref" href="Lucene.Net.Codecs.Lucene46.Lucene46Codec.html">#getDocValuesFormatForField(String)</a>. </p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="markdown level0 remarks"></div>
@@ -220,7 +226,7 @@ To implement your own codec:
         If you have any codec classes in your assembly 
         that are not meant for reading, you can add the <a class="xref" href="Lucene.Net.Codecs.ExcludeCodecFromScanAttribute.html">ExcludeCodecFromScanAttribute</a> 
         to them so they are ignored by the scan.</li><li>set the new <a class="xref" href="Lucene.Net.Codecs.ICodecFactory.html">ICodecFactory</a> by calling <a class="xref" href="Lucene.Net.Codecs.Codec.html#Lucene_Net_Codecs_Codec_SetCodecFactory_Lucene_Net_Codecs_ICodecFactory_">SetCodecFactory(ICodecFactory)</a> at application startup.</li></ol>
-If your codec has dependencies, you may also override <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_GetCodec_System_Type_">GetCodec(Type)</a> to inject 
+If your codec has dependencies, you may also override <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_GetCodec_Type_">GetCodec(Type)</a> to inject 
 them via pure DI or a DI container. See <a href="http://blog.ploeh.dk/2014/05/19/di-friendly-framework/">DI-Friendly Framework</a>
 to understand the approach used.
 <p>
@@ -251,14 +257,14 @@ the format you think it is.
 <p>
 The most common use cases are:
 <ul><li>Initialize <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html">DefaultCodecFactory</a> with a set of <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_CustomCodecTypes">CustomCodecTypes</a>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html">DefaultCodecFactory</a> and override
-<a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_GetCodec_System_Type_">GetCodec(Type)</a> so an external dependency injection
+<a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_GetCodec_Type_">GetCodec(Type)</a> so an external dependency injection
 container can be used to supply the instances (lifetime should be singleton). Note that you could 
 alternately use the &quot;named type&quot; feature that many DI containers have to supply the type based on name by 
 overriding <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_GetCodec_System_String_">GetCodec(String)</a>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html">DefaultCodecFactory</a> and override
 <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_GetCodecType_System_String_">GetCodecType(String)</a> so a type new type can be
 supplied that is not in the <span class="xref">Lucene.Net.Codecs.DefaultCodecFactory.codecNameToTypeMap</span>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html">DefaultCodecFactory</a> to add new or override the default <a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a> 
-types by overriding <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_Initialize">Initialize()</a> and calling <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_PutCodecType_System_Type_">PutCodecType(Type)</a>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html">DefaultCodecFactory</a> to scan additional assemblies for <a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a>
-subclasses in by overriding <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_Initialize">Initialize()</a> and calling <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_ScanForCodecs_System_Reflection_Assembly_">ScanForCodecs(Assembly)</a>. 
+types by overriding <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_Initialize">Initialize()</a> and calling <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_PutCodecType_Type_">PutCodecType(Type)</a>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html">DefaultCodecFactory</a> to scan additional assemblies for <a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a>
+subclasses in by overriding <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_Initialize">Initialize()</a> and calling <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_ScanForCodecs_Assembly_">ScanForCodecs(Assembly)</a>. 
 For performance reasons, the default behavior only loads Lucene.Net codecs.</li></ul>
 <p>
 To set the <a class="xref" href="Lucene.Net.Codecs.ICodecFactory.html">ICodecFactory</a>, call <a class="xref" href="Lucene.Net.Codecs.Codec.html#Lucene_Net_Codecs_Codec_SetCodecFactory_Lucene_Net_Codecs_ICodecFactory_">SetCodecFactory(ICodecFactory)</a>.</p>
@@ -269,14 +275,14 @@ To set the <a class="xref" href="Lucene.Net.Codecs.ICodecFactory.html">ICodecFac
 <p>
 The most common use cases are:
 <ul><li>Initialize <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html">DefaultDocValuesFormatFactory</a> with a set of <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_CustomDocValuesFormatTypes">CustomDocValuesFormatTypes</a>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html">DefaultDocValuesFormatFactory</a> and override
-<a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormat_System_Type_">GetDocValuesFormat(Type)</a> so an external dependency injection
+<a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormat_Type_">GetDocValuesFormat(Type)</a> so an external dependency injection
 container can be used to supply the instances (lifetime should be singleton). Note that you could 
 alternately use the &quot;named type&quot; feature that many DI containers have to supply the type based on name by 
 overriding <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormat_System_String_">GetDocValuesFormat(String)</a>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html">DefaultDocValuesFormatFactory</a> and override
 <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormatType_System_String_">GetDocValuesFormatType(String)</a> so a type new type can be
 supplied that is not in the <span class="xref">Lucene.Net.Codecs.DefaultDocValuesFormatFactory.docValuesFormatNameToTypeMap</span>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html">DefaultDocValuesFormatFactory</a> to add new or override the default <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> 
-types by overriding <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_Initialize">Initialize()</a> and calling <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_PutDocValuesFormatType_System_Type_">PutDocValuesFormatType(Type)</a>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html">DefaultDocValuesFormatFactory</a> to scan additional assemblies for <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a>
-subclasses in by overriding <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_Initialize">Initialize()</a> and calling <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_ScanForDocValuesFormats_System_Reflection_Assembly_">ScanForDocValuesFormats(Assembly)</a>. 
+types by overriding <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_Initialize">Initialize()</a> and calling <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_PutDocValuesFormatType_Type_">PutDocValuesFormatType(Type)</a>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html">DefaultDocValuesFormatFactory</a> to scan additional assemblies for <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a>
+subclasses in by overriding <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_Initialize">Initialize()</a> and calling <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_ScanForDocValuesFormats_Assembly_">ScanForDocValuesFormats(Assembly)</a>. 
 For performance reasons, the default behavior only loads Lucene.Net codecs.</li></ul>
 <p>
 To set the <a class="xref" href="Lucene.Net.Codecs.IDocValuesFormatFactory.html">IDocValuesFormatFactory</a>, call <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html#Lucene_Net_Codecs_DocValuesFormat_SetDocValuesFormatFactory_Lucene_Net_Codecs_IDocValuesFormatFactory_">SetDocValuesFormatFactory(IDocValuesFormatFactory)</a>.</p>
@@ -287,14 +293,14 @@ To set the <a class="xref" href="Lucene.Net.Codecs.IDocValuesFormatFactory.html"
 <p>
 The most common use cases are:
 <ul><li>Initialize <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html">DefaultPostingsFormatFactory</a> with a set of <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_CustomPostingsFormatTypes">CustomPostingsFormatTypes</a>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html">DefaultPostingsFormatFactory</a> and override
-<a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_GetPostingsFormat_System_Type_">GetPostingsFormat(Type)</a> so an external dependency injection
+<a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_GetPostingsFormat_Type_">GetPostingsFormat(Type)</a> so an external dependency injection
 container can be used to supply the instances (lifetime should be singleton). Note that you could 
 alternately use the &quot;named type&quot; feature that many DI containers have to supply the type based on name by 
 overriding <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_GetPostingsFormat_System_String_">GetPostingsFormat(String)</a>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html">DefaultPostingsFormatFactory</a> and override
 <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_GetPostingsFormatType_System_String_">GetPostingsFormatType(String)</a> so a type new type can be
 supplied that is not in the <span class="xref">Lucene.Net.Codecs.DefaultPostingsFormatFactory.postingsFormatNameToTypeMap</span>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html">DefaultPostingsFormatFactory</a> to add new or override the default <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a> 
-types by overriding <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_Initialize">Initialize()</a> and calling <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_PutPostingsFormatType_System_Type_">PutPostingsFormatType(Type)</a>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html">DefaultPostingsFormatFactory</a> to scan additional assemblies for <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a>
-subclasses in by overriding <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_Initialize">Initialize()</a> and calling <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_ScanForPostingsFormats_System_Reflection_Assembly_">ScanForPostingsFormats(Assembly)</a>. 
+types by overriding <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_Initialize">Initialize()</a> and calling <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_PutPostingsFormatType_Type_">PutPostingsFormatType(Type)</a>.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html">DefaultPostingsFormatFactory</a> to scan additional assemblies for <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a>
+subclasses in by overriding <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_Initialize">Initialize()</a> and calling <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_ScanForPostingsFormats_Assembly_">ScanForPostingsFormats(Assembly)</a>. 
 For performance reasons, the default behavior only loads Lucene.Net codecs.</li></ul>
 <p>
 To set the <a class="xref" href="Lucene.Net.Codecs.IPostingsFormatFactory.html">IPostingsFormatFactory</a>, call <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_SetPostingsFormatFactory_Lucene_Net_Codecs_IPostingsFormatFactory_">SetPostingsFormatFactory(IPostingsFormatFactory)</a>.</p>
@@ -308,12 +314,12 @@ the index in a specific format).
 The lifecycle is:
 <ol><li>DocValuesConsumer is created by
 <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html#Lucene_Net_Codecs_DocValuesFormat_FieldsConsumer_Lucene_Net_Index_SegmentWriteState_">FieldsConsumer(SegmentWriteState)</a> or
-<a class="xref" href="Lucene.Net.Codecs.NormsFormat.html#Lucene_Net_Codecs_NormsFormat_NormsConsumer_Lucene_Net_Index_SegmentWriteState_">NormsConsumer(SegmentWriteState)</a>.</li><li><a class="xref" href="Lucene.Net.Codecs.DocValuesConsumer.html#Lucene_Net_Codecs_DocValuesConsumer_AddNumericField_Lucene_Net_Index_FieldInfo_System_Collections_Generic_IEnumerable_System_Nullable_System_Int64___">AddNumericField(FieldInfo, IEnumerable&lt;Nullable&lt;Int64&gt;&gt;)</a>, 
-<a class="xref" href="Lucene.Net.Codecs.DocValuesConsumer.html#Lucene_Net_Codecs_DocValuesConsumer_AddBinaryField_Lucene_Net_Index_FieldInfo_System_Collections_Generic_IEnumerable_Lucene_Net_Util_BytesRef__">AddBinaryField(FieldInfo, IEnumerable&lt;BytesRef&gt;)</a>,
-or <a class="xref" href="Lucene.Net.Codecs.DocValuesConsumer.html#Lucene_Net_Codecs_DocValuesConsumer_AddSortedField_Lucene_Net_Index_FieldInfo_System_Collections_Generic_IEnumerable_Lucene_Net_Util_BytesRef__System_Collections_Generic_IEnumerable_System_Nullable_System_Int64___">AddSortedField(FieldInfo, IEnumerable&lt;BytesRef&gt;, IEnumerable&lt;Nullable&lt;Int64&gt;&gt;)</a> are called for each Numeric,
+<a class="xref" href="Lucene.Net.Codecs.NormsFormat.html#Lucene_Net_Codecs_NormsFormat_NormsConsumer_Lucene_Net_Index_SegmentWriteState_">NormsConsumer(SegmentWriteState)</a>.</li><li><a class="xref" href="Lucene.Net.Codecs.DocValuesConsumer.html#Lucene_Net_Codecs_DocValuesConsumer_AddNumericField_Lucene_Net_Index_FieldInfo_IEnumerable_System_Nullable_System_Int64___">AddNumericField(FieldInfo, IEnumerable&lt;Nullable&lt;Int64&gt;&gt;)</a>, 
+<a class="xref" href="Lucene.Net.Codecs.DocValuesConsumer.html#Lucene_Net_Codecs_DocValuesConsumer_AddBinaryField_Lucene_Net_Index_FieldInfo_IEnumerable_Lucene_Net_Util_BytesRef__">AddBinaryField(FieldInfo, IEnumerable&lt;BytesRef&gt;)</a>,
+or <a class="xref" href="Lucene.Net.Codecs.DocValuesConsumer.html#Lucene_Net_Codecs_DocValuesConsumer_AddSortedField_Lucene_Net_Index_FieldInfo_IEnumerable_Lucene_Net_Util_BytesRef__IEnumerable_System_Nullable_System_Int64___">AddSortedField(FieldInfo, IEnumerable&lt;BytesRef&gt;, IEnumerable&lt;Nullable&lt;Int64&gt;&gt;)</a> are called for each Numeric,
 Binary, or Sorted docvalues field. The API is a &quot;pull&quot; rather
 than &quot;push&quot;, and the implementation is free to iterate over the
-values multiple times (<span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;.GetEnumerator()</span>).</li><li>After all fields are added, the consumer is <a class="xref" href="Lucene.Net.Codecs.DocValuesConsumer.html#Lucene_Net_Codecs_DocValuesConsumer_Dispose">Dispose()</a>d.</li></ol>
+values multiple times (<see cref="!:IEnumerable&lt;T>.GetEnumerator()"></see>).</li><li>After all fields are added, the consumer is <a class="xref" href="Lucene.Net.Codecs.DocValuesConsumer.html#Lucene_Net_Codecs_DocValuesConsumer_Dispose">Dispose()</a>d.</li></ol>
 <p>
 <div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
       <h4><a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a></h4>
@@ -331,7 +337,7 @@ To implement your own format:
         that are not meant for reading, you can add the <a class="xref" href="Lucene.Net.Codecs.ExcludeDocValuesFormatFromScanAttribute.html">ExcludeDocValuesFormatFromScanAttribute</a> 
         to them so they are ignored by the scan.</li><li>Set the new <a class="xref" href="Lucene.Net.Codecs.IDocValuesFormatFactory.html">IDocValuesFormatFactory</a> by calling <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html#Lucene_Net_Codecs_DocValuesFormat_SetDocValuesFormatFactory_Lucene_Net_Codecs_IDocValuesFormatFactory_">SetDocValuesFormatFactory(IDocValuesFormatFactory)</a>
         at application startup.</li></ol>
-If your format has dependencies, you may also override <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormat_System_Type_">GetDocValuesFormat(Type)</a>
+If your format has dependencies, you may also override <a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_GetDocValuesFormat_Type_">GetDocValuesFormat(Type)</a>
 to inject them via pure DI or a DI container. See <a href="http://blog.ploeh.dk/2014/05/19/di-friendly-framework/">DI-Friendly Framework</a>
 to understand the approach used.
 <p>
@@ -358,26 +364,26 @@ sorted docvalues.
       <h4><a class="xref" href="Lucene.Net.Codecs.ExcludeCodecFromScanAttribute.html">ExcludeCodecFromScanAttribute</a></h4>
       <section><p>When placed on a class that subclasses <a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a>, adding this
 attribute will exclude the type from consideration in the 
-<a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_ScanForCodecs_System_Reflection_Assembly_">ScanForCodecs(Assembly)</a> method.
+<see cref="!:DefaultCodecFactory.ScanForCodecs(System.Reflection.Assembly)"></see> method.
 <p>
 However, the <a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a> type can still be added manually using
-<a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_PutCodecType_System_Type_">PutCodecType(Type)</a>.</p>
+<a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_PutCodecType_Type_">PutCodecType(Type)</a>.</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Codecs.ExcludeDocValuesFormatFromScanAttribute.html">ExcludeDocValuesFormatFromScanAttribute</a></h4>
       <section><p>When placed on a class that subclasses <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a>, adding this
 attribute will exclude the type from consideration in the 
-<a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_ScanForDocValuesFormats_System_Reflection_Assembly_">ScanForDocValuesFormats(Assembly)</a> method.
+<see cref="!:DefaultDocValuesFormatFactory.ScanForDocValuesFormats(System.Reflection.Assembly)"></see> method.
 <p>
 However, the <a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a> type can still be added manually using
-<a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_PutDocValuesFormatType_System_Type_">PutDocValuesFormatType(Type)</a>.</p>
+<a class="xref" href="Lucene.Net.Codecs.DefaultDocValuesFormatFactory.html#Lucene_Net_Codecs_DefaultDocValuesFormatFactory_PutDocValuesFormatType_Type_">PutDocValuesFormatType(Type)</a>.</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Codecs.ExcludePostingsFormatFromScanAttribute.html">ExcludePostingsFormatFromScanAttribute</a></h4>
       <section><p>When placed on a class that subclasses <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a>, adding this
 attribute will exclude the type from consideration in the 
-<a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_ScanForPostingsFormats_System_Reflection_Assembly_">ScanForPostingsFormats(Assembly)</a> method.
+<see cref="!:DefaultPostingsFormatFactory.ScanForPostingsFormats(System.Reflection.Assembly)"></see> method.
 <p>
 However, the <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a> type can still be added manually using
-<a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_PutPostingsFormatType_System_Type_">PutPostingsFormatType(Type)</a>.</p>
+<a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_PutPostingsFormatType_Type_">PutPostingsFormatType(Type)</a>.</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Codecs.FieldInfosFormat.html">FieldInfosFormat</a></h4>
       <section><p>Encodes/decodes <a class="xref" href="Lucene.Net.Index.FieldInfos.html">FieldInfos</a>.
@@ -519,7 +525,7 @@ If you implement your own format:
         that are not meant for reading, you can add the <a class="xref" href="Lucene.Net.Codecs.ExcludePostingsFormatFromScanAttribute.html">ExcludePostingsFormatFromScanAttribute</a> 
         to them so they are ignored by the scan.</li><li>Set the new <a class="xref" href="Lucene.Net.Codecs.IPostingsFormatFactory.html">IPostingsFormatFactory</a> by calling <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_SetPostingsFormatFactory_Lucene_Net_Codecs_IPostingsFormatFactory_">SetPostingsFormatFactory(IPostingsFormatFactory)</a> 
         at application startup.</li></ol>
-If your format has dependencies, you may also override <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_GetPostingsFormat_System_Type_">GetPostingsFormat(Type)</a> to inject 
+If your format has dependencies, you may also override <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_GetPostingsFormat_Type_">GetPostingsFormat(Type)</a> to inject 
 them via pure DI or a DI container. See <a href="http://blog.ploeh.dk/2014/05/19/di-friendly-framework/">DI-Friendly Framework</a>
 to understand the approach used.
 <p>
@@ -659,7 +665,7 @@ To set the <a class="xref" href="Lucene.Net.Codecs.IPostingsFormatFactory.html">
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/apache/lucenenet/blob/docs-4.8.0-beta00007/src/Lucene.Net.TestFramework/Codecs/package.md/#L2" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00007/src/Lucene.Net/Codecs/package.md/#L2" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
