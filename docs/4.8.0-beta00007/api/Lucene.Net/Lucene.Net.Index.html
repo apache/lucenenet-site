@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace Lucene.Net.Index
    | Apache Lucene.NET 4.8.0 Documentation ">
-    <meta name="generator" content="docfx 2.47.0.0">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="../../logo/favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
@@ -98,8 +98,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<p>Support for testing of indexes. </p>
-<p> The primary classes are: * <a class="xref" href="../Lucene.Net.TestFramework/Lucene.Net.Index.RandomIndexWriter.html">RandomIndexWriter</a>: Randomizes the indexing experience. * <a class="xref" href="../Lucene.Net.TestFramework/Lucene.Net.Index.MockRandomMergePolicy.html">MockRandomMergePolicy</a>: MergePolicy that makes random decisions. </p>
+<p>Misc index tools and index support.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="markdown level0 remarks"></div>
@@ -302,14 +301,14 @@ and, it does not hold the term bytes in RAM.  Rather, you
 must obtain a <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> from the <a class="xref" href="Lucene.Net.Index.DocTermOrds.html#Lucene_Net_Index_DocTermOrds_GetOrdTermsEnum_Lucene_Net_Index_AtomicReader_">GetOrdTermsEnum(AtomicReader)</a>
 method, and then seek-by-ord to get the term&apos;s bytes.
 <p>
-While normally term ords are type <span class="xref">System.Int64</span>, in this API they are
-<span class="xref">System.Int32</span> as the internal representation here cannot address
+While normally term ords are type <see cref="!:System.Int64"></see>, in this API they are
+<see cref="!:System.Int32"></see> as the internal representation here cannot address
 more than <a class="xref" href="Lucene.Net.Index.BufferedUpdates.html#Lucene_Net_Index_BufferedUpdates_MAX_INT32">MAX_INT32</a> unique terms.  Also, typically this
 class is used on fields with relatively few unique terms
 vs the number of documents.  In addition, there is an
 internal limit (16 MB) on how many bytes each chunk of
 documents may consume.  If you trip this limit you&apos;ll hit
-an <span class="xref">System.InvalidOperationException</span>.
+an <see cref="!:InvalidOperationException"></see>.
 <p>
 Deleted documents are skipped during uninversion, and if
 you look them up you&apos;ll get 0 ords.
@@ -431,7 +430,7 @@ Term enumerations are always ordered by
 greater than all that precede it.
 <p><code>Please note:</code> Consumers of this enumeration cannot
 call <code>Seek()</code>, it is forward only; it throws
-<span class="xref">System.NotSupportedException</span> when a seeking method
+<see cref="!:System.NotSupportedException"></see> when a seeking method
 is called.</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Index.IndexCommit.html">IndexCommit</a></h4>
@@ -501,7 +500,7 @@ an index that is newer than this Lucene version.</p>
 an index that is too old for this Lucene version</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Index.IndexNotFoundException.html">IndexNotFoundException</a></h4>
-      <section><p>Signals that no index was found in the <span class="xref">System.IO.Directory</span>. Possibly because the
+      <section><p>Signals that no index was found in the <see cref="!:Directory"></see>. Possibly because the
 directory is empty, however can also indicate an index corruption.</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a></h4>
@@ -551,7 +550,7 @@ reason, if the incoming index has more than one commit, the tool
 refuses to run by default. Specify <code>-delete-prior-commits</code>
 to override this, allowing the tool to delete all but the last commit.
 From .NET code this can be enabled by passing <code>true</code> to
-<a class="xref" href="Lucene.Net.Index.IndexUpgrader.html#Lucene_Net_Index_IndexUpgrader__ctor_Lucene_Net_Store_Directory_Lucene_Net_Util_LuceneVersion_System_IO_TextWriter_System_Boolean_">IndexUpgrader(Directory, LuceneVersion, TextWriter, Boolean)</a>.
+<a class="xref" href="Lucene.Net.Index.IndexUpgrader.html#Lucene_Net_Index_IndexUpgrader__ctor_Lucene_Net_Store_Directory_Lucene_Net_Util_LuceneVersion_TextWriter_System_Boolean_">IndexUpgrader(Directory, LuceneVersion, TextWriter, Boolean)</a>.
 <p>
 <strong>Warning:</strong> this tool may reorder documents if the index was partially
 upgraded before execution (e.g., documents were added). If your application relies
@@ -655,7 +654,7 @@ merges that are now required.  This method returns a
 <a class="xref" href="Lucene.Net.Index.MergePolicy.MergeSpecification.html">MergePolicy.MergeSpecification</a> instance describing the set of
 merges that should be done, or null if no merges are
 necessary.  When <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_">ForceMerge(Int32)</a> is called, it calls
-<a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_FindForcedMerges_Lucene_Net_Index_SegmentInfos_System_Int32_System_Collections_Generic_IDictionary_Lucene_Net_Index_SegmentCommitInfo_System_Nullable_System_Boolean___">FindForcedMerges(SegmentInfos, Int32, IDictionary&lt;SegmentCommitInfo, Nullable&lt;Boolean&gt;&gt;)</a> and the <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> should
+<a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_FindForcedMerges_Lucene_Net_Index_SegmentInfos_System_Int32_IDictionary_Lucene_Net_Index_SegmentCommitInfo_System_Nullable_System_Boolean___">FindForcedMerges(SegmentInfos, Int32, IDictionary&lt;SegmentCommitInfo, Nullable&lt;Boolean&gt;&gt;)</a> and the <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> should
 then return the necessary merges.</p>
 
 <p>Note that the policy can return more than one merge at
@@ -941,7 +940,7 @@ Files:
 </p>
 Data types:
 <p>
-<ul><li>Header --&gt; <a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a></li><li>GenHeader, NameCounter, SegCount, DeletionCount --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a></li><li>Generation, Version, DelGen, Checksum, FieldInfosGen --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a></li><li>SegName, SegCodec --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteString_System_String_">WriteString(String)</a></li><li>CommitUserData --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteStringStringMap_System_Collections_Generic_IDictionary_System_String_System_String__">WriteStringStringMap(IDictionary&lt;String, String&gt;)</a></li><li>UpdatesFiles --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteStringSet_System_Collections_Generic_ISet_System_String__">WriteStringSet(ISet&lt;String&gt;)</a></li><li>Footer --&gt; <a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteFooter_Lucene_Net_Store_IndexOutput_">WriteFooter(IndexOutput)</a></li></ul>
+<ul><li>Header --&gt; <a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a></li><li>GenHeader, NameCounter, SegCount, DeletionCount --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a></li><li>Generation, Version, DelGen, Checksum, FieldInfosGen --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a></li><li>SegName, SegCodec --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteString_System_String_">WriteString(String)</a></li><li>CommitUserData --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteStringStringMap_IDictionary_System_String_System_String__">WriteStringStringMap(IDictionary&lt;String, String&gt;)</a></li><li>UpdatesFiles --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteStringSet_ISet_System_String__">WriteStringSet(ISet&lt;String&gt;)</a></li><li>Footer --&gt; <a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteFooter_Lucene_Net_Store_IndexOutput_">WriteFooter(IndexOutput)</a></li></ul>
 </p>
 Field Descriptions:
 <p>
@@ -952,7 +951,7 @@ Field Descriptions:
       stored by <a class="xref" href="Lucene.Net.Codecs.LiveDocsFormat.html">LiveDocsFormat</a>.</li><li>DeletionCount records the number of deleted documents in this segment.</li><li>SegCodec is the <a class="xref" href="Lucene.Net.Codecs.Codec.html#Lucene_Net_Codecs_Codec_Name">Name</a> of the <a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a> that encoded
       this segment.</li><li>CommitUserData stores an optional user-supplied opaque
 <see cref="T:IDictionary{string, string}"></see> that was passed to
-<a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_SetCommitData_System_Collections_Generic_IDictionary_System_String_System_String__">SetCommitData(IDictionary&lt;String, String&gt;)</a>.</li><li>FieldInfosGen is the generation count of the fieldInfos file. If this is -1,
+<a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_SetCommitData_IDictionary_System_String_System_String__">SetCommitData(IDictionary&lt;String, String&gt;)</a>.</li><li>FieldInfosGen is the generation count of the fieldInfos file. If this is -1,
 there are no updates to the fieldInfos in that segment. Anything above zero
 means there are updates to fieldInfos stored by <a class="xref" href="Lucene.Net.Codecs.FieldInfosFormat.html">FieldInfosFormat</a>.</li><li>UpdatesFiles stores the list of files that were updated in that segment.</li></ul>
 </p></p>
@@ -1057,7 +1056,7 @@ used by <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index
 <div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
       <h4><a class="xref" href="Lucene.Net.Index.TaskMergeScheduler.html">TaskMergeScheduler</a></h4>
       <section><p>A <a class="xref" href="Lucene.Net.Index.MergeScheduler.html">MergeScheduler</a> that runs each merge using
-<span class="xref">System.Threading.Tasks.Task</span>s on the default <span class="xref">System.Threading.Tasks.TaskScheduler</span>.</p>
+<see cref="!:Task"></see>s on the default <see cref="!:TaskScheduler"></see>.</p>
 <p>If more than <a class="xref" href="Lucene.Net.Index.TaskMergeScheduler.html#Lucene_Net_Index_TaskMergeScheduler_MaxMergeCount">MaxMergeCount</a> merges are
 requested then this class will forcefully throttle the
 incoming threads by pausing until one more more merges
@@ -1276,7 +1275,7 @@ event that triggered the merge.</p>
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/apache/lucenenet/blob/docs-4.8.0-beta00007/src/Lucene.Net.TestFramework/Index/package.md/#L2" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00007/src/Lucene.Net.Misc/Index/package.md/#L2" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>

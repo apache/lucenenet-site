@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class IndexWriter
    | Apache Lucene.NET 4.8.0 Documentation ">
-    <meta name="generator" content="docfx 2.47.0.0">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="../../logo/favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
@@ -93,32 +93,7 @@
   </div>
   <div classs="implements">
     <h5>Implements</h5>
-    <div><span class="xref">System.IDisposable</span></div>
     <div><a class="xref" href="Lucene.Net.Index.ITwoPhaseCommit.html">ITwoPhaseCommit</a></div>
-  </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="../Lucene.Net.Misc/Lucene.Net.Index.html">Lucene.Net.Index</a></h6>
   <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
@@ -138,10 +113,10 @@ and won&apos;t see the newly created index until they re-open. If
 new index if there is not already an index at the provided path
 and otherwise open the existing index.</p>
 
-<p>In either case, documents are added with <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocument_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__">AddDocument(IEnumerable&lt;IIndexableField&gt;)</a>
+<p>In either case, documents are added with <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocument_IEnumerable_Lucene_Net_Index_IIndexableField__">AddDocument(IEnumerable&lt;IIndexableField&gt;)</a>
 and removed with <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_DeleteDocuments_Lucene_Net_Index_Term_">DeleteDocuments(Term)</a> or
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_DeleteDocuments_Lucene_Net_Search_Query_">DeleteDocuments(Query)</a>. A document can be updated with
-<a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_UpdateDocument_Lucene_Net_Index_Term_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__">UpdateDocument(Term, IEnumerable&lt;IIndexableField&gt;)</a> (which just deletes
+<a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_UpdateDocument_Lucene_Net_Index_Term_IEnumerable_Lucene_Net_Index_IIndexableField__">UpdateDocument(Term, IEnumerable&lt;IIndexableField&gt;)</a> (which just deletes
 and then adds the entire document). When finished adding, deleting
 and updating documents, <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Dispose">Dispose()</a> should be called.</p>
 
@@ -201,12 +176,12 @@ The default is <a class="xref" href="Lucene.Net.Index.LogByteSizeMergePolicy.htm
 it decides when and how to run the merges.  The default is
 <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html">ConcurrentMergeScheduler</a>. </p></p>
 <p><a name="OOME"></a><p><strong>NOTE</strong>: if you hit an
-<span class="xref">System.OutOfMemoryException</span> then <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> will quietly record this
+<see cref="!:OutOfMemoryException"></see> then <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> will quietly record this
 fact and block all future segment commits.  This is a
 defensive measure in case any internal state (buffered
 documents and deletions) were corrupted.  Any subsequent
 calls to <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Commit">Commit()</a> will throw an
-<span class="xref">System.InvalidOperationException</span>.  The only course of action is to
+<see cref="!:InvalidOperationException"></see>.  The only course of action is to
 call <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Dispose">Dispose()</a>, which internally will call
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Rollback">Rollback()</a>, to undo any changes to the index since the
 last commit.  You can also just call <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Rollback">Rollback()</a>
@@ -220,17 +195,17 @@ synchronize on the <a class="xref" href="Lucene.Net.Index.IndexWriter.html">Inde
 this may cause deadlock; use your own (non-Lucene) objects
 instead. </p></p>
 <p><strong>NOTE</strong>: If you call
-<span class="xref">System.Threading.Thread.Interrupt</span> on a thread that&apos;s within
+<see cref="!:Thread.Interrupt()"></see> on a thread that&apos;s within
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>, <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> will try to catch this (eg, if
-it&apos;s in a Wait() or <span class="xref">System.Threading.Thread.Sleep(System.Int32)</span>), and will then throw
-the unchecked exception <span class="xref">System.Threading.ThreadInterruptedException</span>
+it&apos;s in a Wait() or <see cref="!:Thread.Sleep(int)"></see>), and will then throw
+the unchecked exception <see cref="!:ThreadInterruptedException"></see>
 and <strong>clear</strong> the interrupt status on the thread.</p>
 </div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter__ctor_Lucene_Net_Store_Directory_Lucene_Net_Index_IndexWriterConfig_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.%23ctor(Lucene.Net.Store.Directory%2CLucene.Net.Index.IndexWriterConfig)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter__ctor_Lucene_Net_Store_Directory_Lucene_Net_Index_IndexWriterConfig_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.%23ctor(Lucene.Net.Store.Directory%2CLucene.Net.Index.IndexWriterConfig)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L815">View Source</a>
@@ -276,30 +251,11 @@ be initialized. </p>
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if the directory cannot be read/written to, or if it does not
-exist and <a class="xref" href="Lucene.Net.Index.IndexWriterConfig.html#Lucene_Net_Index_IndexWriterConfig_OpenMode">OpenMode</a> is
-<a class="xref" href="Lucene.Net.Index.OpenMode.html#Lucene_Net_Index_OpenMode_APPEND">APPEND</a> or if there is any other low-level
-IO error </p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <h3 id="fields">Fields
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_MAX_TERM_LENGTH.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.MAX_TERM_LENGTH%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_MAX_TERM_LENGTH.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.MAX_TERM_LENGTH%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L218">View Source</a>
@@ -308,7 +264,7 @@ IO error </p>
   <div class="markdown level1 summary"><p>Absolute hard maximum length for a term, in bytes once
 encoded as UTF8.  If a term arrives from the analyzer
 longer than this length, an
-<span class="xref">System.ArgumentException</span> is thrown
+<see cref="!:ArgumentException"></see> is thrown
 and a message is printed to <span class="xref">Lucene.Net.Index.IndexWriter.infoStream</span>, if set (see
 <a class="xref" href="Lucene.Net.Index.IndexWriterConfig.html#Lucene_Net_Index_IndexWriterConfig_SetInfoStream_Lucene_Net_Util_InfoStream_">SetInfoStream(InfoStream)</a>).</p>
 </div>
@@ -334,7 +290,7 @@ and a message is printed to <span class="xref">Lucene.Net.Index.IndexWriter.info
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SOURCE.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SOURCE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SOURCE.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SOURCE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L196">View Source</a>
@@ -364,7 +320,7 @@ and a message is printed to <span class="xref">Lucene.Net.Index.IndexWriter.info
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SOURCE_ADDINDEXES_READERS.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SOURCE_ADDINDEXES_READERS%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SOURCE_ADDINDEXES_READERS.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SOURCE_ADDINDEXES_READERS%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L208">View Source</a>
@@ -394,7 +350,7 @@ and a message is printed to <span class="xref">Lucene.Net.Index.IndexWriter.info
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SOURCE_FLUSH.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SOURCE_FLUSH%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SOURCE_FLUSH.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SOURCE_FLUSH%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L204">View Source</a>
@@ -424,7 +380,7 @@ and a message is printed to <span class="xref">Lucene.Net.Index.IndexWriter.info
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SOURCE_MERGE.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SOURCE_MERGE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SOURCE_MERGE.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SOURCE_MERGE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L200">View Source</a>
@@ -454,7 +410,7 @@ and a message is printed to <span class="xref">Lucene.Net.Index.IndexWriter.info
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_WRITE_LOCK_NAME.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.WRITE_LOCK_NAME%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_WRITE_LOCK_NAME.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.WRITE_LOCK_NAME%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L192">View Source</a>
@@ -486,7 +442,7 @@ and a message is printed to <span class="xref">Lucene.Net.Index.IndexWriter.info
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Analyzer.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Analyzer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Analyzer.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Analyzer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1322">View Source</a>
@@ -517,7 +473,7 @@ and a message is printed to <span class="xref">Lucene.Net.Index.IndexWriter.info
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_CommitData.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.CommitData%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_CommitData.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.CommitData%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L3669">View Source</a>
@@ -525,7 +481,7 @@ and a message is printed to <span class="xref">Lucene.Net.Index.IndexWriter.info
   <a id="Lucene_Net_Index_IndexWriter_CommitData_" data-uid="Lucene.Net.Index.IndexWriter.CommitData*"></a>
   <h4 id="Lucene_Net_Index_IndexWriter_CommitData" data-uid="Lucene.Net.Index.IndexWriter.CommitData">CommitData</h4>
   <div class="markdown level1 summary"><p>Returns the commit user data map that was last committed, or the one that
-was set on <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_SetCommitData_System_Collections_Generic_IDictionary_System_String_System_String__">SetCommitData(IDictionary&lt;String, String&gt;)</a>.</p>
+was set on <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_SetCommitData_IDictionary_System_String_System_String__">SetCommitData(IDictionary&lt;String, String&gt;)</a>.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
@@ -542,14 +498,14 @@ was set on <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_In
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.String</span>&gt;</td>
+        <td><span class="xref">IDictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.String</span>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Config.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Config%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Config.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Config%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L983">View Source</a>
@@ -581,7 +537,7 @@ current settings, as well as modify &quot;live&quot; ones.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Directory.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Directory%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Directory.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Directory%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1312">View Source</a>
@@ -612,7 +568,7 @@ current settings, as well as modify &quot;live&quot; ones.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_IsClosed.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.IsClosed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_IsClosed.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.IsClosed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L5676">View Source</a>
@@ -642,7 +598,7 @@ current settings, as well as modify &quot;live&quot; ones.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_KeepFullyDeletedSegments.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.KeepFullyDeletedSegments%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_KeepFullyDeletedSegments.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.KeepFullyDeletedSegments%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L5388">View Source</a>
@@ -674,7 +630,7 @@ current settings, as well as modify &quot;live&quot; ones.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_MaxDoc.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.MaxDoc%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_MaxDoc.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.MaxDoc%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1337">View Source</a>
@@ -711,7 +667,7 @@ not counting deletions.</p>
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_MergingSegments.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.MergingSegments%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_MergingSegments.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.MergingSegments%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L2444">View Source</a>
@@ -742,14 +698,14 @@ Do not alter the returned collection!</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>&gt;</td>
+        <td><span class="xref">ICollection</span>&lt;<a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_NumDocs.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.NumDocs%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_NumDocs.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.NumDocs%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1357">View Source</a>
@@ -790,15 +746,15 @@ counted you should call <a class="xref" href="Lucene.Net.Index.IndexWriter.html#
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_AddDocument_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.AddDocument(System.Collections.Generic.IEnumerable%7BLucene.Net.Index.IIndexableField%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_AddDocument_IEnumerable_Lucene_Net_Index_IIndexableField__.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.AddDocument(IEnumerable%7BLucene.Net.Index.IIndexableField%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1445">View Source</a>
   </span>
   <a id="Lucene_Net_Index_IndexWriter_AddDocument_" data-uid="Lucene.Net.Index.IndexWriter.AddDocument*"></a>
-  <h4 id="Lucene_Net_Index_IndexWriter_AddDocument_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__" data-uid="Lucene.Net.Index.IndexWriter.AddDocument(System.Collections.Generic.IEnumerable{Lucene.Net.Index.IIndexableField})">AddDocument(IEnumerable&lt;IIndexableField&gt;)</h4>
+  <h4 id="Lucene_Net_Index_IndexWriter_AddDocument_IEnumerable_Lucene_Net_Index_IIndexableField__" data-uid="Lucene.Net.Index.IndexWriter.AddDocument(IEnumerable{Lucene.Net.Index.IIndexableField})">AddDocument(IEnumerable&lt;IIndexableField&gt;)</h4>
   <div class="markdown level1 summary"><p>Adds a document to this index.</p>
-<p> Note that if an <span class="xref">System.Exception</span> is hit (for example disk full)
+<p> Note that if an <see cref="!:Exception"></see> is hit (for example disk full)
 then the index will be consistent, but this document
 may not have been added.  Furthermore, it&apos;s possible
 the index will have one segment in non-compound format
@@ -822,7 +778,7 @@ merge policy.</p>
 
 <p>Note that each term in the document can be no longer
 than <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_MAX_TERM_LENGTH">MAX_TERM_LENGTH</a> in bytes, otherwise an
-<span class="xref">System.ArgumentException</span> will be thrown.</p>
+<see cref="!:ArgumentException"></see> will be thrown.</p>
 
 <p>Note that it&apos;s possible to create an invalid Unicode
 string in java if a UTF16 surrogate pair is malformed.
@@ -830,7 +786,7 @@ In this case, the invalid characters are silently
 replaced with the Unicode replacement character
 U+FFFD.</p>
 
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See 
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 </div>
@@ -850,7 +806,7 @@ you should immediately dispose the writer.  See
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;</td>
         <td><span class="parametername">doc</span></td>
         <td></td>
       </tr>
@@ -870,29 +826,24 @@ you should immediately dispose the writer.  See
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_AddDocument_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__Lucene_Net_Analysis_Analyzer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.AddDocument(System.Collections.Generic.IEnumerable%7BLucene.Net.Index.IIndexableField%7D%2CLucene.Net.Analysis.Analyzer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_AddDocument_IEnumerable_Lucene_Net_Index_IIndexableField__Lucene_Net_Analysis_Analyzer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.AddDocument(IEnumerable%7BLucene.Net.Index.IIndexableField%7D%2CLucene.Net.Analysis.Analyzer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1464">View Source</a>
   </span>
   <a id="Lucene_Net_Index_IndexWriter_AddDocument_" data-uid="Lucene.Net.Index.IndexWriter.AddDocument*"></a>
-  <h4 id="Lucene_Net_Index_IndexWriter_AddDocument_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__Lucene_Net_Analysis_Analyzer_" data-uid="Lucene.Net.Index.IndexWriter.AddDocument(System.Collections.Generic.IEnumerable{Lucene.Net.Index.IIndexableField},Lucene.Net.Analysis.Analyzer)">AddDocument(IEnumerable&lt;IIndexableField&gt;, Analyzer)</h4>
+  <h4 id="Lucene_Net_Index_IndexWriter_AddDocument_IEnumerable_Lucene_Net_Index_IIndexableField__Lucene_Net_Analysis_Analyzer_" data-uid="Lucene.Net.Index.IndexWriter.AddDocument(IEnumerable{Lucene.Net.Index.IIndexableField},Lucene.Net.Analysis.Analyzer)">AddDocument(IEnumerable&lt;IIndexableField&gt;, Analyzer)</h4>
   <div class="markdown level1 summary"><p>Adds a document to this index, using the provided <code data-dev-comment-type="paramref" class="paramref">analyzer</code> instead of the
 value of <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Analyzer">Analyzer</a>.</p>
-<p>See <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocument_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__">AddDocument(IEnumerable&lt;IIndexableField&gt;)</a> for details on
-index and <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> state after an <span class="xref">System.Exception</span>, and
+<p>See <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocument_IEnumerable_Lucene_Net_Index_IIndexableField__">AddDocument(IEnumerable&lt;IIndexableField&gt;)</a> for details on
+index and <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> state after an <see cref="!:Exception"></see>, and
 flushing/merging temporary free space requirements.</p>
 
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 </div>
@@ -912,7 +863,7 @@ you should immediately dispose the writer.  See
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;</td>
         <td><span class="parametername">doc</span></td>
         <td></td>
       </tr>
@@ -937,22 +888,17 @@ you should immediately dispose the writer.  See
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_AddDocuments_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.AddDocuments(System.Collections.Generic.IEnumerable%7BSystem.Collections.Generic.IEnumerable%7BLucene.Net.Index.IIndexableField%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_AddDocuments_IEnumerable_IEnumerable_Lucene_Net_Index_IIndexableField___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.AddDocuments(IEnumerable%7BIEnumerable%7BLucene.Net.Index.IIndexableField%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1509">View Source</a>
   </span>
   <a id="Lucene_Net_Index_IndexWriter_AddDocuments_" data-uid="Lucene.Net.Index.IndexWriter.AddDocuments*"></a>
-  <h4 id="Lucene_Net_Index_IndexWriter_AddDocuments_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___" data-uid="Lucene.Net.Index.IndexWriter.AddDocuments(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{Lucene.Net.Index.IIndexableField}})">AddDocuments(IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;)</h4>
+  <h4 id="Lucene_Net_Index_IndexWriter_AddDocuments_IEnumerable_IEnumerable_Lucene_Net_Index_IIndexableField___" data-uid="Lucene.Net.Index.IndexWriter.AddDocuments(IEnumerable{IEnumerable{Lucene.Net.Index.IIndexableField}})">AddDocuments(IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;)</h4>
   <div class="markdown level1 summary"><p>Atomically adds a block of documents with sequentially
 assigned document IDs, such that an external reader
 will see all or none of the documents.</p>
@@ -972,8 +918,8 @@ merge more aggressively re-order documents (for example,
 perhaps to obtain better index compression), in which case
 you may need to fully re-index your documents at that time.</p>
 
-<p>See <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocument_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__">AddDocument(IEnumerable&lt;IIndexableField&gt;)</a> for details on
-index and <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> state after an <span class="xref">System.Exception</span>, and
+<p>See <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocument_IEnumerable_Lucene_Net_Index_IIndexableField__">AddDocument(IEnumerable&lt;IIndexableField&gt;)</a> for details on
+index and <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> state after an <see cref="!:Exception"></see>, and
 flushing/merging temporary free space requirements.</p>
 
 <p><strong>NOTE</strong>: tools that do offline splitting of an index
@@ -983,7 +929,7 @@ contrib) are not aware of these atomically added documents
 and will likely break them up.  Use such tools at your
 own risk!</p>
 
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 
@@ -1005,7 +951,7 @@ you should immediately dispose the writer.  See
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<span class="xref">IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;&gt;</td>
         <td><span class="parametername">docs</span></td>
         <td></td>
       </tr>
@@ -1025,22 +971,17 @@ you should immediately dispose the writer.  See
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_AddDocuments_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___Lucene_Net_Analysis_Analyzer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.AddDocuments(System.Collections.Generic.IEnumerable%7BSystem.Collections.Generic.IEnumerable%7BLucene.Net.Index.IIndexableField%7D%7D%2CLucene.Net.Analysis.Analyzer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_AddDocuments_IEnumerable_IEnumerable_Lucene_Net_Index_IIndexableField___Lucene_Net_Analysis_Analyzer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.AddDocuments(IEnumerable%7BIEnumerable%7BLucene.Net.Index.IIndexableField%7D%7D%2CLucene.Net.Analysis.Analyzer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1524">View Source</a>
   </span>
   <a id="Lucene_Net_Index_IndexWriter_AddDocuments_" data-uid="Lucene.Net.Index.IndexWriter.AddDocuments*"></a>
-  <h4 id="Lucene_Net_Index_IndexWriter_AddDocuments_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___Lucene_Net_Analysis_Analyzer_" data-uid="Lucene.Net.Index.IndexWriter.AddDocuments(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{Lucene.Net.Index.IIndexableField}},Lucene.Net.Analysis.Analyzer)">AddDocuments(IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;, Analyzer)</h4>
+  <h4 id="Lucene_Net_Index_IndexWriter_AddDocuments_IEnumerable_IEnumerable_Lucene_Net_Index_IIndexableField___Lucene_Net_Analysis_Analyzer_" data-uid="Lucene.Net.Index.IndexWriter.AddDocuments(IEnumerable{IEnumerable{Lucene.Net.Index.IIndexableField}},Lucene.Net.Analysis.Analyzer)">AddDocuments(IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;, Analyzer)</h4>
   <div class="markdown level1 summary"><p>Atomically adds a block of documents, analyzed using the
 provided <code data-dev-comment-type="paramref" class="paramref">analyzer</code>, with sequentially assigned document
 IDs, such that an external reader will see all or none
@@ -1063,7 +1004,7 @@ of the documents.
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<span class="xref">IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;&gt;</td>
         <td><span class="parametername">docs</span></td>
         <td></td>
       </tr>
@@ -1088,16 +1029,11 @@ of the documents.
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_AddIndexes_Lucene_Net_Index_IndexReader___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.AddIndexes(Lucene.Net.Index.IndexReader%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_AddIndexes_Lucene_Net_Index_IndexReader___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.AddIndexes(Lucene.Net.Index.IndexReader%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L3193">View Source</a>
@@ -1109,9 +1045,9 @@ of the documents.
 The provided <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a>s are not closed.</p>
 <p><p>
 See <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddIndexes_Lucene_Net_Index_IndexReader___">AddIndexes(IndexReader[])</a> for details on transactional semantics, temporary
-free space required in the <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a>, and non-CFS segments on an <span class="xref">System.Exception</span>.</p>
+free space required in the <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a>, and non-CFS segments on an <see cref="!:Exception"></see>.</p>
 <p><p>
-<strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span> you should immediately
+<strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see> you should immediately
 dispose the writer. See <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 <p><p>
 <strong>NOTE:</strong> empty segments are dropped by this method and not added to this
@@ -1167,16 +1103,11 @@ hit a <a class="xref" href="Lucene.Net.Index.MergePolicy.MergeAbortedException.h
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_AddIndexes_Lucene_Net_Store_Directory___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.AddIndexes(Lucene.Net.Store.Directory%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_AddIndexes_Lucene_Net_Store_Directory___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.AddIndexes(Lucene.Net.Store.Directory%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L3029">View Source</a>
@@ -1194,9 +1125,9 @@ with this method.</p>
 each directory, to ensure that no <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>
 is currently open or tries to open while this is
 running.</p>
-<p><p>This method is transactional in how <span class="xref">System.Exception</span>s are
+<p><p>This method is transactional in how <see cref="!:Exception"></see>s are
 handled: it does not commit a new segments_N file until
-all indexes are added.  this means if an <span class="xref">System.Exception</span>
+all indexes are added.  this means if an <see cref="!:Exception"></see>
 occurs (for example disk full), then either no indexes
 will have been added or they all will have been.</p>
 <p><p>Note that this requires temporary free space in the
@@ -1211,7 +1142,7 @@ and does not merge them. Therefore deleted documents are not removed and
 the new segments are not merged with the existing ones.</p>
 <p><p>This requires this index not be among those to be added.</p>
 <p><p>
-<strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer. See
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 </div>
@@ -1252,11 +1183,6 @@ you should immediately dispose the writer. See
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
-      <tr>
         <td><a class="xref" href="Lucene.Net.Store.LockObtainFailedException.html">LockObtainFailedException</a></td>
         <td><p>if we were unable to
  acquire the write lock in at least one directory </p>
@@ -1266,7 +1192,7 @@ you should immediately dispose the writer. See
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Commit.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Commit%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Commit.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Commit%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L3713">View Source</a>
@@ -1283,7 +1209,7 @@ any running background merges to finish.  This may be a
 costly operation, so you should test the cost in your
 application and do it only when really necessary.</p>
 
-<p> Note that this operation calls <a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_Sync_System_Collections_Generic_ICollection_System_String__">Sync(ICollection&lt;String&gt;)</a> on
+<p> Note that this operation calls <a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_Sync_ICollection_System_String__">Sync(ICollection&lt;String&gt;)</a> on
 the index files.  That call should not return until the
 file contents &amp; metadata are on stable storage.  For
 <a class="xref" href="Lucene.Net.Store.FSDirectory.html">FSDirectory</a>, this calls the OS&apos;s fsync.  But, beware:
@@ -1295,7 +1221,7 @@ not have a battery backup (for example) then on power
 loss it may still lose data.  Lucene cannot guarantee
 consistency on such devices.  </p>
 
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 </div>
@@ -1306,7 +1232,7 @@ you should immediately dispose the writer.  See
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DeleteAll.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DeleteAll%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DeleteAll.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DeleteAll%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L2660">View Source</a>
@@ -1340,7 +1266,7 @@ you should immediately dispose the writer.  See
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DeleteDocuments_Lucene_Net_Index_Term_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DeleteDocuments(Lucene.Net.Index.Term)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DeleteDocuments_Lucene_Net_Index_Term_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DeleteDocuments(Lucene.Net.Index.Term)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1598">View Source</a>
@@ -1348,7 +1274,7 @@ you should immediately dispose the writer.  See
   <a id="Lucene_Net_Index_IndexWriter_DeleteDocuments_" data-uid="Lucene.Net.Index.IndexWriter.DeleteDocuments*"></a>
   <h4 id="Lucene_Net_Index_IndexWriter_DeleteDocuments_Lucene_Net_Index_Term_" data-uid="Lucene.Net.Index.IndexWriter.DeleteDocuments(Lucene.Net.Index.Term)">DeleteDocuments(Term)</h4>
   <div class="markdown level1 summary"><p>Deletes the document(s) containing <code data-dev-comment-type="paramref" class="paramref">term</code>.</p>
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See 
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 </div>
@@ -1389,16 +1315,11 @@ you should immediately dispose the writer.  See
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DeleteDocuments_Lucene_Net_Index_Term___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DeleteDocuments(Lucene.Net.Index.Term%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DeleteDocuments_Lucene_Net_Index_Term___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DeleteDocuments(Lucene.Net.Index.Term%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1722">View Source</a>
@@ -1408,7 +1329,7 @@ you should immediately dispose the writer.  See
   <div class="markdown level1 summary"><p>Deletes the document(s) containing any of the
 terms. All given deletes are applied and flushed atomically
 at the same time.</p>
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 </div>
@@ -1450,16 +1371,11 @@ to be deleted </p>
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DeleteDocuments_Lucene_Net_Search_Query_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DeleteDocuments(Lucene.Net.Search.Query)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DeleteDocuments_Lucene_Net_Search_Query_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DeleteDocuments(Lucene.Net.Search.Query)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1748">View Source</a>
@@ -1467,7 +1383,7 @@ to be deleted </p>
   <a id="Lucene_Net_Index_IndexWriter_DeleteDocuments_" data-uid="Lucene.Net.Index.IndexWriter.DeleteDocuments*"></a>
   <h4 id="Lucene_Net_Index_IndexWriter_DeleteDocuments_Lucene_Net_Search_Query_" data-uid="Lucene.Net.Index.IndexWriter.DeleteDocuments(Lucene.Net.Search.Query)">DeleteDocuments(Query)</h4>
   <div class="markdown level1 summary"><p>Deletes the document(s) matching the provided query.</p>
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 </div>
@@ -1508,16 +1424,11 @@ you should immediately dispose the writer.  See
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DeleteDocuments_Lucene_Net_Search_Query___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DeleteDocuments(Lucene.Net.Search.Query%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DeleteDocuments_Lucene_Net_Search_Query___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DeleteDocuments(Lucene.Net.Search.Query%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1776">View Source</a>
@@ -1526,7 +1437,7 @@ you should immediately dispose the writer.  See
   <h4 id="Lucene_Net_Index_IndexWriter_DeleteDocuments_Lucene_Net_Search_Query___" data-uid="Lucene.Net.Index.IndexWriter.DeleteDocuments(Lucene.Net.Search.Query[])">DeleteDocuments(Query[])</h4>
   <div class="markdown level1 summary"><p>Deletes the document(s) matching any of the provided queries.
 All given deletes are applied and flushed atomically at the same time.</p>
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 </div>
@@ -1568,16 +1479,11 @@ to be deleted </p>
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DeleteUnusedFiles.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DeleteUnusedFiles%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DeleteUnusedFiles.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DeleteUnusedFiles%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L5713">View Source</a>
@@ -1615,7 +1521,7 @@ be deleted the next time <a class="xref" href="Lucene.Net.Index.IndexWriter.html
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Dispose.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Dispose.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1051">View Source</a>
@@ -1634,7 +1540,7 @@ Note that this may be a costly
 operation, so, try to re-use a single writer instead of
 closing and opening a new one.  See <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Commit">Commit()</a> for
 caveats about write caching done by some IO devices.</p>
-<p> If an <span class="xref">System.Exception</span> is hit during close, eg due to disk
+<p> If an <see cref="!:Exception"></see> is hit during close, eg due to disk
 full or some other reason, then both the on-disk index
 and the internal state of the <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> instance will
 be consistent.  However, the close will not be complete
@@ -1663,7 +1569,7 @@ finally
 
 <p>after which, you must be certain not to use the writer
 instance anymore.</p>
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer, again.  See 
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 </div>
@@ -1672,25 +1578,9 @@ you should immediately dispose the writer, again.  See
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
   </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1080">View Source</a>
@@ -1701,7 +1591,7 @@ you should immediately dispose the writer, again.  See
 running merges to finish.  This is only meaningful when
 using a <a class="xref" href="Lucene.Net.Index.MergeScheduler.html">MergeScheduler</a> that runs merges in background
 threads.</p>
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer, again.  See 
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 
@@ -1741,7 +1631,7 @@ then return. </p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DoAfterFlush.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DoAfterFlush%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DoAfterFlush.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DoAfterFlush%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L3488">View Source</a>
@@ -1759,7 +1649,7 @@ is committed (new segments_N file written).</p>
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DoBeforeFlush.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DoBeforeFlush%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_DoBeforeFlush.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.DoBeforeFlush%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L3496">View Source</a>
@@ -1776,7 +1666,7 @@ deleted documents are flushed to the <a class="xref" href="Lucene.Net.Store.Dire
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_EnsureOpen.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.EnsureOpen%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_EnsureOpen.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.EnsureOpen%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L787">View Source</a>
@@ -1784,7 +1674,7 @@ deleted documents are flushed to the <a class="xref" href="Lucene.Net.Store.Dire
   <a id="Lucene_Net_Index_IndexWriter_EnsureOpen_" data-uid="Lucene.Net.Index.IndexWriter.EnsureOpen*"></a>
   <h4 id="Lucene_Net_Index_IndexWriter_EnsureOpen" data-uid="Lucene.Net.Index.IndexWriter.EnsureOpen">EnsureOpen()</h4>
   <div class="markdown level1 summary"><p>Used internally to throw an
-<span class="xref">System.ObjectDisposedException</span> if this <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> has been
+<see cref="!:ObjectDisposedException"></see> if this <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> has been
 disposed (<code>closed=true</code>) or is in the process of
 disposing (<code>closing=true</code>).
 <p>
@@ -1795,32 +1685,16 @@ Calls <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_I
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected void EnsureOpen()</code></pre>
   </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ObjectDisposedException</span></td>
-        <td><p>if this <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> is disposed </p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_EnsureOpen_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.EnsureOpen(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_EnsureOpen_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.EnsureOpen(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L770">View Source</a>
   </span>
   <a id="Lucene_Net_Index_IndexWriter_EnsureOpen_" data-uid="Lucene.Net.Index.IndexWriter.EnsureOpen*"></a>
   <h4 id="Lucene_Net_Index_IndexWriter_EnsureOpen_System_Boolean_" data-uid="Lucene.Net.Index.IndexWriter.EnsureOpen(System.Boolean)">EnsureOpen(Boolean)</h4>
-  <div class="markdown level1 summary"><p>Used internally to throw an <span class="xref">System.ObjectDisposedException</span> if this
+  <div class="markdown level1 summary"><p>Used internally to throw an <see cref="!:ObjectDisposedException"></see> if this
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> has been disposed or is in the process of diposing.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -1848,25 +1722,9 @@ disposing (<code>closing=true</code>) but not yet done disposing (
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.ObjectDisposedException</span></td>
-        <td><p>if this IndexWriter is closed or in the process of closing </p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Flush_System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Flush(System.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Flush_System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Flush(System.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L3838">View Source</a>
@@ -1908,7 +1766,7 @@ deletes or docs were flushed) if necessary </p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.ForceMerge(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.ForceMerge(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L2093">View Source</a>
@@ -1945,14 +1803,14 @@ index will be less than the size of the starting index.
 It could be quite a bit smaller (if there were many
 pending deletes) or just slightly smaller.</p>
 
-<p>If an <span class="xref">System.Exception</span> is hit, for example
+<p>If an <see cref="!:Exception"></see> is hit, for example
 due to disk full, the index will not be corrupted and no
 documents will be lost.  However, it may have
 been partially merged (some segments were merged but
 not all), and it&apos;s possible that one of the segments in
 the index will be in non-compound format even when
 using compound file format.  This will occur when the
-<span class="xref">System.Exception</span> is hit during conversion of the segment into
+<see cref="!:Exception"></see> is hit during conversion of the segment into
 compound format.</p>
 
 <p>This call will merge those segments present in
@@ -1961,7 +1819,7 @@ still adding documents and flushing segments, those
 newly created segments will not be merged unless you
 call <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_">ForceMerge(Int32)</a> again.</p>
 
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 
@@ -2008,11 +1866,6 @@ in the index after merging finishes</p>
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
   <h5 id="Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32__seealso">See Also</h5>
@@ -2021,7 +1874,7 @@ in the index after merging finishes</p>
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.ForceMerge(System.Int32%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.ForceMerge(System.Int32%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L2109">View Source</a>
@@ -2033,7 +1886,7 @@ specify whether the call should block until
 all merging completes.  This is only meaningful with a
 <span class="xref">Lucene.Net.Index.IndexWriter.mergeScheduler</span> that is able to run merges in
 background threads.</p>
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 </div>
@@ -2066,7 +1919,7 @@ you should immediately dispose the writer.  See
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_ForceMergeDeletes.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.ForceMergeDeletes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_ForceMergeDeletes.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.ForceMergeDeletes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L2350">View Source</a>
@@ -2090,7 +1943,7 @@ many deletions you have pending in your index, call
 segment (if there are indexed documents), and applies
 all buffered deletes.</p>
 
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 </div>
@@ -2101,7 +1954,7 @@ you should immediately dispose the writer.  See
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_ForceMergeDeletes_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.ForceMergeDeletes(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_ForceMergeDeletes_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.ForceMergeDeletes(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L2253">View Source</a>
@@ -2113,7 +1966,7 @@ specify whether the call should block until the
 operation completes.  This is only meaningful with a
 <a class="xref" href="Lucene.Net.Index.MergeScheduler.html">MergeScheduler</a> that is able to run merges in
 background threads.</p>
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 
@@ -2146,7 +1999,7 @@ then any thread still running this method might hit a
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_GetReader_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.GetReader(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_GetReader_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.GetReader(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L347">View Source</a>
@@ -2200,7 +2053,7 @@ over, so far.</p>
 <p><strong>NOTE</strong>: Once the writer is disposed, any
 outstanding readers may continue to be used.  However,
 if you attempt to reopen any of those readers, you&apos;ll
-hit an <span class="xref">System.ObjectDisposedException</span>.</p>
+hit an <see cref="!:ObjectDisposedException"></see>.</p>
 
 <div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
   <div class="markdown level1 conceptual"></div>
@@ -2242,25 +2095,9 @@ hit an <span class="xref">System.ObjectDisposedException</span>.</p>
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>If there is a low-level I/O error </p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_HasDeletions.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.HasDeletions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_HasDeletions.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.HasDeletions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1376">View Source</a>
@@ -2295,7 +2132,7 @@ documents. Also, if a merge kicked off as a result of flushing a</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_HasPendingMerges.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.HasPendingMerges%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_HasPendingMerges.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.HasPendingMerges%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L2485">View Source</a>
@@ -2327,7 +2164,7 @@ documents. Also, if a merge kicked off as a result of flushing a</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_HasUncommittedChanges.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.HasUncommittedChanges%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_HasUncommittedChanges.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.HasUncommittedChanges%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L3730">View Source</a>
@@ -2366,7 +2203,7 @@ after you had just called <a class="xref" href="Lucene.Net.Index.IndexWriter.htm
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_IsLocked_Lucene_Net_Store_Directory_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.IsLocked(Lucene.Net.Store.Directory)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_IsLocked_Lucene_Net_Store_Directory_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.IsLocked(Lucene.Net.Store.Directory)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L5582">View Source</a>
@@ -2414,25 +2251,9 @@ currently locked. </p>
       </tr>
     </tbody>
   </table>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_MaybeMerge.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.MaybeMerge%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_MaybeMerge.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.MaybeMerge%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L2372">View Source</a>
@@ -2450,7 +2271,7 @@ parameters have changed.
 <p>
 this method will call the <span class="xref">Lucene.Net.Index.IndexWriter.mergePolicy</span> with
 <a class="xref" href="Lucene.Net.Index.MergeTrigger.html#Lucene_Net_Index_MergeTrigger_EXPLICIT">EXPLICIT</a>.</p>
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 </div>
@@ -2461,7 +2282,7 @@ you should immediately dispose the writer.  See
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Merge_Lucene_Net_Index_MergePolicy_OneMerge_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Merge(Lucene.Net.Index.MergePolicy.OneMerge)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Merge_Lucene_Net_Index_MergePolicy_OneMerge_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Merge(Lucene.Net.Index.MergePolicy.OneMerge)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L4540">View Source</a>
@@ -2496,7 +2317,7 @@ single segment.
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_MergeFinish_Lucene_Net_Index_MergePolicy_OneMerge_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.MergeFinish(Lucene.Net.Index.MergePolicy.OneMerge)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_MergeFinish_Lucene_Net_Index_MergePolicy_OneMerge_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.MergeFinish(Lucene.Net.Index.MergePolicy.OneMerge)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L4869">View Source</a>
@@ -2530,7 +2351,7 @@ the synchronized lock on <a class="xref" href="Lucene.Net.Index.IndexWriter.html
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_NextMerge.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.NextMerge%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_NextMerge.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.NextMerge%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L2461">View Source</a>
@@ -2563,7 +2384,7 @@ merge requested by the <a class="xref" href="Lucene.Net.Index.MergePolicy.html">
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_NumDeletedDocs_Lucene_Net_Index_SegmentCommitInfo_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.NumDeletedDocs(Lucene.Net.Index.SegmentCommitInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_NumDeletedDocs_Lucene_Net_Index_SegmentCommitInfo_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.NumDeletedDocs(Lucene.Net.Index.SegmentCommitInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L747">View Source</a>
@@ -2613,7 +2434,7 @@ delCount is returned.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_NumRamDocs.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.NumRamDocs%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_NumRamDocs.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.NumRamDocs%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L4002">View Source</a>
@@ -2645,7 +2466,7 @@ buffered in RAM.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_PrepareCommit.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.PrepareCommit%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_PrepareCommit.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.PrepareCommit%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L3519">View Source</a>
@@ -2666,7 +2487,7 @@ done since the writer was opened.</p>
 without <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_PrepareCommit">PrepareCommit()</a> first in which case that method
 will internally call <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_PrepareCommit">PrepareCommit()</a>.</p>
 
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 </div>
@@ -2677,7 +2498,7 @@ you should immediately dispose the writer.  See
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_RamSizeInBytes.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.RamSizeInBytes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_RamSizeInBytes.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.RamSizeInBytes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L3979">View Source</a>
@@ -2709,7 +2530,7 @@ Useful for size management with flushRamDocs()</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Rollback.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Rollback%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Rollback.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Rollback%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L2504">View Source</a>
@@ -2730,25 +2551,9 @@ call to <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public virtual void Rollback()</code></pre>
   </div>
-  <h5 class="exceptions">Exceptions</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Condition</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
-    </tbody>
-  </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SegString.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SegString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SegString.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SegString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L5311">View Source</a>
@@ -2781,7 +2586,57 @@ debugging.
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SegString_Lucene_Net_Index_SegmentCommitInfo_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SegString(Lucene.Net.Index.SegmentCommitInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SegString_IEnumerable_Lucene_Net_Index_SegmentCommitInfo__.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SegString(IEnumerable%7BLucene.Net.Index.SegmentCommitInfo%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L5325">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_IndexWriter_SegString_" data-uid="Lucene.Net.Index.IndexWriter.SegString*"></a>
+  <h4 id="Lucene_Net_Index_IndexWriter_SegString_IEnumerable_Lucene_Net_Index_SegmentCommitInfo__" data-uid="Lucene.Net.Index.IndexWriter.SegString(IEnumerable{Lucene.Net.Index.SegmentCommitInfo})">SegString(IEnumerable&lt;SegmentCommitInfo&gt;)</h4>
+  <div class="markdown level1 summary"><p>Returns a string description of the specified
+segments, for debugging.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual string SegString(IEnumerable&lt;SegmentCommitInfo&gt; infos)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>&gt;</td>
+        <td><span class="parametername">infos</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SegString_Lucene_Net_Index_SegmentCommitInfo_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SegString(Lucene.Net.Index.SegmentCommitInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L5348">View Source</a>
@@ -2831,63 +2686,13 @@ segment, for debugging.
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SegString_System_Collections_Generic_IEnumerable_Lucene_Net_Index_SegmentCommitInfo__.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SegString(System.Collections.Generic.IEnumerable%7BLucene.Net.Index.SegmentCommitInfo%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L5325">View Source</a>
-  </span>
-  <a id="Lucene_Net_Index_IndexWriter_SegString_" data-uid="Lucene.Net.Index.IndexWriter.SegString*"></a>
-  <h4 id="Lucene_Net_Index_IndexWriter_SegString_System_Collections_Generic_IEnumerable_Lucene_Net_Index_SegmentCommitInfo__" data-uid="Lucene.Net.Index.IndexWriter.SegString(System.Collections.Generic.IEnumerable{Lucene.Net.Index.SegmentCommitInfo})">SegString(IEnumerable&lt;SegmentCommitInfo&gt;)</h4>
-  <div class="markdown level1 summary"><p>Returns a string description of the specified
-segments, for debugging.
-<p>
-<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></div>
-  <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public virtual string SegString(IEnumerable&lt;SegmentCommitInfo&gt; infos)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>&gt;</td>
-        <td><span class="parametername">infos</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">System.String</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SetCommitData_System_Collections_Generic_IDictionary_System_String_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SetCommitData(System.Collections.Generic.IDictionary%7BSystem.String%2CSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_SetCommitData_IDictionary_System_String_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.SetCommitData(IDictionary%7BSystem.String%2CSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L3656">View Source</a>
   </span>
   <a id="Lucene_Net_Index_IndexWriter_SetCommitData_" data-uid="Lucene.Net.Index.IndexWriter.SetCommitData*"></a>
-  <h4 id="Lucene_Net_Index_IndexWriter_SetCommitData_System_Collections_Generic_IDictionary_System_String_System_String__" data-uid="Lucene.Net.Index.IndexWriter.SetCommitData(System.Collections.Generic.IDictionary{System.String,System.String})">SetCommitData(IDictionary&lt;String, String&gt;)</h4>
+  <h4 id="Lucene_Net_Index_IndexWriter_SetCommitData_IDictionary_System_String_System_String__" data-uid="Lucene.Net.Index.IndexWriter.SetCommitData(IDictionary{System.String,System.String})">SetCommitData(IDictionary&lt;String, String&gt;)</h4>
   <div class="markdown level1 summary"><p>Sets the commit user data map. That method is considered a transaction by
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> and will be committed (<a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Commit">Commit()</a> even if no other
 changes were made to the writer instance. Note that you must call this method
@@ -2913,7 +2718,7 @@ contents after calling this method has no effect.</p>
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.String</span>&gt;</td>
+        <td><span class="xref">IDictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.String</span>&gt;</td>
         <td><span class="parametername">commitUserData</span></td>
         <td></td>
       </tr>
@@ -2921,7 +2726,7 @@ contents after calling this method has no effect.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_TryDeleteDocument_Lucene_Net_Index_IndexReader_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.TryDeleteDocument(Lucene.Net.Index.IndexReader%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_TryDeleteDocument_Lucene_Net_Index_IndexReader_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.TryDeleteDocument(Lucene.Net.Index.IndexReader%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1630">View Source</a>
@@ -2986,7 +2791,7 @@ reader you must use the other DeleteDocument() methods
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Unlock_Lucene_Net_Store_Directory_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Unlock(Lucene.Net.Store.Directory)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_Unlock_Lucene_Net_Store_Directory_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.Unlock(Lucene.Net.Store.Directory)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L5594">View Source</a>
@@ -3023,7 +2828,7 @@ currently accessing this index.</p>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_UpdateBinaryDocValue_Lucene_Net_Index_Term_System_String_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.UpdateBinaryDocValue(Lucene.Net.Index.Term%2CSystem.String%2CLucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_UpdateBinaryDocValue_Lucene_Net_Index_Term_System_String_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.UpdateBinaryDocValue(Lucene.Net.Index.Term%2CSystem.String%2CLucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1930">View Source</a>
@@ -3040,7 +2845,7 @@ method.</p>
 affected documents with the new value.
 
 <p>
-<strong>NOTE:</strong> if this method hits an <span class="xref">System.OutOfMemoryException</span> you should immediately
+<strong>NOTE:</strong> if this method hits an <see cref="!:OutOfMemoryException"></see> you should immediately
 dispose the writer. See <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.
 </p>
 </div>
@@ -3093,28 +2898,23 @@ dispose the writer. See <a class="xref" href="Lucene.Net.Index.IndexWriter.html"
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_UpdateDocument_Lucene_Net_Index_Term_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.UpdateDocument(Lucene.Net.Index.Term%2CSystem.Collections.Generic.IEnumerable%7BLucene.Net.Index.IIndexableField%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_UpdateDocument_Lucene_Net_Index_Term_IEnumerable_Lucene_Net_Index_IIndexableField__.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.UpdateDocument(Lucene.Net.Index.Term%2CIEnumerable%7BLucene.Net.Index.IIndexableField%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1808">View Source</a>
   </span>
   <a id="Lucene_Net_Index_IndexWriter_UpdateDocument_" data-uid="Lucene.Net.Index.IndexWriter.UpdateDocument*"></a>
-  <h4 id="Lucene_Net_Index_IndexWriter_UpdateDocument_Lucene_Net_Index_Term_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__" data-uid="Lucene.Net.Index.IndexWriter.UpdateDocument(Lucene.Net.Index.Term,System.Collections.Generic.IEnumerable{Lucene.Net.Index.IIndexableField})">UpdateDocument(Term, IEnumerable&lt;IIndexableField&gt;)</h4>
+  <h4 id="Lucene_Net_Index_IndexWriter_UpdateDocument_Lucene_Net_Index_Term_IEnumerable_Lucene_Net_Index_IIndexableField__" data-uid="Lucene.Net.Index.IndexWriter.UpdateDocument(Lucene.Net.Index.Term,IEnumerable{Lucene.Net.Index.IIndexableField})">UpdateDocument(Term, IEnumerable&lt;IIndexableField&gt;)</h4>
   <div class="markdown level1 summary"><p>Updates a document by first deleting the document(s)
 containing <code data-dev-comment-type="paramref" class="paramref">term</code> and then adding the new
 document.  The delete and then add are atomic as seen
 by a reader on the same index (flush may happen only after
 the add).</p>
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 </div>
@@ -3141,7 +2941,7 @@ deleted </p>
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;</td>
         <td><span class="parametername">doc</span></td>
         <td><p>the document to be added </p>
 </td>
@@ -3162,28 +2962,23 @@ deleted </p>
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_UpdateDocument_Lucene_Net_Index_Term_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__Lucene_Net_Analysis_Analyzer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.UpdateDocument(Lucene.Net.Index.Term%2CSystem.Collections.Generic.IEnumerable%7BLucene.Net.Index.IIndexableField%7D%2CLucene.Net.Analysis.Analyzer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_UpdateDocument_Lucene_Net_Index_Term_IEnumerable_Lucene_Net_Index_IIndexableField__Lucene_Net_Analysis_Analyzer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.UpdateDocument(Lucene.Net.Index.Term%2CIEnumerable%7BLucene.Net.Index.IIndexableField%7D%2CLucene.Net.Analysis.Analyzer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1831">View Source</a>
   </span>
   <a id="Lucene_Net_Index_IndexWriter_UpdateDocument_" data-uid="Lucene.Net.Index.IndexWriter.UpdateDocument*"></a>
-  <h4 id="Lucene_Net_Index_IndexWriter_UpdateDocument_Lucene_Net_Index_Term_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__Lucene_Net_Analysis_Analyzer_" data-uid="Lucene.Net.Index.IndexWriter.UpdateDocument(Lucene.Net.Index.Term,System.Collections.Generic.IEnumerable{Lucene.Net.Index.IIndexableField},Lucene.Net.Analysis.Analyzer)">UpdateDocument(Term, IEnumerable&lt;IIndexableField&gt;, Analyzer)</h4>
+  <h4 id="Lucene_Net_Index_IndexWriter_UpdateDocument_Lucene_Net_Index_Term_IEnumerable_Lucene_Net_Index_IIndexableField__Lucene_Net_Analysis_Analyzer_" data-uid="Lucene.Net.Index.IndexWriter.UpdateDocument(Lucene.Net.Index.Term,IEnumerable{Lucene.Net.Index.IIndexableField},Lucene.Net.Analysis.Analyzer)">UpdateDocument(Term, IEnumerable&lt;IIndexableField&gt;, Analyzer)</h4>
   <div class="markdown level1 summary"><p>Updates a document by first deleting the document(s)
 containing <code data-dev-comment-type="paramref" class="paramref">term</code> and then adding the new
 document.  The delete and then add are atomic as seen
 by a reader on the same index (flush may happen only after
 the add).</p>
-<p><strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span>
+<p><strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see>
 you should immediately dispose the writer.  See
 <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.</p>
 </div>
@@ -3210,7 +3005,7 @@ deleted </p>
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;</td>
         <td><span class="parametername">doc</span></td>
         <td><p>the document to be added </p>
 </td>
@@ -3237,22 +3032,17 @@ deleted </p>
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_UpdateDocuments_Lucene_Net_Index_Term_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.UpdateDocuments(Lucene.Net.Index.Term%2CSystem.Collections.Generic.IEnumerable%7BSystem.Collections.Generic.IEnumerable%7BLucene.Net.Index.IIndexableField%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_UpdateDocuments_Lucene_Net_Index_Term_IEnumerable_IEnumerable_Lucene_Net_Index_IIndexableField___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.UpdateDocuments(Lucene.Net.Index.Term%2CIEnumerable%7BIEnumerable%7BLucene.Net.Index.IIndexableField%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1540">View Source</a>
   </span>
   <a id="Lucene_Net_Index_IndexWriter_UpdateDocuments_" data-uid="Lucene.Net.Index.IndexWriter.UpdateDocuments*"></a>
-  <h4 id="Lucene_Net_Index_IndexWriter_UpdateDocuments_Lucene_Net_Index_Term_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___" data-uid="Lucene.Net.Index.IndexWriter.UpdateDocuments(Lucene.Net.Index.Term,System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{Lucene.Net.Index.IIndexableField}})">UpdateDocuments(Term, IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;)</h4>
+  <h4 id="Lucene_Net_Index_IndexWriter_UpdateDocuments_Lucene_Net_Index_Term_IEnumerable_IEnumerable_Lucene_Net_Index_IIndexableField___" data-uid="Lucene.Net.Index.IndexWriter.UpdateDocuments(Lucene.Net.Index.Term,IEnumerable{IEnumerable{Lucene.Net.Index.IIndexableField}})">UpdateDocuments(Term, IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;)</h4>
   <div class="markdown level1 summary"><p>Atomically deletes documents matching the provided
 <code data-dev-comment-type="paramref" class="paramref">delTerm</code> and adds a block of documents with sequentially
 assigned document IDs, such that an external reader
@@ -3280,7 +3070,7 @@ will see all or none of the documents.
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<span class="xref">IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;&gt;</td>
         <td><span class="parametername">docs</span></td>
         <td></td>
       </tr>
@@ -3300,26 +3090,21 @@ will see all or none of the documents.
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
-  <h5 id="Lucene_Net_Index_IndexWriter_UpdateDocuments_Lucene_Net_Index_Term_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField____seealso">See Also</h5>
+  <h5 id="Lucene_Net_Index_IndexWriter_UpdateDocuments_Lucene_Net_Index_Term_IEnumerable_IEnumerable_Lucene_Net_Index_IIndexableField____seealso">See Also</h5>
   <div class="seealso">
-      <div><a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocuments_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___">AddDocuments(IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;)</a></div>
+      <div><a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocuments_IEnumerable_IEnumerable_Lucene_Net_Index_IIndexableField___">AddDocuments(IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;)</a></div>
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_UpdateDocuments_Lucene_Net_Index_Term_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___Lucene_Net_Analysis_Analyzer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.UpdateDocuments(Lucene.Net.Index.Term%2CSystem.Collections.Generic.IEnumerable%7BSystem.Collections.Generic.IEnumerable%7BLucene.Net.Index.IIndexableField%7D%7D%2CLucene.Net.Analysis.Analyzer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_UpdateDocuments_Lucene_Net_Index_Term_IEnumerable_IEnumerable_Lucene_Net_Index_IIndexableField___Lucene_Net_Analysis_Analyzer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.UpdateDocuments(Lucene.Net.Index.Term%2CIEnumerable%7BIEnumerable%7BLucene.Net.Index.IIndexableField%7D%7D%2CLucene.Net.Analysis.Analyzer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1557">View Source</a>
   </span>
   <a id="Lucene_Net_Index_IndexWriter_UpdateDocuments_" data-uid="Lucene.Net.Index.IndexWriter.UpdateDocuments*"></a>
-  <h4 id="Lucene_Net_Index_IndexWriter_UpdateDocuments_Lucene_Net_Index_Term_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___Lucene_Net_Analysis_Analyzer_" data-uid="Lucene.Net.Index.IndexWriter.UpdateDocuments(Lucene.Net.Index.Term,System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{Lucene.Net.Index.IIndexableField}},Lucene.Net.Analysis.Analyzer)">UpdateDocuments(Term, IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;, Analyzer)</h4>
+  <h4 id="Lucene_Net_Index_IndexWriter_UpdateDocuments_Lucene_Net_Index_Term_IEnumerable_IEnumerable_Lucene_Net_Index_IIndexableField___Lucene_Net_Analysis_Analyzer_" data-uid="Lucene.Net.Index.IndexWriter.UpdateDocuments(Lucene.Net.Index.Term,IEnumerable{IEnumerable{Lucene.Net.Index.IIndexableField}},Lucene.Net.Analysis.Analyzer)">UpdateDocuments(Term, IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;, Analyzer)</h4>
   <div class="markdown level1 summary"><p>Atomically deletes documents matching the provided
 <code data-dev-comment-type="paramref" class="paramref">delTerm</code> and adds a block of documents, analyzed using
 the provided <code data-dev-comment-type="paramref" class="paramref">analyzer</code>, with sequentially
@@ -3348,7 +3133,7 @@ will see all or none of the documents.
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;&gt;</td>
+        <td><span class="xref">IEnumerable</span>&lt;<span class="xref">IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>&gt;&gt;</td>
         <td><span class="parametername">docs</span></td>
         <td></td>
       </tr>
@@ -3373,20 +3158,15 @@ will see all or none of the documents.
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
-  <h5 id="Lucene_Net_Index_IndexWriter_UpdateDocuments_Lucene_Net_Index_Term_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___Lucene_Net_Analysis_Analyzer__seealso">See Also</h5>
+  <h5 id="Lucene_Net_Index_IndexWriter_UpdateDocuments_Lucene_Net_Index_Term_IEnumerable_IEnumerable_Lucene_Net_Index_IIndexableField___Lucene_Net_Analysis_Analyzer__seealso">See Also</h5>
   <div class="seealso">
-      <div><a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocuments_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___">AddDocuments(IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;)</a></div>
+      <div><a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocuments_IEnumerable_IEnumerable_Lucene_Net_Index_IIndexableField___">AddDocuments(IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;)</a></div>
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_UpdateNumericDocValue_Lucene_Net_Index_Term_System_String_System_Nullable_System_Int64__.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.UpdateNumericDocValue(Lucene.Net.Index.Term%2CSystem.String%2CSystem.Nullable%7BSystem.Int64%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_UpdateNumericDocValue_Lucene_Net_Index_Term_System_String_System_Nullable_System_Int64__.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.UpdateNumericDocValue(Lucene.Net.Index.Term%2CSystem.String%2CSystem.Nullable%7BSystem.Int64%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L1884">View Source</a>
@@ -3399,7 +3179,7 @@ value by passing <code>null</code> as the new <code data-dev-comment-type="param
 fields that already exist in the index, not add new fields through this
 method.</p>
 <p>
-<strong>NOTE</strong>: if this method hits an <span class="xref">System.OutOfMemoryException</span> you should immediately
+<strong>NOTE</strong>: if this method hits an <see cref="!:OutOfMemoryException"></see> you should immediately
 dispose the writer. See <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for details.
 </p>
 </div>
@@ -3452,16 +3232,11 @@ dispose the writer. See <a class="xref" href="Lucene.Net.Index.IndexWriter.html"
         <td><p>if the index is corrupt </p>
 </td>
       </tr>
-      <tr>
-        <td><span class="xref">System.IO.IOException</span></td>
-        <td><p>if there is a low-level IO error </p>
-</td>
-      </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_WaitForMerges.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.WaitForMerges%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter_WaitForMerges.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter.WaitForMerges%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L2801">View Source</a>
@@ -3479,9 +3254,6 @@ dispose the writer. See <a class="xref" href="Lucene.Net.Index.IndexWriter.html"
   </div>
   <h3 id="implements">Implements</h3>
   <div>
-      <span class="xref">System.IDisposable</span>
-  </div>
-  <div>
       <a class="xref" href="Lucene.Net.Index.ITwoPhaseCommit.html">ITwoPhaseCommit</a>
   </div>
 </article>
@@ -3492,7 +3264,7 @@ dispose the writer. See <a class="xref" href="Lucene.Net.Index.IndexWriter.html"
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/apache/lucenenet/new/docs-4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexWriter.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexWriter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
                     <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/IndexWriter.cs/#L185" class="contribution-link">View Source</a>

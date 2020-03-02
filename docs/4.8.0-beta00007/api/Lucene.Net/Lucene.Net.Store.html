@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Namespace Lucene.Net.Store
    | Apache Lucene.NET 4.8.0 Documentation ">
-    <meta name="generator" content="docfx 2.47.0.0">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="../../logo/favicon.ico">
     <link rel="stylesheet" href="../../styles/docfx.vendor.css">
@@ -98,9 +98,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<p>Support for testing store mechanisms. </p>
-<p>The primary class is <a class="xref" href="../Lucene.Net.TestFramework/Lucene.Net.Store.MockDirectoryWrapper.html">MockDirectoryWrapper</a>, which
-wraps any Directory implementation and provides additional checks.</p>
+<p>Binary i/o API, used for all index data.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="markdown level0 remarks"></div>
@@ -137,11 +135,11 @@ so be sure to test heavily with assertions enabled.
 <div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
       <h4><a class="xref" href="Lucene.Net.Store.ByteBufferIndexInput.html">ByteBufferIndexInput</a></h4>
       <section><p>Base <a class="xref" href="Lucene.Net.Store.IndexInput.html">IndexInput</a> implementation that uses an array
-of <span class="xref">J2N.IO.ByteBuffer</span>s to represent a file.
+of <see cref="!:ByteBuffer"></see>s to represent a file.
 <p>
-Because Java&apos;s <span class="xref">J2N.IO.ByteBuffer</span> uses an <span class="xref">System.Int32</span> to address the
+Because Java&apos;s <see cref="!:ByteBuffer"></see> uses an <see cref="!:System.Int32"></see> to address the
 values, it&apos;s necessary to access a file greater
-<span class="xref">System.Int32.MaxValue</span> in size using multiple byte buffers.
+<see cref="!:int.MaxValue"></see> in size using multiple byte buffers.
 <p>
 For efficiency, this class requires that the buffers
 are a power-of-two (<code>chunkSizePower</code>).</p>
@@ -171,7 +169,7 @@ Files:
 <p>Notes:</p>
 <ul><li>FileCount indicates how many files are contained in this compound file.
         The entry table that follows has that many entries.</li><li>Each directory entry contains a long pointer to the start of this file&apos;s data
-        section, the files length, and a <span class="xref">System.String</span> with that file&apos;s name.</li></ul>
+        section, the files length, and a <see cref="!:System.String"></see> with that file&apos;s name.</li></ul>
 <p>
 <div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
       <h4><a class="xref" href="Lucene.Net.Store.CompoundFileDirectory.FileEntry.html">CompoundFileDirectory.FileEntry</a></h4>
@@ -245,7 +243,7 @@ files in the file system.
 There are currently three core
 subclasses:</p>
 <ul><li> <a class="xref" href="Lucene.Net.Store.SimpleFSDirectory.html">SimpleFSDirectory</a> is a straightforward
-        implementation using <span class="xref">System.IO.FileStream</span>.
+        implementation using <see cref="!:System.IO.FileStream"></see>.
         However, it has poor concurrent performance
         (multiple threads will bottleneck) as it
         synchronizes when multiple threads read from the
@@ -255,8 +253,8 @@ subclasses:</p>
         Unfortunately, due to a Windows-only <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6265734">Sun
         JRE bug</a> this is a poor choice for Windows, but
         on all other platforms this is the preferred
-        choice. Applications using <span class="xref">System.Threading.Thread.Interrupt</span> or
-<span class="xref">System.Threading.Tasks.Task&lt;TResult&gt;</span> should use
+        choice. Applications using <see cref="!:System.Threading.Thread.Interrupt()"></see> or
+<see cref="!:System.Threading.Tasks.Task&lt;TResult>"></see> should use
 <a class="xref" href="Lucene.Net.Store.SimpleFSDirectory.html">SimpleFSDirectory</a> instead. See <a class="xref" href="Lucene.Net.Store.NIOFSDirectory.html">NIOFSDirectory</a> java doc
 for details.</li><li> <a class="xref" href="Lucene.Net.Store.MMapDirectory.html">MMapDirectory</a> uses memory-mapped IO when
 reading. This is a good choice if you have plenty
@@ -265,8 +263,8 @@ if you are running on a 64 bit runtime, or you are
 running on a 32 bit runtime but your index sizes are
 small enough to fit into the virtual memory space.
 <p>
-Applications using <span class="xref">System.Threading.Thread.Interrupt</span> or
-<span class="xref">System.Threading.Tasks.Task</span> should use
+Applications using <see cref="!:System.Threading.Thread.Interrupt()"></see> or
+<see cref="!:System.Threading.Tasks.Task"></see> should use
 <a class="xref" href="Lucene.Net.Store.SimpleFSDirectory.html">SimpleFSDirectory</a> instead. See <a class="xref" href="Lucene.Net.Store.MMapDirectory.html">MMapDirectory</a>
 doc for details.</li></ul>
 
@@ -284,7 +282,7 @@ desired implementation directly.</p>
 passing in a custom <a class="xref" href="Lucene.Net.Store.LockFactory.html">LockFactory</a> instance.</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Store.FSDirectory.FSIndexOutput.html">FSDirectory.FSIndexOutput</a></h4>
-      <section><p>Writes output with <span class="xref">System.IO.FileStream.Write(System.Byte[],System.Int32,System.Int32)</span></p>
+      <section><p>Writes output with <see cref="!:FileStream.Write(byte[], int, int)"></see></p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Store.FSLockFactory.html">FSLockFactory</a></h4>
       <section><p>Base class for file system based locking implementation.</p>
@@ -300,7 +298,7 @@ returning a new <a class="xref" href="Lucene.Net.Store.IndexInput.html">IndexInp
 resource, but positioned independently. Lucene never closes cloned
 <a class="xref" href="Lucene.Net.Store.IndexInput.html">IndexInput</a>s, it will only do this on the original one.
 The original instance must take care that cloned instances throw
-<span class="xref">System.ObjectDisposedException</span> when the original one is closed.</p>
+<see cref="!:ObjectDisposedException"></see> when the original one is closed.</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Store.IndexOutput.html">IndexOutput</a></h4>
       <section><p>Abstract base class for output to a file in a <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a>.  A random-access
@@ -309,7 +307,7 @@ output stream.  Used for all Lucene index output operations.</p>
 thread safe (it keeps internal state like file position).</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Store.InputStreamDataInput.html">InputStreamDataInput</a></h4>
-      <section><p>A <a class="xref" href="Lucene.Net.Store.DataInput.html">DataInput</a> wrapping a plain <span class="xref">System.IO.Stream</span>.</p>
+      <section><p>A <a class="xref" href="Lucene.Net.Store.DataInput.html">DataInput</a> wrapping a plain <see cref="!:Stream"></see>.</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Store.IOContext.html">IOContext</a></h4>
       <section><a class="xref" href="Lucene.Net.Store.IOContext.html">IOContext</a> holds additional details on the merge/search context. A <a class="xref" href="Lucene.Net.Store.IOContext.html">IOContext</a>
@@ -379,7 +377,7 @@ It is used as part of an <a class="xref" href="Lucene.Net.Store.IOContext.html">
 </section>
       <h4><a class="xref" href="Lucene.Net.Store.MMapDirectory.html">MMapDirectory</a></h4>
       <section><p>File-based <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a> implementation that uses
-<span class="xref">System.IO.MemoryMappedFiles.MemoryMappedFile</span> for reading, and
+<see cref="!:MemoryMappedFile"></see> for reading, and
 <a class="xref" href="Lucene.Net.Store.FSDirectory.FSIndexOutput.html">FSDirectory.FSIndexOutput</a> for writing.</p>
 <p><strong>NOTE</strong>: memory mapping uses up a portion of the
 virtual memory address space in your process equal to the
@@ -387,16 +385,16 @@ size of the file being mapped.  Before using this class,
 be sure your have plenty of virtual address space, e.g. by
 using a 64 bit runtime, or a 32 bit runtime with indexes that are
 guaranteed to fit within the address space.
-On 32 bit platforms also consult <a class="xref" href="Lucene.Net.Store.MMapDirectory.html#Lucene_Net_Store_MMapDirectory__ctor_System_IO_DirectoryInfo_Lucene_Net_Store_LockFactory_System_Int32_">MMapDirectory(DirectoryInfo, LockFactory, Int32)</a>
+On 32 bit platforms also consult <a class="xref" href="Lucene.Net.Store.MMapDirectory.html#Lucene_Net_Store_MMapDirectory__ctor_DirectoryInfo_Lucene_Net_Store_LockFactory_System_Int32_">MMapDirectory(DirectoryInfo, LockFactory, Int32)</a>
 if you have problems with mmap failing because of fragmented
-address space. If you get an <span class="xref">System.OutOfMemoryException</span>, it is recommended
+address space. If you get an <see cref="!:OutOfMemoryException"></see>, it is recommended
 to reduce the chunk size, until it works.
 <p>
 <strong>NOTE:</strong> Accessing this class either directly or
 indirectly from a thread while it&apos;s interrupted can close the
 underlying channel immediately if at the same time the thread is
 blocked on IO. The channel will remain closed and subsequent access
-to <a class="xref" href="Lucene.Net.Store.MMapDirectory.html">MMapDirectory</a> will throw a <span class="xref">System.ObjectDisposedException</span>.
+to <a class="xref" href="Lucene.Net.Store.MMapDirectory.html">MMapDirectory</a> will throw a <see cref="!:ObjectDisposedException"></see>.
 </p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Store.MMapDirectory.MMapIndexInput.html">MMapDirectory.MMapIndexInput</a></h4>
@@ -432,11 +430,11 @@ test it by using <a class="xref" href="Lucene.Net.Store.VerifyingLockFactory.htm
 <a class="xref" href="Lucene.Net.Store.LockVerifyServer.html">LockVerifyServer</a> and <a class="xref" href="Lucene.Net.Store.LockStressTest.html">LockStressTest</a>.</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Store.NIOFSDirectory.html">NIOFSDirectory</a></h4>
-      <section><p>An <a class="xref" href="Lucene.Net.Store.FSDirectory.html">FSDirectory</a> implementation that uses <span class="xref">System.IO.FileStream</span>&apos;s
+      <section><p>An <a class="xref" href="Lucene.Net.Store.FSDirectory.html">FSDirectory</a> implementation that uses <see cref="!:FileStream"></see>&apos;s
 positional read, which allows multiple threads to read from the same file
 without synchronizing.
 <p>
-This class only uses <span class="xref">System.IO.FileStream</span> when reading; writing is achieved with
+This class only uses <see cref="!:FileStream"></see> when reading; writing is achieved with
 <a class="xref" href="Lucene.Net.Store.FSDirectory.FSIndexOutput.html">FSDirectory.FSIndexOutput</a>.
 <p>
 <strong>NOTE</strong>: <a class="xref" href="Lucene.Net.Store.NIOFSDirectory.html">NIOFSDirectory</a> is not recommended on Windows because of a bug in
@@ -449,15 +447,15 @@ for details.
 indirectly from a thread while it&apos;s interrupted can close the
 underlying file descriptor immediately if at the same time the thread is
 blocked on IO. The file descriptor will remain closed and subsequent access
-to <a class="xref" href="Lucene.Net.Store.NIOFSDirectory.html">NIOFSDirectory</a> will throw a <span class="xref">System.ObjectDisposedException</span>. If
-your application uses either <span class="xref">System.Threading.Thread.Interrupt</span> or
-<span class="xref">System.Threading.Tasks.Task</span> you should use <a class="xref" href="Lucene.Net.Store.SimpleFSDirectory.html">SimpleFSDirectory</a> in
+to <a class="xref" href="Lucene.Net.Store.NIOFSDirectory.html">NIOFSDirectory</a> will throw a <see cref="!:ObjectDisposedException"></see>. If
+your application uses either <see cref="!:System.Threading.Thread.Interrupt()"></see> or
+<see cref="!:System.Threading.Tasks.Task"></see> you should use <a class="xref" href="Lucene.Net.Store.SimpleFSDirectory.html">SimpleFSDirectory</a> in
 favor of <a class="xref" href="Lucene.Net.Store.NIOFSDirectory.html">NIOFSDirectory</a>.</font>
 </p></p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Store.NIOFSDirectory.NIOFSIndexInput.html">NIOFSDirectory.NIOFSIndexInput</a></h4>
-      <section><p>Reads bytes with the <a class="xref" href="Lucene.Net.Support.IO.FileStreamExtensions.html#Lucene_Net_Support_IO_FileStreamExtensions_Read_System_IO_FileStream_J2N_IO_ByteBuffer_System_Int64_">Read(FileStream, ByteBuffer, Int64)</a>
-extension method for <span class="xref">System.IO.FileStream</span>.</p>
+      <section><p>Reads bytes with the <a class="xref" href="Lucene.Net.Support.IO.FileStreamExtensions.html#Lucene_Net_Support_IO_FileStreamExtensions_Read_FileStream_ByteBuffer_System_Int64_">Read(FileStream, ByteBuffer, Int64)</a>
+extension method for <see cref="!:FileStream"></see>.</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Store.NoLockFactory.html">NoLockFactory</a></h4>
       <section><p>Use this <a class="xref" href="Lucene.Net.Store.LockFactory.html">LockFactory</a> to disable locking entirely.
@@ -491,7 +489,7 @@ not be cached (until the net bytes falls below 60 MB).</p>
 <p>
 <div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
       <h4><a class="xref" href="Lucene.Net.Store.OutputStreamDataOutput.html">OutputStreamDataOutput</a></h4>
-      <section><p>A <a class="xref" href="Lucene.Net.Store.DataOutput.html">DataOutput</a> wrapping a plain <span class="xref">System.IO.Stream</span>.</p>
+      <section><p>A <a class="xref" href="Lucene.Net.Store.DataOutput.html">DataOutput</a> wrapping a plain <see cref="!:Stream"></see>.</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Store.RAMDirectory.html">RAMDirectory</a></h4>
       <section><p>A memory-resident <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a> implementation.  Locking
@@ -537,19 +535,19 @@ want to read bytes or write bytes.</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Store.SimpleFSDirectory.html">SimpleFSDirectory</a></h4>
       <section><p>A straightforward implementation of <a class="xref" href="Lucene.Net.Store.FSDirectory.html">FSDirectory</a>
-using <span class="xref">System.IO.FileStream</span>.  However, this class has
+using <see cref="!:FileStream"></see>.  However, this class has
 poor concurrent performance (multiple threads will
 bottleneck) as it synchronizes when multiple threads
 read from the same file.  It&apos;s usually better to use
 <a class="xref" href="Lucene.Net.Store.NIOFSDirectory.html">NIOFSDirectory</a> or <a class="xref" href="Lucene.Net.Store.MMapDirectory.html">MMapDirectory</a> instead.</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Store.SimpleFSDirectory.SimpleFSIndexInput.html">SimpleFSDirectory.SimpleFSIndexInput</a></h4>
-      <section><p>Reads bytes with <span class="xref">System.IO.FileStream.Seek(System.Int64,System.IO.SeekOrigin)</span> followed by
-<span class="xref">System.IO.FileStream.Read(System.Byte[],System.Int32,System.Int32)</span>.</p>
+      <section><p>Reads bytes with <see cref="!:FileStream.Seek(long, SeekOrigin)"></see> followed by
+<see cref="!:FileStream.Read(byte[], int, int)"></see>.</p>
 </section>
       <h4><a class="xref" href="Lucene.Net.Store.SimpleFSLockFactory.html">SimpleFSLockFactory</a></h4>
       <section><p>Implements <a class="xref" href="Lucene.Net.Store.LockFactory.html">LockFactory</a> using 
-<span class="xref">System.IO.File.WriteAllText(System.String,System.String,System.Text.Encoding)</span> 
+<see cref="!:File.WriteAllText(string, string, Encoding)"></see> 
 (writes the file with UTF8 encoding and no byte order mark).</p>
 
 <p>Special care needs to be taken if you change the locking
@@ -603,7 +601,7 @@ NOTE: This was Context in Lucene</p>
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/apache/lucenenet/blob/docs-4.8.0-beta00007/src/Lucene.Net.TestFramework/Store/package.md/#L2" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00007/src/Lucene.Net/Store/package.md/#L2" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
