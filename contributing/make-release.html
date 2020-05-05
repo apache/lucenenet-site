@@ -1,0 +1,436 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Making a release of Lucene.Net | Apache Lucene.NET 4.8.0 </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Making a release of Lucene.Net | Apache Lucene.NET 4.8.0 ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../logo/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono">
+    <link rel="stylesheet" href="/styles/site.css">
+  
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="contributing/make-release">
+<h1 id="making-a-release-of-lucenenet">Making a release of Lucene.Net</h1>
+
+<div class="NOTE">
+<h5>Note</h5>
+<p>This is a project-specific procedure, based on the <a href="https://infra.apache.org/release-publishing.html">Apache Release Creation Process</a></p>
+</div>
+<h2 id="versioning-procedure-overview">Versioning Procedure Overview</h2>
+<h3 id="package-version">Package Version</h3>
+<p>The version number that is used in the build process is called the <em>Package Version</em>, which is the same version number used for the NuGet package. The assembly version, file version, and informational version are all derived from the Package Version during the build process. The Package Version uses the following rules.</p>
+<ul>
+<li><p>Since Lucene.NET is a port of a <a href="https://semver.org/">semantically versioned</a> component, our versioning scheme is to use the same version number as Lucene on production release (i.e. <code>4.8.0</code>). Any patches thereafter (breaking API change or not) will add a revision number (i.e <code>4.8.0.1</code>).</p>
+</li>
+<li><p>We are also using pre-release version numbers (i.e. <code>4.8.0-beta00001</code>) for all unstable versions up to the production release. When doing pre-releases, revision numbers are not supported.</p>
+</li>
+<li><p><strong>ONLY when changes are updated from a newer Lucene version to Lucene.NET</strong>, the Lucene.NET version number is updated to match the Lucene version (i.e. <code>4.8.0</code> &gt; <code>4.8.1</code> or <code>4.8.0</code> &gt; <code>5.10.0</code>).</p>
+</li>
+<li><p>Version numbers always progress in the following order</p>
+<ul>
+<li>Pre-Release (i.e. <code>4.8.0-beta00001</code>)</li>
+<li>Production Release (i.e. <code>4.8.0</code>)</li>
+<li>Production Release Patch N (i.e where N is 1, <code>4.8.0.1</code>, where N is 2, <code>4.8.0.2</code>, etc)</li>
+</ul>
+</li>
+<li><p>Version numbers correspond to GitHub milestones, so when releasing a milestone, the same version number should be used</p>
+</li>
+</ul>
+<h3 id="git-tag-version">Git Tag Version</h3>
+<p>For legacy reasons, tagging the Git repository to indicate a version uses a different version format, but it must include all of the elements of the Package Version, for example:</p>
+<pre><code class="lang-txt"># Pre-Release
+Lucene.Net_4_8_0_beta00001
+
+# Production Release
+Lucene.Net_4_8_0
+
+# Production Release Patch (breaking API changes included)
+Lucene.Net_4_8_0_1
+
+</code></pre>
+<h2 id="release-preparation">Release Preparation</h2>
+<ul>
+<li><p>Nominate a release manager (must be a Lucene.NET committer)</p>
+</li>
+<li><p>Review all GitHub issues associated with the release milestone. All issues should be resolved or closed.</p>
+</li>
+<li><p>Any issues that have been assigned to the release milestone that are still in progress should be moved to the next milestone. Any critical or blocker issues should be resolved on the <code>dev</code> mailing list. Discuss any issues that you are unsure of on the <code>dev</code> mailing list.</p>
+</li>
+</ul>
+<h2 id="steps-for-the-release-manager">Steps for the Release Manager</h2>
+<p>The following steps need only to be performed once.</p>
+<ul>
+<li><p>Install the <a href="https://www.oracle.com/java/technologies/javase-jre8-downloads.html">Java Runtime Environment</a></p>
+</li>
+<li><p>Install a subversion command line client, such as <a href="https://tortoisesvn.net/downloads.html">TortoiseSVN</a></p>
+</li>
+<li><p>Install <a href="https://www.gnupg.org/">GNU Privacy Guard</a></p>
+</li>
+<li><p><a href="https://infra.apache.org/release-signing.html#generate">Generate a code signing key</a> if you don't already have one</p>
+</li>
+<li><p>Make sure you have your PGP key entered into <a href="https://id.apache.org/">https://id.apache.org/</a>. Your KEYS will then be present in <a href="https://people.apache.org/keys/group/lucenenet.asc">https://people.apache.org/keys/group/lucenenet.asc</a>.</p>
+</li>
+<li><p>Make sure you have your PGP keys password.</p>
+</li>
+<li><p>Append your PGP key to the <code>KEYS</code> file in <a href="https://dist.apache.org/repos/dist/release">https://dist.apache.org/repos/dist/release</a>:</p>
+<pre><code class="lang-powershell">dotnet msbuild -t:AppendSignature -p:ApacheID=&lt;apacheId&gt;
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>You may be prompted for your password</p>
+</div>
+</li>
+</ul>
+<h2 id="release-steps">Release Steps</h2>
+<ul>
+<li><p>Prepare a GitHub Release. Review the <a href="https://github.com/apache/lucenenet/commits/master">master branch commit history</a>, and <a href="https://github.com/apache/lucenenet/releases/new">create a new <strong>DRAFT</strong> GitHub release</a> using the following template:</p>
+<pre><code class="lang-txt">&gt; This release contains &lt;any important changes that users should be aware of&gt;
+
+## Change Log
+
+### Breaking Changes
+* #&lt;GitHub Issue ID (optional)&gt; - &lt;A descriptive title (may need to add context or summarize)&gt;
+
+### Bugs
+* #&lt;GitHub Issue ID (optional)&gt; - &lt;A descriptive title (may need to add context or summarize)&gt;
+
+### Improvements
+* #&lt;GitHub Issue ID (optional)&gt; - &lt;A descriptive title (may need to add context or summarize)&gt;
+
+### New Features
+* #&lt;GitHub Issue ID (optional)&gt; - &lt;A descriptive title (may need to add context or summarize)&gt;
+</code></pre>
+</li>
+<li><p>Checkout the Lucene.NET master branch: <code>git clone https://github.com/apache/lucenenet.git</code></p>
+</li>
+<li><p>Add Missing License Headers</p>
+<ul>
+<li><p>Run <a href="https://creadur.apache.org/rat/">Apache Release Audit Tool</a>:</p>
+<pre><code class="lang-powershell">dotnet msbuild -t:AuditRelease
+</code></pre>
+</li>
+<li><p>Review and commit the changes to your local Git clone, adding exclusions to <code>.rat-excludes</code> and re-running as necessary</p>
+<ul>
+<li>Exclude files that already have license headers</li>
+<li>Exclude files that are automatically generated</li>
+<li>Exclude files that don't work properly with licence headers included</li>
+</ul>
+</li>
+<li><p>Push the changes to the remote <code>lucenenet</code> repository (<code>https://gitbox.apache.org/repos/asf/lucenenet.gif</code>)</p>
+<pre><code class="lang-powershell">git push &lt;remote&gt; master --tags
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>Execute a complete test locally (it can take up to an hour, but you may do the next step in parallel):</p>
+<pre><code class="lang-powershell">build -pv:&lt;packageVersion&gt; -t -mp:10
+</code></pre>
+</li>
+<li><p>Execute a complete test on a temporary Azure DevOps organization (it can take up to an hour) (see <a href="https://github.com/apache/lucenenet#azure-devops">build instructions on README.md</a>).</p>
+</li>
+</ul>
+<h2 id="successful-release-preparation">Successful Release Preparation</h2>
+<h3 id="perform-the-release-build">Perform the Release Build</h3>
+<ul>
+<li><p>Login to the <a href="https://dev.azure.com/lucene-net/Lucene.NET/_build?definitionId=3&amp;_a=summary">Lucene.NET build pipeline</a> on Azure DevOps</p>
+</li>
+<li><p>Click the <code>Run pipeline</code> button</p>
+</li>
+<li><p>Ensure the <code>master</code> branch is selected</p>
+</li>
+<li><p>Expand <code>Variables</code></p>
+</li>
+<li><p>Update the <code>PackageVersion</code> variable to the release version number (i.e. <code>4.8.0-beta00008</code>)</p>
+</li>
+<li><p>Click the back arrow to return to the main view</p>
+</li>
+<li><p>Click the <code>Run</code> button to begin the build (it will take about an hour)</p>
+</li>
+<li><p>On your local Git clone, check out the SVN distribution repositories</p>
+<pre><code class="lang-powershell">dotnet msbuild -t:CheckoutRelease
+</code></pre>
+</li>
+<li><p>Upon successful Azure DevOps build, download the <code>release</code> build artifact, which contains the release binaries and copy both the <code>.src.zip</code> and <code>.bin.zip</code> files to a new folder named <code>&lt;repo root&gt;/svn-dev/&lt;packageVersion&gt;/</code></p>
+</li>
+<li><p>On your local Git clone, tag the repository using the info in <code>RELEASE-TODO.txt</code></p>
+<ul>
+<li><code>git log</code></li>
+<li>Verify the HEAD commit hash of the local repo matches that in <code>RELEASE-TODO.txt</code></li>
+<li><code>git tag -a &lt;tag from RELEASE-TODO.txt&gt; -m &quot;&lt;tag from RELEASE-TODO.txt&gt;&quot;</code></li>
+<li><code>git push &lt;remote-name (defaults to origin)&gt; master --tags</code></li>
+</ul>
+</li>
+<li><p><a href="https://infra.apache.org/release-signing.html">Sign the <code>release</code> artifacts</a> using GnuPG</p>
+<pre><code class="lang-powershell">dotnet msbuild -t:SignReleaseCandidate -p:PackageVersion=&lt;packageVersion&gt;
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>You may be prompted for your password</p>
+</div>
+</li>
+<li><p>Check signature of generated artifacts (the <code>SignReleaseCandidate</code> target above runs the commands)</p>
+</li>
+</ul>
+<h3 id="check-the-release-artifacts">Check the Release Artifacts</h3>
+<p>Perform basic checks against the release binary:</p>
+<ul>
+<li><p>Check presence and appropriateness of LICENSE, NOTICE, and README files.</p>
+</li>
+<li><p>Check the <code>nupkg</code> files to ensure they can be referenced in Visual Studio.</p>
+</li>
+</ul>
+<h3 id="add-release-artifacts-to-the-svn-dev-distribution-repository">Add Release Artifacts to the SVN <code>dev</code> Distribution Repository</h3>
+<pre><code class="lang-powershell"># Note the command copies the &lt;repo root&gt;/svn-release/KEYS file to &lt;repo-root&gt;/svn-dev/KEYS
+# and overwrites any local changes to it
+
+dotnet msbuild -t:CommitReleaseCandidate -p:PackageVersion=&lt;packageVersion&gt;
+</code></pre>
+<h3 id="create-a-vote-thread">Create a VOTE Thread</h3>
+<p>Notify the developer mailing list of a new version vote. Be sure to replace all values in [] with the appropriate values. Use the <a href="https://www.timeanddate.com/countdown/create">Countdown Timer Tool</a> to create a timer to show exactly when the vote ends.</p>
+<pre><code class="lang-txt">To: dev@lucenenet.apache.org
+Message Subject: [VOTE] Apache Lucene.NET [version]
+
+------------------------------------------------------
+
+I have posted a new release for the Apache Lucene.NET [version] release and it is ready for testing.
+
+The binaries can be downloaded from:
+https://dist.apache.org/repos/dist/dev/lucenenet
+
+The release was made from the Apache Lucene.NET [version] tag at:
+https://github.com/apache/lucenenet/tree/[tag]
+
+The release notes are listed at:
+https://github.com/apache/lucenenet/releases/tag/[tag-url]&quot;
+
+The release was made using the Lucene.NET release process, documented on the website:
+https://lucenenet.apache.org/release.html &lt;!-- TODO: Update URL --&gt;
+
+Please vote on releasing these packages as Apache Lucene.NET [version]. The vote is open for at least the next 72 hours, i.e. midnight UTC on [YYYY-MM-DD]
+http://www.timeanddate.com/counters/customcounter.html?year=[YYYY]&amp;month=[MM]&amp;day=[DD]
+
+
+
+Only votes from Lucene.NET PMC are binding, but everyone is welcome to check the release candidate and vote.
+The vote passes if at least three binding +1 votes are cast.
+
+[ ] +1 Release the packages as Apache Lucene.NET [VERSION]
+[ ] -1 Do not release the packages because...
+
+</code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Only people with permissions on GitHub will be able to see the draft release notes. <a href="https://people.apache.org/phonebook.html?ctte=lucenenet">PMC members</a> and <a href="https://people.apache.org/phonebook.html?unix=lucenenet">committers</a> can have permissions, but only if they set them up themselves.</p>
+</div>
+<h2 id="after-a-successful-vote">After a Successful Vote</h2>
+<p>The vote is successful if at least 3 +1 votes are received from <a href="https://people.apache.org/phonebook.html?ctte=lucenenet">Lucene.NET PMC members</a> after a minimum of 72 hours of sending the vote email. Acknowledge the voting results on the mailing list in the VOTE thread.</p>
+<pre><code class="lang-txt">To: dev@lucenenet.apache.org
+Message Subject: [RESULT] [VOTE] Apache Lucene.NET [version]
+
+------------------------------------------------------
+
+The vote has now closed. The results are:
+
+Binding Votes:
+
++1 [TOTAL BINDING +1 VOTES]
+-1 [TOTAL BINDING -1 VOTES]
+
+The vote is ***successful/not successful***
+</code></pre>
+<div class="TIP">
+<h5>Tip</h5>
+<p>Due to <a href="https://issues.apache.org/jira/browse/INFRA-20098">spam issues</a> you may want to bcc each person who voted on the RESULT email to ensure they receive it.</p>
+</div>
+<h3 id="release-to-nugetorg">Release to NuGet.org</h3>
+<ul>
+<li><p>Login to the <a href="https://dev.azure.com/lucene-net/Lucene.NET/_release?_a=releases&amp;view=mine&amp;definitionId=1">Lucene.NET release pipeline</a> on Azure DevOps</p>
+</li>
+<li><p>Click the release that corresponds to the version that is being released</p>
+</li>
+<li><p>The <code>Release [VOTE]</code> step should be waiting for manual intervention, click the <code>Resume</code> button</p>
+</li>
+<li><p>Enter the result of the vote in the following format: <code>Binding Votes +1: [3] 0: [0] -1: [0] Non Binding Votes +1: [3] 0: [0] -1: [0]</code>, updating the values within <code>[ ]</code> appropriately</p>
+</li>
+<li><p>Upon clicking <code>Resume</code> again the release will finish, submitting the NuGet packages to NuGet.org</p>
+</li>
+</ul>
+<h3 id="release-binaries-to-svn">Release Binaries to SVN</h3>
+<p>Commit the distribution via SVN to <a href="https://dist.apache.org/repos/dist/release">https://dist.apache.org/repos/dist/release</a>:</p>
+<pre><code class="lang-powershell">dotnet msbuild -t:CommitRelease -p:PackageVersion=&lt;packageVersion&gt;
+</code></pre>
+<h3 id="archive-old-releases">Archive Old Release(s)</h3>
+<p>To reduce the load on the ASF mirrors, projects are required to delete old releases (see <a href="http://www.apache.org/legal/release-policy.html#when-to-archive">http://www.apache.org/legal/release-policy.html#when-to-archive</a>).</p>
+<p>Remove the old releases from SVN under <a href="https://dist.apache.org/repos/dist/release/lucenenet/">https://dist.apache.org/repos/dist/release/lucenenet/</a>.</p>
+<h3 id="update-website-with-new-release">Update Website with new release</h3>
+<ul>
+<li>Update the <code>/websites/site/lucenetemplate/doap_Lucene_Net.rdf</code> file to reflect the new version and ensure other links/info in the file are correct.
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Only update the version if it's a new stable version.</p>
+</div>
+</li>
+<li>Create a new release page in the <code>/websites/site/download</code>, in most cases it's easiest to just copy the previous release page.
+<ul>
+<li>Ensure the <code>uid</code> in the header is correct</li>
+<li>Update all headers, status, release date to be correct</li>
+<li>Ensure supported frameworks and packages section is accurate for the new release</li>
+</ul>
+</li>
+<li>Add the new release page to the <code>/websites/site/download/toc.yml</code> file</li>
+<li>Follow the instructions on how to <a href="https://lucenenet.apache.org/contributing/documentation.html#website">build, test &amp; publish the website</a> and run/test the website locally.</li>
+<li>Commit changes and <a href="https://lucenenet.apache.org/contributing/documentation.html#website">publish the website</a>.</li>
+</ul>
+<h3 id="update-the-api-documentation-with-new-release">Update the API Documentation with new release</h3>
+<ul>
+<li>Create and push a new Git branch from the relese tag called <code>docs/[version]</code>, for example: <code>docs/4.8.0-beta00008</code>.</li>
+<li>Update the DocFx config file <code>/websites/apidocs/docfx.json</code> and change the <code>globalMetadata</code> section:
+<ul>
+<li><code>_appTitle</code> should be: &quot;Apache Lucene.NET [Version] Documentation&quot;</li>
+<li>ensure the <code>_appFooter</code> has the correct copyright year</li>
+<li>the <code>_gitContribute.branch</code> should be the name of the branch just created</li>
+</ul>
+</li>
+<li>Follow the instructions on how to <a href="https://lucenenet.apache.org/contributing/documentation.html#api-docs">build, test and publish the docs</a> and run/test the docs locally. When testing locally ensure that the &quot;Improve this doc&quot; button on each documentation page links to the newly created branch on GitHub.</li>
+<li>Commit and push any changes done during the docs building process to the new branch.</li>
+<li>Merge the new branch to the <code>master</code> branch, or create a Pull Request to target the <code>master</code> branch if you want to review changes that way or want another team member to review changes.</li>
+<li><a href="https://lucenenet.apache.org/contributing/documentation.html#api-docs">Publish the docs</a>.</li>
+</ul>
+<h3 id="post-release-steps">Post-Release Steps</h3>
+<ul>
+<li><p>Log the new version at <a href="https://reporter.apache.org/addrelease.html?lucenenet">https://reporter.apache.org/addrelease.html?lucenenet</a></p>
+</li>
+<li><p>Publish the Draft <a href="https://github.com/apache/lucenenet/releases">GitHub Release</a> that was <a href="#release-steps">created earlier</a>, updating the tag if necessary</p>
+</li>
+<li><p>Send announcement email</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Only include announce@apache.org if it is a stable release version</p>
+</div>
+<pre><code class="lang-txt">To: announce@apache.org; dev@lucenenet.apache.org; user@lucenenet.apache.org
+Message Subject: [ANNOUNCE] Apache Lucene.NET [version] Released
+
+------------------------------------------------------
+
+The Apache Lucene.NET team is pleased to announce the release of version [version] of Apache Lucene.NET. Apache Lucene.NET is a .NET full-text search engine framework, a C# port of the popular Apache Lucene project. Apache Lucene.NET is not a complete application, but rather a code library and API that can easily be used to add search capabilities to applications.
+
+The Lucene.NET [version] binary and source distributions are available for download from our download page: 
+https://lucenenet.apache.org/download/download.html
+
+The Lucene.NET library is distributed by NuGet.org as well. See the README.md page for more details:
+https://github.com/apache/lucenenet#all-packages-1
+
+Changes in this version:
+https://github.com/apache/lucenenet/releases/tag/&lt;tag&gt;
+
+The Apache Lucene.NET Team
+
+</code></pre>
+</li>
+</ul>
+<h2 id="after-an-unsuccessful-vote">After an Unsuccessful Vote</h2>
+<p>The release vote may fail due to an issue discovered in the release candidate. If the vote fails the release should be canceled by:</p>
+<ul>
+<li>Sending an email to <a href="mailto:dev@lucenenet.apache.org">dev@lucenenet.apache.org</a> on the VOTE thread notifying of the vote’s cancellation.</li>
+</ul>
+<p>A new release candidate can now be prepared. When complete, a new VOTE thread can be started as described in the steps above.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/master/websites/site/contributing/make-release.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
