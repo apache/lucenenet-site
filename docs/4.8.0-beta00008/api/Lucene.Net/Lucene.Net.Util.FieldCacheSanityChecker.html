@@ -1,0 +1,397 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class FieldCacheSanityChecker
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class FieldCacheSanityChecker
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Util.FieldCacheSanityChecker">
+  
+  
+  <h1 id="Lucene_Net_Util_FieldCacheSanityChecker" data-uid="Lucene.Net.Util.FieldCacheSanityChecker" class="text-break">Class FieldCacheSanityChecker
+  </h1>
+  <div class="markdown level0 summary"><p><p>
+Provides methods for sanity checking that entries in the FieldCache
+are not wasteful or inconsistent.
+</p>
+<p>
+Lucene 2.9 Introduced numerous enhancements into how the FieldCache
+is used by the low levels of Lucene searching (for Sorting and
+ValueSourceQueries) to improve both the speed for Sorting, as well
+as reopening of IndexReaders.  But these changes have shifted the
+usage of FieldCache from &quot;top level&quot; IndexReaders (frequently a
+MultiReader or DirectoryReader) down to the leaf level SegmentReaders.
+As a result, existing applications that directly access the FieldCache
+may find RAM usage increase significantly when upgrading to 2.9 or
+Later.  This class provides an API for these applications (or their
+Unit tests) to check at run time if the FieldCache contains &quot;insane&quot;
+usages of the FieldCache.
+</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div><p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">FieldCacheSanityChecker</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="../Lucene.Net.Benchmarks/Lucene.Net.Util.html">Lucene.Net.Util</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Util_FieldCacheSanityChecker_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class FieldCacheSanityChecker</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_FieldCacheSanityChecker__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.FieldCacheSanityChecker.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Util/FieldCacheSanityChecker.cs/#L58">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_FieldCacheSanityChecker__ctor_" data-uid="Lucene.Net.Util.FieldCacheSanityChecker.#ctor*"></a>
+  <h4 id="Lucene_Net_Util_FieldCacheSanityChecker__ctor" data-uid="Lucene.Net.Util.FieldCacheSanityChecker.#ctor">FieldCacheSanityChecker()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FieldCacheSanityChecker()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_FieldCacheSanityChecker__ctor_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.FieldCacheSanityChecker.%23ctor(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Util/FieldCacheSanityChecker.cs/#L65">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_FieldCacheSanityChecker__ctor_" data-uid="Lucene.Net.Util.FieldCacheSanityChecker.#ctor*"></a>
+  <h4 id="Lucene_Net_Util_FieldCacheSanityChecker__ctor_System_Boolean_" data-uid="Lucene.Net.Util.FieldCacheSanityChecker.#ctor(System.Boolean)">FieldCacheSanityChecker(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FieldCacheSanityChecker(bool estimateRam)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">estimateRam</span></td>
+        <td><p>If set, estimate size for all <a class="xref" href="Lucene.Net.Search.FieldCache.CacheEntry.html">FieldCache.CacheEntry</a> objects will be calculated.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_FieldCacheSanityChecker_Check_Lucene_Net_Search_FieldCache_CacheEntry___.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.FieldCacheSanityChecker.Check(Lucene.Net.Search.FieldCache.CacheEntry%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Util/FieldCacheSanityChecker.cs/#L104">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_FieldCacheSanityChecker_Check_" data-uid="Lucene.Net.Util.FieldCacheSanityChecker.Check*"></a>
+  <h4 id="Lucene_Net_Util_FieldCacheSanityChecker_Check_Lucene_Net_Search_FieldCache_CacheEntry___" data-uid="Lucene.Net.Util.FieldCacheSanityChecker.Check(Lucene.Net.Search.FieldCache.CacheEntry[])">Check(FieldCache.CacheEntry[])</h4>
+  <div class="markdown level1 summary"><p>Tests a CacheEntry[] for indication of &quot;insane&quot; cache usage.
+<p>
+<strong>NOTE:</strong>FieldCache CreationPlaceholder objects are ignored.
+(:TODO: is this a bad idea? are we masking a real problem?)
+</p></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FieldCacheSanityChecker.Insanity[] Check(params FieldCache.CacheEntry[] cacheEntries)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCache.CacheEntry.html">FieldCache.CacheEntry</a>[]</td>
+        <td><span class="parametername">cacheEntries</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.FieldCacheSanityChecker.Insanity.html">FieldCacheSanityChecker.Insanity</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_FieldCacheSanityChecker_CheckSanity_Lucene_Net_Search_FieldCache_CacheEntry___.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.FieldCacheSanityChecker.CheckSanity(Lucene.Net.Search.FieldCache.CacheEntry%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Util/FieldCacheSanityChecker.cs/#L91">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_FieldCacheSanityChecker_CheckSanity_" data-uid="Lucene.Net.Util.FieldCacheSanityChecker.CheckSanity*"></a>
+  <h4 id="Lucene_Net_Util_FieldCacheSanityChecker_CheckSanity_Lucene_Net_Search_FieldCache_CacheEntry___" data-uid="Lucene.Net.Util.FieldCacheSanityChecker.CheckSanity(Lucene.Net.Search.FieldCache.CacheEntry[])">CheckSanity(FieldCache.CacheEntry[])</h4>
+  <div class="markdown level1 summary"><p>Quick and dirty convenience method that instantiates an instance with
+&quot;good defaults&quot; and uses it to test the <a class="xref" href="Lucene.Net.Search.FieldCache.CacheEntry.html">FieldCache.CacheEntry</a>s </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheSanityChecker.Insanity[] CheckSanity(params FieldCache.CacheEntry[] cacheEntries)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCache.CacheEntry.html">FieldCache.CacheEntry</a>[]</td>
+        <td><span class="parametername">cacheEntries</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.FieldCacheSanityChecker.Insanity.html">FieldCacheSanityChecker.Insanity</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Util_FieldCacheSanityChecker_CheckSanity_Lucene_Net_Search_FieldCache_CacheEntry____seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Util.FieldCacheSanityChecker.html#Lucene_Net_Util_FieldCacheSanityChecker_Check_Lucene_Net_Search_FieldCache_CacheEntry___">Check(FieldCache.CacheEntry[])</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_FieldCacheSanityChecker_CheckSanity_Lucene_Net_Search_IFieldCache_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.FieldCacheSanityChecker.CheckSanity(Lucene.Net.Search.IFieldCache)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Util/FieldCacheSanityChecker.cs/#L82">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_FieldCacheSanityChecker_CheckSanity_" data-uid="Lucene.Net.Util.FieldCacheSanityChecker.CheckSanity*"></a>
+  <h4 id="Lucene_Net_Util_FieldCacheSanityChecker_CheckSanity_Lucene_Net_Search_IFieldCache_" data-uid="Lucene.Net.Util.FieldCacheSanityChecker.CheckSanity(Lucene.Net.Search.IFieldCache)">CheckSanity(IFieldCache)</h4>
+  <div class="markdown level1 summary"><p>Quick and dirty convenience method </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheSanityChecker.Insanity[] CheckSanity(IFieldCache cache)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a></td>
+        <td><span class="parametername">cache</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.FieldCacheSanityChecker.Insanity.html">FieldCacheSanityChecker.Insanity</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Util_FieldCacheSanityChecker_CheckSanity_Lucene_Net_Search_IFieldCache__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Util.FieldCacheSanityChecker.html#Lucene_Net_Util_FieldCacheSanityChecker_Check_Lucene_Net_Search_FieldCache_CacheEntry___">Check(FieldCache.CacheEntry[])</a></div>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a></div>
+      <div><a class="xref" href="Lucene.Net.Util.FieldCacheSanityChecker.Insanity.html">FieldCacheSanityChecker.Insanity</a></div>
+      <div><a class="xref" href="Lucene.Net.Util.FieldCacheSanityChecker.InsanityType.html">FieldCacheSanityChecker.InsanityType</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_FieldCacheSanityChecker.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.FieldCacheSanityChecker%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Util/FieldCacheSanityChecker.cs/#L54" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

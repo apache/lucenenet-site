@@ -1,0 +1,378 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Lucene.Net.Analysis.Compound
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Lucene.Net.Analysis.Compound
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Analysis.Compound">
+  
+  <h1 id="Lucene_Net_Analysis_Compound" data-uid="Lucene.Net.Analysis.Compound" class="text-break">Namespace Lucene.Net.Analysis.Compound
+  </h1>
+  <div class="markdown level0 summary"><!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<p>A filter that decomposes compound words you find in many Germanic
+languages into the word parts. This example shows what it does:
+<table border="1">
+    <tr>
+        <th>Input token stream</th>
+    </tr>
+    <tr>
+        <td>Rindfleischüberwachungsgesetz Drahtschere abba</td>
+    </tr>
+</table></p>
+<table border="1">
+    <tr>
+        <th>Output token stream</th>
+    </tr>
+    <tr>
+        <td>(Rindfleischüberwachungsgesetz,0,29)</td>
+    </tr>
+    <tr>
+        <td>(Rind,0,4,posIncr=0)</td>
+    </tr>
+    <tr>
+        <td>(fleisch,4,11,posIncr=0)</td>
+    </tr>
+    <tr>
+        <td>(überwachung,11,22,posIncr=0)</td>
+    </tr>
+    <tr>
+        <td>(gesetz,23,29,posIncr=0)</td>
+    </tr>
+    <tr>
+        <td>(Drahtschere,30,41)</td>
+    </tr>
+    <tr>
+        <td>(Draht,30,35,posIncr=0)</td>
+    </tr>
+    <tr>
+        <td>(schere,35,41,posIncr=0)</td>
+    </tr>
+    <tr>
+        <td>(abba,42,46)</td>
+    </tr>
+</table>
+
+<p>The input token is always preserved and the filters do not alter the case of word parts. There are two variants of the
+filter available:</p>
+<ul>
+<li><p><em>HyphenationCompoundWordTokenFilter</em>: it uses a
+hyphenation grammar based approach to find potential word parts of a
+given word.</p>
+</li>
+<li><p><em>DictionaryCompoundWordTokenFilter</em>: it uses a
+brute-force dictionary-only based approach to find the word parts of a given
+word.</p>
+</li>
+</ul>
+<h3 id="compound-word-token-filters">Compound word token filters</h3>
+<h4 id="hyphenationcompoundwordtokenfilter">HyphenationCompoundWordTokenFilter</h4>
+<p>The <a class="xref" href="Lucene.Net.Analysis.Compound.HyphenationCompoundWordTokenFilter.html">
+HyphenationCompoundWordTokenFilter</a> uses hyphenation grammars to find
+potential subwords that a worth to check against the dictionary. It can be used
+without a dictionary as well but then produces a lot of &quot;nonword&quot; tokens.
+The quality of the output tokens is directly connected to the quality of the
+grammar file you use. For languages like German they are quite good.</p>
+<h5 id="grammar-file">Grammar file</h5>
+<p>Unfortunately we cannot bundle the hyphenation grammar files with Lucene
+because they do not use an ASF compatible license (they use the LaTeX
+Project Public License instead). You can find the XML based grammar
+files at the
+<a href="http://offo.sourceforge.net/hyphenation/index.html">Objects
+For Formatting Objects</a>
+(OFFO) Sourceforge project (direct link to download the pattern files:
+<a href="http://downloads.sourceforge.net/offo/offo-hyphenation.zip">http://downloads.sourceforge.net/offo/offo-hyphenation.zip</a>
+). The files you need are in the subfolder
+<em>offo-hyphenation/hyph/</em>
+.</p>
+<p>Credits for the hyphenation code go to the
+<a href="http://xmlgraphics.apache.org/fop/">Apache FOP project</a>
+.</p>
+<h4 id="dictionarycompoundwordtokenfilter">DictionaryCompoundWordTokenFilter</h4>
+<p>The <a class="xref" href="Lucene.Net.Analysis.Compound.DictionaryCompoundWordTokenFilter.html">
+DictionaryCompoundWordTokenFilter</a> uses a dictionary-only approach to
+find subwords in a compound word. It is much slower than the one that
+uses the hyphenation grammars. You can use it as a first start to
+see if your dictionary is good or not because it is much simpler in design.</p>
+<h3 id="dictionary">Dictionary</h3>
+<p>The output quality of both token filters is directly connected to the
+quality of the dictionary you use. They are language dependent of course.
+You always should use a dictionary
+that fits to the text you want to index. If you index medical text for
+example then you should use a dictionary that contains medical words.
+A good start for general text are the dictionaries you find at the
+<a href="http://wiki.services.openoffice.org/wiki/Dictionaries">OpenOffice
+dictionaries</a>
+Wiki.</p>
+<h3 id="which-variant-should-i-use">Which variant should I use?</h3>
+<p>This decision matrix should help you:
+<table border="1">
+    <tr>
+        <th>Token filter</th>
+        <th>Output quality</th>
+        <th>Performance</th>
+    </tr>
+    <tr>
+        <td>HyphenationCompoundWordTokenFilter</td>
+        <td>good if grammar file is good – acceptable otherwise</td>
+        <td>fast</td>
+    </tr>
+    <tr>
+        <td>DictionaryCompoundWordTokenFilter</td>
+        <td>good</td>
+        <td>slow</td>
+    </tr>
+</table></p>
+<h3 id="examples">Examples</h3>
+<pre><code>  public void testHyphenationCompoundWordsDE() throws Exception {
+    String[] dict = { &quot;Rind&quot;, &quot;Fleisch&quot;, &quot;Draht&quot;, &quot;Schere&quot;, &quot;Gesetz&quot;,
+        &quot;Aufgabe&quot;, &quot;Überwachung&quot; };
+
+Reader reader = new FileReader(&quot;de_DR.xml&quot;);
+
+HyphenationTree hyphenator = HyphenationCompoundWordTokenFilter
+        .getHyphenationTree(reader);
+
+HyphenationCompoundWordTokenFilter tf = new HyphenationCompoundWordTokenFilter(
+        new WhitespaceTokenizer(new StringReader(
+            &quot;Rindfleischüberwachungsgesetz Drahtschere abba&quot;)), hyphenator,
+        dict, CompoundWordTokenFilterBase.DEFAULT_MIN_WORD_SIZE,
+        CompoundWordTokenFilterBase.DEFAULT_MIN_SUBWORD_SIZE,
+        CompoundWordTokenFilterBase.DEFAULT_MAX_SUBWORD_SIZE, false);
+
+    CharTermAttribute t = tf.addAttribute(CharTermAttribute.class);
+    while (tf.incrementToken()) {
+       System.out.println(t);
+    }
+  }
+</code></pre><p>  public void testHyphenationCompoundWordsWithoutDictionaryDE() throws Exception {
+        Reader reader = new FileReader(&quot;de_DR.xml&quot;);</p>
+<pre><code>HyphenationTree hyphenator = HyphenationCompoundWordTokenFilter
+        .getHyphenationTree(reader);
+
+HyphenationCompoundWordTokenFilter tf = new HyphenationCompoundWordTokenFilter(
+        new WhitespaceTokenizer(new StringReader(
+            &quot;Rindfleischüberwachungsgesetz Drahtschere abba&quot;)), hyphenator);
+
+    CharTermAttribute t = tf.addAttribute(CharTermAttribute.class);
+    while (tf.incrementToken()) {
+       System.out.println(t);
+    }
+  }
+
+  public void testDumbCompoundWordsSE() throws Exception {
+    String[] dict = { &quot;Bil&quot;, &quot;Dörr&quot;, &quot;Motor&quot;, &quot;Tak&quot;, &quot;Borr&quot;, &quot;Slag&quot;, &quot;Hammar&quot;,
+        &quot;Pelar&quot;, &quot;Glas&quot;, &quot;Ögon&quot;, &quot;Fodral&quot;, &quot;Bas&quot;, &quot;Fiol&quot;, &quot;Makare&quot;, &quot;Gesäll&quot;,
+        &quot;Sko&quot;, &quot;Vind&quot;, &quot;Rute&quot;, &quot;Torkare&quot;, &quot;Blad&quot; };
+
+DictionaryCompoundWordTokenFilter tf = new DictionaryCompoundWordTokenFilter(
+        new WhitespaceTokenizer(
+            new StringReader(
+                &quot;Bildörr Bilmotor Biltak Slagborr Hammarborr Pelarborr Glasögonfodral Basfiolsfodral Basfiolsfodralmakaregesäll Skomakare Vindrutetorkare Vindrutetorkarblad abba&quot;)),
+        dict);
+    CharTermAttribute t = tf.addAttribute(CharTermAttribute.class);
+    while (tf.incrementToken()) {
+       System.out.println(t);
+    }
+  }
+</code></pre></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Compound.CompoundWordTokenFilterBase.html">CompoundWordTokenFilterBase</a></h4>
+      <section><p>Base class for decomposition token filters.
+<p>
+You must specify the required <a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a> compatibility when creating
+<a class="xref" href="Lucene.Net.Analysis.Compound.CompoundWordTokenFilterBase.html">CompoundWordTokenFilterBase</a>:
+<ul><li>As of 3.1, CompoundWordTokenFilterBase correctly handles Unicode 4.0
+    supplementary characters in strings and char arrays provided as compound word
+    dictionaries.</li><li>As of 4.4, <a class="xref" href="Lucene.Net.Analysis.Compound.CompoundWordTokenFilterBase.html">CompoundWordTokenFilterBase</a> doesn&apos;t update offsets.</li></ul></p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Compound.CompoundWordTokenFilterBase.CompoundToken.html">CompoundWordTokenFilterBase.CompoundToken</a></h4>
+      <section><p>Helper class to hold decompounded token information</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Compound.DictionaryCompoundWordTokenFilter.html">DictionaryCompoundWordTokenFilter</a></h4>
+      <section><p>A <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a> that decomposes compound words found in many Germanic languages.
+<p>
+&quot;Donaudampfschiff&quot; becomes Donau, dampf, schiff so that you can find
+&quot;Donaudampfschiff&quot; even when you only enter &quot;schiff&quot;. 
+ It uses a brute-force algorithm to achieve this.
+</p>
+<p>
+You must specify the required <a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a> compatibility when creating
+<a class="xref" href="Lucene.Net.Analysis.Compound.CompoundWordTokenFilterBase.html">CompoundWordTokenFilterBase</a>:
+<ul><li>As of 3.1, CompoundWordTokenFilterBase correctly handles Unicode 4.0
+    supplementary characters in strings and char arrays provided as compound word
+    dictionaries.</li></ul>
+</p></p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Compound.DictionaryCompoundWordTokenFilterFactory.html">DictionaryCompoundWordTokenFilterFactory</a></h4>
+      <section><p>Factory for <a class="xref" href="Lucene.Net.Analysis.Compound.DictionaryCompoundWordTokenFilter.html">DictionaryCompoundWordTokenFilter</a>. </p>
+<pre><code>&lt;fieldType name=&quot;text_dictcomp&quot; class=&quot;solr.TextField&quot; positionIncrementGap=&quot;100&quot;>
+  &lt;analyzer>
+    &lt;tokenizer class=&quot;solr.WhitespaceTokenizerFactory&quot;/>
+    &lt;filter class=&quot;solr.DictionaryCompoundWordTokenFilterFactory&quot; dictionary=&quot;dictionary.txt&quot;
+        minWordSize=&quot;5&quot; minSubwordSize=&quot;2&quot; maxSubwordSize=&quot;15&quot; onlyLongestMatch=&quot;true&quot;/>
+  &lt;/analyzer>
+&lt;/fieldType></code></pre>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Compound.HyphenationCompoundWordTokenFilter.html">HyphenationCompoundWordTokenFilter</a></h4>
+      <section><p>A <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a> that decomposes compound words found in many Germanic languages.
+<p>
+&quot;Donaudampfschiff&quot; becomes Donau, dampf, schiff so that you can find
+&quot;Donaudampfschiff&quot; even when you only enter &quot;schiff&quot;. It uses a hyphenation
+grammar and a word dictionary to achieve this.
+</p>
+<p>
+You must specify the required <a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a> compatibility when creating
+<a class="xref" href="Lucene.Net.Analysis.Compound.CompoundWordTokenFilterBase.html">CompoundWordTokenFilterBase</a>:
+<ul><li>As of 3.1, CompoundWordTokenFilterBase correctly handles Unicode 4.0
+    supplementary characters in strings and char arrays provided as compound word
+    dictionaries.</li></ul>
+</p></p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Compound.HyphenationCompoundWordTokenFilterFactory.html">HyphenationCompoundWordTokenFilterFactory</a></h4>
+      <section><p>Factory for <a class="xref" href="Lucene.Net.Analysis.Compound.HyphenationCompoundWordTokenFilter.html">HyphenationCompoundWordTokenFilter</a>.
+<p>
+This factory accepts the following parameters:
+<ul><li><pre><code>hyphenator</code></pre> (mandatory): path to the FOP xml hyphenation pattern. 
+    See <a href="http://offo.sourceforge.net/hyphenation/">http://offo.sourceforge.net/hyphenation/</a>.</li><li><pre><code>encoding</code></pre> (optional): encoding of the xml hyphenation file. defaults to UTF-8.</li><li><pre><code>dictionary</code></pre> (optional): dictionary of words. defaults to no dictionary.</li><li><pre><code>minWordSize</code></pre> (optional): minimal word length that gets decomposed. defaults to 5.</li><li><pre><code>minSubwordSize</code></pre> (optional): minimum length of subwords. defaults to 2.</li><li><pre><code>maxSubwordSize</code></pre> (optional): maximum length of subwords. defaults to 15.</li><li><pre><code>onlyLongestMatch</code></pre> (optional): if true, adds only the longest matching subword 
+    to the stream. defaults to false.</li></ul>
+<p>
+<pre><code>&lt;fieldType name=&quot;text_hyphncomp&quot; class=&quot;solr.TextField&quot; positionIncrementGap=&quot;100&quot;>
+  &lt;analyzer>
+    &lt;tokenizer class=&quot;solr.WhitespaceTokenizerFactory&quot;/>
+    &lt;filter class=&quot;solr.HyphenationCompoundWordTokenFilterFactory&quot; hyphenator=&quot;hyphenator.xml&quot; encoding=&quot;UTF-8&quot;
+        dictionary=&quot;dictionary.txt&quot; minWordSize=&quot;5&quot; minSubwordSize=&quot;2&quot; maxSubwordSize=&quot;15&quot; onlyLongestMatch=&quot;false&quot;/>
+  &lt;/analyzer>
+&lt;/fieldType></code></pre>
+<p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00008/src/Lucene.Net.Analysis.Common/Analysis/Compound/package.md/#L2" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

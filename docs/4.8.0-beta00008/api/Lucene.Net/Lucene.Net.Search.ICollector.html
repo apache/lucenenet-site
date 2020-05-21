@@ -1,0 +1,396 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Interface ICollector
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Interface ICollector
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.ICollector">
+  
+  
+  <h1 id="Lucene_Net_Search_ICollector" data-uid="Lucene.Net.Search.ICollector" class="text-break">Interface ICollector
+  </h1>
+  <div class="markdown level0 summary"><p>Expert: Collectors are primarily meant to be used to
+gather raw results from a search, and implement sorting
+or custom result filtering, collation, etc. </p>
+
+<p>Lucene&apos;s core collectors are derived from Collector.
+Likely your application can use one of these classes, or
+subclass <a class="xref" href="Lucene.Net.Search.TopDocsCollector-1.html">TopDocsCollector&lt;T&gt;</a>, instead of
+implementing <a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> directly:
+
+<ul><li><a class="xref" href="Lucene.Net.Search.TopDocsCollector-1.html">TopDocsCollector&lt;T&gt;</a> is an abstract base class
+  that assumes you will retrieve the top N docs,
+  according to some criteria, after collection is
+  done.  </li><li><a class="xref" href="Lucene.Net.Search.TopScoreDocCollector.html">TopScoreDocCollector</a> is a concrete subclass
+<a class="xref" href="Lucene.Net.Search.TopDocsCollector-1.html">TopDocsCollector&lt;T&gt;</a> and sorts according to score +
+docID.  This is used internally by the 
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> search methods that do not take an
+explicit <a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a>. It is likely the most frequently
+used collector.</li><li><a class="xref" href="Lucene.Net.Search.TopFieldCollector.html">TopFieldCollector</a> subclasses 
+<a class="xref" href="Lucene.Net.Search.TopDocsCollector-1.html">TopDocsCollector&lt;T&gt;</a> and sorts according to a specified
+<a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a> object (sort by field).  This is used
+internally by the <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> search methods
+that take an explicit <a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a>.</li><li><a class="xref" href="Lucene.Net.Search.TimeLimitingCollector.html">TimeLimitingCollector</a>, which wraps any other
+Collector and aborts the search if it&apos;s taken too much
+time.</li><li><a class="xref" href="Lucene.Net.Search.PositiveScoresOnlyCollector.html">PositiveScoresOnlyCollector</a> wraps any other
+<a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> and prevents collection of hits whose score
+is &lt;= 0.0</li></ul>
+</p>
+
+<p><a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> decouples the score from the collected doc:
+the score computation is skipped entirely if it&apos;s not
+needed.  Collectors that do need the score should
+implement the <a class="xref" href="Lucene.Net.Search.ICollector.html#Lucene_Net_Search_ICollector_SetScorer_Lucene_Net_Search_Scorer_">SetScorer(Scorer)</a> method, to hold onto the
+passed <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> instance, and call 
+<a class="xref" href="Lucene.Net.Search.Scorer.html#Lucene_Net_Search_Scorer_GetScore">GetScore()</a> within the collect method to compute the
+current hit&apos;s score.  If your collector may request the
+score for a single hit multiple times, you should use
+<a class="xref" href="Lucene.Net.Search.ScoreCachingWrappingScorer.html">ScoreCachingWrappingScorer</a>. </p>
+
+<p><strong>NOTE:</strong> The doc that is passed to the collect
+method is relative to the current reader. If your
+collector needs to resolve this to the docID space of the
+Multi*Reader, you must re-base it by recording the
+docBase from the most recent <a class="xref" href="Lucene.Net.Search.ICollector.html#Lucene_Net_Search_ICollector_SetNextReader_Lucene_Net_Index_AtomicReaderContext_">SetNextReader(AtomicReaderContext)</a> call.  Here&apos;s
+a simple example showing how to collect docIDs into an
+<a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a>:</p>
+
+<pre><code>private class MySearchCollector : ICollector
+{
+    private readonly OpenBitSet bits;
+    private int docBase;
+
+    public MySearchCollector(OpenBitSet bits)
+    {
+        if (bits == null) throw new ArgumentNullException(&quot;bits&quot;);
+        this.bits = bits;
+    }
+
+    // ignore scorer
+    public void SetScorer(Scorer scorer)
+    { 
+    }
+
+    // accept docs out of order (for a BitSet it doesn&apos;t matter)
+    public bool AcceptDocsOutOfOrder
+    {
+        get { return true; }
+    }
+
+    public void Collect(int doc)
+    {
+        bits.Set(doc + docBase);
+    }
+
+    public void SetNextReader(AtomicReaderContext context)
+    {
+        this.docBase = context.DocBase;
+    }
+}
+
+IndexSearcher searcher = new IndexSearcher(indexReader);
+OpenBitSet bits = new OpenBitSet(indexReader.MaxDoc);
+searcher.Search(query, new MySearchCollector(bits));</code></pre>
+
+<p>Not all collectors will need to rebase the docID.  For
+example, a collector that simply counts the total number
+of hits would skip it.</p>
+
+<p><strong>NOTE:</strong> Prior to 2.9, Lucene silently filtered
+out hits with score &lt;= 0.  As of 2.9, the core <a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a>s
+no longer do that.  It&apos;s very unusual to have such hits
+(a negative query boost, or function query returning
+negative custom scores, could cause it to happen).  If
+you need that behavior, use 
+<a class="xref" href="Lucene.Net.Search.PositiveScoresOnlyCollector.html">PositiveScoresOnlyCollector</a>.</p>
+
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div><p><p>
+@since 2.9</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="../Lucene.Net.TestFramework/Lucene.Net.Search.html">Lucene.Net.Search</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Search_ICollector_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface ICollector</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_ICollector_AcceptsDocsOutOfOrder.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.ICollector.AcceptsDocsOutOfOrder%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/Collector.cs/#L189">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_ICollector_AcceptsDocsOutOfOrder_" data-uid="Lucene.Net.Search.ICollector.AcceptsDocsOutOfOrder*"></a>
+  <h4 id="Lucene_Net_Search_ICollector_AcceptsDocsOutOfOrder" data-uid="Lucene.Net.Search.ICollector.AcceptsDocsOutOfOrder">AcceptsDocsOutOfOrder</h4>
+  <div class="markdown level1 summary"><p>Return <code>true</code> if this collector does not
+require the matching docIDs to be delivered in int sort
+order (smallest to largest) to <a class="xref" href="Lucene.Net.Search.ICollector.html#Lucene_Net_Search_ICollector_Collect_System_Int32_">Collect(Int32)</a>.</p>
+<p> Most Lucene Query implementations will visit
+matching docIDs in order.  However, some queries
+(currently limited to certain cases of <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>) 
+can achieve faster searching if the
+<a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> allows them to deliver the
+docIDs out of order.</p>
+
+<p> Many collectors don&apos;t mind getting docIDs out of
+order, so it&apos;s important to return <code>true</code>
+here.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">bool AcceptsDocsOutOfOrder { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_ICollector_Collect_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.ICollector.Collect(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/Collector.cs/#L161">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_ICollector_Collect_" data-uid="Lucene.Net.Search.ICollector.Collect*"></a>
+  <h4 id="Lucene_Net_Search_ICollector_Collect_System_Int32_" data-uid="Lucene.Net.Search.ICollector.Collect(System.Int32)">Collect(Int32)</h4>
+  <div class="markdown level1 summary"><p>Called once for every document matching a query, with the unbased document
+number.
+<p>Note: The collection of the current segment can be terminated by throwing
+a <a class="xref" href="Lucene.Net.Search.CollectionTerminatedException.html">CollectionTerminatedException</a>. In this case, the last docs of the
+current <a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a> will be skipped and <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a>
+will swallow the exception and continue collection with the next leaf.
+<p>
+Note: this is called in an inner search loop. For good search performance,
+implementations of this method should not call <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Doc_System_Int32_">Doc(Int32)</a> or
+<a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Document_System_Int32_">Document(Int32)</a> on every hit.
+Doing so can slow searches by an order of magnitude or more.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void Collect(int doc)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">doc</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_ICollector_SetNextReader_Lucene_Net_Index_AtomicReaderContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.ICollector.SetNextReader(Lucene.Net.Index.AtomicReaderContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/Collector.cs/#L171">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_ICollector_SetNextReader_" data-uid="Lucene.Net.Search.ICollector.SetNextReader*"></a>
+  <h4 id="Lucene_Net_Search_ICollector_SetNextReader_Lucene_Net_Index_AtomicReaderContext_" data-uid="Lucene.Net.Search.ICollector.SetNextReader(Lucene.Net.Index.AtomicReaderContext)">SetNextReader(AtomicReaderContext)</h4>
+  <div class="markdown level1 summary"><p>Called before collecting from each <a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a>. All doc ids in
+<a class="xref" href="Lucene.Net.Search.ICollector.html#Lucene_Net_Search_ICollector_Collect_System_Int32_">Collect(Int32)</a> will correspond to <a class="xref" href="Lucene.Net.Index.IndexReaderContext.html#Lucene_Net_Index_IndexReaderContext_Reader">Reader</a>.
+<p>
+Add <a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html#Lucene_Net_Index_AtomicReaderContext_DocBase">DocBase</a> to the current <a class="xref" href="Lucene.Net.Index.IndexReaderContext.html#Lucene_Net_Index_IndexReaderContext_Reader">Reader</a>&apos;s
+internal document id to re-base ids in <a class="xref" href="Lucene.Net.Search.ICollector.html#Lucene_Net_Search_ICollector_Collect_System_Int32_">Collect(Int32)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void SetNextReader(AtomicReaderContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>next atomic reader context </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_ICollector_SetScorer_Lucene_Net_Search_Scorer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.ICollector.SetScorer(Lucene.Net.Search.Scorer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/Collector.cs/#L146">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_ICollector_SetScorer_" data-uid="Lucene.Net.Search.ICollector.SetScorer*"></a>
+  <h4 id="Lucene_Net_Search_ICollector_SetScorer_Lucene_Net_Search_Scorer_" data-uid="Lucene.Net.Search.ICollector.SetScorer(Lucene.Net.Search.Scorer)">SetScorer(Scorer)</h4>
+  <div class="markdown level1 summary"><p>Called before successive calls to <a class="xref" href="Lucene.Net.Search.ICollector.html#Lucene_Net_Search_ICollector_Collect_System_Int32_">Collect(Int32)</a>. Implementations
+that need the score of the current document (passed-in to
+<a class="xref" href="Lucene.Net.Search.ICollector.html#Lucene_Net_Search_ICollector_Collect_System_Int32_">Collect(Int32)</a>), should save the passed-in <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> and call
+<code>scorer.GetScore()</code> when needed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void SetScorer(Scorer scorer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a></td>
+        <td><span class="parametername">scorer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_ICollector.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.ICollector%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/Collector.cs/#L138" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,1207 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class TernaryTree
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class TernaryTree
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree">
+  
+  
+  <h1 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree" class="text-break">Class TernaryTree
+  </h1>
+  <div class="markdown level0 summary"><h2>Ternary Search Tree.</h2>
+
+<p>
+A ternary search tree is a hybrid between a binary tree and a digital search
+tree (trie). Keys are limited to strings. A data value of type char is stored
+in each leaf node. It can be used as an index (or pointer) to the data.
+Branches that only contain one key are compressed to one node by storing a
+pointer to the trailer substring of the key. This class is intended to serve
+as base class or helper class to implement Dictionary collections or the
+like. Ternary trees have some nice properties as the following: the tree can
+be traversed in sorted order, partial matches (wildcard) can be implemented,
+retrieval of all keys within a given distance from the target, etc. The
+storage requirements are higher than a binary tree but a lot less than a
+trie. Performance is comparable with a hash table, sometimes it outperforms a
+hash function (most of the time can determine a miss faster than a hash).
+</p>
+
+<p>
+The main purpose of this java port is to serve as a base for implementing
+TeX&apos;s hyphenation algorithm (see The TeXBook, appendix H). Each language
+requires from 5000 to 15000 hyphenation patterns which will be keys in this
+tree. The strings patterns are usually small (from 2 to 5 characters), but
+each char in the tree is stored in a node. Thus memory usage is the main
+concern. We will sacrifice &apos;elegance&apos; to keep memory requirements to the
+minimum. Using java&apos;s char type as pointer (yes, I know pointer it is a
+forbidden word in java) we can keep the size of the node to be just 8 bytes
+(3 pointers and the data char). This gives room for about 65000 nodes. In my
+tests the english patterns took 7694 nodes and the german patterns 10055
+nodes, so I think we are safe.
+</p>
+
+<p>
+All said, this is a map with strings as keys and char as value. Pretty
+limited!. It can be extended to a general map by using the string
+representation of an object and using the char value as an index to an array
+that contains the object values.
+</p>
+
+<p>This class has been taken from the Apache FOP project (<a href="http://xmlgraphics.apache.org/fop/">http://xmlgraphics.apache.org/fop/</a>). They have been slightly modified. </p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">TernaryTree</span></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Analysis.Compound.Hyphenation.HyphenationTree.html">HyphenationTree</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Analysis.Compound.Hyphenation.html">Lucene.Net.Analysis.Compound.Hyphenation</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Analysis.Common.dll</h6>
+  <h5 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class TernaryTree</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_BLOCK_SIZE.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.BLOCK_SIZE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L122">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_BLOCK_SIZE" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.BLOCK_SIZE">BLOCK_SIZE</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected const int BLOCK_SIZE = 2048</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_eq.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_eq%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L93">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_eq" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_eq">m_eq</h4>
+  <div class="markdown level1 summary"><p>Pointer to equal branch and to data when this node is a string terminator.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected char[] m_eq</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_freenode.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_freenode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L118">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_freenode" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_freenode">m_freenode</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected char m_freenode</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_hi.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_hi%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L88">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_hi" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_hi">m_hi</h4>
+  <div class="markdown level1 summary"><p>Pointer to high branch.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected char[] m_hi</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_kv.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_kv%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L114">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_kv" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_kv">m_kv</h4>
+  <div class="markdown level1 summary"><p>This vector holds the trailing of the keys when the branch is compressed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected CharVector m_kv</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Compound.Hyphenation.CharVector.html">CharVector</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_length.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_length%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L120">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_length" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_length">m_length</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int m_length</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_lo.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_lo%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L83">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_lo" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_lo">m_lo</h4>
+  <div class="markdown level1 summary"><p>Pointer to low branch and to rest of the key when it is stored directly in
+this node, we don&apos;t have unions in java!</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected char[] m_lo</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_root.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_root%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L116">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_root" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_root">m_root</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected char m_root</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_sc.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_sc%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L109">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_m_sc" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.m_sc">m_sc</h4>
+  <div class="markdown level1 summary"><p>
+The character stored in this node: splitchar. Two special values are
+reserved:
+</p>
+<ul><li>0x0000 as string terminator</li><li>0xFFFF to indicate that the branch starting at this node is compressed</li></ul>
+<p>
+This shouldn&apos;t be a problem if we give the usual semantics to strings since
+0xFFFF is guaranteed not to be an Unicode character.
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected char[] m_sc</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Length.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Length%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L404">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Length_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Length*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Length" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Length">Length</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int Length { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Balance.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Balance%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L447">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Balance_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Balance*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Balance" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Balance">Balance()</h4>
+  <div class="markdown level1 summary"><p>Balance the tree for best search performance</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Balance()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Clone.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L409">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Clone_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Clone*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Clone" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Clone">Clone()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual object Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Find_System_Char___System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Find(System.Char%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L338">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Find_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Find*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Find_System_Char___System_Int32_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Find(System.Char[],System.Int32)">Find(Char[], Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int Find(char[] key, int start)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">start</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Find_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Find(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L328">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Find_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Find*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Find_System_String_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Find(System.String)">Find(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int Find(string key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Init.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Init%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L129">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Init_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Init*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Init" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Init">Init()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void Init()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Insert_System_Char___System_Int32_System_Char_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Insert(System.Char%5B%5D%2CSystem.Int32%2CSystem.Char)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L161">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Insert_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Insert*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Insert_System_Char___System_Int32_System_Char_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Insert(System.Char[],System.Int32,System.Char)">Insert(Char[], Int32, Char)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Insert(char[] key, int start, char val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">start</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td><span class="parametername">val</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Insert_System_String_System_Char_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Insert(System.String%2CSystem.Char)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L147">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Insert_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Insert*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Insert_System_String_System_Char_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Insert(System.String,System.Char)">Insert(String, Char)</h4>
+  <div class="markdown level1 summary"><p>Branches are initially compressed, needing one node per key plus the size
+of the string key. They are decompressed as needed when another key with
+same prefix is inserted. This saves a lot of space, specially for long
+keys.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Insert(string key, char val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td><span class="parametername">val</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_InsertBalanced_System_String___System_Char___System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.InsertBalanced(System.String%5B%5D%2CSystem.Char%5B%5D%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L429">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_InsertBalanced_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.InsertBalanced*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_InsertBalanced_System_String___System_Char___System_Int32_System_Int32_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.InsertBalanced(System.String[],System.Char[],System.Int32,System.Int32)">InsertBalanced(String[], Char[], Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Recursively insert the median first and then the median of the lower and
+upper halves, and so on in order to get a balanced tree. The array of keys
+is assumed to be sorted in ascending order.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void InsertBalanced(string[] k, char[] v, int offset, int n)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">k</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">v</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">n</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Keys.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Keys%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L526">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Keys_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Keys*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Keys" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Keys">Keys()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IEnumerator&lt;string&gt; Keys()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Knows_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Knows(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L381">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Knows_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Knows*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_Knows_System_String_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.Knows(System.String)">Knows(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Knows(string key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_PrintStats_System_IO_TextWriter_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.PrintStats(System.IO.TextWriter)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L790">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_PrintStats_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.PrintStats*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_PrintStats_System_IO_TextWriter_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.PrintStats(System.IO.TextWriter)">PrintStats(TextWriter)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void PrintStats(TextWriter out)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.TextWriter</span></td>
+        <td><span class="parametername">out</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_StrCmp_System_Char___System_Int32_System_Char___System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.StrCmp(System.Char%5B%5D%2CSystem.Int32%2CSystem.Char%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L266">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_StrCmp_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.StrCmp*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_StrCmp_System_Char___System_Int32_System_Char___System_Int32_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.StrCmp(System.Char[],System.Int32,System.Char[],System.Int32)">StrCmp(Char[], Int32, Char[], Int32)</h4>
+  <div class="markdown level1 summary"><p>Compares 2 null terminated char arrays</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int StrCmp(char[] a, int startA, char[] b, int startB)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startA</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startB</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_StrCmp_System_String_System_Char___System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.StrCmp(System.String%2CSystem.Char%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L281">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_StrCmp_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.StrCmp*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_StrCmp_System_String_System_Char___System_Int32_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.StrCmp(System.String,System.Char[],System.Int32)">StrCmp(String, Char[], Int32)</h4>
+  <div class="markdown level1 summary"><p>Compares a string with null terminated char array</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int StrCmp(string str, char[] a, int start)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">str</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">start</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_StrCpy_System_Char___System_Int32_System_Char___System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.StrCpy(System.Char%5B%5D%2CSystem.Int32%2CSystem.Char%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L304">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_StrCpy_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.StrCpy*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_StrCpy_System_Char___System_Int32_System_Char___System_Int32_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.StrCpy(System.Char[],System.Int32,System.Char[],System.Int32)">StrCpy(Char[], Int32, Char[], Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void StrCpy(char[] dst, int di, char[] src, int si)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">dst</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">di</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">src</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">si</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_StrLen_System_Char___.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.StrLen(System.Char%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L323">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_StrLen_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.StrLen*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_StrLen_System_Char___" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.StrLen(System.Char[])">StrLen(Char[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int StrLen(char[] a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_StrLen_System_Char___System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.StrLen(System.Char%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L313">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_StrLen_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.StrLen*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_StrLen_System_Char___System_Int32_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.StrLen(System.Char[],System.Int32)">StrLen(Char[], Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int StrLen(char[] a, int start)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">start</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_TrimToSize.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.TrimToSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L480">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_TrimToSize_" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.TrimToSize*"></a>
+  <h4 id="Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree_TrimToSize" data-uid="Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree.TrimToSize">TrimToSize()</h4>
+  <div class="markdown level1 summary"><p>Each node stores a character (splitchar) which is part of some key(s). In a
+compressed branch (one that only contain a single string key) the trailer
+of the key which is not already in nodes is stored externally in the kv
+array. As items are inserted, key substrings decrease. Some substrings may
+completely disappear when the whole branch is totally decompressed. The
+tree is traversed to find the key substrings actually used. In addition,
+duplicate substrings are removed using a map (implemented with a
+TernaryTree!).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void TrimToSize()</code></pre>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Compound_Hyphenation_TernaryTree.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Compound.Hyphenation.TernaryTree%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Analysis.Common/Analysis/Compound/Hyphenation/TernaryTree.cs/#L68" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

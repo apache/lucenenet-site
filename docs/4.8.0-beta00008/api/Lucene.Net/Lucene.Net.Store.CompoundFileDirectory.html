@@ -1,0 +1,920 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class CompoundFileDirectory
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class CompoundFileDirectory
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Store.CompoundFileDirectory">
+  
+  
+  <h1 id="Lucene_Net_Store_CompoundFileDirectory" data-uid="Lucene.Net.Store.CompoundFileDirectory" class="text-break">Class CompoundFileDirectory
+  </h1>
+  <div class="markdown level0 summary"><p>Class for accessing a compound stream.
+This class implements a directory, but is limited to only read operations.
+Directory methods that would normally modify data throw an exception.
+<p>
+All files belonging to a segment have the same name with varying extensions.
+The extensions correspond to the different file formats used by the <a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a>.
+When using the Compound File format these files are collapsed into a
+single <code>.cfs</code> file (except for the <a class="xref" href="Lucene.Net.Codecs.LiveDocsFormat.html">LiveDocsFormat</a>, with a
+corresponding <code>.cfe</code> file indexing its sub-files.
+<p>
+Files:
+<ul><li><code>.cfs</code>: An optional &quot;virtual&quot; file consisting of all the other
+        index files for systems that frequently run out of file handles.</li><li><code>.cfe</code>: The &quot;virtual&quot; compound file&apos;s entry table holding all
+        entries in the corresponding .cfs file.</li></ul>
+<p>Description:</p>
+<ul><li>Compound (.cfs) --&gt; Header, FileData <sup>FileCount</sup></li><li>Compound Entry Table (.cfe) --&gt; Header, FileCount, &lt;FileName,
+        DataOffset, DataLength&gt; <sup>FileCount</sup>, Footer</li><li>Header --&gt; <a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a></li><li>FileCount --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a></li><li>DataOffset,DataLength --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a></li><li>FileName --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteString_System_String_">WriteString(String)</a></li><li>FileData --&gt; raw file data</li><li>Footer --&gt; <a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteFooter_Lucene_Net_Store_IndexOutput_">WriteFooter(IndexOutput)</a></li></ul>
+<p>Notes:</p>
+<ul><li>FileCount indicates how many files are contained in this compound file.
+        The entry table that follows has that many entries.</li><li>Each directory entry contains a long pointer to the start of this file&apos;s data
+        section, the files length, and a <span class="xref">System.String</span> with that file&apos;s name.</li></ul>
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></div>
+    <div class="level2"><a class="xref" href="Lucene.Net.Store.BaseDirectory.html">BaseDirectory</a></div>
+    <div class="level3"><span class="xref">CompoundFileDirectory</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.BaseDirectory.html#Lucene_Net_Store_BaseDirectory_IsOpen">BaseDirectory.IsOpen</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.BaseDirectory.html#Lucene_Net_Store_BaseDirectory_m_lockFactory">BaseDirectory.m_lockFactory</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.BaseDirectory.html#Lucene_Net_Store_BaseDirectory_ClearLock_System_String_">BaseDirectory.ClearLock(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.BaseDirectory.html#Lucene_Net_Store_BaseDirectory_SetLockFactory_Lucene_Net_Store_LockFactory_">BaseDirectory.SetLockFactory(LockFactory)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.BaseDirectory.html#Lucene_Net_Store_BaseDirectory_LockFactory">BaseDirectory.LockFactory</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.BaseDirectory.html#Lucene_Net_Store_BaseDirectory_EnsureOpen">BaseDirectory.EnsureOpen()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_OpenChecksumInput_System_String_Lucene_Net_Store_IOContext_">Directory.OpenChecksumInput(String, IOContext)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_Dispose">Directory.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_GetLockID">Directory.GetLockID()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_Copy_Lucene_Net_Store_Directory_System_String_System_String_Lucene_Net_Store_IOContext_">Directory.Copy(Directory, String, String, IOContext)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="../Lucene.Net.TestFramework/Lucene.Net.Store.html">Lucene.Net.Store</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Store_CompoundFileDirectory_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class CompoundFileDirectory : BaseDirectory, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory__ctor_Lucene_Net_Store_Directory_System_String_Lucene_Net_Store_IOContext_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory.%23ctor(Lucene.Net.Store.Directory%2CSystem.String%2CLucene.Net.Store.IOContext%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L95">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_CompoundFileDirectory__ctor_" data-uid="Lucene.Net.Store.CompoundFileDirectory.#ctor*"></a>
+  <h4 id="Lucene_Net_Store_CompoundFileDirectory__ctor_Lucene_Net_Store_Directory_System_String_Lucene_Net_Store_IOContext_System_Boolean_" data-uid="Lucene.Net.Store.CompoundFileDirectory.#ctor(Lucene.Net.Store.Directory,System.String,Lucene.Net.Store.IOContext,System.Boolean)">CompoundFileDirectory(Directory, String, IOContext, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Create a new <a class="xref" href="Lucene.Net.Store.CompoundFileDirectory.html">CompoundFileDirectory</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CompoundFileDirectory(Directory directory, string fileName, IOContext context, bool openForWrite)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">directory</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fileName</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IOContext.html">IOContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">openForWrite</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory_Directory.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory.Directory%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L280">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_CompoundFileDirectory_Directory_" data-uid="Lucene.Net.Store.CompoundFileDirectory.Directory*"></a>
+  <h4 id="Lucene_Net_Store_CompoundFileDirectory_Directory" data-uid="Lucene.Net.Store.CompoundFileDirectory.Directory">Directory</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Directory Directory { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory_Name.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory.Name%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L288">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_CompoundFileDirectory_Name_" data-uid="Lucene.Net.Store.CompoundFileDirectory.Name*"></a>
+  <h4 id="Lucene_Net_Store_CompoundFileDirectory_Name" data-uid="Lucene.Net.Store.CompoundFileDirectory.Name">Name</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Name { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory_CreateOutput_System_String_Lucene_Net_Store_IOContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory.CreateOutput(System.String%2CLucene.Net.Store.IOContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L408">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_CompoundFileDirectory_CreateOutput_" data-uid="Lucene.Net.Store.CompoundFileDirectory.CreateOutput*"></a>
+  <h4 id="Lucene_Net_Store_CompoundFileDirectory_CreateOutput_System_String_Lucene_Net_Store_IOContext_" data-uid="Lucene.Net.Store.CompoundFileDirectory.CreateOutput(System.String,Lucene.Net.Store.IOContext)">CreateOutput(String, IOContext)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IndexOutput CreateOutput(string name, IOContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IOContext.html">IOContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IndexOutput.html">IndexOutput</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_CreateOutput_System_String_Lucene_Net_Store_IOContext_">Directory.CreateOutput(String, IOContext)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory_CreateSlicer_System_String_Lucene_Net_Store_IOContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory.CreateSlicer(System.String%2CLucene.Net.Store.IOContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L427">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_CompoundFileDirectory_CreateSlicer_" data-uid="Lucene.Net.Store.CompoundFileDirectory.CreateSlicer*"></a>
+  <h4 id="Lucene_Net_Store_CompoundFileDirectory_CreateSlicer_System_String_Lucene_Net_Store_IOContext_" data-uid="Lucene.Net.Store.CompoundFileDirectory.CreateSlicer(System.String,Lucene.Net.Store.IOContext)">CreateSlicer(String, IOContext)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Directory.IndexInputSlicer CreateSlicer(string name, IOContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IOContext.html">IOContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.IndexInputSlicer.html">Directory.IndexInputSlicer</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_CreateSlicer_System_String_Lucene_Net_Store_IOContext_">Directory.CreateSlicer(String, IOContext)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory_DeleteFile_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory.DeleteFile(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L377">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_CompoundFileDirectory_DeleteFile_" data-uid="Lucene.Net.Store.CompoundFileDirectory.DeleteFile*"></a>
+  <h4 id="Lucene_Net_Store_CompoundFileDirectory_DeleteFile_System_String_" data-uid="Lucene.Net.Store.CompoundFileDirectory.DeleteFile(System.String)">DeleteFile(String)</h4>
+  <div class="markdown level1 summary"><p>Not implemented </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DeleteFile(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_DeleteFile_System_String_">Directory.DeleteFile(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.NotSupportedException</span></td>
+        <td><p>always: not supported by CFS  </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L296">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_CompoundFileDirectory_Dispose_" data-uid="Lucene.Net.Store.CompoundFileDirectory.Dispose*"></a>
+  <h4 id="Lucene_Net_Store_CompoundFileDirectory_Dispose_System_Boolean_" data-uid="Lucene.Net.Store.CompoundFileDirectory.Dispose(System.Boolean)">Dispose(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">disposing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_Dispose_System_Boolean_">Directory.Dispose(Boolean)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory_FileExists_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory.FileExists(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L363">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_CompoundFileDirectory_FileExists_" data-uid="Lucene.Net.Store.CompoundFileDirectory.FileExists*"></a>
+  <h4 id="Lucene_Net_Store_CompoundFileDirectory_FileExists_System_String_" data-uid="Lucene.Net.Store.CompoundFileDirectory.FileExists(System.String)">FileExists(String)</h4>
+  <div class="markdown level1 summary"><p>Returns true iff a file with the given name exists. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;this method will be removed in 5.0&quot;)]
+public override bool FileExists(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_FileExists_System_String_">Directory.FileExists(String)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory_FileLength_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory.FileLength(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L393">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_CompoundFileDirectory_FileLength_" data-uid="Lucene.Net.Store.CompoundFileDirectory.FileLength*"></a>
+  <h4 id="Lucene_Net_Store_CompoundFileDirectory_FileLength_System_String_" data-uid="Lucene.Net.Store.CompoundFileDirectory.FileLength(System.String)">FileLength(String)</h4>
+  <div class="markdown level1 summary"><p>Returns the length of a file in the directory. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override long FileLength(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_FileLength_System_String_">Directory.FileLength(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>if the file does not exist  </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory_ListAll.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory.ListAll%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L340">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_CompoundFileDirectory_ListAll_" data-uid="Lucene.Net.Store.CompoundFileDirectory.ListAll*"></a>
+  <h4 id="Lucene_Net_Store_CompoundFileDirectory_ListAll" data-uid="Lucene.Net.Store.CompoundFileDirectory.ListAll">ListAll()</h4>
+  <div class="markdown level1 summary"><p>Returns an array of strings, one for each file in the directory. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string[] ListAll()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_ListAll">Directory.ListAll()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory_MakeLock_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory.MakeLock(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L422">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_CompoundFileDirectory_MakeLock_" data-uid="Lucene.Net.Store.CompoundFileDirectory.MakeLock*"></a>
+  <h4 id="Lucene_Net_Store_CompoundFileDirectory_MakeLock_System_String_" data-uid="Lucene.Net.Store.CompoundFileDirectory.MakeLock(System.String)">MakeLock(String)</h4>
+  <div class="markdown level1 summary"><p>Not implemented </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Lock MakeLock(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Lock.html">Lock</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.BaseDirectory.html#Lucene_Net_Store_BaseDirectory_MakeLock_System_String_">BaseDirectory.MakeLock(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.NotSupportedException</span></td>
+        <td><p>always: not supported by CFS  </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory_OpenInput_System_String_Lucene_Net_Store_IOContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory.OpenInput(System.String%2CLucene.Net.Store.IOContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L321">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_CompoundFileDirectory_OpenInput_" data-uid="Lucene.Net.Store.CompoundFileDirectory.OpenInput*"></a>
+  <h4 id="Lucene_Net_Store_CompoundFileDirectory_OpenInput_System_String_Lucene_Net_Store_IOContext_" data-uid="Lucene.Net.Store.CompoundFileDirectory.OpenInput(System.String,Lucene.Net.Store.IOContext)">OpenInput(String, IOContext)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IndexInput OpenInput(string name, IOContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IOContext.html">IOContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IndexInput.html">IndexInput</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_OpenInput_System_String_Lucene_Net_Store_IOContext_">Directory.OpenInput(String, IOContext)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory_RenameFile_System_String_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory.RenameFile(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L385">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_CompoundFileDirectory_RenameFile_" data-uid="Lucene.Net.Store.CompoundFileDirectory.RenameFile*"></a>
+  <h4 id="Lucene_Net_Store_CompoundFileDirectory_RenameFile_System_String_System_String_" data-uid="Lucene.Net.Store.CompoundFileDirectory.RenameFile(System.String,System.String)">RenameFile(String, String)</h4>
+  <div class="markdown level1 summary"><p>Not implemented </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void RenameFile(string from, string to)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">from</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">to</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.NotSupportedException</span></td>
+        <td><p>always: not supported by CFS  </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory_Sync_System_Collections_Generic_ICollection_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory.Sync(System.Collections.Generic.ICollection%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L414">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_CompoundFileDirectory_Sync_" data-uid="Lucene.Net.Store.CompoundFileDirectory.Sync*"></a>
+  <h4 id="Lucene_Net_Store_CompoundFileDirectory_Sync_System_Collections_Generic_ICollection_System_String__" data-uid="Lucene.Net.Store.CompoundFileDirectory.Sync(System.Collections.Generic.ICollection{System.String})">Sync(ICollection&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Sync(ICollection&lt;string&gt; names)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">names</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_Sync_System_Collections_Generic_ICollection_System_String__">Directory.Sync(ICollection&lt;String&gt;)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L469">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_CompoundFileDirectory_ToString_" data-uid="Lucene.Net.Store.CompoundFileDirectory.ToString*"></a>
+  <h4 id="Lucene_Net_Store_CompoundFileDirectory_ToString" data-uid="Lucene.Net.Store.CompoundFileDirectory.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_ToString">Directory.ToString()</a></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_CompoundFileDirectory.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.CompoundFileDirectory%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Store/CompoundFileDirectory.cs/#L73" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

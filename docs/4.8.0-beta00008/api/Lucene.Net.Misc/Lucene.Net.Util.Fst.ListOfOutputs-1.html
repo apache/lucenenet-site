@@ -1,0 +1,794 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ListOfOutputs&lt;T&gt;
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ListOfOutputs&lt;T&gt;
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1">
+  
+  
+  <h1 id="Lucene_Net_Util_Fst_ListOfOutputs_1" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1" class="text-break">Class ListOfOutputs&lt;T&gt;
+  </h1>
+  <div class="markdown level0 summary"><p>Wraps another Outputs implementation and encodes one or
+more of its output values.  You can use this when a single
+input may need to map to more than one output,
+maintaining order: pass the same input with a different
+output by calling <a class="xref" href="../Lucene.Net/Lucene.Net.Util.Fst.Builder-1.html#Lucene_Net_Util_Fst_Builder_1_Add_Lucene_Net_Util_Int32sRef__0_">Add(Int32sRef, T)</a> multiple
+times.  The builder will then combine the outputs using
+the <a class="xref" href="../Lucene.Net/Lucene.Net.Util.Fst.Outputs-1.html#Lucene_Net_Util_Fst_Outputs_1_Merge__0__0_">Merge(T, T)</a> method.</p>
+<p>The resulting FST may not be minimal when an input has
+more than one output, as this requires pushing all
+multi-output values to a final state.
+
+</p>
+<p>NOTE: the only way to create multiple outputs is to
+add the same input to the FST multiple times in a row.  This is
+how the FST maps a single input to multiple outputs (e.g. you
+cannot pass a List&lt;Object&gt; to <a class="xref" href="../Lucene.Net/Lucene.Net.Util.Fst.Builder-1.html#Lucene_Net_Util_Fst_Builder_1_Add_Lucene_Net_Util_Int32sRef__0_">Add(Int32sRef, T)</a>).  If
+your outputs are longs, and you need at most 2, then use
+<a class="xref" href="Lucene.Net.Util.Fst.UpToTwoPositiveInt64Outputs.html">UpToTwoPositiveInt64Outputs</a> instead since it stores
+the outputs more compactly (by stealing a bit from each
+long value).
+
+</p>
+<p>NOTE: this cannot wrap itself (ie you cannot make an
+FST with List&lt;List&lt;Object&gt;&gt; outputs using this).
+
+@lucene.experimental
+</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="../Lucene.Net/Lucene.Net.Util.Fst.Outputs-1.html">Outputs</a>&lt;<span class="xref">System.Object</span>&gt;</div>
+    <div class="level2"><span class="xref">ListOfOutputs&lt;T&gt;</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Util.Fst.html">Lucene.Net.Util.Fst</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Misc.dll</h6>
+  <h5 id="Lucene_Net_Util_Fst_ListOfOutputs_1_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class ListOfOutputs&lt;T&gt; : Outputs&lt;object&gt;</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Fst_ListOfOutputs_1__ctor_Lucene_Net_Util_Fst_Outputs__0__.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Fst.ListOfOutputs%601.%23ctor(Lucene.Net.Util.Fst.Outputs%7B%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Misc/Util/Fst/ListOfOutputs.cs/#L71">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Fst_ListOfOutputs_1__ctor_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.#ctor*"></a>
+  <h4 id="Lucene_Net_Util_Fst_ListOfOutputs_1__ctor_Lucene_Net_Util_Fst_Outputs__0__" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.#ctor(Lucene.Net.Util.Fst.Outputs{`0})">ListOfOutputs(Outputs&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ListOfOutputs(Outputs&lt;T&gt; outputs)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Util.Fst.Outputs-1.html">Outputs</a>&lt;T&gt;</td>
+        <td><span class="parametername">outputs</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Fst_ListOfOutputs_1_NoOutput.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Fst.ListOfOutputs%601.NoOutput%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Misc/Util/Fst/ListOfOutputs.cs/#L154">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Fst_ListOfOutputs_1_NoOutput_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.NoOutput*"></a>
+  <h4 id="Lucene_Net_Util_Fst_ListOfOutputs_1_NoOutput" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.NoOutput">NoOutput</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override object NoOutput { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Util.Fst.Outputs&lt;System.Object&gt;.NoOutput</span></div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Fst_ListOfOutputs_1_Add_System_Object_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Fst.ListOfOutputs%601.Add(System.Object%2CSystem.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Misc/Util/Fst/ListOfOutputs.cs/#L88">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Fst_ListOfOutputs_1_Add_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.Add*"></a>
+  <h4 id="Lucene_Net_Util_Fst_ListOfOutputs_1_Add_System_Object_System_Object_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.Add(System.Object,System.Object)">Add(Object, Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override object Add(object prefix, object output)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">prefix</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">output</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Util.Fst.Outputs&lt;System.Object&gt;.Add(System.Object, System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Fst_ListOfOutputs_1_AsList_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Fst.ListOfOutputs%601.AsList(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Misc/Util/Fst/ListOfOutputs.cs/#L224">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Fst_ListOfOutputs_1_AsList_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.AsList*"></a>
+  <h4 id="Lucene_Net_Util_Fst_ListOfOutputs_1_AsList_System_Object_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.AsList(System.Object)">AsList(Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IList&lt;T&gt; AsList(object output)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">output</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Fst_ListOfOutputs_1_Common_System_Object_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Fst.ListOfOutputs%601.Common(System.Object%2CSystem.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Misc/Util/Fst/ListOfOutputs.cs/#L76">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Fst_ListOfOutputs_1_Common_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.Common*"></a>
+  <h4 id="Lucene_Net_Util_Fst_ListOfOutputs_1_Common_System_Object_System_Object_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.Common(System.Object,System.Object)">Common(Object, Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override object Common(object output1, object output2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">output1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">output2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Util.Fst.Outputs&lt;System.Object&gt;.Common(System.Object, System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Fst_ListOfOutputs_1_Merge_System_Object_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Fst.ListOfOutputs%601.Merge(System.Object%2CSystem.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Misc/Util/Fst/ListOfOutputs.cs/#L188">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Fst_ListOfOutputs_1_Merge_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.Merge*"></a>
+  <h4 id="Lucene_Net_Util_Fst_ListOfOutputs_1_Merge_System_Object_System_Object_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.Merge(System.Object,System.Object)">Merge(Object, Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override object Merge(object first, object second)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">first</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">second</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Util.Fst.Outputs&lt;System.Object&gt;.Merge(System.Object, System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Fst_ListOfOutputs_1_OutputToString_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Fst.ListOfOutputs%601.OutputToString(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Misc/Util/Fst/ListOfOutputs.cs/#L162">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Fst_ListOfOutputs_1_OutputToString_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.OutputToString*"></a>
+  <h4 id="Lucene_Net_Util_Fst_ListOfOutputs_1_OutputToString_System_Object_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.OutputToString(System.Object)">OutputToString(Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string OutputToString(object output)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">output</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Util.Fst.Outputs&lt;System.Object&gt;.OutputToString(System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Fst_ListOfOutputs_1_Read_Lucene_Net_Store_DataInput_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Fst.ListOfOutputs%601.Read(Lucene.Net.Store.DataInput)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Misc/Util/Fst/ListOfOutputs.cs/#L131">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Fst_ListOfOutputs_1_Read_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.Read*"></a>
+  <h4 id="Lucene_Net_Util_Fst_ListOfOutputs_1_Read_Lucene_Net_Store_DataInput_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.Read(Lucene.Net.Store.DataInput)">Read(DataInput)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override object Read(DataInput in)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Store.DataInput.html">DataInput</a></td>
+        <td><span class="parametername">in</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Util.Fst.Outputs&lt;System.Object&gt;.Read(Lucene.Net.Store.DataInput)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Fst_ListOfOutputs_1_ReadFinalOutput_Lucene_Net_Store_DataInput_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Fst.ListOfOutputs%601.ReadFinalOutput(Lucene.Net.Store.DataInput)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Misc/Util/Fst/ListOfOutputs.cs/#L136">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Fst_ListOfOutputs_1_ReadFinalOutput_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.ReadFinalOutput*"></a>
+  <h4 id="Lucene_Net_Util_Fst_ListOfOutputs_1_ReadFinalOutput_Lucene_Net_Store_DataInput_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.ReadFinalOutput(Lucene.Net.Store.DataInput)">ReadFinalOutput(DataInput)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override object ReadFinalOutput(DataInput in)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Store.DataInput.html">DataInput</a></td>
+        <td><span class="parametername">in</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Util.Fst.Outputs&lt;System.Object&gt;.ReadFinalOutput(Lucene.Net.Store.DataInput)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Fst_ListOfOutputs_1_Subtract_System_Object_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Fst.ListOfOutputs%601.Subtract(System.Object%2CSystem.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Misc/Util/Fst/ListOfOutputs.cs/#L82">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Fst_ListOfOutputs_1_Subtract_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.Subtract*"></a>
+  <h4 id="Lucene_Net_Util_Fst_ListOfOutputs_1_Subtract_System_Object_System_Object_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.Subtract(System.Object,System.Object)">Subtract(Object, Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override object Subtract(object object, object inc)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">object</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">inc</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Util.Fst.Outputs&lt;System.Object&gt;.Subtract(System.Object, System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Fst_ListOfOutputs_1_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Fst.ListOfOutputs%601.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Misc/Util/Fst/ListOfOutputs.cs/#L219">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Fst_ListOfOutputs_1_ToString_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.ToString*"></a>
+  <h4 id="Lucene_Net_Util_Fst_ListOfOutputs_1_ToString" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Fst_ListOfOutputs_1_Write_System_Object_Lucene_Net_Store_DataOutput_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Fst.ListOfOutputs%601.Write(System.Object%2CLucene.Net.Store.DataOutput)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Misc/Util/Fst/ListOfOutputs.cs/#L107">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Fst_ListOfOutputs_1_Write_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.Write*"></a>
+  <h4 id="Lucene_Net_Util_Fst_ListOfOutputs_1_Write_System_Object_Lucene_Net_Store_DataOutput_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.Write(System.Object,Lucene.Net.Store.DataOutput)">Write(Object, DataOutput)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(object output, DataOutput out)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">output</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Store.DataOutput.html">DataOutput</a></td>
+        <td><span class="parametername">out</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Util.Fst.Outputs&lt;System.Object&gt;.Write(System.Object, Lucene.Net.Store.DataOutput)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Fst_ListOfOutputs_1_WriteFinalOutput_System_Object_Lucene_Net_Store_DataOutput_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Fst.ListOfOutputs%601.WriteFinalOutput(System.Object%2CLucene.Net.Store.DataOutput)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Misc/Util/Fst/ListOfOutputs.cs/#L113">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Fst_ListOfOutputs_1_WriteFinalOutput_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.WriteFinalOutput*"></a>
+  <h4 id="Lucene_Net_Util_Fst_ListOfOutputs_1_WriteFinalOutput_System_Object_Lucene_Net_Store_DataOutput_" data-uid="Lucene.Net.Util.Fst.ListOfOutputs`1.WriteFinalOutput(System.Object,Lucene.Net.Store.DataOutput)">WriteFinalOutput(Object, DataOutput)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteFinalOutput(object output, DataOutput out)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">output</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Store.DataOutput.html">DataOutput</a></td>
+        <td><span class="parametername">out</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Util.Fst.Outputs&lt;System.Object&gt;.WriteFinalOutput(System.Object, Lucene.Net.Store.DataOutput)</span></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Fst_ListOfOutputs_1.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Fst.ListOfOutputs%601%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Misc/Util/Fst/ListOfOutputs.cs/#L66" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
