@@ -76,15 +76,17 @@
 <hr>
 <p><em>Details about this website and the API documentation site and how to help contribute to them</em></p>
 <h2 id="overview">Overview</h2>
-<p>The website and the api documentation source code is found in the same Git repository as the Lucene.Net code in the folder: <code>/websites/</code>. The site is built with a static site generator called <a href="https://dotnet.github.io/docfx/">DocFx</a> and all of the content/pages are created using Markdown files.</p>
+<p>The website and the api documentation source code is found in the same Git repository as the Lucene.Net code in the folder: <code>/websites/</code>. The website and documentation site is built with a static site generator called <a href="https://dotnet.github.io/docfx/">DocFx</a> and all of the content/pages are created using Markdown files.</p>
 <p>To submit changes for the website, create a Pull Request to the <a href="https://github.com/apache/lucenenet">Lucene Git repositoriy</a>. (See <a class="xref" href="index.html#submit-a-pull-request">Contributing</a> for details)</p>
 <h2 id="website">Website</h2>
+<h3 id="build-script">Build script</h3>
 <p>To build the website and run it on your machine, run the powershell script: <code>/websites/site/site.ps1</code>. You don't have to pass any parameters in and it will build the site and host it at <a href="http://localhost:8080">http://localhost:8080</a>.</p>
 <p>The script has 2 optional parameters:</p>
 <ul>
 <li><code>-ServeDocs</code> <em>(default is 1)</em> The value of <code>1</code> means it will build the docs and host the site, if <code>0</code> is specified, it will build the static site to be hosted elsewhere.</li>
 <li><code>-Clean</code> <em>(default is 0)</em> The value of <code>1</code> means that it will clear all caches and tool files before it builds again. This is handy if a new version of docfx is available or if there's odd things occuring with the incremental build.</li>
 </ul>
+<h3 id="filefolder-structure">File/folder structure</h3>
 <p>The file/folder structure is within <code>/websites/site</code>:</p>
 <ul>
 <li><code>site.ps1</code> - the build script</li>
@@ -96,13 +98,24 @@
 <li><code>tools/*</code> - during the build process some tools will be downloaded which are stored here</li>
 <li><code>_site</code> - this is the exported static site that is generated</li>
 </ul>
-<h2 id="api-docs">API Docs</h2>
-<p>To build the api docs and run it on your machine, run the powershell script: <code>/websites/apidocs/docs.ps1</code>. You don't have to pass any parameters in and it will build the site and host it at <a href="http://localhost:8080">http://localhost:8080</a>.</p>
-<p>The script has 2 optional parameters:</p>
+<h3 id="deploy-the-website">Deploy the website</h3>
 <ul>
+<li>The website is deployed via git</li>
+<li>Checkout the Git repo that hosts the documentation: <a href="https://github.com/apache/lucenenet-site/tree/asf-site">https://github.com/apache/lucenenet-site/tree/asf-site</a> <em>(ensure you have <code>asf-site</code> branch checked out, not <code>master</code>)</em></li>
+<li>Copy the build output of the website to the root. The build output will be all of the files in the <code>/websites/site/_site</code> in your main lucene.net checked out Git repository.</li>
+<li>Commit and push these changes</li>
+<li>The new version of the website will be live. If the amount of new files committed is large, the new files may take some time to become live.</li>
+</ul>
+<h2 id="api-docs">API Docs</h2>
+<h3 id="build-script-1">Build script</h3>
+<p>To build the api docs and run it on your machine, run the powershell script: <code>/websites/apidocs/docs.ps1</code>. You don't have to pass any parameters in and it will build the site and host it at <a href="http://localhost:8080">http://localhost:8080</a>.</p>
+<p>The script has 3 parameters:</p>
+<ul>
+<li><code>-LuceneNetVersion</code> <em>(mandatory)</em> This is the Lucene.Net version including pre-release information that is being built. For example: <code>4.8.0-beta00008</code>. <em>(This value will correspond to the folder and branch name where the docs get hosted, see below)</em></li>
 <li><code>-ServeDocs</code> <em>(default is 1)</em> The value of <code>1</code> means it will build the docs and host the site, if <code>0</code> is specified, it will build the static site to be hosted elsewhere.</li>
 <li><code>-Clean</code> <em>(default is 0)</em> The value of <code>1</code> means that it will clear all caches and tool files before it builds again. This is handy if a new version of docfx is available or if there's odd things occuring with the incremental build.</li>
 </ul>
+<h3 id="filefolder-structure-1">File/folder structure</h3>
 <p>The file/folder structure is within <code>/websites/apidocs</code>:</p>
 <ul>
 <li><code>docs.ps1</code> - the build script</li>
@@ -112,6 +125,59 @@
 <li><code>toc.yml</code> - these files determine the menu structures <em>(see docfx manual for further info)</em></li>
 <li><code>tools/*</code> - during the build process some tools will be downloaded which are stored here</li>
 <li><code>_site</code> - this is the exported static site that is generated</li>
+</ul>
+<h3 id="process-overview">Process overview</h3>
+<p>The documentation generation is a complex process because it needs to convert the Java Lucene project's documentation into a usable format to produce the output Lucene.Net's documentation.</p>
+<p>The process overview is:</p>
+<ul>
+<li>Use the <code>JavaDocToMarkdownConverter</code> project within the <code>DocumentationTools.sln</code> solution to run the conversion of the Java Lucene projects docs into a useable format for DocFx. This tool takes uses a release tag output of the Java Lucene project as it's source to convert against the Lucene.Net's source.</li>
+<li>Run the documentation build script to produce the documentation site</li>
+<li>Publish the output to the <a href="https://github.com/apache/lucenenet-site"><code>lucenenet-site</code></a> repository into a correpsonding named version directory</li>
+</ul>
+<p>We don't want to manually change the converted resulting markdown files (<code>.md</code>) because they would get overwritten again when the conversion process is re-executed. Therefor to fix any formatting issues or customized output of the project docs, these customizations/fixes/tweaks are built directly in to the conversion process itself in the <code>JavaDocToMarkdownConverter.csproj</code> project.</p>
+<h3 id="building-the-docs">Building the docs</h3>
+<ul>
+<li>Checkout the Lucene.Net release tag to build the docs against</li>
+<li>Execute the <code>./src/docs/convert.ps1</code> script and enter the current Lucene version to convert from.
+<ul>
+<li>For example, for Lucene.Net 4.8.0 we are converting from the Java Lucene build release of <a href="https://github.com/apache/lucene-solr/releases/tag/releases%2Flucene-solr%2F4.8.1">&quot;4.8.1&quot;</a> so in this case enter: 4.8.1 at the prompt or call the whole script like <code>./src/docs/convert.ps1 -JavaLuceneVersion 4.8.1</code></li>
+<li>This script will download and extract the Java Lucene release files, build the <code>DocumentationTools.sln</code> solution and execute the <code>JavaDocToMarkdownConverter.exe</code></li>
+</ul>
+</li>
+<li>Review and commit the files changed
+<ul>
+<li>Many times there will just be whitespace changes in the files especially if this process has been executed before for the same source/destination version.</li>
+<li>If this is a new source/destination version there will be a <strong>lot</strong> of file changes, at least one file per folder.</li>
+<li>If there are formatting issues or irregularities in the converted output then these will need to be addressed by making changes to the conversion tool itself <code>JavaDocToMarkdownConverter.csproj</code> (generally only needed for new major version releases)</li>
+</ul>
+</li>
+<li>Execute the <code>./websites/apidocs/docs.ps1</code> script to build and serve the api docs website locally for testing.
+<ul>
+<li>Example: <code>./websites/apidocs/docs.ps1 -LuceneNetVersion 4.8.0-beta00008</code></li>
+<li>will serve a website on <a href="http://localhost:8080">http://localhost:8080</a></li>
+<li>It will take quite a while (approx 10 minutes) to build</li>
+</ul>
+</li>
+</ul>
+<h3 id="publishing-the-docs">Publishing the docs</h3>
+<ul>
+<li>Checkout the Git repo that hosts the documentation: <a href="https://github.com/apache/lucenenet-site/tree/asf-site">https://github.com/apache/lucenenet-site/tree/asf-site</a> <em>(ensure you have <code>asf-site</code> branch checked out, not <code>master</code>)</em></li>
+<li>Create a new folder in this repo: <code>/docs/[Version]</code>, for example: <code>/docs/4.8.0-beta00008</code></li>
+<li>Copy the build output of the documentation site to this new folder. The build output will be all of the files in the <code>/websites/apidocs/_site</code> in your main lucene.net checked out Git repository.</li>
+<li>Commit and push these changes</li>
+<li>The new version documentation will be live. Due to the amount of new files committed, the new files may take up to 60 minutes to become live.</li>
+<li>Next the website needs updating which is a manual process currently:
+<ul>
+<li>In the <code>/websites/site/download</code> folder there should be a document per release. It's normally fine to copy the document of the latest release for the same major version. For a new major version some modifications may be needed.</li>
+<li>Ensure the correct version number is listed in the header and the nuget download snippet.</li>
+<li>Update the <code>Status</code> and <code>Released</code> heading information.</li>
+<li>Ensure the download links are correct.</li>
+<li>Update the <code>/websites/site/download/toc.yml</code> file to include a reference to the new page which should maintain descending version order.</li>
+<li>Update the <code>/websites/site/docs.md</code> file and add a link to the new documentation for the current version which should maintain descending version order.</li>
+<li><a href="#website">Build the website</a> and test locally, then deploy the changes</li>
+</ul>
+</li>
+<li>Once the website is committed/pushed, the last step is to create a named branch on the main <a href="https://github.com/apache/lucenenet"><code>lucenenet</code></a> repository with the name: <code>docs/[Version]</code>, for example <code>docs/4.8.0-beta00008</code> based on commit of the latest (if any) changes made to the docs in the <code>lucenenet</code> repository on the main branch. This branch is used for linking to on the API docs &quot;Improve this Doc&quot; button.</li>
 </ul>
 </article>
           </div>
