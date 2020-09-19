@@ -1,0 +1,1302 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class NumericUtils
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class NumericUtils
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Util.NumericUtils">
+  
+  
+  <h1 id="Lucene_Net_Util_NumericUtils" data-uid="Lucene.Net.Util.NumericUtils" class="text-break">Class NumericUtils
+  </h1>
+  <div class="markdown level0 summary"><p>This is a helper class to generate prefix-encoded representations for numerical values
+and supplies converters to represent float/double values as sortable integers/longs.</p>
+<p><p>To quickly execute range queries in Apache Lucene, a range is divided recursively
+into multiple intervals for searching: The center of the range is searched only with
+the lowest possible precision in the trie, while the boundaries are matched
+more exactly. this reduces the number of terms dramatically.</p>
+<p><p>This class generates terms to achieve this: First the numerical integer values need to
+be converted to bytes. For that integer values (32 bit or 64 bit) are made unsigned
+and the bits are converted to ASCII chars with each 7 bit. The resulting byte[] is
+sortable like the original integer value (even using UTF-8 sort order). Each value is also
+prefixed (in the first char) by the <code>shift</code> value (number of bits removed) used
+during encoding.</p>
+<p><p>To also index floating point numbers, this class supplies two methods to convert them
+to integer values by changing their bit layout: <a class="xref" href="Lucene.Net.Util.NumericUtils.html#Lucene_Net_Util_NumericUtils_DoubleToSortableInt64_System_Double_">DoubleToSortableInt64(Double)</a>,
+<a class="xref" href="Lucene.Net.Util.NumericUtils.html#Lucene_Net_Util_NumericUtils_SingleToSortableInt32_System_Single_">SingleToSortableInt32(Single)</a>. You will have no precision loss by
+converting floating point numbers to integers and back (only that the integer form
+is not usable). Other data types like dates can easily converted to <span class="xref">System.Int64</span>s or <span class="xref">System.Int32</span>s (e.g.
+date to long: <span class="xref">System.DateTime.Ticks</span>).</p>
+<p><p>For easy usage, the trie algorithm is implemented for indexing inside
+<a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a> that can index <span class="xref">System.Int32</span>, <span class="xref">System.Int64</span>,
+<span class="xref">System.Single</span>, and <span class="xref">System.Double</span>. For querying,
+<a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a> and <a class="xref" href="Lucene.Net.Search.NumericRangeFilter.html">NumericRangeFilter</a> implement the query part
+for the same data types.</p>
+<p><p>This class can also be used, to generate lexicographically sortable (according to
+<a class="xref" href="Lucene.Net.Util.BytesRef.html#Lucene_Net_Util_BytesRef_UTF8SortedAsUTF16Comparer">UTF8SortedAsUTF16Comparer</a>) representations of numeric data
+types for other usages (e.g. sorting).</p>
+<p><p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div><p>@since 2.9, API changed non backwards-compliant in 4.0</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">NumericUtils</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Util.html">Lucene.Net.Util</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Util_NumericUtils_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class NumericUtils</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_BUF_SIZE_INT32.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.BUF_SIZE_INT32%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L106">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_NumericUtils_BUF_SIZE_INT32" data-uid="Lucene.Net.Util.NumericUtils.BUF_SIZE_INT32">BUF_SIZE_INT32</h4>
+  <div class="markdown level1 summary"><p>The maximum term length (used for <span class="xref">byte[]</span> buffer size)
+for encoding <span class="xref">System.Int32</span> values.
+<p>
+NOTE: This was BUF_SIZE_INT in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int BUF_SIZE_INT32 = 6</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Util_NumericUtils_BUF_SIZE_INT32_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Util.NumericUtils.html#Lucene_Net_Util_NumericUtils_Int32ToPrefixCodedBytes_System_Int32_System_Int32_Lucene_Net_Util_BytesRef_">Int32ToPrefixCodedBytes(Int32, Int32, BytesRef)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_BUF_SIZE_INT64.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.BUF_SIZE_INT64%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L89">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_NumericUtils_BUF_SIZE_INT64" data-uid="Lucene.Net.Util.NumericUtils.BUF_SIZE_INT64">BUF_SIZE_INT64</h4>
+  <div class="markdown level1 summary"><p>The maximum term length (used for <span class="xref">byte[]</span> buffer size)
+for encoding <span class="xref">System.Int64</span> values.
+<p>
+NOTE: This was BUF_SIZE_LONG in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int BUF_SIZE_INT64 = 11</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Util_NumericUtils_BUF_SIZE_INT64_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Util.NumericUtils.html#Lucene_Net_Util_NumericUtils_Int64ToPrefixCodedBytes_System_Int64_System_Int32_Lucene_Net_Util_BytesRef_">Int64ToPrefixCodedBytes(Int64, Int32, BytesRef)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_PRECISION_STEP_DEFAULT.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.PRECISION_STEP_DEFAULT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L72">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_NumericUtils_PRECISION_STEP_DEFAULT" data-uid="Lucene.Net.Util.NumericUtils.PRECISION_STEP_DEFAULT">PRECISION_STEP_DEFAULT</h4>
+  <div class="markdown level1 summary"><p>The default precision step used by <a class="xref" href="Lucene.Net.Documents.Int32Field.html">Int32Field</a>,
+<a class="xref" href="Lucene.Net.Documents.SingleField.html">SingleField</a>, <a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a>, 
+<a class="xref" href="Lucene.Net.Documents.DoubleField.html">DoubleField</a>, <a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a>,
+<a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a>, and <a class="xref" href="Lucene.Net.Search.NumericRangeFilter.html">NumericRangeFilter</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int PRECISION_STEP_DEFAULT = 4</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_SHIFT_START_INT32.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.SHIFT_START_INT32%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L97">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_NumericUtils_SHIFT_START_INT32" data-uid="Lucene.Net.Util.NumericUtils.SHIFT_START_INT32">SHIFT_START_INT32</h4>
+  <div class="markdown level1 summary"><p>Integers are stored at lower precision by shifting off lower bits. The shift count is
+stored as <code>SHIFT_START_INT32+shift</code> in the first byte
+<p>
+NOTE: This was SHIFT_START_INT in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const byte SHIFT_START_INT32 = 96</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_SHIFT_START_INT64.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.SHIFT_START_INT64%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L80">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_NumericUtils_SHIFT_START_INT64" data-uid="Lucene.Net.Util.NumericUtils.SHIFT_START_INT64">SHIFT_START_INT64</h4>
+  <div class="markdown level1 summary"><p>Longs are stored at lower precision by shifting off lower bits. The shift count is
+stored as <code>SHIFT_START_INT64+shift</code> in the first byte
+<p>
+NOTE: This was SHIFT_START_LONG in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const char SHIFT_START_INT64 = ' '</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_DoubleToSortableInt64_System_Double_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.DoubleToSortableInt64(System.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L309">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_DoubleToSortableInt64_" data-uid="Lucene.Net.Util.NumericUtils.DoubleToSortableInt64*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_DoubleToSortableInt64_System_Double_" data-uid="Lucene.Net.Util.NumericUtils.DoubleToSortableInt64(System.Double)">DoubleToSortableInt64(Double)</h4>
+  <div class="markdown level1 summary"><p>Converts a <span class="xref">System.Double</span> value to a sortable signed <span class="xref">System.Int64</span>.
+The value is converted by getting their IEEE 754 floating-point &quot;double format&quot;
+bit layout and then some bits are swapped, to be able to compare the result as <span class="xref">System.Int64</span>.
+By this the precision is not reduced, but the value can easily used as a <span class="xref">System.Int64</span>.
+The sort order (including <span class="xref">System.Double.NaN</span>) is defined by
+<span class="xref">System.Double.CompareTo(System.Double)</span>; <code>NaN</code> is greater than positive infinity. 
+<p>
+NOTE: This was doubleToSortableLong() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static long DoubleToSortableInt64(double val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">val</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Util_NumericUtils_DoubleToSortableInt64_System_Double__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Util.NumericUtils.html#Lucene_Net_Util_NumericUtils_SortableInt64ToDouble_System_Int64_">SortableInt64ToDouble(Int64)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_FilterPrefixCodedInt32s_Lucene_Net_Index_TermsEnum_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.FilterPrefixCodedInt32s(Lucene.Net.Index.TermsEnum)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L581">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_FilterPrefixCodedInt32s_" data-uid="Lucene.Net.Util.NumericUtils.FilterPrefixCodedInt32s*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_FilterPrefixCodedInt32s_Lucene_Net_Index_TermsEnum_" data-uid="Lucene.Net.Util.NumericUtils.FilterPrefixCodedInt32s(Lucene.Net.Index.TermsEnum)">FilterPrefixCodedInt32s(TermsEnum)</h4>
+  <div class="markdown level1 summary"><p>Filters the given <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> by accepting only prefix coded 32 bit
+terms with a shift value of <code>0</code>.
+<p>
+NOTE: This was filterPrefixCodedInts() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TermsEnum FilterPrefixCodedInt32s(TermsEnum termsEnum)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a></td>
+        <td><span class="parametername">termsEnum</span></td>
+        <td><p>The terms enum to filter </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a></td>
+        <td><p>A filtered <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> that only returns prefix coded 32 bit
+       terms with a shift value of <code>0</code>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_FilterPrefixCodedInt64s_Lucene_Net_Index_TermsEnum_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.FilterPrefixCodedInt64s(Lucene.Net.Index.TermsEnum)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L553">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_FilterPrefixCodedInt64s_" data-uid="Lucene.Net.Util.NumericUtils.FilterPrefixCodedInt64s*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_FilterPrefixCodedInt64s_Lucene_Net_Index_TermsEnum_" data-uid="Lucene.Net.Util.NumericUtils.FilterPrefixCodedInt64s(Lucene.Net.Index.TermsEnum)">FilterPrefixCodedInt64s(TermsEnum)</h4>
+  <div class="markdown level1 summary"><p>Filters the given <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> by accepting only prefix coded 64 bit
+terms with a shift value of <code>0</code>.
+<p>
+NOTE: This was filterPrefixCodedLongs() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TermsEnum FilterPrefixCodedInt64s(TermsEnum termsEnum)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a></td>
+        <td><span class="parametername">termsEnum</span></td>
+        <td><p>The terms enum to filter </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a></td>
+        <td><p>A filtered <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> that only returns prefix coded 64 bit
+       terms with a shift value of <code>0</code>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_GetPrefixCodedInt32Shift_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.GetPrefixCodedInt32Shift(Lucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L235">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_GetPrefixCodedInt32Shift_" data-uid="Lucene.Net.Util.NumericUtils.GetPrefixCodedInt32Shift*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_GetPrefixCodedInt32Shift_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Util.NumericUtils.GetPrefixCodedInt32Shift(Lucene.Net.Util.BytesRef)">GetPrefixCodedInt32Shift(BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Returns the shift value from a prefix encoded <span class="xref">System.Int32</span>. 
+<p>
+NOTE: This was getPrefixCodedIntShift() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int GetPrefixCodedInt32Shift(BytesRef val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">val</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.FormatException</span></td>
+        <td><p>if the supplied <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> is
+not correctly prefix encoded. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_GetPrefixCodedInt64Shift_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.GetPrefixCodedInt64Shift(Lucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L217">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_GetPrefixCodedInt64Shift_" data-uid="Lucene.Net.Util.NumericUtils.GetPrefixCodedInt64Shift*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_GetPrefixCodedInt64Shift_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Util.NumericUtils.GetPrefixCodedInt64Shift(Lucene.Net.Util.BytesRef)">GetPrefixCodedInt64Shift(BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Returns the shift value from a prefix encoded <span class="xref">System.Int64</span>. 
+<p>
+NOTE: This was getPrefixCodedLongShift() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int GetPrefixCodedInt64Shift(BytesRef val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">val</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.FormatException</span></td>
+        <td><p>if the supplied <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> is
+not correctly prefix encoded. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_Int32ToPrefixCoded_System_Int32_System_Int32_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.Int32ToPrefixCoded(System.Int32%2CSystem.Int32%2CLucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L134">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_Int32ToPrefixCoded_" data-uid="Lucene.Net.Util.NumericUtils.Int32ToPrefixCoded*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_Int32ToPrefixCoded_System_Int32_System_Int32_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Util.NumericUtils.Int32ToPrefixCoded(System.Int32,System.Int32,Lucene.Net.Util.BytesRef)">Int32ToPrefixCoded(Int32, Int32, BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Returns prefix coded bits after reducing the precision by <code data-dev-comment-type="paramref" class="paramref">shift</code> bits.
+This is method is used by <a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a>.
+After encoding, <code>bytes.Offset</code> will always be 0. 
+<p>
+NOTE: This was intToPrefixCoded() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Int32ToPrefixCoded(int val, int shift, BytesRef bytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The numeric value </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">shift</span></td>
+        <td><p>How many bits to strip from the right </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">bytes</span></td>
+        <td><p>Will contain the encoded value </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_Int32ToPrefixCodedBytes_System_Int32_System_Int32_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.Int32ToPrefixCodedBytes(System.Int32%2CSystem.Int32%2CLucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L185">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_Int32ToPrefixCodedBytes_" data-uid="Lucene.Net.Util.NumericUtils.Int32ToPrefixCodedBytes*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_Int32ToPrefixCodedBytes_System_Int32_System_Int32_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Util.NumericUtils.Int32ToPrefixCodedBytes(System.Int32,System.Int32,Lucene.Net.Util.BytesRef)">Int32ToPrefixCodedBytes(Int32, Int32, BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Returns prefix coded bits after reducing the precision by <code data-dev-comment-type="paramref" class="paramref">shift</code> bits.
+This is method is used by <a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a>.
+After encoding, <code>bytes.Offset</code> will always be 0. 
+<p>
+NOTE: This was intToPrefixCodedBytes() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Int32ToPrefixCodedBytes(int val, int shift, BytesRef bytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The numeric value </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">shift</span></td>
+        <td><p>How many bits to strip from the right </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">bytes</span></td>
+        <td><p>Will contain the encoded value </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_Int64ToPrefixCoded_System_Int64_System_Int32_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.Int64ToPrefixCoded(System.Int64%2CSystem.Int32%2CLucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L118">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_Int64ToPrefixCoded_" data-uid="Lucene.Net.Util.NumericUtils.Int64ToPrefixCoded*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_Int64ToPrefixCoded_System_Int64_System_Int32_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Util.NumericUtils.Int64ToPrefixCoded(System.Int64,System.Int32,Lucene.Net.Util.BytesRef)">Int64ToPrefixCoded(Int64, Int32, BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Returns prefix coded bits after reducing the precision by <code data-dev-comment-type="paramref" class="paramref">shift</code> bits.
+This is method is used by <a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a>.
+After encoding, <code>bytes.Offset</code> will always be 0. 
+<p>
+NOTE: This was longToPrefixCoded() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Int64ToPrefixCoded(long val, int shift, BytesRef bytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The numeric value </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">shift</span></td>
+        <td><p>How many bits to strip from the right </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">bytes</span></td>
+        <td><p>Will contain the encoded value </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_Int64ToPrefixCodedBytes_System_Int64_System_Int32_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.Int64ToPrefixCodedBytes(System.Int64%2CSystem.Int32%2CLucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L150">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_Int64ToPrefixCodedBytes_" data-uid="Lucene.Net.Util.NumericUtils.Int64ToPrefixCodedBytes*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_Int64ToPrefixCodedBytes_System_Int64_System_Int32_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Util.NumericUtils.Int64ToPrefixCodedBytes(System.Int64,System.Int32,Lucene.Net.Util.BytesRef)">Int64ToPrefixCodedBytes(Int64, Int32, BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Returns prefix coded bits after reducing the precision by <code data-dev-comment-type="paramref" class="paramref">shift</code> bits.
+This is method is used by <a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a>.
+After encoding, <code>bytes.Offset</code> will always be 0. 
+<p>
+NOTE: This was longToPrefixCodedBytes() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Int64ToPrefixCodedBytes(long val, int shift, BytesRef bytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">val</span></td>
+        <td><p>The numeric value </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">shift</span></td>
+        <td><p>How many bits to strip from the right </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">bytes</span></td>
+        <td><p>Will contain the encoded value </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_PrefixCodedToInt32_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.PrefixCodedToInt32(Lucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L282">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_PrefixCodedToInt32_" data-uid="Lucene.Net.Util.NumericUtils.PrefixCodedToInt32*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_PrefixCodedToInt32_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Util.NumericUtils.PrefixCodedToInt32(Lucene.Net.Util.BytesRef)">PrefixCodedToInt32(BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Returns an <span class="xref">System.Int32</span> from prefixCoded bytes.
+Rightmost bits will be zero for lower precision codes.
+This method can be used to decode a term&apos;s value. 
+<p>
+NOTE: This was prefixCodedToInt() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int PrefixCodedToInt32(BytesRef val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">val</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.FormatException</span></td>
+        <td><p>if the supplied <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> is
+not correctly prefix encoded. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Util_NumericUtils_PrefixCodedToInt32_Lucene_Net_Util_BytesRef__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Util.NumericUtils.html#Lucene_Net_Util_NumericUtils_Int32ToPrefixCodedBytes_System_Int32_System_Int32_Lucene_Net_Util_BytesRef_">Int32ToPrefixCodedBytes(Int32, Int32, BytesRef)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_PrefixCodedToInt64_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.PrefixCodedToInt64(Lucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L256">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_PrefixCodedToInt64_" data-uid="Lucene.Net.Util.NumericUtils.PrefixCodedToInt64*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_PrefixCodedToInt64_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Util.NumericUtils.PrefixCodedToInt64(Lucene.Net.Util.BytesRef)">PrefixCodedToInt64(BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Returns a <span class="xref">System.Int64</span> from prefixCoded bytes.
+Rightmost bits will be zero for lower precision codes.
+This method can be used to decode a term&apos;s value. 
+<p>
+NOTE: This was prefixCodedToLong() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static long PrefixCodedToInt64(BytesRef val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">val</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.FormatException</span></td>
+        <td><p>if the supplied <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> is
+not correctly prefix encoded. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Util_NumericUtils_PrefixCodedToInt64_Lucene_Net_Util_BytesRef__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Util.NumericUtils.html#Lucene_Net_Util_NumericUtils_Int64ToPrefixCodedBytes_System_Int64_System_Int32_Lucene_Net_Util_BytesRef_">Int64ToPrefixCodedBytes(Int64, Int32, BytesRef)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_SingleToSortableInt32_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.SingleToSortableInt32(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L347">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_SingleToSortableInt32_" data-uid="Lucene.Net.Util.NumericUtils.SingleToSortableInt32*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_SingleToSortableInt32_System_Single_" data-uid="Lucene.Net.Util.NumericUtils.SingleToSortableInt32(System.Single)">SingleToSortableInt32(Single)</h4>
+  <div class="markdown level1 summary"><p>Converts a <span class="xref">System.Single</span> value to a sortable signed <span class="xref">System.Int32</span>.
+The value is converted by getting their IEEE 754 floating-point &quot;float format&quot;
+bit layout and then some bits are swapped, to be able to compare the result as <span class="xref">System.Int32</span>.
+By this the precision is not reduced, but the value can easily used as an <span class="xref">System.Int32</span>.
+The sort order (including <span class="xref">System.Single.NaN</span>) is defined by
+<span class="xref">System.Single.CompareTo(System.Single)</span>; <code>NaN</code> is greater than positive infinity. 
+<p>
+NOTE: This was floatToSortableInt() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int SingleToSortableInt32(float val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">val</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Util_NumericUtils_SingleToSortableInt32_System_Single__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Util.NumericUtils.html#Lucene_Net_Util_NumericUtils_SortableInt32ToSingle_System_Int32_">SortableInt32ToSingle(Int32)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_SortableInt32ToSingle_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.SortableInt32ToSingle(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L364">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_SortableInt32ToSingle_" data-uid="Lucene.Net.Util.NumericUtils.SortableInt32ToSingle*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_SortableInt32ToSingle_System_Int32_" data-uid="Lucene.Net.Util.NumericUtils.SortableInt32ToSingle(System.Int32)">SortableInt32ToSingle(Int32)</h4>
+  <div class="markdown level1 summary"><p>Converts a sortable <span class="xref">System.Int32</span> back to a <span class="xref">System.Single</span>. 
+<p>
+NOTE: This was sortableIntToFloat() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static float SortableInt32ToSingle(int val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">val</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Util_NumericUtils_SortableInt32ToSingle_System_Int32__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Util.NumericUtils.html#Lucene_Net_Util_NumericUtils_SingleToSortableInt32_System_Single_">SingleToSortableInt32(Single)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_SortableInt64ToDouble_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.SortableInt64ToDouble(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L326">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_SortableInt64ToDouble_" data-uid="Lucene.Net.Util.NumericUtils.SortableInt64ToDouble*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_SortableInt64ToDouble_System_Int64_" data-uid="Lucene.Net.Util.NumericUtils.SortableInt64ToDouble(System.Int64)">SortableInt64ToDouble(Int64)</h4>
+  <div class="markdown level1 summary"><p>Converts a sortable <span class="xref">System.Int64</span> back to a <span class="xref">System.Double</span>. 
+<p>
+NOTE: This was sortableLongToDouble() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static double SortableInt64ToDouble(long val)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">val</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Util_NumericUtils_SortableInt64ToDouble_System_Int64__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Util.NumericUtils.html#Lucene_Net_Util_NumericUtils_DoubleToSortableInt64_System_Double_">DoubleToSortableInt64(Double)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_SplitInt32Range_Lucene_Net_Util_NumericUtils_Int32RangeBuilder_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.SplitInt32Range(Lucene.Net.Util.NumericUtils.Int32RangeBuilder%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L402">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_SplitInt32Range_" data-uid="Lucene.Net.Util.NumericUtils.SplitInt32Range*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_SplitInt32Range_Lucene_Net_Util_NumericUtils_Int32RangeBuilder_System_Int32_System_Int32_System_Int32_" data-uid="Lucene.Net.Util.NumericUtils.SplitInt32Range(Lucene.Net.Util.NumericUtils.Int32RangeBuilder,System.Int32,System.Int32,System.Int32)">SplitInt32Range(NumericUtils.Int32RangeBuilder, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Splits an <span class="xref">System.Int32</span> range recursively.
+You may implement a builder that adds clauses to a
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a> for each call to its
+<a class="xref" href="Lucene.Net.Util.NumericUtils.Int32RangeBuilder.html#Lucene_Net_Util_NumericUtils_Int32RangeBuilder_AddRange_Lucene_Net_Util_BytesRef_Lucene_Net_Util_BytesRef_">AddRange(BytesRef, BytesRef)</a>
+method.
+<p>
+This method is used by <a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a>.
+<p>
+NOTE: This was splitIntRange() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitInt32Range(NumericUtils.Int32RangeBuilder builder, int precisionStep, int minBound, int maxBound)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.NumericUtils.Int32RangeBuilder.html">NumericUtils.Int32RangeBuilder</a></td>
+        <td><span class="parametername">builder</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">precisionStep</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">minBound</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxBound</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils_SplitInt64Range_Lucene_Net_Util_NumericUtils_Int64RangeBuilder_System_Int32_System_Int64_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils.SplitInt64Range(Lucene.Net.Util.NumericUtils.Int64RangeBuilder%2CSystem.Int32%2CSystem.Int64%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L385">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_NumericUtils_SplitInt64Range_" data-uid="Lucene.Net.Util.NumericUtils.SplitInt64Range*"></a>
+  <h4 id="Lucene_Net_Util_NumericUtils_SplitInt64Range_Lucene_Net_Util_NumericUtils_Int64RangeBuilder_System_Int32_System_Int64_System_Int64_" data-uid="Lucene.Net.Util.NumericUtils.SplitInt64Range(Lucene.Net.Util.NumericUtils.Int64RangeBuilder,System.Int32,System.Int64,System.Int64)">SplitInt64Range(NumericUtils.Int64RangeBuilder, Int32, Int64, Int64)</h4>
+  <div class="markdown level1 summary"><p>Splits a long range recursively.
+You may implement a builder that adds clauses to a
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a> for each call to its
+<a class="xref" href="Lucene.Net.Util.NumericUtils.Int64RangeBuilder.html#Lucene_Net_Util_NumericUtils_Int64RangeBuilder_AddRange_Lucene_Net_Util_BytesRef_Lucene_Net_Util_BytesRef_">AddRange(BytesRef, BytesRef)</a>
+method.
+<p>
+This method is used by <a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a>.
+<p>
+NOTE: This was splitLongRange() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SplitInt64Range(NumericUtils.Int64RangeBuilder builder, int precisionStep, long minBound, long maxBound)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.NumericUtils.Int64RangeBuilder.html">NumericUtils.Int64RangeBuilder</a></td>
+        <td><span class="parametername">builder</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">precisionStep</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">minBound</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">maxBound</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_NumericUtils.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.NumericUtils%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/NumericUtils.cs/#L64" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

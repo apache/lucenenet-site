@@ -1,0 +1,2623 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Field
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Field
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Documents.Field">
+  
+  
+  <h1 id="Lucene_Net_Documents_Field" data-uid="Lucene.Net.Documents.Field" class="text-break">Class Field
+  </h1>
+  <div class="markdown level0 summary"><p>Expert: directly create a field for a document.  Most
+users should use one of the sugar subclasses: <a class="xref" href="Lucene.Net.Documents.Int32Field.html">Int32Field</a>, 
+<a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a>, <a class="xref" href="Lucene.Net.Documents.SingleField.html">SingleField</a>, <a class="xref" href="Lucene.Net.Documents.DoubleField.html">DoubleField</a>, 
+<a class="xref" href="Lucene.Net.Documents.BinaryDocValuesField.html">BinaryDocValuesField</a>, <a class="xref" href="Lucene.Net.Documents.NumericDocValuesField.html">NumericDocValuesField</a>,
+<a class="xref" href="Lucene.Net.Documents.SortedDocValuesField.html">SortedDocValuesField</a>, <a class="xref" href="Lucene.Net.Documents.StringField.html">StringField</a>,
+<a class="xref" href="Lucene.Net.Documents.TextField.html">TextField</a>, <a class="xref" href="Lucene.Net.Documents.StoredField.html">StoredField</a>.</p>
+<p><p> A field is a section of a <a class="xref" href="Lucene.Net.Documents.Document.html">Document</a>. Each field has three
+parts: name, type and value. Values may be text
+(<span class="xref">System.String</span>, <span class="xref">System.IO.TextReader</span> or pre-analyzed <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>), binary
+(<span class="xref">byte[]</span>), or numeric (<span class="xref">System.Int32</span>, <span class="xref">System.Int64</span>, <span class="xref">System.Single</span>, or <span class="xref">System.Double</span>). 
+Fields are optionally stored in the
+index, so that they may be returned with hits on the document.</p>
+<p><p>
+NOTE: the field type is an <a class="xref" href="Lucene.Net.Index.IIndexableFieldType.html">IIndexableFieldType</a>.  Making changes
+to the state of the <a class="xref" href="Lucene.Net.Index.IIndexableFieldType.html">IIndexableFieldType</a> will impact any
+Field it is used in.  It is strongly recommended that no
+changes be made after <a class="xref" href="Lucene.Net.Documents.Field.html">Field</a> instantiation.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Field</span></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Documents.BinaryDocValuesField.html">BinaryDocValuesField</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Documents.DoubleField.html">DoubleField</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Documents.Int32Field.html">Int32Field</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Documents.NumericDocValuesField.html">NumericDocValuesField</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Documents.SingleField.html">SingleField</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Documents.SortedDocValuesField.html">SortedDocValuesField</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Documents.SortedSetDocValuesField.html">SortedSetDocValuesField</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Documents.StoredField.html">StoredField</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Documents.StringField.html">StringField</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Documents.TextField.html">TextField</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Documents.html">Lucene.Net.Documents</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Documents_Field_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Field : IIndexableField</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field__ctor_System_String_Lucene_Net_Analysis_TokenStream_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.%23ctor(System.String%2CLucene.Net.Analysis.TokenStream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L1251">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field__ctor_" data-uid="Lucene.Net.Documents.Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Field__ctor_System_String_Lucene_Net_Analysis_TokenStream_" data-uid="Lucene.Net.Documents.Field.#ctor(System.String,Lucene.Net.Analysis.TokenStream)">Field(String, TokenStream)</h4>
+  <div class="markdown level1 summary"><p>Create a tokenized and indexed field that is not stored. Term vectors will
+not be stored. This is useful for pre-analyzed fields.
+The <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> is read only when the <a class="xref" href="Lucene.Net.Documents.Document.html">Document</a> is added to the index,
+i.e. you may not close the <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> until <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocument_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__">AddDocument(IEnumerable&lt;IIndexableField&gt;)</a>
+has been called.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use TextField instead.&quot;)]
+public Field(string name, TokenStream tokenStream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the field</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a></td>
+        <td><span class="parametername">tokenStream</span></td>
+        <td><p>The <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> with the content</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>if <code data-dev-comment-type="paramref" class="paramref">name</code> or <code data-dev-comment-type="paramref" class="paramref">tokenStream</code> is <code>null</code></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field__ctor_System_String_Lucene_Net_Analysis_TokenStream_Lucene_Net_Documents_Field_TermVector_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.%23ctor(System.String%2CLucene.Net.Analysis.TokenStream%2CLucene.Net.Documents.Field.TermVector)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L1268">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field__ctor_" data-uid="Lucene.Net.Documents.Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Field__ctor_System_String_Lucene_Net_Analysis_TokenStream_Lucene_Net_Documents_Field_TermVector_" data-uid="Lucene.Net.Documents.Field.#ctor(System.String,Lucene.Net.Analysis.TokenStream,Lucene.Net.Documents.Field.TermVector)">Field(String, TokenStream, Field.TermVector)</h4>
+  <div class="markdown level1 summary"><p>Create a tokenized and indexed field that is not stored, optionally with 
+storing term vectors.  This is useful for pre-analyzed fields.
+The <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> is read only when the <a class="xref" href="Lucene.Net.Documents.Document.html">Document</a> is added to the index,
+i.e. you may not close the <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> until <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocument_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__">AddDocument(IEnumerable&lt;IIndexableField&gt;)</a>
+has been called.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use TextField instead.&quot;)]
+public Field(string name, TokenStream tokenStream, Field.TermVector termVector)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the field</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a></td>
+        <td><span class="parametername">tokenStream</span></td>
+        <td><p>The <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> with the content</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.Field.TermVector.html">Field.TermVector</a></td>
+        <td><span class="parametername">termVector</span></td>
+        <td><p>Whether term vector should be stored</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>if <code data-dev-comment-type="paramref" class="paramref">name</code> or <code data-dev-comment-type="paramref" class="paramref">tokenStream</code> is <code>null</code></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field__ctor_System_String_Lucene_Net_Analysis_TokenStream_Lucene_Net_Documents_FieldType_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.%23ctor(System.String%2CLucene.Net.Analysis.TokenStream%2CLucene.Net.Documents.FieldType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L201">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field__ctor_" data-uid="Lucene.Net.Documents.Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Field__ctor_System_String_Lucene_Net_Analysis_TokenStream_Lucene_Net_Documents_FieldType_" data-uid="Lucene.Net.Documents.Field.#ctor(System.String,Lucene.Net.Analysis.TokenStream,Lucene.Net.Documents.FieldType)">Field(String, TokenStream, FieldType)</h4>
+  <div class="markdown level1 summary"><p>Create field with <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> value. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Field(string name, TokenStream tokenStream, FieldType type)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>field name </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a></td>
+        <td><span class="parametername">tokenStream</span></td>
+        <td><p>TokenStream value </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a></td>
+        <td><span class="parametername">type</span></td>
+        <td><p>field type </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>if <a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_IsStored">IsStored</a> is true, or
+       if <a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_IsTokenized">IsTokenized</a> is false, or if <a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_IsIndexed">IsIndexed</a> is false. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>if either the <code data-dev-comment-type="paramref" class="paramref">name</code> or <code data-dev-comment-type="paramref" class="paramref">type</code>
+       is <code>null</code>, or if the <code data-dev-comment-type="paramref" class="paramref">tokenStream</code> is <code>null</code> </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field__ctor_System_String_Lucene_Net_Documents_FieldType_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.%23ctor(System.String%2CLucene.Net.Documents.FieldType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L141">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field__ctor_" data-uid="Lucene.Net.Documents.Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Field__ctor_System_String_Lucene_Net_Documents_FieldType_" data-uid="Lucene.Net.Documents.Field.#ctor(System.String,Lucene.Net.Documents.FieldType)">Field(String, FieldType)</h4>
+  <div class="markdown level1 summary"><p>Expert: creates a field with no initial value.
+Intended only for custom <a class="xref" href="Lucene.Net.Documents.Field.html">Field</a> subclasses.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected Field(string name, FieldType type)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>field name </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a></td>
+        <td><span class="parametername">type</span></td>
+        <td><p>field type </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>if either the <code data-dev-comment-type="paramref" class="paramref">name</code> or <code data-dev-comment-type="paramref" class="paramref">type</code>
+       is <code>null</code>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field__ctor_System_String_Lucene_Net_Util_BytesRef_Lucene_Net_Documents_FieldType_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.%23ctor(System.String%2CLucene.Net.Util.BytesRef%2CLucene.Net.Documents.FieldType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L278">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field__ctor_" data-uid="Lucene.Net.Documents.Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Field__ctor_System_String_Lucene_Net_Util_BytesRef_Lucene_Net_Documents_FieldType_" data-uid="Lucene.Net.Documents.Field.#ctor(System.String,Lucene.Net.Util.BytesRef,Lucene.Net.Documents.FieldType)">Field(String, BytesRef, FieldType)</h4>
+  <div class="markdown level1 summary"><p>Create field with binary value.</p>
+<p><p>NOTE: the provided BytesRef is not copied so be sure
+not to change it until you&apos;re done with this field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Field(string name, BytesRef bytes, FieldType type)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>field name </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">bytes</span></td>
+        <td><p>BytesRef pointing to binary content (not copied) </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a></td>
+        <td><span class="parametername">type</span></td>
+        <td><p>field type </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>if the <a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_IsIndexed">IsIndexed</a> is true </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>if the field <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>,
+       or the <code data-dev-comment-type="paramref" class="paramref">type</code> is <code>null</code> </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field__ctor_System_String_System_Byte___.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.%23ctor(System.String%2CSystem.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L1279">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field__ctor_" data-uid="Lucene.Net.Documents.Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Field__ctor_System_String_System_Byte___" data-uid="Lucene.Net.Documents.Field.#ctor(System.String,System.Byte[])">Field(String, Byte[])</h4>
+  <div class="markdown level1 summary"><p>Create a stored field with binary value. Optionally the value may be compressed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use StoredField instead.&quot;)]
+public Field(string name, byte[] value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the field</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The binary value</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field__ctor_System_String_System_Byte___Lucene_Net_Documents_FieldType_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.%23ctor(System.String%2CSystem.Byte%5B%5D%2CLucene.Net.Documents.FieldType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L242">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field__ctor_" data-uid="Lucene.Net.Documents.Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Field__ctor_System_String_System_Byte___Lucene_Net_Documents_FieldType_" data-uid="Lucene.Net.Documents.Field.#ctor(System.String,System.Byte[],Lucene.Net.Documents.FieldType)">Field(String, Byte[], FieldType)</h4>
+  <div class="markdown level1 summary"><p>Create field with binary value.</p>
+<p><p>NOTE: the provided <span class="xref">byte[]</span> is not copied so be sure
+not to change it until you&apos;re done with this field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Field(string name, byte[] value, FieldType type)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>field name </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">value</span></td>
+        <td><p>byte array pointing to binary content (not copied) </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a></td>
+        <td><span class="parametername">type</span></td>
+        <td><p>field type </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>if the <a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_IsIndexed">IsIndexed</a> is true </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>the field <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>,
+       or if the <code data-dev-comment-type="paramref" class="paramref">type</code> is <code>null</code> </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field__ctor_System_String_System_Byte___System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.%23ctor(System.String%2CSystem.Byte%5B%5D%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L1292">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field__ctor_" data-uid="Lucene.Net.Documents.Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Field__ctor_System_String_System_Byte___System_Int32_System_Int32_" data-uid="Lucene.Net.Documents.Field.#ctor(System.String,System.Byte[],System.Int32,System.Int32)">Field(String, Byte[], Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Create a stored field with binary value. Optionally the value may be compressed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use StoredField instead.&quot;)]
+public Field(string name, byte[] value, int offset, int length)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the field</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The binary value</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td><p>Starting offset in value where this <a class="xref" href="Lucene.Net.Documents.Field.html">Field</a>&apos;s bytes are</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">length</span></td>
+        <td><p>Number of bytes to use for this <a class="xref" href="Lucene.Net.Documents.Field.html">Field</a>, starting at offset</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field__ctor_System_String_System_Byte___System_Int32_System_Int32_Lucene_Net_Documents_FieldType_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.%23ctor(System.String%2CSystem.Byte%5B%5D%2CSystem.Int32%2CSystem.Int32%2CLucene.Net.Documents.FieldType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L261">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field__ctor_" data-uid="Lucene.Net.Documents.Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Field__ctor_System_String_System_Byte___System_Int32_System_Int32_Lucene_Net_Documents_FieldType_" data-uid="Lucene.Net.Documents.Field.#ctor(System.String,System.Byte[],System.Int32,System.Int32,Lucene.Net.Documents.FieldType)">Field(String, Byte[], Int32, Int32, FieldType)</h4>
+  <div class="markdown level1 summary"><p>Create field with binary value.</p>
+<p><p>NOTE: the provided <span class="xref">byte[]</span> is not copied so be sure
+not to change it until you&apos;re done with this field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Field(string name, byte[] value, int offset, int length, FieldType type)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>field name </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">value</span></td>
+        <td><p>byte array pointing to binary content (not copied) </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td><p>starting position of the byte array </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">length</span></td>
+        <td><p>valid length of the byte array </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a></td>
+        <td><span class="parametername">type</span></td>
+        <td><p>field type </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>if the <a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_IsIndexed">IsIndexed</a> is true </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>if the field <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>,
+       or the <code data-dev-comment-type="paramref" class="paramref">type</code> is <code>null</code> </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field__ctor_System_String_System_IO_TextReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.%23ctor(System.String%2CSystem.IO.TextReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L1219">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field__ctor_" data-uid="Lucene.Net.Documents.Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Field__ctor_System_String_System_IO_TextReader_" data-uid="Lucene.Net.Documents.Field.#ctor(System.String,System.IO.TextReader)">Field(String, TextReader)</h4>
+  <div class="markdown level1 summary"><p>Create a tokenized and indexed field that is not stored. Term vectors will
+not be stored.  The <span class="xref">System.IO.TextReader</span> is read only when the <a class="xref" href="Lucene.Net.Documents.Document.html">Document</a> is added to the index,
+i.e. you may not close the <span class="xref">System.IO.TextReader</span> until <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocument_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__">AddDocument(IEnumerable&lt;IIndexableField&gt;)</a>
+has been called.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use TextField instead.&quot;)]
+public Field(string name, TextReader reader)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the field</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">reader</span></td>
+        <td><p>The reader with the content</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>if <code data-dev-comment-type="paramref" class="paramref">name</code> or <code data-dev-comment-type="paramref" class="paramref">reader</code> is <code>null</code></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field__ctor_System_String_System_IO_TextReader_Lucene_Net_Documents_Field_TermVector_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.%23ctor(System.String%2CSystem.IO.TextReader%2CLucene.Net.Documents.Field.TermVector)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L1235">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field__ctor_" data-uid="Lucene.Net.Documents.Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Field__ctor_System_String_System_IO_TextReader_Lucene_Net_Documents_Field_TermVector_" data-uid="Lucene.Net.Documents.Field.#ctor(System.String,System.IO.TextReader,Lucene.Net.Documents.Field.TermVector)">Field(String, TextReader, Field.TermVector)</h4>
+  <div class="markdown level1 summary"><p>Create a tokenized and indexed field that is not stored, optionally with 
+storing term vectors.  The <span class="xref">System.IO.TextReader</span> is read only when the <a class="xref" href="Lucene.Net.Documents.Document.html">Document</a> is added to the index,
+i.e. you may not close the <span class="xref">System.IO.TextReader</span> until <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocument_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField__">AddDocument(IEnumerable&lt;IIndexableField&gt;)</a>
+has been called.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use TextField instead.&quot;)]
+public Field(string name, TextReader reader, Field.TermVector termVector)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the field</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">reader</span></td>
+        <td><p>The reader with the content</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.Field.TermVector.html">Field.TermVector</a></td>
+        <td><span class="parametername">termVector</span></td>
+        <td><p>Whether term vector should be stored</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>if <code data-dev-comment-type="paramref" class="paramref">name</code> or <code data-dev-comment-type="paramref" class="paramref">reader</code> is <code>null</code></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field__ctor_System_String_System_IO_TextReader_Lucene_Net_Documents_FieldType_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.%23ctor(System.String%2CSystem.IO.TextReader%2CLucene.Net.Documents.FieldType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L164">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field__ctor_" data-uid="Lucene.Net.Documents.Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Field__ctor_System_String_System_IO_TextReader_Lucene_Net_Documents_FieldType_" data-uid="Lucene.Net.Documents.Field.#ctor(System.String,System.IO.TextReader,Lucene.Net.Documents.FieldType)">Field(String, TextReader, FieldType)</h4>
+  <div class="markdown level1 summary"><p>Create field with <span class="xref">System.IO.TextReader</span> value. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Field(string name, TextReader reader, FieldType type)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>field name </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">reader</span></td>
+        <td><p>reader value </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a></td>
+        <td><span class="parametername">type</span></td>
+        <td><p>field type </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>if <a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_IsStored">IsStored</a> is true, or
+       if <a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_IsTokenized">IsTokenized</a> is false. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>if either the <code data-dev-comment-type="paramref" class="paramref">name</code> or <code data-dev-comment-type="paramref" class="paramref">type</code>
+       is <code>null</code>, or if the reader is <code>null</code> </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field__ctor_System_String_System_String_Lucene_Net_Documents_Field_Store_Lucene_Net_Documents_Field_Index_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.%23ctor(System.String%2CSystem.String%2CLucene.Net.Documents.Field.Store%2CLucene.Net.Documents.Field.Index)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L1181">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field__ctor_" data-uid="Lucene.Net.Documents.Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Field__ctor_System_String_System_String_Lucene_Net_Documents_Field_Store_Lucene_Net_Documents_Field_Index_" data-uid="Lucene.Net.Documents.Field.#ctor(System.String,System.String,Lucene.Net.Documents.Field.Store,Lucene.Net.Documents.Field.Index)">Field(String, String, Field.Store, Field.Index)</h4>
+  <div class="markdown level1 summary"><p>Create a field by specifying its <code data-dev-comment-type="paramref" class="paramref">name</code>, <code data-dev-comment-type="paramref" class="paramref">value</code> and how it will
+be saved in the index. Term vectors will not be stored in the index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use StringField, TextField instead.&quot;)]
+public Field(string name, string value, Field.Store store, Field.Index index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the field</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The string to process</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.Field.Store.html">Field.Store</a></td>
+        <td><span class="parametername">store</span></td>
+        <td><p>Whether <code data-dev-comment-type="paramref" class="paramref">value</code> should be stored in the index</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.Field.Index.html">Field.Index</a></td>
+        <td><span class="parametername">index</span></td>
+        <td><p>Whether the field should be indexed, and if so, if it should
+be tokenized before indexing</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>if <code data-dev-comment-type="paramref" class="paramref">name</code> or <code data-dev-comment-type="paramref" class="paramref">value</code> is <code>null</code></p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>if the field is neither stored nor indexed</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field__ctor_System_String_System_String_Lucene_Net_Documents_Field_Store_Lucene_Net_Documents_Field_Index_Lucene_Net_Documents_Field_TermVector_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.%23ctor(System.String%2CSystem.String%2CLucene.Net.Documents.Field.Store%2CLucene.Net.Documents.Field.Index%2CLucene.Net.Documents.Field.TermVector)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L1204">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field__ctor_" data-uid="Lucene.Net.Documents.Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Field__ctor_System_String_System_String_Lucene_Net_Documents_Field_Store_Lucene_Net_Documents_Field_Index_Lucene_Net_Documents_Field_TermVector_" data-uid="Lucene.Net.Documents.Field.#ctor(System.String,System.String,Lucene.Net.Documents.Field.Store,Lucene.Net.Documents.Field.Index,Lucene.Net.Documents.Field.TermVector)">Field(String, String, Field.Store, Field.Index, Field.TermVector)</h4>
+  <div class="markdown level1 summary"><p>Create a field by specifying its <code data-dev-comment-type="paramref" class="paramref">name</code>, <code data-dev-comment-type="paramref" class="paramref">value</code> and how it will
+be saved in the index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use StringField, TextField instead.&quot;)]
+public Field(string name, string value, Field.Store store, Field.Index index, Field.TermVector termVector)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>The name of the field</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The string to process</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.Field.Store.html">Field.Store</a></td>
+        <td><span class="parametername">store</span></td>
+        <td><p>Whether <code data-dev-comment-type="paramref" class="paramref">value</code> should be stored in the index</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.Field.Index.html">Field.Index</a></td>
+        <td><span class="parametername">index</span></td>
+        <td><p>Whether the field should be indexed, and if so, if it should
+be tokenized before indexing</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.Field.TermVector.html">Field.TermVector</a></td>
+        <td><span class="parametername">termVector</span></td>
+        <td><p>Whether term vector should be stored</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>if <code data-dev-comment-type="paramref" class="paramref">name</code> or <code data-dev-comment-type="paramref" class="paramref">value</code> is <code>null</code></p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>in any of the following situations:
+<ul><li>the field is neither stored nor indexed</li><li>the field is not indexed but termVector is <a class="xref" href="Lucene.Net.Documents.Field.TermVector.html#Lucene_Net_Documents_Field_TermVector_YES">YES</a></li></ul></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field__ctor_System_String_System_String_Lucene_Net_Documents_FieldType_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.%23ctor(System.String%2CSystem.String%2CLucene.Net.Documents.FieldType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L308">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field__ctor_" data-uid="Lucene.Net.Documents.Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Field__ctor_System_String_System_String_Lucene_Net_Documents_FieldType_" data-uid="Lucene.Net.Documents.Field.#ctor(System.String,System.String,Lucene.Net.Documents.FieldType)">Field(String, String, FieldType)</h4>
+  <div class="markdown level1 summary"><p>Create field with <span class="xref">System.String</span> value. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Field(string name, string value, FieldType type)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>field name </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>string value </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a></td>
+        <td><span class="parametername">type</span></td>
+        <td><p>field type </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>if the field&apos;s type is neither indexed() nor stored(),
+       or if indexed() is false but storeTermVectors() is true. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>if either the <code data-dev-comment-type="paramref" class="paramref">name</code> or <code data-dev-comment-type="paramref" class="paramref">value</code>
+       is <code>null</code>, or if the <code data-dev-comment-type="paramref" class="paramref">type</code> is <code>null</code> </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_m_boost.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.m_boost%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L131">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Documents_Field_m_boost" data-uid="Lucene.Net.Documents.Field.m_boost">m_boost</h4>
+  <div class="markdown level1 summary"><p>Field&apos;s boost </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected float m_boost</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Documents_Field_m_boost_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_Boost">Boost</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_m_name.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.m_name%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L60">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Documents_Field_m_name" data-uid="Lucene.Net.Documents.Field.m_name">m_name</h4>
+  <div class="markdown level1 summary"><p>Field&apos;s name</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly string m_name</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_m_tokenStream.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.m_tokenStream%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L124">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Documents_Field_m_tokenStream" data-uid="Lucene.Net.Documents.Field.m_tokenStream">m_tokenStream</h4>
+  <div class="markdown level1 summary"><p>Pre-analyzed <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> for indexed fields; this is
+separate from <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_FieldsData">FieldsData</a> because you are allowed to
+have both; eg maybe field has a <span class="xref">System.String</span> value but you
+customize how it&apos;s tokenized</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected TokenStream m_tokenStream</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_m_type.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.m_type%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L55">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Documents_Field_m_type" data-uid="Lucene.Net.Documents.Field.m_type">m_type</h4>
+  <div class="markdown level1 summary"><p>Field&apos;s type</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly FieldType m_type</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_Boost.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.Boost%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L624">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_Boost_" data-uid="Lucene.Net.Documents.Field.Boost*"></a>
+  <h4 id="Lucene_Net_Documents_Field_Boost" data-uid="Lucene.Net.Documents.Field.Boost">Boost</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the boost factor on this field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual float Boost { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Documents_Field_Boost_remarks">Remarks</h5>
+  <div class="markdown level1 remarks"><p>The default value is <code>1.0f</code> (no boost).</p>
+</div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>(setter only) if this field is not indexed,
+       or if it omits norms. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_FieldsData.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.FieldsData%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L75">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_FieldsData_" data-uid="Lucene.Net.Documents.Field.FieldsData*"></a>
+  <h4 id="Lucene_Net_Documents_Field_FieldsData" data-uid="Lucene.Net.Documents.Field.FieldsData">FieldsData</h4>
+  <div class="markdown level1 summary"><p>Field&apos;s value 
+<p>
+Setting this property will automatically set the backing field for the
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_NumericType">NumericType</a> property.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected object FieldsData { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_FieldType.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.FieldType%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L842">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_FieldType_" data-uid="Lucene.Net.Documents.Field.FieldType*"></a>
+  <h4 id="Lucene_Net_Documents_Field_FieldType" data-uid="Lucene.Net.Documents.Field.FieldType">FieldType</h4>
+  <div class="markdown level1 summary"><p>Returns the <a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a> for this field as type <a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual FieldType FieldType { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_IndexableFieldType.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.IndexableFieldType%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L846">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_IndexableFieldType_" data-uid="Lucene.Net.Documents.Field.IndexableFieldType*"></a>
+  <h4 id="Lucene_Net_Documents_Field_IndexableFieldType" data-uid="Lucene.Net.Documents.Field.IndexableFieldType">IndexableFieldType</h4>
+  <div class="markdown level1 summary"><p>Returns the <a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a> for this field as type <a class="xref" href="Lucene.Net.Index.IIndexableFieldType.html">IIndexableFieldType</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IIndexableFieldType IndexableFieldType { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IIndexableFieldType.html">IIndexableFieldType</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_Name.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.Name%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L616">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_Name_" data-uid="Lucene.Net.Documents.Field.Name*"></a>
+  <h4 id="Lucene_Net_Documents_Field_Name" data-uid="Lucene.Net.Documents.Field.Name">Name</h4>
+  <div class="markdown level1 summary"><p>The field&apos;s name</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual string Name { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_NumericType.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.NumericType%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L695">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_NumericType_" data-uid="Lucene.Net.Documents.Field.NumericType*"></a>
+  <h4 id="Lucene_Net_Documents_Field_NumericType" data-uid="Lucene.Net.Documents.Field.NumericType">NumericType</h4>
+  <div class="markdown level1 summary"><p>Gets the <a class="xref" href="Lucene.Net.Documents.NumericFieldType.html">NumericFieldType</a> of the underlying value, or <a class="xref" href="Lucene.Net.Documents.NumericFieldType.html#Lucene_Net_Documents_NumericFieldType_NONE">NONE</a> if the value is not set or non-numeric.
+<p>
+Expert: The difference between this property and <a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_NumericType">NumericType</a> is 
+this is represents the current state of the field (whether being written or read) and the
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_FieldType">FieldType</a> property represents instructions on how the field will be written,
+but does not re-populate when reading back from an index (it is write-only).
+<p>
+In Java, the numeric type was determined by checking the type of<br><a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetNumericValue">GetNumericValue()</a>. However, since there are no reference number
+types in .NET, using <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetNumericValue">GetNumericValue()</a> so will cause boxing/unboxing. It is
+therefore recommended to use this property to check the underlying type and the corresponding 
+<code>Get*Value()</code> method to retrieve the value.
+<p>
+NOTE: Since Lucene codecs do not support <a class="xref" href="Lucene.Net.Documents.NumericFieldType.html#Lucene_Net_Documents_NumericFieldType_BYTE">BYTE</a> or <a class="xref" href="Lucene.Net.Documents.NumericFieldType.html#Lucene_Net_Documents_NumericFieldType_INT16">INT16</a>,
+fields created with these types will always be <a class="xref" href="Lucene.Net.Documents.NumericFieldType.html#Lucene_Net_Documents_NumericFieldType_INT32">INT32</a> when read back from the index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual NumericFieldType NumericType { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.NumericFieldType.html">NumericFieldType</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_GetBinaryValue.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.GetBinaryValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L807">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_GetBinaryValue_" data-uid="Lucene.Net.Documents.Field.GetBinaryValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_GetBinaryValue" data-uid="Lucene.Net.Documents.Field.GetBinaryValue">GetBinaryValue()</h4>
+  <div class="markdown level1 summary"><p>Non-null if this field has a binary value. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual BytesRef GetBinaryValue()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_GetByteValue.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.GetByteValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L703">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_GetByteValue_" data-uid="Lucene.Net.Documents.Field.GetByteValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_GetByteValue" data-uid="Lucene.Net.Documents.Field.GetByteValue">GetByteValue()</h4>
+  <div class="markdown level1 summary"><p>Returns the field value as <span class="xref">System.Byte</span> or <code>null</code> if the type
+is non-numeric.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual byte? GetByteValue()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Byte</span>&gt;</td>
+        <td><p>The field value or <code>null</code> if the type is non-numeric.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_GetDoubleValue.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.GetDoubleValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L793">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_GetDoubleValue_" data-uid="Lucene.Net.Documents.Field.GetDoubleValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_GetDoubleValue" data-uid="Lucene.Net.Documents.Field.GetDoubleValue">GetDoubleValue()</h4>
+  <div class="markdown level1 summary"><p>Returns the field value as <span class="xref">System.Double</span> or <code>null</code> if the type
+is non-numeric.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual double? GetDoubleValue()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><p>The field value or <code>null</code> if the type is non-numeric.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_GetInt16Value.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.GetInt16Value%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L721">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_GetInt16Value_" data-uid="Lucene.Net.Documents.Field.GetInt16Value*"></a>
+  <h4 id="Lucene_Net_Documents_Field_GetInt16Value" data-uid="Lucene.Net.Documents.Field.GetInt16Value">GetInt16Value()</h4>
+  <div class="markdown level1 summary"><p>Returns the field value as <span class="xref">System.Int16</span> or <code>null</code> if the type
+is non-numeric.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual short? GetInt16Value()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int16</span>&gt;</td>
+        <td><p>The field value or <code>null</code> if the type is non-numeric.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_GetInt32Value.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.GetInt32Value%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L739">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_GetInt32Value_" data-uid="Lucene.Net.Documents.Field.GetInt32Value*"></a>
+  <h4 id="Lucene_Net_Documents_Field_GetInt32Value" data-uid="Lucene.Net.Documents.Field.GetInt32Value">GetInt32Value()</h4>
+  <div class="markdown level1 summary"><p>Returns the field value as <span class="xref">System.Int32</span> or <code>null</code> if the type
+is non-numeric.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int? GetInt32Value()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><p>The field value or <code>null</code> if the type is non-numeric.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_GetInt64Value.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.GetInt64Value%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L757">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_GetInt64Value_" data-uid="Lucene.Net.Documents.Field.GetInt64Value*"></a>
+  <h4 id="Lucene_Net_Documents_Field_GetInt64Value" data-uid="Lucene.Net.Documents.Field.GetInt64Value">GetInt64Value()</h4>
+  <div class="markdown level1 summary"><p>Returns the field value as <span class="xref">System.Int64</span> or <code>null</code> if the type
+is non-numeric.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual long? GetInt64Value()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int64</span>&gt;</td>
+        <td><p>The field value or <code>null</code> if the type is non-numeric.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_GetNumericValue.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.GetNumericValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L640">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_GetNumericValue_" data-uid="Lucene.Net.Documents.Field.GetNumericValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_GetNumericValue" data-uid="Lucene.Net.Documents.Field.GetNumericValue">GetNumericValue()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;In .NET, use of this method will cause boxing/unboxing. Instead, use the NumericType property to check the underlying type and call the appropriate GetXXXValue() method to retrieve the value.&quot;)]
+public virtual object GetNumericValue()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_GetReaderValue.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.GetReaderValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L432">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_GetReaderValue_" data-uid="Lucene.Net.Documents.Field.GetReaderValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_GetReaderValue" data-uid="Lucene.Net.Documents.Field.GetReaderValue">GetReaderValue()</h4>
+  <div class="markdown level1 summary"><p>The value of the field as a <span class="xref">System.IO.TextReader</span>, or <code>null</code>. If <code>null</code>, the <span class="xref">System.String</span> value or
+binary value is used. Exactly one of <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetStringValue">GetStringValue()</a>, <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetReaderValue">GetReaderValue()</a>, and
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetBinaryValue">GetBinaryValue()</a> must be set.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TextReader GetReaderValue()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_GetSingleValue.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.GetSingleValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L775">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_GetSingleValue_" data-uid="Lucene.Net.Documents.Field.GetSingleValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_GetSingleValue" data-uid="Lucene.Net.Documents.Field.GetSingleValue">GetSingleValue()</h4>
+  <div class="markdown level1 summary"><p>Returns the field value as <span class="xref">System.Single</span> or <code>null</code> if the type
+is non-numeric.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual float? GetSingleValue()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Single</span>&gt;</td>
+        <td><p>The field value or <code>null</code> if the type is non-numeric.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_GetStringValue.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.GetStringValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L342">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_GetStringValue_" data-uid="Lucene.Net.Documents.Field.GetStringValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_GetStringValue" data-uid="Lucene.Net.Documents.Field.GetStringValue">GetStringValue()</h4>
+  <div class="markdown level1 summary"><p>The value of the field as a <span class="xref">System.String</span>, or <code>null</code>. If <code>null</code>, the <span class="xref">System.IO.TextReader</span> value or
+binary value is used. Exactly one of <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetStringValue">GetStringValue()</a>, <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetReaderValue">GetReaderValue()</a>, and
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetBinaryValue">GetBinaryValue()</a> must be set.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual string GetStringValue()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>The string representation of the value if it is either a <span class="xref">System.String</span> or numeric type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_GetStringValue_System_IFormatProvider_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.GetStringValue(System.IFormatProvider)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L362">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_GetStringValue_" data-uid="Lucene.Net.Documents.Field.GetStringValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_GetStringValue_System_IFormatProvider_" data-uid="Lucene.Net.Documents.Field.GetStringValue(System.IFormatProvider)">GetStringValue(IFormatProvider)</h4>
+  <div class="markdown level1 summary"><p>The value of the field as a <span class="xref">System.String</span>, or <code>null</code>. If <code>null</code>, the <span class="xref">System.IO.TextReader</span> value or
+binary value is used. Exactly one of <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetStringValue">GetStringValue()</a>, <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetReaderValue">GetReaderValue()</a>, and
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetBinaryValue">GetBinaryValue()</a> must be set.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual string GetStringValue(IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IFormatProvider</span></td>
+        <td><span class="parametername">provider</span></td>
+        <td><p>An object that supplies culture-specific formatting information. This parameter has no effect if this field is non-numeric.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>The string representation of the value if it is either a <span class="xref">System.String</span> or numeric type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_GetStringValue_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.GetStringValue(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L386">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_GetStringValue_" data-uid="Lucene.Net.Documents.Field.GetStringValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_GetStringValue_System_String_" data-uid="Lucene.Net.Documents.Field.GetStringValue(System.String)">GetStringValue(String)</h4>
+  <div class="markdown level1 summary"><p>The value of the field as a <span class="xref">System.String</span>, or <code>null</code>. If <code>null</code>, the <span class="xref">System.IO.TextReader</span> value or
+binary value is used. Exactly one of <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetStringValue">GetStringValue()</a>, <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetReaderValue">GetReaderValue()</a>, and
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetBinaryValue">GetBinaryValue()</a> must be set.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual string GetStringValue(string format)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">format</span></td>
+        <td><p>A standard or custom numeric format string. This parameter has no effect if this field is non-numeric.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>The string representation of the value if it is either a <span class="xref">System.String</span> or numeric type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_GetStringValue_System_String_System_IFormatProvider_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.GetStringValue(System.String%2CSystem.IFormatProvider)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L411">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_GetStringValue_" data-uid="Lucene.Net.Documents.Field.GetStringValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_GetStringValue_System_String_System_IFormatProvider_" data-uid="Lucene.Net.Documents.Field.GetStringValue(System.String,System.IFormatProvider)">GetStringValue(String, IFormatProvider)</h4>
+  <div class="markdown level1 summary"><p>The value of the field as a <span class="xref">System.String</span>, or <code>null</code>. If <code>null</code>, the <span class="xref">System.IO.TextReader</span> value or
+binary value is used. Exactly one of <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetStringValue">GetStringValue()</a>, <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetReaderValue">GetReaderValue()</a>, and
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetBinaryValue">GetBinaryValue()</a> must be set.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual string GetStringValue(string format, IFormatProvider provider)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">format</span></td>
+        <td><p>A standard or custom numeric format string. This parameter has no effect if this field is non-numeric.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IFormatProvider</span></td>
+        <td><span class="parametername">provider</span></td>
+        <td><p>An object that supplies culture-specific formatting information. This parameter has no effect if this field is non-numeric.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>The string representation of the value if it is either a <span class="xref">System.String</span> or numeric type.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_GetTokenStream_Lucene_Net_Analysis_Analyzer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.GetTokenStream(Lucene.Net.Analysis.Analyzer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L848">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_GetTokenStream_" data-uid="Lucene.Net.Documents.Field.GetTokenStream*"></a>
+  <h4 id="Lucene_Net_Documents_Field_GetTokenStream_Lucene_Net_Analysis_Analyzer_" data-uid="Lucene.Net.Documents.Field.GetTokenStream(Lucene.Net.Analysis.Analyzer)">GetTokenStream(Analyzer)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TokenStream GetTokenStream(Analyzer analyzer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a></td>
+        <td><span class="parametername">analyzer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_GetTokenStreamValue.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.GetTokenStreamValue%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L441">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_GetTokenStreamValue_" data-uid="Lucene.Net.Documents.Field.GetTokenStreamValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_GetTokenStreamValue" data-uid="Lucene.Net.Documents.Field.GetTokenStreamValue">GetTokenStreamValue()</h4>
+  <div class="markdown level1 summary"><p>The <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> for this field to be used when indexing, or <code>null</code>. If <code>null</code>,
+the <span class="xref">System.IO.TextReader</span> value or <span class="xref">System.String</span> value is analyzed to produce the indexed tokens.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TokenStream GetTokenStreamValue()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_SetBytesValue_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.SetBytesValue(Lucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L491">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_SetBytesValue_" data-uid="Lucene.Net.Documents.Field.SetBytesValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_SetBytesValue_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Documents.Field.SetBytesValue(Lucene.Net.Util.BytesRef)">SetBytesValue(BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Expert: change the value of this field. See
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetStringValue_System_String_">SetStringValue(String)</a>.</p>
+<p><p>NOTE: the provided <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> is not copied so be sure
+not to change it until you&apos;re done with this field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetBytesValue(BytesRef value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_SetBytesValue_System_Byte___.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.SetBytesValue(System.Byte%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L508">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_SetBytesValue_" data-uid="Lucene.Net.Documents.Field.SetBytesValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_SetBytesValue_System_Byte___" data-uid="Lucene.Net.Documents.Field.SetBytesValue(System.Byte[])">SetBytesValue(Byte[])</h4>
+  <div class="markdown level1 summary"><p>Expert: change the value of this field. See
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetStringValue_System_String_">SetStringValue(String)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetBytesValue(byte[] value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_SetByteValue_System_Byte_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.SetByteValue(System.Byte)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L517">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_SetByteValue_" data-uid="Lucene.Net.Documents.Field.SetByteValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_SetByteValue_System_Byte_" data-uid="Lucene.Net.Documents.Field.SetByteValue(System.Byte)">SetByteValue(Byte)</h4>
+  <div class="markdown level1 summary"><p>Expert: change the value of this field. See
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetStringValue_System_String_">SetStringValue(String)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetByteValue(byte value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_SetDoubleValue_System_Double_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.SetDoubleValue(System.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L582">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_SetDoubleValue_" data-uid="Lucene.Net.Documents.Field.SetDoubleValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_SetDoubleValue_System_Double_" data-uid="Lucene.Net.Documents.Field.SetDoubleValue(System.Double)">SetDoubleValue(Double)</h4>
+  <div class="markdown level1 summary"><p>Expert: change the value of this field. See
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetStringValue_System_String_">SetStringValue(String)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetDoubleValue(double value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_SetInt16Value_System_Int16_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.SetInt16Value(System.Int16)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L530">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_SetInt16Value_" data-uid="Lucene.Net.Documents.Field.SetInt16Value*"></a>
+  <h4 id="Lucene_Net_Documents_Field_SetInt16Value_System_Int16_" data-uid="Lucene.Net.Documents.Field.SetInt16Value(System.Int16)">SetInt16Value(Int16)</h4>
+  <div class="markdown level1 summary"><p>Expert: change the value of this field. See
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetStringValue_System_String_">SetStringValue(String)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetInt16Value(short value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int16</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_SetInt32Value_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.SetInt32Value(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L543">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_SetInt32Value_" data-uid="Lucene.Net.Documents.Field.SetInt32Value*"></a>
+  <h4 id="Lucene_Net_Documents_Field_SetInt32Value_System_Int32_" data-uid="Lucene.Net.Documents.Field.SetInt32Value(System.Int32)">SetInt32Value(Int32)</h4>
+  <div class="markdown level1 summary"><p>Expert: change the value of this field. See
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetStringValue_System_String_">SetStringValue(String)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetInt32Value(int value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_SetInt64Value_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.SetInt64Value(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L556">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_SetInt64Value_" data-uid="Lucene.Net.Documents.Field.SetInt64Value*"></a>
+  <h4 id="Lucene_Net_Documents_Field_SetInt64Value_System_Int64_" data-uid="Lucene.Net.Documents.Field.SetInt64Value(System.Int64)">SetInt64Value(Int64)</h4>
+  <div class="markdown level1 summary"><p>Expert: change the value of this field. See
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetStringValue_System_String_">SetStringValue(String)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetInt64Value(long value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_SetReaderValue_System_IO_TextReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.SetReaderValue(System.IO.TextReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L475">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_SetReaderValue_" data-uid="Lucene.Net.Documents.Field.SetReaderValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_SetReaderValue_System_IO_TextReader_" data-uid="Lucene.Net.Documents.Field.SetReaderValue(System.IO.TextReader)">SetReaderValue(TextReader)</h4>
+  <div class="markdown level1 summary"><p>Expert: change the value of this field. See 
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetStringValue_System_String_">SetStringValue(String)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetReaderValue(TextReader value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_SetSingleValue_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.SetSingleValue(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L569">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_SetSingleValue_" data-uid="Lucene.Net.Documents.Field.SetSingleValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_SetSingleValue_System_Single_" data-uid="Lucene.Net.Documents.Field.SetSingleValue(System.Single)">SetSingleValue(Single)</h4>
+  <div class="markdown level1 summary"><p>Expert: change the value of this field. See
+<a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetStringValue_System_String_">SetStringValue(String)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetSingleValue(float value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_SetStringValue_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.SetStringValue(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L462">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_SetStringValue_" data-uid="Lucene.Net.Documents.Field.SetStringValue*"></a>
+  <h4 id="Lucene_Net_Documents_Field_SetStringValue_System_String_" data-uid="Lucene.Net.Documents.Field.SetStringValue(System.String)">SetStringValue(String)</h4>
+  <div class="markdown level1 summary"><p>
+Expert: change the value of this field. This can be used during indexing to
+re-use a single <a class="xref" href="Lucene.Net.Documents.Field.html">Field</a> instance to improve indexing speed by avoiding GC
+cost of new&apos;ing and reclaiming <a class="xref" href="Lucene.Net.Documents.Field.html">Field</a> instances. Typically a single
+<a class="xref" href="Lucene.Net.Documents.Document.html">Document</a> instance is re-used as well. This helps most on small
+documents.
+</p>
+
+<p>
+Each <a class="xref" href="Lucene.Net.Documents.Field.html">Field</a> instance should only be used once within a single
+<a class="xref" href="Lucene.Net.Documents.Document.html">Document</a> instance. See <a href="http://wiki.apache.org/lucene-java/ImproveIndexingSpeed">ImproveIndexingSpeed</a> for details.
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetStringValue(string value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_SetTokenStream_Lucene_Net_Analysis_TokenStream_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.SetTokenStream(Lucene.Net.Analysis.TokenStream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L600">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_SetTokenStream_" data-uid="Lucene.Net.Documents.Field.SetTokenStream*"></a>
+  <h4 id="Lucene_Net_Documents_Field_SetTokenStream_Lucene_Net_Analysis_TokenStream_" data-uid="Lucene.Net.Documents.Field.SetTokenStream(Lucene.Net.Analysis.TokenStream)">SetTokenStream(TokenStream)</h4>
+  <div class="markdown level1 summary"><p>Expert: sets the token stream to be used for indexing and causes
+<a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_IsIndexed">IsIndexed</a> and <a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_IsTokenized">IsTokenized</a> to return true. May be combined with stored
+values from <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetStringValue">GetStringValue()</a> or <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetBinaryValue">GetBinaryValue()</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetTokenStream(TokenStream tokenStream)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a></td>
+        <td><span class="parametername">tokenStream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L821">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_ToString_" data-uid="Lucene.Net.Documents.Field.ToString*"></a>
+  <h4 id="Lucene_Net_Documents_Field_ToString" data-uid="Lucene.Net.Documents.Field.ToString">ToString()</h4>
+  <div class="markdown level1 summary"><p>Prints a <a class="xref" href="Lucene.Net.Documents.Field.html">Field</a> for human consumption. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field_TranslateFieldType_Lucene_Net_Documents_Field_Store_Lucene_Net_Documents_Field_Index_Lucene_Net_Documents_Field_TermVector_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field.TranslateFieldType(Lucene.Net.Documents.Field.Store%2CLucene.Net.Documents.Field.Index%2CLucene.Net.Documents.Field.TermVector)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Document/Field.cs/#L1106">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Field_TranslateFieldType_" data-uid="Lucene.Net.Documents.Field.TranslateFieldType*"></a>
+  <h4 id="Lucene_Net_Documents_Field_TranslateFieldType_Lucene_Net_Documents_Field_Store_Lucene_Net_Documents_Field_Index_Lucene_Net_Documents_Field_TermVector_" data-uid="Lucene.Net.Documents.Field.TranslateFieldType(Lucene.Net.Documents.Field.Store,Lucene.Net.Documents.Field.Index,Lucene.Net.Documents.Field.TermVector)">TranslateFieldType(Field.Store, Field.Index, Field.TermVector)</h4>
+  <div class="markdown level1 summary"><p>Translates the pre-4.0 enums for specifying how a
+field should be indexed into the 4.0 <a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a>
+approach.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;This is here only to ease transition from the pre-4.0 APIs.&quot;)]
+public static FieldType TranslateFieldType(Field.Store store, Field.Index index, Field.TermVector termVector)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.Field.Store.html">Field.Store</a></td>
+        <td><span class="parametername">store</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.Field.Index.html">Field.Index</a></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.Field.TermVector.html">Field.TermVector</a></td>
+        <td><span class="parametername">termVector</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Documents.Extensions.IndexableFieldExtensions.html#Lucene_Net_Documents_Extensions_IndexableFieldExtensions_GetByteValueOrDefault_Lucene_Net_Index_IIndexableField_">IndexableFieldExtensions.GetByteValueOrDefault(IIndexableField)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Documents.Extensions.IndexableFieldExtensions.html#Lucene_Net_Documents_Extensions_IndexableFieldExtensions_GetInt16ValueOrDefault_Lucene_Net_Index_IIndexableField_">IndexableFieldExtensions.GetInt16ValueOrDefault(IIndexableField)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Documents.Extensions.IndexableFieldExtensions.html#Lucene_Net_Documents_Extensions_IndexableFieldExtensions_GetInt32ValueOrDefault_Lucene_Net_Index_IIndexableField_">IndexableFieldExtensions.GetInt32ValueOrDefault(IIndexableField)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Documents.Extensions.IndexableFieldExtensions.html#Lucene_Net_Documents_Extensions_IndexableFieldExtensions_GetInt64ValueOrDefault_Lucene_Net_Index_IIndexableField_">IndexableFieldExtensions.GetInt64ValueOrDefault(IIndexableField)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Documents.Extensions.IndexableFieldExtensions.html#Lucene_Net_Documents_Extensions_IndexableFieldExtensions_GetSingleValueOrDefault_Lucene_Net_Index_IIndexableField_">IndexableFieldExtensions.GetSingleValueOrDefault(IIndexableField)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Documents.Extensions.IndexableFieldExtensions.html#Lucene_Net_Documents_Extensions_IndexableFieldExtensions_GetDoubleValueOrDefault_Lucene_Net_Index_IIndexableField_">IndexableFieldExtensions.GetDoubleValueOrDefault(IIndexableField)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Field.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Field%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Support/Document/Field.cs/#L22" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>
