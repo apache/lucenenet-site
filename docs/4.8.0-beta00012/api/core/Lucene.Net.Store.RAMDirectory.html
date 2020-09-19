@@ -1,0 +1,856 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class RAMDirectory
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class RAMDirectory
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Store.RAMDirectory">
+  
+  
+  <h1 id="Lucene_Net_Store_RAMDirectory" data-uid="Lucene.Net.Store.RAMDirectory" class="text-break">Class RAMDirectory
+  </h1>
+  <div class="markdown level0 summary"><p>A memory-resident <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a> implementation.  Locking
+implementation is by default the <a class="xref" href="Lucene.Net.Store.SingleInstanceLockFactory.html">SingleInstanceLockFactory</a>
+but can be changed with <a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_SetLockFactory_Lucene_Net_Store_LockFactory_">SetLockFactory(LockFactory)</a>.</p>
+<p><p><strong>Warning:</strong> This class is not intended to work with huge
+indexes. Everything beyond several hundred megabytes will waste
+resources (GC cycles), because it uses an internal buffer size
+of 1024 bytes, producing millions of <span class="xref">byte[1024]</span> arrays.
+This class is optimized for small memory-resident indexes.
+It also has bad concurrency on multithreaded environments.</p>
+<p><p>It is recommended to materialize large indexes on disk and use
+<a class="xref" href="Lucene.Net.Store.MMapDirectory.html">MMapDirectory</a>, which is a high-performance directory
+implementation working directly on the file system cache of the
+operating system, so copying data to heap space is not useful.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></div>
+    <div class="level2"><a class="xref" href="Lucene.Net.Store.BaseDirectory.html">BaseDirectory</a></div>
+    <div class="level3"><span class="xref">RAMDirectory</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.BaseDirectory.html#Lucene_Net_Store_BaseDirectory_IsOpen">BaseDirectory.IsOpen</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.BaseDirectory.html#Lucene_Net_Store_BaseDirectory_m_lockFactory">BaseDirectory.m_lockFactory</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.BaseDirectory.html#Lucene_Net_Store_BaseDirectory_MakeLock_System_String_">BaseDirectory.MakeLock(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.BaseDirectory.html#Lucene_Net_Store_BaseDirectory_ClearLock_System_String_">BaseDirectory.ClearLock(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.BaseDirectory.html#Lucene_Net_Store_BaseDirectory_SetLockFactory_Lucene_Net_Store_LockFactory_">BaseDirectory.SetLockFactory(LockFactory)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.BaseDirectory.html#Lucene_Net_Store_BaseDirectory_LockFactory">BaseDirectory.LockFactory</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.BaseDirectory.html#Lucene_Net_Store_BaseDirectory_EnsureOpen">BaseDirectory.EnsureOpen()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_OpenChecksumInput_System_String_Lucene_Net_Store_IOContext_">Directory.OpenChecksumInput(String, IOContext)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_Dispose">Directory.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_ToString">Directory.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_Copy_Lucene_Net_Store_Directory_System_String_System_String_Lucene_Net_Store_IOContext_">Directory.Copy(Directory, String, String, IOContext)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_CreateSlicer_System_String_Lucene_Net_Store_IOContext_">Directory.CreateSlicer(String, IOContext)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Store.html">Lucene.Net.Store</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Store_RAMDirectory_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class RAMDirectory : BaseDirectory, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L56">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_RAMDirectory__ctor_" data-uid="Lucene.Net.Store.RAMDirectory.#ctor*"></a>
+  <h4 id="Lucene_Net_Store_RAMDirectory__ctor" data-uid="Lucene.Net.Store.RAMDirectory.#ctor">RAMDirectory()</h4>
+  <div class="markdown level1 summary"><p>Constructs an empty <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RAMDirectory()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory__ctor_Lucene_Net_Store_Directory_Lucene_Net_Store_IOContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory.%23ctor(Lucene.Net.Store.Directory%2CLucene.Net.Store.IOContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L96">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_RAMDirectory__ctor_" data-uid="Lucene.Net.Store.RAMDirectory.#ctor*"></a>
+  <h4 id="Lucene_Net_Store_RAMDirectory__ctor_Lucene_Net_Store_Directory_Lucene_Net_Store_IOContext_" data-uid="Lucene.Net.Store.RAMDirectory.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Store.IOContext)">RAMDirectory(Directory, IOContext)</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Store.RAMDirectory.html">RAMDirectory</a> instance from a different
+<a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a> implementation.  This can be used to load
+a disk-based index into memory.</p>
+<p><p><strong>Warning:</strong> this class is not intended to work with huge
+indexes. Everything beyond several hundred megabytes will waste
+resources (GC cycles), because it uses an internal buffer size
+of 1024 bytes, producing millions of <span class="xref">byte[1024]</span> arrays.
+this class is optimized for small memory-resident indexes.
+It also has bad concurrency on multithreaded environments.</p>
+<p><p>For disk-based indexes it is recommended to use
+<a class="xref" href="Lucene.Net.Store.MMapDirectory.html">MMapDirectory</a>, which is a high-performance directory
+implementation working directly on the file system cache of the
+operating system, so copying data to heap space is not useful.</p>
+<p><p>Note that the resulting <a class="xref" href="Lucene.Net.Store.RAMDirectory.html">RAMDirectory</a> instance is fully
+independent from the original <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a> (it is a
+complete copy).  Any subsequent changes to the
+original <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a> will not be visible in the
+<a class="xref" href="Lucene.Net.Store.RAMDirectory.html">RAMDirectory</a> instance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public RAMDirectory(Directory dir, IOContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">dir</span></td>
+        <td><p>a <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a> value </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IOContext.html">IOContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>io context</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>if an error occurs </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory_m_fileMap.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory.m_fileMap%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L47">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Store_RAMDirectory_m_fileMap" data-uid="Lucene.Net.Store.RAMDirectory.m_fileMap">m_fileMap</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly ConcurrentDictionary&lt;string, RAMFile&gt; m_fileMap</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Concurrent.ConcurrentDictionary</span>&lt;<span class="xref">System.String</span>, <a class="xref" href="Lucene.Net.Store.RAMFile.html">RAMFile</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory_m_sizeInBytes.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory.m_sizeInBytes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L48">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Store_RAMDirectory_m_sizeInBytes" data-uid="Lucene.Net.Store.RAMDirectory.m_sizeInBytes">m_sizeInBytes</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly AtomicInt64 m_sizeInBytes</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">J2N.Threading.Atomic.AtomicInt64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory_CreateOutput_System_String_Lucene_Net_Store_IOContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory.CreateOutput(System.String%2CLucene.Net.Store.IOContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L181">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_RAMDirectory_CreateOutput_" data-uid="Lucene.Net.Store.RAMDirectory.CreateOutput*"></a>
+  <h4 id="Lucene_Net_Store_RAMDirectory_CreateOutput_System_String_Lucene_Net_Store_IOContext_" data-uid="Lucene.Net.Store.RAMDirectory.CreateOutput(System.String,Lucene.Net.Store.IOContext)">CreateOutput(String, IOContext)</h4>
+  <div class="markdown level1 summary"><p>Creates a new, empty file in the directory with the given name. Returns a stream writing this file. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IndexOutput CreateOutput(string name, IOContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IOContext.html">IOContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IndexOutput.html">IndexOutput</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_CreateOutput_System_String_Lucene_Net_Store_IOContext_">Directory.CreateOutput(String, IOContext)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory_DeleteFile_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory.DeleteFile(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L164">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_RAMDirectory_DeleteFile_" data-uid="Lucene.Net.Store.RAMDirectory.DeleteFile*"></a>
+  <h4 id="Lucene_Net_Store_RAMDirectory_DeleteFile_System_String_" data-uid="Lucene.Net.Store.RAMDirectory.DeleteFile(System.String)">DeleteFile(String)</h4>
+  <div class="markdown level1 summary"><p>Removes an existing file in the directory. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void DeleteFile(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_DeleteFile_System_String_">Directory.DeleteFile(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>if the file does not exist </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L224">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_RAMDirectory_Dispose_" data-uid="Lucene.Net.Store.RAMDirectory.Dispose*"></a>
+  <h4 id="Lucene_Net_Store_RAMDirectory_Dispose_System_Boolean_" data-uid="Lucene.Net.Store.RAMDirectory.Dispose(System.Boolean)">Dispose(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Closes the store to future operations, releasing associated memory. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">disposing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_Dispose_System_Boolean_">Directory.Dispose(Boolean)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory_FileExists_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory.FileExists(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L130">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_RAMDirectory_FileExists_" data-uid="Lucene.Net.Store.RAMDirectory.FileExists*"></a>
+  <h4 id="Lucene_Net_Store_RAMDirectory_FileExists_System_String_" data-uid="Lucene.Net.Store.RAMDirectory.FileExists(System.String)">FileExists(String)</h4>
+  <div class="markdown level1 summary"><p>Returns true iff the named file exists in this directory. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;this method will be removed in 5.0&quot;)]
+public override sealed bool FileExists(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_FileExists_System_String_">Directory.FileExists(String)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory_FileLength_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory.FileLength(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L140">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_RAMDirectory_FileLength_" data-uid="Lucene.Net.Store.RAMDirectory.FileLength*"></a>
+  <h4 id="Lucene_Net_Store_RAMDirectory_FileLength_System_String_" data-uid="Lucene.Net.Store.RAMDirectory.FileLength(System.String)">FileLength(String)</h4>
+  <div class="markdown level1 summary"><p>Returns the length in bytes of a file in the directory. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override sealed long FileLength(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_FileLength_System_String_">Directory.FileLength(String)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>if the file does not exist </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory_GetLockID.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory.GetLockID%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L114">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_RAMDirectory_GetLockID_" data-uid="Lucene.Net.Store.RAMDirectory.GetLockID*"></a>
+  <h4 id="Lucene_Net_Store_RAMDirectory_GetLockID" data-uid="Lucene.Net.Store.RAMDirectory.GetLockID">GetLockID()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string GetLockID()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_GetLockID">Directory.GetLockID()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory_GetSizeInBytes.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory.GetSizeInBytes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L155">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_RAMDirectory_GetSizeInBytes_" data-uid="Lucene.Net.Store.RAMDirectory.GetSizeInBytes*"></a>
+  <h4 id="Lucene_Net_Store_RAMDirectory_GetSizeInBytes" data-uid="Lucene.Net.Store.RAMDirectory.GetSizeInBytes">GetSizeInBytes()</h4>
+  <div class="markdown level1 summary"><p>Return total size in bytes of all files in this directory. This is
+currently quantized to <span class="xref">Lucene.Net.Store.RAMOutputStream.BUFFER_SIZE</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public long GetSizeInBytes()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory_ListAll.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory.ListAll%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L119">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_RAMDirectory_ListAll_" data-uid="Lucene.Net.Store.RAMDirectory.ListAll*"></a>
+  <h4 id="Lucene_Net_Store_RAMDirectory_ListAll" data-uid="Lucene.Net.Store.RAMDirectory.ListAll">ListAll()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override sealed string[] ListAll()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_ListAll">Directory.ListAll()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory_NewRAMFile.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory.NewRAMFile%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L200">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_RAMDirectory_NewRAMFile_" data-uid="Lucene.Net.Store.RAMDirectory.NewRAMFile*"></a>
+  <h4 id="Lucene_Net_Store_RAMDirectory_NewRAMFile" data-uid="Lucene.Net.Store.RAMDirectory.NewRAMFile">NewRAMFile()</h4>
+  <div class="markdown level1 summary"><p>Returns a new <a class="xref" href="Lucene.Net.Store.RAMFile.html">RAMFile</a> for storing data. this method can be
+overridden to return different <a class="xref" href="Lucene.Net.Store.RAMFile.html">RAMFile</a> impls, that e.g. override
+<a class="xref" href="Lucene.Net.Store.RAMFile.html#Lucene_Net_Store_RAMFile_NewBuffer_System_Int32_">NewBuffer(Int32)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual RAMFile NewRAMFile()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.RAMFile.html">RAMFile</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory_OpenInput_System_String_Lucene_Net_Store_IOContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory.OpenInput(System.String%2CLucene.Net.Store.IOContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L211">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_RAMDirectory_OpenInput_" data-uid="Lucene.Net.Store.RAMDirectory.OpenInput*"></a>
+  <h4 id="Lucene_Net_Store_RAMDirectory_OpenInput_System_String_Lucene_Net_Store_IOContext_" data-uid="Lucene.Net.Store.RAMDirectory.OpenInput(System.String,Lucene.Net.Store.IOContext)">OpenInput(String, IOContext)</h4>
+  <div class="markdown level1 summary"><p>Returns a stream reading an existing file. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IndexInput OpenInput(string name, IOContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IOContext.html">IOContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IndexInput.html">IndexInput</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_OpenInput_System_String_Lucene_Net_Store_IOContext_">Directory.OpenInput(String, IOContext)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory_Sync_System_Collections_Generic_ICollection_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory.Sync(System.Collections.Generic.ICollection%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L205">View Source</a>
+  </span>
+  <a id="Lucene_Net_Store_RAMDirectory_Sync_" data-uid="Lucene.Net.Store.RAMDirectory.Sync*"></a>
+  <h4 id="Lucene_Net_Store_RAMDirectory_Sync_System_Collections_Generic_ICollection_System_String__" data-uid="Lucene.Net.Store.RAMDirectory.Sync(System.Collections.Generic.ICollection{System.String})">Sync(ICollection&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Sync(ICollection&lt;string&gt; names)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">names</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Store.Directory.html#Lucene_Net_Store_Directory_Sync_System_Collections_Generic_ICollection_System_String__">Directory.Sync(ICollection&lt;String&gt;)</a></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Store_RAMDirectory.md&amp;value=---%0Auid%3A%20Lucene.Net.Store.RAMDirectory%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Store/RAMDirectory.cs/#L45" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

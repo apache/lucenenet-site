@@ -1,0 +1,1017 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class TermsEnum
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class TermsEnum
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Index.TermsEnum">
+  
+  
+  <h1 id="Lucene_Net_Index_TermsEnum" data-uid="Lucene.Net.Index.TermsEnum" class="text-break">Class TermsEnum
+  </h1>
+  <div class="markdown level0 summary"><p>Enumerator to seek (<a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_SeekCeil_Lucene_Net_Util_BytesRef_">SeekCeil(BytesRef)</a>, 
+<a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_SeekExact_Lucene_Net_Util_BytesRef_">SeekExact(BytesRef)</a>) or step through 
+(<a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_MoveNext">MoveNext()</a> terms to obtain <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Term">Term</a>, frequency information 
+(<a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_DocFreq">DocFreq</a>), <a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a> or 
+<a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html">DocsAndPositionsEnum</a> for the current term 
+(<a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Docs_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsEnum_">Docs(IBits, DocsEnum)</a>).</p>
+<p><p>Term enumerations are always ordered by
+<a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Comparer">Comparer</a>.  Each term in the enumeration is
+greater than the one before it.</p>
+<p><p>The <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> is unpositioned when you first obtain it
+and you must first successfully call <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_MoveNext">MoveNext()</a> or one
+of the <code>Seek</code> methods.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">TermsEnum</span></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Index.FilterAtomicReader.FilterTermsEnum.html">FilterAtomicReader.FilterTermsEnum</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Index.FilteredTermsEnum.html">FilteredTermsEnum</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Index.MultiTermsEnum.html">MultiTermsEnum</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Search.FuzzyTermsEnum.html">FuzzyTermsEnum</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lucene.Net.Util.IBytesRefEnumerator.html">IBytesRefEnumerator</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Index.html">Lucene.Net.Index</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Index_TermsEnum_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class TermsEnum : IBytesRefEnumerator, IBytesRefIterator</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L80">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum__ctor_" data-uid="Lucene.Net.Index.TermsEnum.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum__ctor" data-uid="Lucene.Net.Index.TermsEnum.#ctor">TermsEnum()</h4>
+  <div class="markdown level1 summary"><p>Sole constructor. (For invocation by subclass
+constructors, typically implicit.)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected TermsEnum()</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_EMPTY.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.EMPTY%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L297">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_TermsEnum_EMPTY" data-uid="Lucene.Net.Index.TermsEnum.EMPTY">EMPTY</h4>
+  <div class="markdown level1 summary"><p>An empty <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> for quickly returning an empty instance e.g.
+in <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html">MultiTermQuery</a>
+<p><em>Please note:</em> this enum should be unmodifiable,
+but it is currently possible to add Attributes to it.
+This should not be a problem, as the enum is always empty and
+the existence of unused Attributes does not matter.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly TermsEnum EMPTY</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_Attributes.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.Attributes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L86">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_Attributes_" data-uid="Lucene.Net.Index.TermsEnum.Attributes*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_Attributes" data-uid="Lucene.Net.Index.TermsEnum.Attributes">Attributes</h4>
+  <div class="markdown level1 summary"><p>Returns the related attributes. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual AttributeSource Attributes { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.AttributeSource.html">AttributeSource</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_Comparer.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.Comparer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L53">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_Comparer_" data-uid="Lucene.Net.Index.TermsEnum.Comparer*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_Comparer" data-uid="Lucene.Net.Index.TermsEnum.Comparer">Comparer</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract IComparer&lt;BytesRef&gt; Comparer { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IComparer</span>&lt;<a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_DocFreq.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.DocFreq%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L190">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_DocFreq_" data-uid="Lucene.Net.Index.TermsEnum.DocFreq*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_DocFreq" data-uid="Lucene.Net.Index.TermsEnum.DocFreq">DocFreq</h4>
+  <div class="markdown level1 summary"><p>Returns the number of documents containing the current
+term.  Do not call this when the enum is unpositioned.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract int DocFreq { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Index_TermsEnum_DocFreq_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.TermsEnum.SeekStatus.html#Lucene_Net_Index_TermsEnum_SeekStatus_END">END</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_Ord.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.Ord%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L183">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_Ord_" data-uid="Lucene.Net.Index.TermsEnum.Ord*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_Ord" data-uid="Lucene.Net.Index.TermsEnum.Ord">Ord</h4>
+  <div class="markdown level1 summary"><p>Returns ordinal position for current term.  This is an
+optional property (the codec may throw <span class="xref">System.NotSupportedException</span>.
+Do not call this when the enum is unpositioned.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract long Ord { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_Term.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.Term%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L176">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_Term_" data-uid="Lucene.Net.Index.TermsEnum.Term*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_Term" data-uid="Lucene.Net.Index.TermsEnum.Term">Term</h4>
+  <div class="markdown level1 summary"><p>Returns current term. Do not call this when the enum
+is unpositioned.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract BytesRef Term { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_TotalTermFreq.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.TotalTermFreq%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L200">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_TotalTermFreq_" data-uid="Lucene.Net.Index.TermsEnum.TotalTermFreq*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_TotalTermFreq" data-uid="Lucene.Net.Index.TermsEnum.TotalTermFreq">TotalTermFreq</h4>
+  <div class="markdown level1 summary"><p>Returns the total number of occurrences of this term
+across all documents (the sum of the Freq for each
+doc that has this term).  This will be -1 if the
+codec doesn&apos;t support this measure.  Note that, like
+other term measures, this measure does not take
+deleted documents into account.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract long TotalTermFreq { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_Docs_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsEnum_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.Docs(Lucene.Net.Util.IBits%2CLucene.Net.Index.DocsEnum)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L210">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_Docs_" data-uid="Lucene.Net.Index.TermsEnum.Docs*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_Docs_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsEnum_" data-uid="Lucene.Net.Index.TermsEnum.Docs(Lucene.Net.Util.IBits,Lucene.Net.Index.DocsEnum)">Docs(IBits, DocsEnum)</h4>
+  <div class="markdown level1 summary"><p>Get <a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a> for the current term. Do not
+call this when the enum is unpositioned. This method
+will not return <code>null</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DocsEnum Docs(IBits liveDocs, DocsEnum reuse)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td><span class="parametername">liveDocs</span></td>
+        <td><p>Unset bits are documents that should not
+be returned </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a></td>
+        <td><span class="parametername">reuse</span></td>
+        <td><p>Pass a prior <a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a> for possible reuse </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_Docs_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsEnum_Lucene_Net_Index_DocsFlags_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.Docs(Lucene.Net.Util.IBits%2CLucene.Net.Index.DocsEnum%2CLucene.Net.Index.DocsFlags)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L227">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_Docs_" data-uid="Lucene.Net.Index.TermsEnum.Docs*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_Docs_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsEnum_Lucene_Net_Index_DocsFlags_" data-uid="Lucene.Net.Index.TermsEnum.Docs(Lucene.Net.Util.IBits,Lucene.Net.Index.DocsEnum,Lucene.Net.Index.DocsFlags)">Docs(IBits, DocsEnum, DocsFlags)</h4>
+  <div class="markdown level1 summary"><p>Get <a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a> for the current term, with
+control over whether freqs are required. Do not
+call this when the enum is unpositioned. This method
+will not return <code>null</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract DocsEnum Docs(IBits liveDocs, DocsEnum reuse, DocsFlags flags)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td><span class="parametername">liveDocs</span></td>
+        <td><p>Unset bits are documents that should not
+be returned </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a></td>
+        <td><span class="parametername">reuse</span></td>
+        <td><p>Pass a prior DocsEnum for possible reuse </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsFlags.html">DocsFlags</a></td>
+        <td><span class="parametername">flags</span></td>
+        <td><p>Specifies which optional per-document values
+      you require; <a class="xref" href="Lucene.Net.Index.DocsFlags.html">DocsFlags</a></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Index_TermsEnum_Docs_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsEnum_Lucene_Net_Index_DocsFlags__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Docs_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsEnum_">Docs(IBits, DocsEnum)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_DocsAndPositions_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsAndPositionsEnum_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.DocsAndPositions(Lucene.Net.Util.IBits%2CLucene.Net.Index.DocsAndPositionsEnum)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L239">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_DocsAndPositions_" data-uid="Lucene.Net.Index.TermsEnum.DocsAndPositions*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_DocsAndPositions_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsAndPositionsEnum_" data-uid="Lucene.Net.Index.TermsEnum.DocsAndPositions(Lucene.Net.Util.IBits,Lucene.Net.Index.DocsAndPositionsEnum)">DocsAndPositions(IBits, DocsAndPositionsEnum)</h4>
+  <div class="markdown level1 summary"><p>Get <a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html">DocsAndPositionsEnum</a> for the current term.
+Do not call this when the enum is unpositioned.  This
+method will return <code>null</code> if positions were not
+indexed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DocsAndPositionsEnum DocsAndPositions(IBits liveDocs, DocsAndPositionsEnum reuse)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td><span class="parametername">liveDocs</span></td>
+        <td><p>Unset bits are documents that should not
+be returned </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html">DocsAndPositionsEnum</a></td>
+        <td><span class="parametername">reuse</span></td>
+        <td><p>Pass a prior DocsAndPositionsEnum for possible reuse </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html">DocsAndPositionsEnum</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Index_TermsEnum_DocsAndPositions_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsAndPositionsEnum__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_DocsAndPositions_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsAndPositionsEnum_Lucene_Net_Index_DocsAndPositionsFlags_">DocsAndPositions(IBits, DocsAndPositionsEnum, DocsAndPositionsFlags)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_DocsAndPositions_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsAndPositionsEnum_Lucene_Net_Index_DocsAndPositionsFlags_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.DocsAndPositions(Lucene.Net.Util.IBits%2CLucene.Net.Index.DocsAndPositionsEnum%2CLucene.Net.Index.DocsAndPositionsFlags)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L257">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_DocsAndPositions_" data-uid="Lucene.Net.Index.TermsEnum.DocsAndPositions*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_DocsAndPositions_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsAndPositionsEnum_Lucene_Net_Index_DocsAndPositionsFlags_" data-uid="Lucene.Net.Index.TermsEnum.DocsAndPositions(Lucene.Net.Util.IBits,Lucene.Net.Index.DocsAndPositionsEnum,Lucene.Net.Index.DocsAndPositionsFlags)">DocsAndPositions(IBits, DocsAndPositionsEnum, DocsAndPositionsFlags)</h4>
+  <div class="markdown level1 summary"><p>Get <a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html">DocsAndPositionsEnum</a> for the current term,
+with control over whether offsets and payloads are
+required.  Some codecs may be able to optimize their
+implementation when offsets and/or payloads are not required.
+Do not call this when the enum is unpositioned. This
+will return <code>null</code> if positions were not indexed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract DocsAndPositionsEnum DocsAndPositions(IBits liveDocs, DocsAndPositionsEnum reuse, DocsAndPositionsFlags flags)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td><span class="parametername">liveDocs</span></td>
+        <td><p>Unset bits are documents that should not
+be returned </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html">DocsAndPositionsEnum</a></td>
+        <td><span class="parametername">reuse</span></td>
+        <td><p>Pass a prior DocsAndPositionsEnum for possible reuse </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsAndPositionsFlags.html">DocsAndPositionsFlags</a></td>
+        <td><span class="parametername">flags</span></td>
+        <td><p>Specifies which optional per-position values you
+       require; see <a class="xref" href="Lucene.Net.Index.DocsAndPositionsFlags.html">DocsAndPositionsFlags</a>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html">DocsAndPositionsEnum</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_GetTermState.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.GetTermState%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L269">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_GetTermState_" data-uid="Lucene.Net.Index.TermsEnum.GetTermState*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_GetTermState" data-uid="Lucene.Net.Index.TermsEnum.GetTermState">GetTermState()</h4>
+  <div class="markdown level1 summary"><p>Expert: Returns the <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a>s internal state to position the <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a>
+without re-seeking the term dictionary.
+<p>
+NOTE: A seek by <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_GetTermState">GetTermState()</a> might not capture the
+<a class="xref" href="Lucene.Net.Util.AttributeSource.html">AttributeSource</a>&apos;s state. Callers must maintain the
+<a class="xref" href="Lucene.Net.Util.AttributeSource.html">AttributeSource</a> states separately</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TermState GetTermState()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Index_TermsEnum_GetTermState_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a></div>
+      <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_SeekExact_Lucene_Net_Util_BytesRef_Lucene_Net_Index_TermState_">SeekExact(BytesRef, TermState)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_MoveNext.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.MoveNext%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L72">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_MoveNext_" data-uid="Lucene.Net.Index.TermsEnum.MoveNext*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_MoveNext" data-uid="Lucene.Net.Index.TermsEnum.MoveNext">MoveNext()</h4>
+  <div class="markdown level1 summary"><p>Moves to the next item in the <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a>.
+<p>
+The default implementation can and should be overridden with a more optimized version.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract bool MoveNext()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the enumerator was successfully advanced to the next element;
+<code>false</code> if the enumerator has passed the end of the collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_SeekCeil_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.SeekCeil(Lucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L134">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_SeekCeil_" data-uid="Lucene.Net.Index.TermsEnum.SeekCeil*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_SeekCeil_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Index.TermsEnum.SeekCeil(Lucene.Net.Util.BytesRef)">SeekCeil(BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Seeks to the specified term, if it exists, or to the
+next (ceiling) term.  Returns <a class="xref" href="Lucene.Net.Index.TermsEnum.SeekStatus.html">TermsEnum.SeekStatus</a> to
+indicate whether exact term was found, a different
+term was found, or EOF was hit.  The target term may
+be before or after the current term.  If this returns
+<a class="xref" href="Lucene.Net.Index.TermsEnum.SeekStatus.html#Lucene_Net_Index_TermsEnum_SeekStatus_END">END</a>, the enum is unpositioned.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract TermsEnum.SeekStatus SeekCeil(BytesRef text)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">text</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermsEnum.SeekStatus.html">TermsEnum.SeekStatus</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_SeekExact_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.SeekExact(Lucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L121">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_SeekExact_" data-uid="Lucene.Net.Index.TermsEnum.SeekExact*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_SeekExact_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Index.TermsEnum.SeekExact(Lucene.Net.Util.BytesRef)">SeekExact(BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Attempts to seek to the exact term, returning
+<code>true</code> if the term is found.  If this returns <code>false</code>, the
+enum is unpositioned.  For some codecs, <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_SeekExact_Lucene_Net_Util_BytesRef_">SeekExact(BytesRef)</a> may
+be substantially faster than <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_SeekCeil_Lucene_Net_Util_BytesRef_">SeekCeil(BytesRef)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool SeekExact(BytesRef text)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">text</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_SeekExact_Lucene_Net_Util_BytesRef_Lucene_Net_Index_TermState_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.SeekExact(Lucene.Net.Util.BytesRef%2CLucene.Net.Index.TermState)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L164">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_SeekExact_" data-uid="Lucene.Net.Index.TermsEnum.SeekExact*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_SeekExact_Lucene_Net_Util_BytesRef_Lucene_Net_Index_TermState_" data-uid="Lucene.Net.Index.TermsEnum.SeekExact(Lucene.Net.Util.BytesRef,Lucene.Net.Index.TermState)">SeekExact(BytesRef, TermState)</h4>
+  <div class="markdown level1 summary"><p>Expert: Seeks a specific position by <a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a> previously obtained
+from <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_GetTermState">GetTermState()</a>. Callers should maintain the <a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a> to
+use this method. Low-level implementations may position the <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a>
+without re-seeking the term dictionary.
+<p>
+Seeking by <a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a> should only be used iff the state was obtained
+from the same <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> instance.
+<p>
+NOTE: Using this method with an incompatible <a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a> might leave
+this <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> in undefined state. On a segment level
+<a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a> instances are compatible only iff the source and the
+target <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> operate on the same field. If operating on segment
+level, TermState instances must not be used across segments.
+<p>
+NOTE: A seek by <a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a> might not restore the
+<a class="xref" href="Lucene.Net.Util.AttributeSource.html">AttributeSource</a>&apos;s state. <a class="xref" href="Lucene.Net.Util.AttributeSource.html">AttributeSource</a> states must be
+maintained separately if this method is used. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SeekExact(BytesRef term, TermState state)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">term</span></td>
+        <td><p>the term the <a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a> corresponds to </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a></td>
+        <td><span class="parametername">state</span></td>
+        <td><p>the <a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a> </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_SeekExact_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.SeekExact(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L142">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_SeekExact_" data-uid="Lucene.Net.Index.TermsEnum.SeekExact*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_SeekExact_System_Int64_" data-uid="Lucene.Net.Index.TermsEnum.SeekExact(System.Int64)">SeekExact(Int64)</h4>
+  <div class="markdown level1 summary"><p>Seeks to the specified term by ordinal (position) as
+previously returned by <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Ord">Ord</a>. The target <code data-dev-comment-type="paramref" class="paramref">ord</code>
+may be before or after the current ord, and must be
+within bounds.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void SeekExact(long ord)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">ord</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum_Lucene_Net_Util_IBytesRefEnumerator_Current.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum.Lucene%23Net%23Util%23IBytesRefEnumerator%23Current%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L63">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TermsEnum_Lucene_Net_Util_IBytesRefEnumerator_Current_" data-uid="Lucene.Net.Index.TermsEnum.Lucene#Net#Util#IBytesRefEnumerator#Current*"></a>
+  <h4 id="Lucene_Net_Index_TermsEnum_Lucene_Net_Util_IBytesRefEnumerator_Current" data-uid="Lucene.Net.Index.TermsEnum.Lucene#Net#Util#IBytesRefEnumerator#Current">IBytesRefEnumerator.Current</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">BytesRef IBytesRefEnumerator.Current { get; }</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Util.IBytesRefEnumerator.html">IBytesRefEnumerator</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TermsEnum.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TermsEnum%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/TermsEnum.cs/#L48" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

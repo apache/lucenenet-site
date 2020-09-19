@@ -1,0 +1,650 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class SearcherManager
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class SearcherManager
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.SearcherManager">
+  
+  
+  <h1 id="Lucene_Net_Search_SearcherManager" data-uid="Lucene.Net.Search.SearcherManager" class="text-break">Class SearcherManager
+  </h1>
+  <div class="markdown level0 summary"><p>Utility class to safely share <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> instances across multiple
+threads, while periodically reopening. This class ensures each searcher is
+disposed only once all threads have finished using it.</p>
+<p><p>
+Use <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_Acquire">Acquire()</a> to obtain the current searcher, and <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_Release__0_">Release(G)</a> to
+release it, like this:</p>
+<pre><code>IndexSearcher s = manager.Acquire();
+try 
+{
+    // Do searching, doc retrieval, etc. with s
+} 
+finally 
+{
+    manager.Release(s);
+    // Do not use s after this!
+    s = null;
+}</code></pre>
+
+<p><p>
+In addition you should periodically call <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_MaybeRefresh">MaybeRefresh()</a>. While it&apos;s
+possible to call this just before running each query, this is discouraged
+since it penalizes the unlucky queries that do the reopen. It&apos;s better to use
+a separate background thread, that periodically calls <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_MaybeRefresh">MaybeRefresh()</a>. Finally,
+be sure to call <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_Dispose">Dispose()</a> once you are done.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html">ReferenceManager</a>&lt;<a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a>&gt;</div>
+    <div class="level2"><span class="xref">SearcherManager</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_Current">ReferenceManager&lt;IndexSearcher&gt;.Current</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_Acquire">ReferenceManager&lt;IndexSearcher&gt;.Acquire()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_Dispose">ReferenceManager&lt;IndexSearcher&gt;.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_Dispose_System_Boolean_">ReferenceManager&lt;IndexSearcher&gt;.Dispose(Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_MaybeRefresh">ReferenceManager&lt;IndexSearcher&gt;.MaybeRefresh()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_MaybeRefreshBlocking">ReferenceManager&lt;IndexSearcher&gt;.MaybeRefreshBlocking()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_AfterMaybeRefresh">ReferenceManager&lt;IndexSearcher&gt;.AfterMaybeRefresh()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_Release__0_">ReferenceManager&lt;IndexSearcher&gt;.Release(IndexSearcher)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_AddListener_Lucene_Net_Search_ReferenceManager_IRefreshListener_">ReferenceManager&lt;IndexSearcher&gt;.AddListener(ReferenceManager.IRefreshListener)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_RemoveListener_Lucene_Net_Search_ReferenceManager_IRefreshListener_">ReferenceManager&lt;IndexSearcher&gt;.RemoveListener(ReferenceManager.IRefreshListener)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Search.html">Lucene.Net.Search</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Search_SearcherManager_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class SearcherManager : ReferenceManager&lt;IndexSearcher&gt;, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_SearcherManager__ctor_Lucene_Net_Index_IndexWriter_System_Boolean_Lucene_Net_Search_SearcherFactory_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.SearcherManager.%23ctor(Lucene.Net.Index.IndexWriter%2CSystem.Boolean%2CLucene.Net.Search.SearcherFactory)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Search/SearcherManager.cs/#L87">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_SearcherManager__ctor_" data-uid="Lucene.Net.Search.SearcherManager.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_SearcherManager__ctor_Lucene_Net_Index_IndexWriter_System_Boolean_Lucene_Net_Search_SearcherFactory_" data-uid="Lucene.Net.Search.SearcherManager.#ctor(Lucene.Net.Index.IndexWriter,System.Boolean,Lucene.Net.Search.SearcherFactory)">SearcherManager(IndexWriter, Boolean, SearcherFactory)</h4>
+  <div class="markdown level1 summary"><p>Creates and returns a new <a class="xref" href="Lucene.Net.Search.SearcherManager.html">SearcherManager</a> from the given
+<a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SearcherManager(IndexWriter writer, bool applyAllDeletes, SearcherFactory searcherFactory)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a></td>
+        <td><span class="parametername">writer</span></td>
+        <td><p>The <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> to open the <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> from. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">applyAllDeletes</span></td>
+        <td><p>If <code>true</code>, all buffered deletes will be applied (made
+visible) in the <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> / <a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a>.
+If <code>false</code>, the deletes may or may not be applied, but
+remain buffered (in <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>) so that they will be applied in
+the future. Applying deletes can be costly, so if your app can
+tolerate deleted documents being returned you might gain some
+performance by passing <code>false</code>. See
+<a class="xref" href="Lucene.Net.Index.DirectoryReader.html#Lucene_Net_Index_DirectoryReader_OpenIfChanged_Lucene_Net_Index_DirectoryReader_Lucene_Net_Index_IndexWriter_System_Boolean_">OpenIfChanged(DirectoryReader, IndexWriter, Boolean)</a>. </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.SearcherFactory.html">SearcherFactory</a></td>
+        <td><span class="parametername">searcherFactory</span></td>
+        <td><p>An optional <a class="xref" href="Lucene.Net.Search.SearcherFactory.html">SearcherFactory</a>. Pass <code>null</code> if you
+don&apos;t require the searcher to be warmed before going live or other
+custom behavior.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>if there is a low-level I/O error </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_SearcherManager__ctor_Lucene_Net_Store_Directory_Lucene_Net_Search_SearcherFactory_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.SearcherManager.%23ctor(Lucene.Net.Store.Directory%2CLucene.Net.Search.SearcherFactory)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Search/SearcherManager.cs/#L105">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_SearcherManager__ctor_" data-uid="Lucene.Net.Search.SearcherManager.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_SearcherManager__ctor_Lucene_Net_Store_Directory_Lucene_Net_Search_SearcherFactory_" data-uid="Lucene.Net.Search.SearcherManager.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Search.SearcherFactory)">SearcherManager(Directory, SearcherFactory)</h4>
+  <div class="markdown level1 summary"><p>Creates and returns a new <a class="xref" href="Lucene.Net.Search.SearcherManager.html">SearcherManager</a> from the given <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SearcherManager(Directory dir, SearcherFactory searcherFactory)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">dir</span></td>
+        <td><p>The directory to open the <a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a> on. </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.SearcherFactory.html">SearcherFactory</a></td>
+        <td><span class="parametername">searcherFactory</span></td>
+        <td><p>An optional <a class="xref" href="Lucene.Net.Search.SearcherFactory.html">SearcherFactory</a>. Pass
+<code>null</code> if you don&apos;t require the searcher to be warmed
+before going live or other custom behavior.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>If there is a low-level I/O error </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_SearcherManager_DecRef_Lucene_Net_Search_IndexSearcher_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.SearcherManager.DecRef(Lucene.Net.Search.IndexSearcher)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Search/SearcherManager.cs/#L115">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_SearcherManager_DecRef_" data-uid="Lucene.Net.Search.SearcherManager.DecRef*"></a>
+  <h4 id="Lucene_Net_Search_SearcherManager_DecRef_Lucene_Net_Search_IndexSearcher_" data-uid="Lucene.Net.Search.SearcherManager.DecRef(Lucene.Net.Search.IndexSearcher)">DecRef(IndexSearcher)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void DecRef(IndexSearcher reference)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a></td>
+        <td><span class="parametername">reference</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Search.ReferenceManager&lt;Lucene.Net.Search.IndexSearcher&gt;.DecRef(Lucene.Net.Search.IndexSearcher)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_SearcherManager_GetRefCount_Lucene_Net_Search_IndexSearcher_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.SearcherManager.GetRefCount(Lucene.Net.Search.IndexSearcher)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Search/SearcherManager.cs/#L140">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_SearcherManager_GetRefCount_" data-uid="Lucene.Net.Search.SearcherManager.GetRefCount*"></a>
+  <h4 id="Lucene_Net_Search_SearcherManager_GetRefCount_Lucene_Net_Search_IndexSearcher_" data-uid="Lucene.Net.Search.SearcherManager.GetRefCount(Lucene.Net.Search.IndexSearcher)">GetRefCount(IndexSearcher)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override int GetRefCount(IndexSearcher reference)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a></td>
+        <td><span class="parametername">reference</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Search.ReferenceManager&lt;Lucene.Net.Search.IndexSearcher&gt;.GetRefCount(Lucene.Net.Search.IndexSearcher)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_SearcherManager_GetSearcher_Lucene_Net_Search_SearcherFactory_Lucene_Net_Index_IndexReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.SearcherManager.GetSearcher(Lucene.Net.Search.SearcherFactory%2CLucene.Net.Index.IndexReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Search/SearcherManager.cs/#L170">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_SearcherManager_GetSearcher_" data-uid="Lucene.Net.Search.SearcherManager.GetSearcher*"></a>
+  <h4 id="Lucene_Net_Search_SearcherManager_GetSearcher_Lucene_Net_Search_SearcherFactory_Lucene_Net_Index_IndexReader_" data-uid="Lucene.Net.Search.SearcherManager.GetSearcher(Lucene.Net.Search.SearcherFactory,Lucene.Net.Index.IndexReader)">GetSearcher(SearcherFactory, IndexReader)</h4>
+  <div class="markdown level1 summary"><p>Expert: creates a searcher from the provided 
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> using the provided 
+<a class="xref" href="Lucene.Net.Search.SearcherFactory.html">SearcherFactory</a>.  NOTE: this decRefs incoming reader
+on throwing an exception.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IndexSearcher GetSearcher(SearcherFactory searcherFactory, IndexReader reader)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.SearcherFactory.html">SearcherFactory</a></td>
+        <td><span class="parametername">searcherFactory</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a></td>
+        <td><span class="parametername">reader</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_SearcherManager_IsSearcherCurrent.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.SearcherManager.IsSearcherCurrent%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Search/SearcherManager.cs/#L149">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_SearcherManager_IsSearcherCurrent_" data-uid="Lucene.Net.Search.SearcherManager.IsSearcherCurrent*"></a>
+  <h4 id="Lucene_Net_Search_SearcherManager_IsSearcherCurrent" data-uid="Lucene.Net.Search.SearcherManager.IsSearcherCurrent">IsSearcherCurrent()</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if no changes have occured since this searcher
+ie. reader was opened, otherwise <code>false</code>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsSearcherCurrent()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Search_SearcherManager_IsSearcherCurrent_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.DirectoryReader.html#Lucene_Net_Index_DirectoryReader_IsCurrent">IsCurrent</a>()</div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_SearcherManager_RefreshIfNeeded_Lucene_Net_Search_IndexSearcher_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.SearcherManager.RefreshIfNeeded(Lucene.Net.Search.IndexSearcher)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Search/SearcherManager.cs/#L120">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_SearcherManager_RefreshIfNeeded_" data-uid="Lucene.Net.Search.SearcherManager.RefreshIfNeeded*"></a>
+  <h4 id="Lucene_Net_Search_SearcherManager_RefreshIfNeeded_Lucene_Net_Search_IndexSearcher_" data-uid="Lucene.Net.Search.SearcherManager.RefreshIfNeeded(Lucene.Net.Search.IndexSearcher)">RefreshIfNeeded(IndexSearcher)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override IndexSearcher RefreshIfNeeded(IndexSearcher referenceToRefresh)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a></td>
+        <td><span class="parametername">referenceToRefresh</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Search.ReferenceManager&lt;Lucene.Net.Search.IndexSearcher&gt;.RefreshIfNeeded(Lucene.Net.Search.IndexSearcher)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_SearcherManager_TryIncRef_Lucene_Net_Search_IndexSearcher_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.SearcherManager.TryIncRef(Lucene.Net.Search.IndexSearcher)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Search/SearcherManager.cs/#L135">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_SearcherManager_TryIncRef_" data-uid="Lucene.Net.Search.SearcherManager.TryIncRef*"></a>
+  <h4 id="Lucene_Net_Search_SearcherManager_TryIncRef_Lucene_Net_Search_IndexSearcher_" data-uid="Lucene.Net.Search.SearcherManager.TryIncRef(Lucene.Net.Search.IndexSearcher)">TryIncRef(IndexSearcher)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override bool TryIncRef(IndexSearcher reference)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a></td>
+        <td><span class="parametername">reference</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Search.ReferenceManager&lt;Lucene.Net.Search.IndexSearcher&gt;.TryIncRef(Lucene.Net.Search.IndexSearcher)</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Search.ReferenceManagerExtensions.html#Lucene_Net_Search_ReferenceManagerExtensions_GetContext__1_Lucene_Net_Search_ReferenceManager___0__">ReferenceManagerExtensions.GetContext&lt;T&gt;(ReferenceManager&lt;T&gt;)</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Search.SearcherFactory.html">SearcherFactory</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_SearcherManager.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.SearcherManager%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Search/SearcherManager.cs/#L62" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>
