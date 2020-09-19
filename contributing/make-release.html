@@ -78,10 +78,10 @@
 <p>This is a project-specific procedure, based on the <a href="https://infra.apache.org/release-publishing.html">Apache Release Creation Process</a></p>
 </div>
 <h2 id="versioning">Versioning</h2>
-<p>For Package Version, Nuget version and branch naming guidelines see the <a class="xref" href="versioning.html">Versioning Procedure Overview</a> document.</p>
+<p>For Package Version, NuGet version and branch naming guidelines see the <a class="xref" href="versioning.html">Versioning Procedure Overview</a> document.</p>
 <h2 id="release-preparation">Release Preparation</h2>
 <ul>
-<li><p>Nominate a release manager (must be a Lucene.NET committer)</p>
+<li><p>Nominate a release manager (must be a Lucene.NET committer).</p>
 </li>
 <li><p>Review all GitHub issues associated with the release milestone. All issues should be resolved or closed.</p>
 </li>
@@ -91,7 +91,7 @@
 <h2 id="steps-for-the-release-manager">Steps for the Release Manager</h2>
 <p>The following steps need only to be performed once.</p>
 <ul>
-<li><p>Install the <a href="https://www.oracle.com/java/technologies/javase-jre8-downloads.html">Java Runtime Environment</a></p>
+<li><p>Install the <a href="https://www.oracle.com/java/technologies/javase-jre8-downloads.html">Java Runtime Environment</a>. This is a dependency of the Release Audit Tool.</p>
 </li>
 <li><p>Install a subversion command line client, such as <a href="https://tortoisesvn.net/downloads.html">TortoiseSVN</a></p>
 </li>
@@ -153,11 +153,11 @@
 </li>
 </ul>
 </li>
-<li><p>Execute a complete test locally (it can take up to an hour, but you may do the next step in parallel):</p>
+<li><p>Execute a complete test locally (it can take around 20 minutes, but you may do the next step in parallel):</p>
 <pre><code class="lang-powershell">build -pv:&lt;packageVersion&gt; -t -mp:10
 </code></pre>
 </li>
-<li><p>Execute a complete test on a temporary Azure DevOps organization (it can take up to an hour) (see <a href="https://github.com/apache/lucenenet#azure-devops">build instructions on README.md</a>).</p>
+<li><p>Execute a complete test on a temporary Azure DevOps organization (it can take around 30-40 minutes) (see <a href="https://github.com/apache/lucenenet#azure-devops">build instructions on README.md</a>).</p>
 </li>
 </ul>
 <h2 id="successful-release-preparation">Successful Release Preparation</h2>
@@ -175,13 +175,27 @@
 </li>
 <li><p>Click the back arrow to return to the main view</p>
 </li>
-<li><p>Click the <code>Run</code> button to begin the build (it will take about an hour)</p>
+<li><p>Click the <code>Run</code> button to begin the build (it will take about 40 minutes)</p>
 </li>
+</ul>
+<h3 id="check-the-release-artifacts">Check the Release Artifacts</h3>
+<ul>
+<li>Upon successful Azure DevOps build, download the <code>release</code> build artifact and unzip it. Note you will need to copy the files in a later step.</li>
+</ul>
+<p>Perform basic checks against the release binary:</p>
+<ul>
+<li><p>Check presence and appropriateness of LICENSE, NOTICE, and README files.</p>
+</li>
+<li><p>Check the <code>nupkg</code> files to ensure they can be referenced in Visual Studio.</p>
+</li>
+</ul>
+<h3 id="sign-the-release">Sign the Release</h3>
+<ul>
 <li><p>On your local Git clone, check out the SVN distribution repositories</p>
 <pre><code class="lang-powershell">dotnet msbuild -t:CheckoutRelease
 </code></pre>
 </li>
-<li><p>Upon successful Azure DevOps build, download the <code>release</code> build artifact, which contains the release binaries and copy both the <code>.src.zip</code> and <code>.bin.zip</code> files to a new folder named <code>&lt;repo root&gt;/svn-dev/&lt;packageVersion&gt;/</code></p>
+<li><p>From the <code>release</code> build artifact that you downloaded from Azure DevOps in the <strong>Check the Release Artifacts</strong> section, copy both the <code>.src.zip</code> and <code>.bin.zip</code> files to a new folder named <code>&lt;repo root&gt;/svn-dev/&lt;packageVersion&gt;/</code></p>
 </li>
 <li><p>On your local Git clone, tag the repository using the info in <code>RELEASE-TODO.txt</code></p>
 <ul>
@@ -200,14 +214,6 @@
 </div>
 </li>
 <li><p>Check signature of generated artifacts (the <code>SignReleaseCandidate</code> target above runs the commands)</p>
-</li>
-</ul>
-<h3 id="check-the-release-artifacts">Check the Release Artifacts</h3>
-<p>Perform basic checks against the release binary:</p>
-<ul>
-<li><p>Check presence and appropriateness of LICENSE, NOTICE, and README files.</p>
-</li>
-<li><p>Check the <code>nupkg</code> files to ensure they can be referenced in Visual Studio.</p>
 </li>
 </ul>
 <h3 id="add-release-artifacts-to-the-svn-dev-distribution-repository">Add Release Artifacts to the SVN <code>dev</code> Distribution Repository</h3>
@@ -232,7 +238,7 @@ The release was made from the Apache Lucene.NET [version] tag at:
 https://github.com/apache/lucenenet/tree/[tag]
 
 The release notes are listed at:
-https://github.com/apache/lucenenet/releases/tag/[tag-url]&quot;
+https://github.com/apache/lucenenet/releases/tag/[tag-url]
 
 The release was made using the Lucene.NET release process, documented on the website:
 https://lucenenet.apache.org/contributing/make-release.html
@@ -246,6 +252,7 @@ Only votes from Lucene.NET PMC are binding, but everyone is welcome to check the
 The vote passes if at least three binding +1 votes are cast.
 
 [ ] +1 Release the packages as Apache Lucene.NET [VERSION]
+
 [ ] -1 Do not release the packages because...
 
 </code></pre>
@@ -290,6 +297,19 @@ The vote is ***successful/not successful***
 <p>Commit the distribution via SVN to <a href="https://dist.apache.org/repos/dist/release">https://dist.apache.org/repos/dist/release</a>:</p>
 <pre><code class="lang-powershell">dotnet msbuild -t:CommitRelease -p:PackageVersion=&lt;packageVersion&gt;
 </code></pre>
+<div class="NOTE">
+<h5>Note</h5>
+<p>If preferred or if the above command fails, this step can be done manually using Windows Explorer/TortoiseSVN by doing the following steps:</p>
+<ul>
+<li>Copy <code>&lt;repo root&gt;/svn-dev/KEYS</code> to <code>&lt;repo root&gt;/svn-release/KEYS</code></li>
+<li>Copy <code>&lt;repo root&gt;/svn-dev/&lt;packageVersion&gt;</code> to <code>&lt;repo root&gt;/svn-release/&lt;packageVersion&gt;</code></li>
+<li>Right-click on <code>&lt;repo root&gt;/svn-release</code>, and click &quot;SVN Commit...&quot;</li>
+<li>Add the commit message <code>Added Apache-Lucene.Net-&lt;packageVersion&gt; to release/lucenenet</code> and click OK</li>
+<li>Right-click on <code>&lt;repo root&gt;/svn-dev/&lt;packageVersion&gt;</code> and click &quot;TortoiseSVN &gt; Delete&quot;</li>
+<li>Right-click on <code>&lt;repo root&gt;/svn-dev</code> and click &quot;SVN Commit...&quot;</li>
+<li>Add the commit message <code>Removed Apache-Lucene.Net-&lt;packageVersion&gt; from dev/lucenenet</code> and click OK</li>
+</ul>
+</div>
 <h3 id="archive-old-releases">Archive Old Release(s)</h3>
 <p>To reduce the load on the ASF mirrors, projects are required to delete old releases (see <a href="http://www.apache.org/legal/release-policy.html#when-to-archive">http://www.apache.org/legal/release-policy.html#when-to-archive</a>).</p>
 <p>Remove the old releases from SVN under <a href="https://dist.apache.org/repos/dist/release/lucenenet/">https://dist.apache.org/repos/dist/release/lucenenet/</a>.</p>
@@ -333,7 +353,7 @@ The vote is ***successful/not successful***
 </li>
 <li><p>Publish the Draft <a href="https://github.com/apache/lucenenet/releases">GitHub Release</a> that was <a href="#release-steps">created earlier</a>, updating the tag if necessary</p>
 </li>
-<li><p>Send announcement email</p>
+<li><p>Send announcement email 24 hours after the release (to ensure the mirrors have propagated the download locations)</p>
 <div class="IMPORTANT">
 <h5>Important</h5>
 <p>Only include announce@apache.org if it is a stable release version</p>
