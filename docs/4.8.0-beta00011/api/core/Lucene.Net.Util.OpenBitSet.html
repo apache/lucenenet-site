@@ -1,0 +1,2552 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class OpenBitSet
+   | Apache Lucene.NET 4.8.0-beta00011 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class OpenBitSet
+   | Apache Lucene.NET 4.8.0-beta00011 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Util.OpenBitSet">
+  
+  
+  <h1 id="Lucene_Net_Util_OpenBitSet" data-uid="Lucene.Net.Util.OpenBitSet" class="text-break">Class OpenBitSet
+  </h1>
+  <div class="markdown level0 summary"><p>An &quot;open&quot; BitSet implementation that allows direct access to the array of words
+storing the bits.
+<p>
+NOTE: This can be used in .NET any place where a <code>java.util.BitSet</code> is used in Java.
+<p>
+Unlike <code>java.util.BitSet</code>, the fact that bits are packed into an array of longs
+is part of the interface.  This allows efficient implementation of other algorithms
+by someone other than the author.  It also allows one to efficiently implement
+alternate serialization or interchange formats.
+<p>
+<a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a> is faster than <code>java.util.BitSet</code> in most operations
+and <em>much</em> faster at calculating cardinality of sets and results of set operations.
+It can also handle sets of larger cardinality (up to 64 * 2**32-1)
+<p>
+The goals of <a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a> are the fastest implementation possible, and
+maximum code reuse.  Extra safety and encapsulation
+may always be built on top, but if that&apos;s built in, the cost can never be removed (and
+hence people re-implement their own version in order to get better performance).
+<p>
+<h3>Performance Results</h3></p>
+<p>Test system: Pentium 4, Sun Java 1.5_06 -server -Xbatch -Xmx64M
+<p>BitSet size = 1,000,000
+<p>Results are java.util.BitSet time divided by OpenBitSet time.
+<table><thead><tr><th>cardinalityIntersectionCountUnionNextSetBitGetGetIterator</th><th></th></tr></thead><tbody><tr><td>50% full</td><td>3.363.961.441.461.991.58</td></tr><tr><td>1% full</td><td>3.313.90 1.04 0.99</td></tr></tbody></table>
+<p>
+<p>
+Test system: AMD Opteron, 64 bit linux, Sun Java 1.5_06 -server -Xbatch -Xmx64M
+<p>BitSet size = 1,000,000
+<p>Results are java.util.BitSet time divided by OpenBitSet time.
+<table><thead><tr><th>cardinalityIntersectionCountUnionNextSetBitGetGetIterator</th><th></th></tr></thead><tbody><tr><td>50% full</td><td>2.503.501.001.031.121.25</td></tr><tr><td>1% full</td><td>2.513.49 1.00 1.02</td></tr></tbody></table></p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a></div>
+    <div class="level2"><span class="xref">OpenBitSet</span></div>
+      <div class="level3"><a class="xref" href="Lucene.Net.Util.OpenBitSetDISI.html">OpenBitSetDISI</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_NewAnonymous_System_Func_Lucene_Net_Search_DocIdSetIterator__">DocIdSet.NewAnonymous(Func&lt;DocIdSetIterator&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_NewAnonymous_System_Func_Lucene_Net_Search_DocIdSetIterator__System_Func_Lucene_Net_Util_IBits__">DocIdSet.NewAnonymous(Func&lt;DocIdSetIterator&gt;, Func&lt;IBits&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_NewAnonymous_System_Func_Lucene_Net_Search_DocIdSetIterator__System_Func_System_Boolean__">DocIdSet.NewAnonymous(Func&lt;DocIdSetIterator&gt;, Func&lt;Boolean&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_NewAnonymous_System_Func_Lucene_Net_Search_DocIdSetIterator__System_Func_Lucene_Net_Util_IBits__System_Func_System_Boolean__">DocIdSet.NewAnonymous(Func&lt;DocIdSetIterator&gt;, Func&lt;IBits&gt;, Func&lt;Boolean&gt;)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Util.html">Lucene.Net.Util</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Util_OpenBitSet_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class OpenBitSet : DocIdSet, IBits</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L103">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet__ctor_" data-uid="Lucene.Net.Util.OpenBitSet.#ctor*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet__ctor" data-uid="Lucene.Net.Util.OpenBitSet.#ctor">OpenBitSet()</h4>
+  <div class="markdown level1 summary"><p>Constructor: allocates enough space for 64 bits. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public OpenBitSet()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet__ctor_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.%23ctor(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L94">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet__ctor_" data-uid="Lucene.Net.Util.OpenBitSet.#ctor*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet__ctor_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.#ctor(System.Int64)">OpenBitSet(Int64)</h4>
+  <div class="markdown level1 summary"><p>Constructs an <a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a> large enough to hold <code data-dev-comment-type="paramref" class="paramref">numBits</code>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public OpenBitSet(long numBits)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">numBits</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet__ctor_System_Int64___System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.%23ctor(System.Int64%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L120">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet__ctor_" data-uid="Lucene.Net.Util.OpenBitSet.#ctor*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet__ctor_System_Int64___System_Int32_" data-uid="Lucene.Net.Util.OpenBitSet.#ctor(System.Int64[],System.Int32)">OpenBitSet(Int64[], Int32)</h4>
+  <div class="markdown level1 summary"><p>Constructs an <a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a> from an existing <span class="xref">long[]</span>.
+<p>
+The first 64 bits are in long[0], with bit index 0 at the least significant
+bit, and bit index 63 at the most significant. Given a bit index, the word
+containing it is long[index/64], and it is at bit number index%64 within
+that word.
+<p>
+<code data-dev-comment-type="paramref" class="paramref">numWords</code> are the number of elements in the array that contain set bits
+(non-zero longs). <code data-dev-comment-type="paramref" class="paramref">numWords</code> should be &lt;= bits.Length, and any existing
+words in the array at position &gt;= numWords should be zero.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public OpenBitSet(long[] bits, int numWords)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span>[]</td>
+        <td><span class="parametername">bits</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numWords</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_m_bits.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.m_bits%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L86">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_OpenBitSet_m_bits" data-uid="Lucene.Net.Util.OpenBitSet.m_bits">m_bits</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected long[] m_bits</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_m_wlen.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.m_wlen%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L87">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_OpenBitSet_m_wlen" data-uid="Lucene.Net.Util.OpenBitSet.m_wlen">m_wlen</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int m_wlen</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Bits.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Bits%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L136">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Bits_" data-uid="Lucene.Net.Util.OpenBitSet.Bits*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Bits" data-uid="Lucene.Net.Util.OpenBitSet.Bits">Bits</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IBits Bits { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_Bits">DocIdSet.Bits</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Capacity.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Capacity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L144">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Capacity_" data-uid="Lucene.Net.Util.OpenBitSet.Capacity*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Capacity" data-uid="Lucene.Net.Util.OpenBitSet.Capacity">Capacity</h4>
+  <div class="markdown level1 summary"><p>Returns the current capacity in bits (1 greater than the index of the last bit). </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual long Capacity { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_IsCacheable.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.IsCacheable%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L140">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_IsCacheable_" data-uid="Lucene.Net.Util.OpenBitSet.IsCacheable*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_IsCacheable" data-uid="Lucene.Net.Util.OpenBitSet.IsCacheable">IsCacheable</h4>
+  <div class="markdown level1 summary"><p>This DocIdSet implementation is cacheable. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool IsCacheable { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_IsCacheable">DocIdSet.IsCacheable</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_IsEmpty.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.IsEmpty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L166">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_IsEmpty_" data-uid="Lucene.Net.Util.OpenBitSet.IsEmpty*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_IsEmpty" data-uid="Lucene.Net.Util.OpenBitSet.IsEmpty">IsEmpty</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if there are no set bits </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsEmpty { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Length.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Length%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L162">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Length_" data-uid="Lucene.Net.Util.OpenBitSet.Length*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Length" data-uid="Lucene.Net.Util.OpenBitSet.Length">Length</h4>
+  <div class="markdown level1 summary"><p>Returns the current capacity of this set. This is <em>not</em> equal to <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Cardinality">Cardinality()</a>.
+<p>
+NOTE: This is equivalent to size() or length() in Lucene.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int Length { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_NumWords.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.NumWords%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L178">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_NumWords_" data-uid="Lucene.Net.Util.OpenBitSet.NumWords*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_NumWords" data-uid="Lucene.Net.Util.OpenBitSet.NumWords">NumWords</h4>
+  <div class="markdown level1 summary"><p>Expert: gets the number of <span class="xref">System.Int64</span>s in the array that are in use. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int NumWords { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_And_Lucene_Net_Util_OpenBitSet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.And(Lucene.Net.Util.OpenBitSet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L974">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_And_" data-uid="Lucene.Net.Util.OpenBitSet.And*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_And_Lucene_Net_Util_OpenBitSet_" data-uid="Lucene.Net.Util.OpenBitSet.And(Lucene.Net.Util.OpenBitSet)">And(OpenBitSet)</h4>
+  <div class="markdown level1 summary"><p>see <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Intersect_Lucene_Net_Util_OpenBitSet_">Intersect(OpenBitSet)</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void And(OpenBitSet other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_AndNot_Lucene_Net_Util_OpenBitSet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.AndNot(Lucene.Net.Util.OpenBitSet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L986">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_AndNot_" data-uid="Lucene.Net.Util.OpenBitSet.AndNot*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_AndNot_Lucene_Net_Util_OpenBitSet_" data-uid="Lucene.Net.Util.OpenBitSet.AndNot(Lucene.Net.Util.OpenBitSet)">AndNot(OpenBitSet)</h4>
+  <div class="markdown level1 summary"><p>see <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_AndNot_Lucene_Net_Util_OpenBitSet_">AndNot(OpenBitSet)</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void AndNot(OpenBitSet other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_AndNotCount_Lucene_Net_Util_OpenBitSet_Lucene_Net_Util_OpenBitSet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.AndNotCount(Lucene.Net.Util.OpenBitSet%2CLucene.Net.Util.OpenBitSet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L691">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_AndNotCount_" data-uid="Lucene.Net.Util.OpenBitSet.AndNotCount*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_AndNotCount_Lucene_Net_Util_OpenBitSet_Lucene_Net_Util_OpenBitSet_" data-uid="Lucene.Net.Util.OpenBitSet.AndNotCount(Lucene.Net.Util.OpenBitSet,Lucene.Net.Util.OpenBitSet)">AndNotCount(OpenBitSet, OpenBitSet)</h4>
+  <div class="markdown level1 summary"><p>Returns the popcount or cardinality of &quot;a and not b&quot;
+or &quot;intersection(a, not(b))&quot;.
+Neither set is modified.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static long AndNotCount(OpenBitSet a, OpenBitSet b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Bits2words_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Bits2words(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L1045">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Bits2words_" data-uid="Lucene.Net.Util.OpenBitSet.Bits2words*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Bits2words_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.Bits2words(System.Int64)">Bits2words(Int64)</h4>
+  <div class="markdown level1 summary"><p>Returns the number of 64 bit words it would take to hold <code data-dev-comment-type="paramref" class="paramref">numBits</code>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int Bits2words(long numBits)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">numBits</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Cardinality.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Cardinality%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L654">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Cardinality_" data-uid="Lucene.Net.Util.OpenBitSet.Cardinality*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Cardinality" data-uid="Lucene.Net.Util.OpenBitSet.Cardinality">Cardinality()</h4>
+  <div class="markdown level1 summary"><p>Get the number of set bits.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual long Cardinality()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><p>The number of set bits. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Clear_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Clear(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L403">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Clear_" data-uid="Lucene.Net.Util.OpenBitSet.Clear*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Clear_System_Int32_System_Int32_" data-uid="Lucene.Net.Util.OpenBitSet.Clear(System.Int32,System.Int32)">Clear(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Clears a range of bits.  Clearing past the end does not change the size of the set.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Clear(int startIndex, int endIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startIndex</span></td>
+        <td><p>Lower index </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">endIndex</span></td>
+        <td><p>One-past the last bit to clear </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Clear_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Clear(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L386">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Clear_" data-uid="Lucene.Net.Util.OpenBitSet.Clear*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Clear_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.Clear(System.Int64)">Clear(Int64)</h4>
+  <div class="markdown level1 summary"><p>Clears a bit, allowing access beyond the current set size without changing the size. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Clear(long index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Clear_System_Int64_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Clear(System.Int64%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L450">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Clear_" data-uid="Lucene.Net.Util.OpenBitSet.Clear*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Clear_System_Int64_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.Clear(System.Int64,System.Int64)">Clear(Int64, Int64)</h4>
+  <div class="markdown level1 summary"><p>Clears a range of bits.  Clearing past the end does not change the size of the set.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Clear(long startIndex, long endIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">startIndex</span></td>
+        <td><p>Lower index </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">endIndex</span></td>
+        <td><p>One-past the last bit to clear </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Clone.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L875">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Clone_" data-uid="Lucene.Net.Util.OpenBitSet.Clone*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Clone" data-uid="Lucene.Net.Util.OpenBitSet.Clone">Clone()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_EnsureCapacity_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.EnsureCapacity(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L1021">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_EnsureCapacity_" data-uid="Lucene.Net.Util.OpenBitSet.EnsureCapacity*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_EnsureCapacity_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.EnsureCapacity(System.Int64)">EnsureCapacity(Int64)</h4>
+  <div class="markdown level1 summary"><p>Ensure that the <span class="xref">long[]</span> is big enough to hold numBits, expanding it if
+necessary.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void EnsureCapacity(long numBits)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">numBits</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_EnsureCapacityWords_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.EnsureCapacityWords(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L1010">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_EnsureCapacityWords_" data-uid="Lucene.Net.Util.OpenBitSet.EnsureCapacityWords*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_EnsureCapacityWords_System_Int32_" data-uid="Lucene.Net.Util.OpenBitSet.EnsureCapacityWords(System.Int32)">EnsureCapacityWords(Int32)</h4>
+  <div class="markdown level1 summary"><p>Expand the <span class="xref">long[]</span> with the size given as a number of words (64 bit longs). </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void EnsureCapacityWords(int numWords)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numWords</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L1052">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Equals_" data-uid="Lucene.Net.Util.OpenBitSet.Equals*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Equals_System_Object_" data-uid="Lucene.Net.Util.OpenBitSet.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if both sets have the same bits set. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object o)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">o</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.Equals(System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_ExpandingWordNum_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.ExpandingWordNum(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L341">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_ExpandingWordNum_" data-uid="Lucene.Net.Util.OpenBitSet.ExpandingWordNum*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_ExpandingWordNum_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.ExpandingWordNum(System.Int64)">ExpandingWordNum(Int64)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual int ExpandingWordNum(long index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_FastClear_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.FastClear(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L355">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_FastClear_" data-uid="Lucene.Net.Util.OpenBitSet.FastClear*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_FastClear_System_Int32_" data-uid="Lucene.Net.Util.OpenBitSet.FastClear(System.Int32)">FastClear(Int32)</h4>
+  <div class="markdown level1 summary"><p>Clears a bit.
+The <code data-dev-comment-type="paramref" class="paramref">index</code> should be less than the <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Length">Length</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void FastClear(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_FastClear_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.FastClear(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L375">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_FastClear_" data-uid="Lucene.Net.Util.OpenBitSet.FastClear*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_FastClear_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.FastClear(System.Int64)">FastClear(Int64)</h4>
+  <div class="markdown level1 summary"><p>Clears a bit.
+The <code data-dev-comment-type="paramref" class="paramref">index</code> should be less than the <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Length">Length</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void FastClear(long index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_FastFlip_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.FastFlip(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L524">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_FastFlip_" data-uid="Lucene.Net.Util.OpenBitSet.FastFlip*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_FastFlip_System_Int32_" data-uid="Lucene.Net.Util.OpenBitSet.FastFlip(System.Int32)">FastFlip(Int32)</h4>
+  <div class="markdown level1 summary"><p>Flips a bit.
+The <code data-dev-comment-type="paramref" class="paramref">index</code> should be less than the <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Length">Length</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void FastFlip(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_FastFlip_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.FastFlip(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L537">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_FastFlip_" data-uid="Lucene.Net.Util.OpenBitSet.FastFlip*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_FastFlip_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.FastFlip(System.Int64)">FastFlip(Int64)</h4>
+  <div class="markdown level1 summary"><p>Flips a bit.
+The <code data-dev-comment-type="paramref" class="paramref">index</code> should be less than the <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Length">Length</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void FastFlip(long index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_FastGet_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.FastGet(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L201">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_FastGet_" data-uid="Lucene.Net.Util.OpenBitSet.FastGet*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_FastGet_System_Int32_" data-uid="Lucene.Net.Util.OpenBitSet.FastGet(System.Int32)">FastGet(Int32)</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> or <code>false</code> for the specified bit <code data-dev-comment-type="paramref" class="paramref">index</code>.
+The index should be less than the <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Length">Length</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool FastGet(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_FastGet_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.FastGet(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L231">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_FastGet_" data-uid="Lucene.Net.Util.OpenBitSet.FastGet*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_FastGet_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.FastGet(System.Int64)">FastGet(Int64)</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> or <code>false</code> for the specified bit <code data-dev-comment-type="paramref" class="paramref">index</code>.
+The index should be less than the <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Length">Length</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool FastGet(long index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_FastSet_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.FastSet(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L287">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_FastSet_" data-uid="Lucene.Net.Util.OpenBitSet.FastSet*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_FastSet_System_Int32_" data-uid="Lucene.Net.Util.OpenBitSet.FastSet(System.Int32)">FastSet(Int32)</h4>
+  <div class="markdown level1 summary"><p>Sets the bit at the specified <code data-dev-comment-type="paramref" class="paramref">index</code>.
+The <code data-dev-comment-type="paramref" class="paramref">index</code> should be less than the <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Length">Length</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void FastSet(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_FastSet_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.FastSet(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L300">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_FastSet_" data-uid="Lucene.Net.Util.OpenBitSet.FastSet*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_FastSet_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.FastSet(System.Int64)">FastSet(Int64)</h4>
+  <div class="markdown level1 summary"><p>Sets the bit at the specified <code data-dev-comment-type="paramref" class="paramref">index</code>.
+The <code data-dev-comment-type="paramref" class="paramref">index</code> should be less than the <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Length">Length</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void FastSet(long index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Flip_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Flip(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L548">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Flip_" data-uid="Lucene.Net.Util.OpenBitSet.Flip*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Flip_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.Flip(System.Int64)">Flip(Int64)</h4>
+  <div class="markdown level1 summary"><p>Flips a bit, expanding the set size if necessary. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Flip(long index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Flip_System_Int64_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Flip(System.Int64%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L589">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Flip_" data-uid="Lucene.Net.Util.OpenBitSet.Flip*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Flip_System_Int64_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.Flip(System.Int64,System.Int64)">Flip(Int64, Int64)</h4>
+  <div class="markdown level1 summary"><p>Flips a range of bits, expanding the set size if necessary.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Flip(long startIndex, long endIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">startIndex</span></td>
+        <td><p>Lower index </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">endIndex</span></td>
+        <td><p>One-past the last bit to flip </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_FlipAndGet_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.FlipAndGet(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L560">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_FlipAndGet_" data-uid="Lucene.Net.Util.OpenBitSet.FlipAndGet*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_FlipAndGet_System_Int32_" data-uid="Lucene.Net.Util.OpenBitSet.FlipAndGet(System.Int32)">FlipAndGet(Int32)</h4>
+  <div class="markdown level1 summary"><p>Flips a bit and returns the resulting bit value.
+The <code data-dev-comment-type="paramref" class="paramref">index</code> should be less than the <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Length">Length</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool FlipAndGet(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_FlipAndGet_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.FlipAndGet(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L574">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_FlipAndGet_" data-uid="Lucene.Net.Util.OpenBitSet.FlipAndGet*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_FlipAndGet_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.FlipAndGet(System.Int64)">FlipAndGet(Int64)</h4>
+  <div class="markdown level1 summary"><p>Flips a bit and returns the resulting bit value.
+The <code data-dev-comment-type="paramref" class="paramref">index</code> should be less than the <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Length">Length</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool FlipAndGet(long index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Get_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Get(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L182">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Get_" data-uid="Lucene.Net.Util.OpenBitSet.Get*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Get_System_Int32_" data-uid="Lucene.Net.Util.OpenBitSet.Get(System.Int32)">Get(Int32)</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> or <code>false</code> for the specified bit <code data-dev-comment-type="paramref" class="paramref">index</code>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Get(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Get_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Get(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L215">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Get_" data-uid="Lucene.Net.Util.OpenBitSet.Get*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Get_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.Get(System.Int64)">Get(Int64)</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> or <code>false</code> for the specified bit <code data-dev-comment-type="paramref" class="paramref">index</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Get(long index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_GetAndSet_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.GetAndSet(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L494">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_GetAndSet_" data-uid="Lucene.Net.Util.OpenBitSet.GetAndSet*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_GetAndSet_System_Int32_" data-uid="Lucene.Net.Util.OpenBitSet.GetAndSet(System.Int32)">GetAndSet(Int32)</h4>
+  <div class="markdown level1 summary"><p>Sets a bit and returns the previous value.
+The <code data-dev-comment-type="paramref" class="paramref">index</code> should be less than the <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Length">Length</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool GetAndSet(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_GetAndSet_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.GetAndSet(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L509">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_GetAndSet_" data-uid="Lucene.Net.Util.OpenBitSet.GetAndSet*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_GetAndSet_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.GetAndSet(System.Int64)">GetAndSet(Int64)</h4>
+  <div class="markdown level1 summary"><p>Sets a bit and returns the previous value.
+The <code data-dev-comment-type="paramref" class="paramref">index</code> should be less than the <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Length">Length</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool GetAndSet(long index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_GetBit_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.GetBit(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L256">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_GetBit_" data-uid="Lucene.Net.Util.OpenBitSet.GetBit*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_GetBit_System_Int32_" data-uid="Lucene.Net.Util.OpenBitSet.GetBit(System.Int32)">GetBit(Int32)</h4>
+  <div class="markdown level1 summary"><p>Returns 1 if the bit is set, 0 if not.
+The <code data-dev-comment-type="paramref" class="paramref">index</code> should be less than the <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Length">Length</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int GetBit(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_GetBits.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.GetBits%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L170">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_GetBits_" data-uid="Lucene.Net.Util.OpenBitSet.GetBits*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_GetBits" data-uid="Lucene.Net.Util.OpenBitSet.GetBits">GetBits()</h4>
+  <div class="markdown level1 summary"><p>Expert: returns the <span class="xref">long[]</span> storing the bits. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual long[] GetBits()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_GetHashCode.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L1095">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_GetHashCode_" data-uid="Lucene.Net.Util.OpenBitSet.GetHashCode*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_GetHashCode" data-uid="Lucene.Net.Util.OpenBitSet.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.GetHashCode()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_GetIterator.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.GetIterator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L131">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_GetIterator_" data-uid="Lucene.Net.Util.OpenBitSet.GetIterator*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_GetIterator" data-uid="Lucene.Net.Util.OpenBitSet.GetIterator">GetIterator()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override DocIdSetIterator GetIterator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html">DocIdSetIterator</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_GetIterator">DocIdSet.GetIterator()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Intersect_Lucene_Net_Util_OpenBitSet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Intersect(Lucene.Net.Util.OpenBitSet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L885">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Intersect_" data-uid="Lucene.Net.Util.OpenBitSet.Intersect*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Intersect_Lucene_Net_Util_OpenBitSet_" data-uid="Lucene.Net.Util.OpenBitSet.Intersect(Lucene.Net.Util.OpenBitSet)">Intersect(OpenBitSet)</h4>
+  <div class="markdown level1 summary"><p>this = this AND other </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Intersect(OpenBitSet other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_IntersectionCount_Lucene_Net_Util_OpenBitSet_Lucene_Net_Util_OpenBitSet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.IntersectionCount(Lucene.Net.Util.OpenBitSet%2CLucene.Net.Util.OpenBitSet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L663">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_IntersectionCount_" data-uid="Lucene.Net.Util.OpenBitSet.IntersectionCount*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_IntersectionCount_Lucene_Net_Util_OpenBitSet_Lucene_Net_Util_OpenBitSet_" data-uid="Lucene.Net.Util.OpenBitSet.IntersectionCount(Lucene.Net.Util.OpenBitSet,Lucene.Net.Util.OpenBitSet)">IntersectionCount(OpenBitSet, OpenBitSet)</h4>
+  <div class="markdown level1 summary"><p>Returns the popcount or cardinality of the intersection of the two sets.
+Neither set is modified.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static long IntersectionCount(OpenBitSet a, OpenBitSet b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Intersects_Lucene_Net_Util_OpenBitSet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Intersects(Lucene.Net.Util.OpenBitSet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L993">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Intersects_" data-uid="Lucene.Net.Util.OpenBitSet.Intersects*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Intersects_Lucene_Net_Util_OpenBitSet_" data-uid="Lucene.Net.Util.OpenBitSet.Intersects(Lucene.Net.Util.OpenBitSet)">Intersects(OpenBitSet)</h4>
+  <div class="markdown level1 summary"><p>returns <code>true</code> if the sets have any elements in common. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Intersects(OpenBitSet other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_NextSetBit_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.NextSetBit(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L723">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_NextSetBit_" data-uid="Lucene.Net.Util.OpenBitSet.NextSetBit*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_NextSetBit_System_Int32_" data-uid="Lucene.Net.Util.OpenBitSet.NextSetBit(System.Int32)">NextSetBit(Int32)</h4>
+  <div class="markdown level1 summary"><p>Returns the index of the first set bit starting at the <code data-dev-comment-type="paramref" class="paramref">index</code> specified.
+-1 is returned if there are no more set bits.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int NextSetBit(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_NextSetBit_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.NextSetBit(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L754">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_NextSetBit_" data-uid="Lucene.Net.Util.OpenBitSet.NextSetBit*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_NextSetBit_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.NextSetBit(System.Int64)">NextSetBit(Int64)</h4>
+  <div class="markdown level1 summary"><p>Returns the index of the first set bit starting at the <code data-dev-comment-type="paramref" class="paramref">index</code> specified.
+-1 is returned if there are no more set bits.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual long NextSetBit(long index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Or_Lucene_Net_Util_OpenBitSet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Or(Lucene.Net.Util.OpenBitSet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L980">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Or_" data-uid="Lucene.Net.Util.OpenBitSet.Or*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Or_Lucene_Net_Util_OpenBitSet_" data-uid="Lucene.Net.Util.OpenBitSet.Or(Lucene.Net.Util.OpenBitSet)">Or(OpenBitSet)</h4>
+  <div class="markdown level1 summary"><p>see <a class="xref" href="Lucene.Net.Util.OpenBitSet.html#Lucene_Net_Util_OpenBitSet_Union_Lucene_Net_Util_OpenBitSet_">Union(OpenBitSet)</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Or(OpenBitSet other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_PrevSetBit_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.PrevSetBit(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L786">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_PrevSetBit_" data-uid="Lucene.Net.Util.OpenBitSet.PrevSetBit*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_PrevSetBit_System_Int32_" data-uid="Lucene.Net.Util.OpenBitSet.PrevSetBit(System.Int32)">PrevSetBit(Int32)</h4>
+  <div class="markdown level1 summary"><p>Returns the index of the first set bit starting downwards at
+the <code data-dev-comment-type="paramref" class="paramref">index</code> specified.
+-1 is returned if there are no more set bits.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int PrevSetBit(int index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_PrevSetBit_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.PrevSetBit(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L833">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_PrevSetBit_" data-uid="Lucene.Net.Util.OpenBitSet.PrevSetBit*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_PrevSetBit_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.PrevSetBit(System.Int64)">PrevSetBit(Int64)</h4>
+  <div class="markdown level1 summary"><p>Returns the index of the first set bit starting downwards at
+the <code data-dev-comment-type="paramref" class="paramref">index</code> specified.
+-1 is returned if there are no more set bits.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual long PrevSetBit(long index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Remove_Lucene_Net_Util_OpenBitSet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Remove(Lucene.Net.Util.OpenBitSet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L933">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Remove_" data-uid="Lucene.Net.Util.OpenBitSet.Remove*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Remove_Lucene_Net_Util_OpenBitSet_" data-uid="Lucene.Net.Util.OpenBitSet.Remove(Lucene.Net.Util.OpenBitSet)">Remove(OpenBitSet)</h4>
+  <div class="markdown level1 summary"><p>Remove all elements set in other. this = this AND_NOT other. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Remove(OpenBitSet other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Set_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Set(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L275">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Set_" data-uid="Lucene.Net.Util.OpenBitSet.Set*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Set_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.Set(System.Int64)">Set(Int64)</h4>
+  <div class="markdown level1 summary"><p>Sets a bit, expanding the set size if necessary. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Set(long index)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Set_System_Int64_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Set(System.Int64%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L314">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Set_" data-uid="Lucene.Net.Util.OpenBitSet.Set*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Set_System_Int64_System_Int64_" data-uid="Lucene.Net.Util.OpenBitSet.Set(System.Int64,System.Int64)">Set(Int64, Int64)</h4>
+  <div class="markdown level1 summary"><p>Sets a range of bits, expanding the set size if necessary.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Set(long startIndex, long endIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">startIndex</span></td>
+        <td><p>Lower index </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">endIndex</span></td>
+        <td><p>One-past the last bit to set </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_TrimTrailingZeros.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.TrimTrailingZeros%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L1033">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_TrimTrailingZeros_" data-uid="Lucene.Net.Util.OpenBitSet.TrimTrailingZeros*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_TrimTrailingZeros" data-uid="Lucene.Net.Util.OpenBitSet.TrimTrailingZeros">TrimTrailingZeros()</h4>
+  <div class="markdown level1 summary"><p>Lowers numWords, the number of words in use,
+by checking for trailing zero words.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void TrimTrailingZeros()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Union_Lucene_Net_Util_OpenBitSet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Union(Lucene.Net.Util.OpenBitSet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L906">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Union_" data-uid="Lucene.Net.Util.OpenBitSet.Union*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Union_Lucene_Net_Util_OpenBitSet_" data-uid="Lucene.Net.Util.OpenBitSet.Union(Lucene.Net.Util.OpenBitSet)">Union(OpenBitSet)</h4>
+  <div class="markdown level1 summary"><p>this = this OR other </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Union(OpenBitSet other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_UnionCount_Lucene_Net_Util_OpenBitSet_Lucene_Net_Util_OpenBitSet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.UnionCount(Lucene.Net.Util.OpenBitSet%2CLucene.Net.Util.OpenBitSet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L672">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_UnionCount_" data-uid="Lucene.Net.Util.OpenBitSet.UnionCount*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_UnionCount_Lucene_Net_Util_OpenBitSet_Lucene_Net_Util_OpenBitSet_" data-uid="Lucene.Net.Util.OpenBitSet.UnionCount(Lucene.Net.Util.OpenBitSet,Lucene.Net.Util.OpenBitSet)">UnionCount(OpenBitSet, OpenBitSet)</h4>
+  <div class="markdown level1 summary"><p>Returns the popcount or cardinality of the union of the two sets.
+Neither set is modified.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static long UnionCount(OpenBitSet a, OpenBitSet b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_Xor_Lucene_Net_Util_OpenBitSet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.Xor(Lucene.Net.Util.OpenBitSet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L946">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_Xor_" data-uid="Lucene.Net.Util.OpenBitSet.Xor*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_Xor_Lucene_Net_Util_OpenBitSet_" data-uid="Lucene.Net.Util.OpenBitSet.Xor(Lucene.Net.Util.OpenBitSet)">Xor(OpenBitSet)</h4>
+  <div class="markdown level1 summary"><p>this = this XOR other </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Xor(OpenBitSet other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet_XorCount_Lucene_Net_Util_OpenBitSet_Lucene_Net_Util_OpenBitSet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet.XorCount(Lucene.Net.Util.OpenBitSet%2CLucene.Net.Util.OpenBitSet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L705">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_OpenBitSet_XorCount_" data-uid="Lucene.Net.Util.OpenBitSet.XorCount*"></a>
+  <h4 id="Lucene_Net_Util_OpenBitSet_XorCount_Lucene_Net_Util_OpenBitSet_Lucene_Net_Util_OpenBitSet_" data-uid="Lucene.Net.Util.OpenBitSet.XorCount(Lucene.Net.Util.OpenBitSet,Lucene.Net.Util.OpenBitSet)">XorCount(OpenBitSet, OpenBitSet)</h4>
+  <div class="markdown level1 summary"><p>Returns the popcount or cardinality of the exclusive-or of the two sets.
+Neither set is modified.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static long XorCount(OpenBitSet a, OpenBitSet b)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a></td>
+        <td><span class="parametername">b</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_OpenBitSet.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.OpenBitSet%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Util/OpenBitSet.cs/#L81" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

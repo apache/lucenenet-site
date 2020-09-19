@@ -1,0 +1,307 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Lucene.Net.Search.Highlight
+   | Apache Lucene.NET 4.8.0-beta00011 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Lucene.Net.Search.Highlight
+   | Apache Lucene.NET 4.8.0-beta00011 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="highlighter/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.Highlight">
+  
+  <h1 id="Lucene_Net_Search_Highlight" data-uid="Lucene.Net.Search.Highlight" class="text-break">Namespace Lucene.Net.Search.Highlight
+  </h1>
+  <div class="markdown level0 summary"><!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<p>The highlight package contains classes to provide &quot;keyword in context&quot; features
+typically used to highlight search terms in the text of results pages.
+The Highlighter class is the central component and can be used to extract the
+most interesting sections of a piece of text and highlight them, with the help of
+Fragmenter, fragment Scorer, and Formatter classes.</p>
+<h2 id="example-usage">Example Usage</h2>
+<pre><code>  //... Above, create documents with two fields, one with term vectors (tv) and one without (notv)
+  IndexSearcher searcher = new IndexSearcher(directory);
+  QueryParser parser = new QueryParser(&quot;notv&quot;, analyzer);
+  Query query = parser.parse(&quot;million&quot;);
+</code></pre><p>  TopDocs hits = searcher.search(query, 10);</p>
+<p>  SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter();
+      Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
+      for (int i = 0; i &lt; 10;=&quot;&quot; i++)=&quot;&quot; {=&quot;&quot; int=&quot;&quot; id=&quot;hits.scoreDocs[i].doc;&quot; document=&quot;&quot; doc=&quot;searcher.doc(id);&quot; string=&quot;&quot; text=&quot;doc.get(&quot; notv&quot;);&quot;=&quot;&quot; tokenstream=&quot;&quot; tokenstream=&quot;TokenSources.getAnyTokenStream(searcher.getIndexReader(),&quot; id,=&quot;&quot; &quot;notv&quot;,=&quot;&quot; analyzer);=&quot;&quot; textfragment[]=&quot;&quot; frag=&quot;highlighter.getBestTextFragments(tokenStream,&quot; text,=&quot;&quot; false,=&quot;&quot; 10);//highlighter.getbestfragments(tokenstream,=&quot;&quot; text,=&quot;&quot; 3,=&quot;&quot; &quot;...&quot;);=&quot;&quot; for=&quot;&quot; (int=&quot;&quot; j=&quot;0;&quot; j=&quot;&quot;&gt;&lt; frag.length;=&quot;&quot; j++)=&quot;&quot; {=&quot;&quot; if=&quot;&quot; ((frag[j]=&quot;&quot; !=&quot;null)&quot; &amp;&amp;=&quot;&quot; (frag[j].getscore()=&quot;&quot;&gt; 0)) {
+            System.out.println((frag[j].toString()));
+          }
+        }
+        //Term vector
+        text = doc.get(&quot;tv&quot;);
+        tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(), hits.scoreDocs[i].doc, &quot;tv&quot;, analyzer);
+        frag = highlighter.getBestTextFragments(tokenStream, text, false, 10);
+        for (int j = 0; j &lt; frag.length;=&quot;&quot; j++)=&quot;&quot; {=&quot;&quot; if=&quot;&quot; ((frag[j]=&quot;&quot; !=&quot;null)&quot; &amp;&amp;=&quot;&quot; (frag[j].getscore()=&quot;&quot;&gt; 0)) {
+            System.out.println((frag[j].toString()));
+          }
+        }
+        System.out.println(&quot;-------------&quot;);
+      }</p>
+<h2 id="new-features-06022005">New features 06/02/2005</h2>
+<p>This release adds options for encoding (thanks to Nicko Cadell).
+An &quot;Encoder&quot; implementation such as the new SimpleHTMLEncoder class can be passed to the highlighter to encode
+all those non-xhtml standard characters such as &amp; into legal values. This simple class may not suffice for
+some languages -  Commons Lang has an implementation that could be used: escapeHtml(String) in
+<a href="http://svn.apache.org/viewcvs.cgi/jakarta/commons/proper/lang/trunk/src/java/org/apache/commons/lang/StringEscapeUtils.java?rev=137958&amp;view=markup">http://svn.apache.org/viewcvs.cgi/jakarta/commons/proper/lang/trunk/src/java/org/apache/commons/lang/StringEscapeUtils.java?rev=137958&view=markup</a></p>
+<h2 id="new-features-22122004">New features 22/12/2004</h2>
+<p>This release adds some new capabilities:</p>
+<ol>
+<li><p>Faster highlighting using Term vector support</p>
+</li>
+<li><p>New formatting options to use color intensity to show informational value</p>
+</li>
+<li><p>Options for better summarization by using term IDF scores to influence fragment selection</p>
+<p>The highlighter takes a TokenStream as input. Until now these streams have typically been produced using an Analyzer but the new class TokenSources provides helper methods for obtaining TokenStreams from the new TermVector position support (see latest CVS version).</p>
+</li>
+</ol>
+<p>The new class GradientFormatter can use a scale of colors to highlight terms according to their score. A subtle use of color can help emphasise the reasons for matching (useful when doing &quot;MoreLikeThis&quot; queries and you want to see what the basis of the similarities are).</p>
+<p>The QueryScorer class has a new constructor which can use an IndexReader to derive the IDF (inverse document frequency) for each term in order to influence the score. This is useful for helping to extracting the most significant sections of a document and in supplying scores used by the new GradientFormatter to color significant words more strongly. The QueryScorer.getMaxWeight method is useful when passed to the GradientFormatter constructor to define the top score which is associated with the top color.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.DefaultEncoder.html">DefaultEncoder</a></h4>
+      <section><p>Simple <a class="xref" href="Lucene.Net.Search.Highlight.IEncoder.html">IEncoder</a> implementation that does not modify the output</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.GradientFormatter.html">GradientFormatter</a></h4>
+      <section><p>Formats text with different color intensity depending on the score of the term.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.Highlighter.html">Highlighter</a></h4>
+      <section><p>Class used to markup highlighted terms found in the best sections of a
+text, using configurable <a class="xref" href="Lucene.Net.Search.Highlight.IFragmenter.html">IFragmenter</a>, <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Scorer.html">Scorer</a>, <a class="xref" href="Lucene.Net.Search.Highlight.IFormatter.html">IFormatter</a>,
+<a class="xref" href="Lucene.Net.Search.Highlight.IEncoder.html">IEncoder</a> and tokenizers.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.InvalidTokenOffsetsException.html">InvalidTokenOffsetsException</a></h4>
+      <section><p>Exception thrown if TokenStream Tokens are incompatible with provided text</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.NullFragmenter.html">NullFragmenter</a></h4>
+      <section><p><a class="xref" href="Lucene.Net.Search.Highlight.IFragmenter.html">IFragmenter</a> implementation which does not fragment the text.
+   This is useful for highlighting the entire content of a document or field.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.OffsetLimitTokenFilter.html">OffsetLimitTokenFilter</a></h4>
+      <section><p>This <span class="xref">Lucene.Net.Analysis.TokenFilter</span> limits the number of tokens while indexing by adding up the
+current offset.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.PositionSpan.html">PositionSpan</a></h4>
+      <section><p>Utility class to record Positions Spans</p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.QueryScorer.html">QueryScorer</a></h4>
+      <section><p><a class="xref" href="Lucene.Net.Search.Highlight.IScorer.html">IScorer</a> implementation which scores text fragments by the number of
+unique query terms found. This class converts appropriate <span class="xref">Lucene.Net.Search.Query</span>s to
+<span class="xref">Lucene.Net.Search.Spans.SpanQuery</span>s and attempts to score only those terms that participated in
+generating the &apos;hit&apos; on the document.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.QueryTermExtractor.html">QueryTermExtractor</a></h4>
+      <section><p>Utility class used to extract the terms used in a query, plus any weights.
+This class will not find terms for <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.MultiTermQuery.html">MultiTermQuery</a>, RangeQuery and <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.PrefixQuery.html">PrefixQuery</a> classes
+so the caller must pass a rewritten query (see <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Rewrite_Lucene_Net_Index_IndexReader_">Rewrite(IndexReader)</a>) to obtain a list of 
+expanded terms.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.QueryTermScorer.html">QueryTermScorer</a></h4>
+      <section><p><a class="xref" href="Lucene.Net.Search.Highlight.IScorer.html">IScorer</a> implementation which scores text fragments by the number of
+unique query terms found. This class uses the <a class="xref" href="Lucene.Net.Search.Highlight.QueryTermExtractor.html">QueryTermExtractor</a>
+class to process determine the query terms and their boosts to be used.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.SimpleFragmenter.html">SimpleFragmenter</a></h4>
+      <section><p><a class="xref" href="Lucene.Net.Search.Highlight.IFragmenter.html">IFragmenter</a> implementation which breaks text up into same-size
+fragments with no concerns over spotting sentence boundaries.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.SimpleHTMLEncoder.html">SimpleHTMLEncoder</a></h4>
+      <section><p>Simple <a class="xref" href="Lucene.Net.Search.Highlight.IEncoder.html">IEncoder</a> implementation to escape text for HTML output</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.SimpleHTMLFormatter.html">SimpleHTMLFormatter</a></h4>
+      <section><p>Simple <a class="xref" href="Lucene.Net.Search.Highlight.IFormatter.html">IFormatter</a> implementation to highlight terms with a pre and post tag</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.SimpleSpanFragmenter.html">SimpleSpanFragmenter</a></h4>
+      <section><p><a class="xref" href="Lucene.Net.Search.Highlight.IFragmenter.html">IFragmenter</a> implementation which breaks text up into same-size
+fragments but does not split up <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Spans.Spans.html">Spans</a>. This is a simple sample class.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.SpanGradientFormatter.html">SpanGradientFormatter</a></h4>
+      <section><p>Formats text with different color intensity depending on the score of the
+term using the span tag. <a class="xref" href="Lucene.Net.Search.Highlight.GradientFormatter.html">GradientFormatter</a> uses a bgcolor argument to the font tag which
+doesn&apos;t work in Mozilla, thus this class.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.TextFragment.html">TextFragment</a></h4>
+      <section><p>Low-level class used to record information about a section of a document 
+with a score.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.TokenGroup.html">TokenGroup</a></h4>
+      <section><p>One, or several overlapping tokens, along with the score(s) and the scope of
+the original text</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.TokenSources.html">TokenSources</a></h4>
+      <section><p>Hides implementation issues associated with obtaining a <span class="xref">Lucene.Net.Analysis.TokenStream</span> for use with 
+the <a class="xref" href="Lucene.Net.Search.Highlight.Highlighter.html">Highlighter</a> - can obtain from
+term vectors with offsets and positions or from an Analyzer re-parsing the stored content.
+see TokenStreamFromTermVector</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.TokenStreamFromTermPositionVector.html">TokenStreamFromTermPositionVector</a></h4>
+      <section><p><span class="xref">Lucene.Net.Analysis.TokenStream</span> created from a term vector field.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.WeightedSpanTerm.html">WeightedSpanTerm</a></h4>
+      <section><p>Lightweight class to hold term, weight, and positions used for scoring this term.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.WeightedSpanTermExtractor.html">WeightedSpanTermExtractor</a></h4>
+      <section><p>Class used to extract <a class="xref" href="Lucene.Net.Search.Highlight.WeightedSpanTerm.html">WeightedSpanTerm</a>s from a <span class="xref">Lucene.Net.Search.Query</span> based on whether 
+<a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Index.Term.html">Term</a>s from the <span class="xref">Lucene.Net.Search.Query</span> are contained in a supplied <span class="xref">Lucene.Net.Analysis.TokenStream</span>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.WeightedSpanTermExtractor.PositionCheckingMap-1.html">WeightedSpanTermExtractor.PositionCheckingMap&lt;K&gt;</a></h4>
+      <section><p>This class makes sure that if both position sensitive and insensitive
+versions of the same term are added, the position insensitive one wins.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.WeightedTerm.html">WeightedTerm</a></h4>
+      <section><p>Lightweight class to hold term and a Weight value used for scoring this term</p>
+</section>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.IEncoder.html">IEncoder</a></h4>
+      <section><p>Encodes original text. The <a class="xref" href="Lucene.Net.Search.Highlight.IEncoder.html">IEncoder</a> works with the <a class="xref" href="Lucene.Net.Search.Highlight.IFormatter.html">IFormatter</a> to generate the output.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.IFormatter.html">IFormatter</a></h4>
+      <section><p>Processes terms found in the original text, typically by applying some form 
+of mark-up to highlight terms in HTML search results pages.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.IFragmenter.html">IFragmenter</a></h4>
+      <section><p>Implements the policy for breaking text into multiple fragments for consideration
+by the <a class="xref" href="Lucene.Net.Search.Highlight.Highlighter.html">Highlighter</a> class. A sophisticated implementation may do this on the basis
+of detecting end of sentences in the text. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Highlight.IScorer.html">IScorer</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Highlight.IScorer.html">IScorer</a> is responsible for scoring a stream of tokens. These token scores
+can then be used to compute <a class="xref" href="Lucene.Net.Search.Highlight.TextFragment.html">TextFragment</a> scores.</p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00011/src/Lucene.Net.Highlighter/Highlight/package.md/#L2" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>
