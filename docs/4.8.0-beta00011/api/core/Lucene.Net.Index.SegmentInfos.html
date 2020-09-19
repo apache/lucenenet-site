@@ -1,0 +1,1620 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class SegmentInfos
+   | Apache Lucene.NET 4.8.0-beta00011 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class SegmentInfos
+   | Apache Lucene.NET 4.8.0-beta00011 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Index.SegmentInfos">
+  
+  
+  <h1 id="Lucene_Net_Index_SegmentInfos" data-uid="Lucene.Net.Index.SegmentInfos" class="text-break">Class SegmentInfos
+  </h1>
+  <div class="markdown level0 summary"><p>A collection of segmentInfo objects with methods for operating on
+those segments in relation to the file system.
+<p>
+The active segments in the index are stored in the segment info file,
+<code>segments_N</code>. There may be one or more <code>segments_N</code> files in the
+index; however, the one with the largest generation is the active one (when
+older segments_N files are present it&apos;s because they temporarily cannot be
+deleted, or, a writer is in the process of committing, or a custom
+<a class="xref" href="Lucene.Net.Index.IndexDeletionPolicy.html">IndexDeletionPolicy</a>
+is in use). This file lists each segment by name and has details about the
+codec and generation of deletes.
+</p>
+<p>There is also a file <code>segments.gen</code>. this file contains
+the current generation (the <code>_N</code> in <code>segments_N</code>) of the index.
+This is used only as a fallback in case the current generation cannot be
+accurately determined by directory listing alone (as is the case for some NFS
+clients with time-based directory cache expiration). This file simply contains
+an <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a> version header
+(<a class="xref" href="Lucene.Net.Index.SegmentInfos.html#Lucene_Net_Index_SegmentInfos_FORMAT_SEGMENTS_GEN_CURRENT">FORMAT_SEGMENTS_GEN_CURRENT</a>), followed by the
+generation recorded as <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a>, written twice.</p>
+<p>
+Files:
+<ul><li><code>segments.gen</code>: GenHeader, Generation, Generation, Footer</li><li><code>segments_N</code>: Header, Version, NameCounter, SegCount,
+   &lt;SegName, SegCodec, DelGen, DeletionCount, FieldInfosGen, UpdatesFiles&gt;<sup>SegCount</sup>,
+   CommitUserData, Footer</li></ul>
+</p>
+Data types:
+<p>
+<ul><li>Header --&gt; <a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a></li><li>GenHeader, NameCounter, SegCount, DeletionCount --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a></li><li>Generation, Version, DelGen, Checksum, FieldInfosGen --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a></li><li>SegName, SegCodec --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteString_System_String_">WriteString(String)</a></li><li>CommitUserData --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteStringStringMap_System_Collections_Generic_IDictionary_System_String_System_String__">WriteStringStringMap(IDictionary&lt;String, String&gt;)</a></li><li>UpdatesFiles --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteStringSet_System_Collections_Generic_ISet_System_String__">WriteStringSet(ISet&lt;String&gt;)</a></li><li>Footer --&gt; <a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteFooter_Lucene_Net_Store_IndexOutput_">WriteFooter(IndexOutput)</a></li></ul>
+</p>
+Field Descriptions:
+<p>
+<ul><li>Version counts how often the index has been changed by adding or deleting
+      documents.</li><li>NameCounter is used to generate names for new segment files.</li><li>SegName is the name of the segment, and is used as the file name prefix for
+      all of the files that compose the segment&apos;s index.</li><li>DelGen is the generation count of the deletes file. If this is -1,
+      there are no deletes. Anything above zero means there are deletes
+      stored by <a class="xref" href="Lucene.Net.Codecs.LiveDocsFormat.html">LiveDocsFormat</a>.</li><li>DeletionCount records the number of deleted documents in this segment.</li><li>SegCodec is the <a class="xref" href="Lucene.Net.Codecs.Codec.html#Lucene_Net_Codecs_Codec_Name">Name</a> of the <a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a> that encoded
+      this segment.</li><li>CommitUserData stores an optional user-supplied opaque
+<see cref="T:IDictionary{string, string}"></see> that was passed to
+<a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_SetCommitData_System_Collections_Generic_IDictionary_System_String_System_String__">SetCommitData(IDictionary&lt;String, String&gt;)</a>.</li><li>FieldInfosGen is the generation count of the fieldInfos file. If this is -1,
+there are no updates to the fieldInfos in that segment. Anything above zero
+means there are updates to fieldInfos stored by <a class="xref" href="Lucene.Net.Codecs.FieldInfosFormat.html">FieldInfosFormat</a>.</li><li>UpdatesFiles stores the list of files that were updated in that segment.</li></ul>
+</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">SegmentInfos</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>&gt;</div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Index.html">Lucene.Net.Index</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Index_SegmentInfos_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class SegmentInfos : IEnumerable&lt;SegmentCommitInfo&gt;, IEnumerable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L174">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos__ctor_" data-uid="Lucene.Net.Index.SegmentInfos.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos__ctor" data-uid="Lucene.Net.Index.SegmentInfos.#ctor">SegmentInfos()</h4>
+  <div class="markdown level1 summary"><p>Sole constructor. Typically you call this and then
+use <a class="xref" href="Lucene.Net.Index.SegmentInfos.html#Lucene_Net_Index_SegmentInfos_Read_Lucene_Net_Store_Directory_">Read(Directory)</a> or
+<a class="xref" href="Lucene.Net.Index.SegmentInfos.html#Lucene_Net_Index_SegmentInfos_Read_Lucene_Net_Store_Directory_System_String_">Read(Directory, String)</a> to populate each
+<a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>.  Alternatively, you can add/remove your
+own <a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>s.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SegmentInfos()</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_FORMAT_SEGMENTS_GEN_CURRENT.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.FORMAT_SEGMENTS_GEN_CURRENT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L142">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_SegmentInfos_FORMAT_SEGMENTS_GEN_CURRENT" data-uid="Lucene.Net.Index.SegmentInfos.FORMAT_SEGMENTS_GEN_CURRENT">FORMAT_SEGMENTS_GEN_CURRENT</h4>
+  <div class="markdown level1 summary"><p>Current format of segments.gen </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int FORMAT_SEGMENTS_GEN_CURRENT</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_VERSION_40.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.VERSION_40%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L123">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_SegmentInfos_VERSION_40" data-uid="Lucene.Net.Index.SegmentInfos.VERSION_40">VERSION_40</h4>
+  <div class="markdown level1 summary"><p>The file format version for the segments_N codec header, up to 4.5. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int VERSION_40</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_VERSION_46.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.VERSION_46%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L127">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_SegmentInfos_VERSION_46" data-uid="Lucene.Net.Index.SegmentInfos.VERSION_46">VERSION_46</h4>
+  <div class="markdown level1 summary"><p>The file format version for the segments_N codec header, since 4.6+. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int VERSION_46</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_VERSION_48.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.VERSION_48%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L131">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_SegmentInfos_VERSION_48" data-uid="Lucene.Net.Index.SegmentInfos.VERSION_48">VERSION_48</h4>
+  <div class="markdown level1 summary"><p>The file format version for the segments_N codec header, since 4.8+ </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int VERSION_48</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_Count.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.Count%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L1418">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_Count_" data-uid="Lucene.Net.Index.SegmentInfos.Count*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_Count" data-uid="Lucene.Net.Index.SegmentInfos.Count">Count</h4>
+  <div class="markdown level1 summary"><p>Returns number of <a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>s.
+<p>
+NOTE: This was size() in Lucene.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_Counter.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.Counter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L146">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_Counter_" data-uid="Lucene.Net.Index.SegmentInfos.Counter*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_Counter" data-uid="Lucene.Net.Index.SegmentInfos.Counter">Counter</h4>
+  <div class="markdown level1 summary"><p>Used to name new segments. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Counter { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_DefaultGenLookaheadCount.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.DefaultGenLookaheadCount%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L770">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_DefaultGenLookaheadCount_" data-uid="Lucene.Net.Index.SegmentInfos.DefaultGenLookaheadCount*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_DefaultGenLookaheadCount" data-uid="Lucene.Net.Index.SegmentInfos.DefaultGenLookaheadCount">DefaultGenLookaheadCount</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the <span class="xref">Lucene.Net.Index.SegmentInfos.defaultGenLookaheadCount</span>.
+<p>
+Advanced: set how many times to try incrementing the
+gen when loading the segments file.  this only runs if
+the primary (listing directory) and secondary (opening
+segments.gen file) methods fail to find the segments
+file.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int DefaultGenLookaheadCount { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_Generation.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.Generation%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L732">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_Generation_" data-uid="Lucene.Net.Index.SegmentInfos.Generation*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_Generation" data-uid="Lucene.Net.Index.SegmentInfos.Generation">Generation</h4>
+  <div class="markdown level1 summary"><p>Returns current generation. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public long Generation { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_InfoStream.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.InfoStream%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L742">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_InfoStream_" data-uid="Lucene.Net.Index.SegmentInfos.InfoStream*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_InfoStream" data-uid="Lucene.Net.Index.SegmentInfos.InfoStream">InfoStream</h4>
+  <div class="markdown level1 summary"><p>If non-null, information about retries when loading
+the segments file will be printed to this.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static TextWriter InfoStream { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.TextWriter</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_LastGeneration.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.LastGeneration%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L736">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_LastGeneration_" data-uid="Lucene.Net.Index.SegmentInfos.LastGeneration*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_LastGeneration" data-uid="Lucene.Net.Index.SegmentInfos.LastGeneration">LastGeneration</h4>
+  <div class="markdown level1 summary"><p>Returns last succesfully read or written generation. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public long LastGeneration { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_Segments.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.Segments%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L722">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_Segments_" data-uid="Lucene.Net.Index.SegmentInfos.Segments*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_Segments" data-uid="Lucene.Net.Index.SegmentInfos.Segments">Segments</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IList&lt;SegmentCommitInfo&gt; Segments { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_TotalDocCount.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.TotalDocCount%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L1313">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_TotalDocCount_" data-uid="Lucene.Net.Index.SegmentInfos.TotalDocCount*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_TotalDocCount" data-uid="Lucene.Net.Index.SegmentInfos.TotalDocCount">TotalDocCount</h4>
+  <div class="markdown level1 summary"><p>Returns sum of all segment&apos;s docCounts.  Note that
+this does not include deletions</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int TotalDocCount { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_UserData.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.UserData%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L1282">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_UserData_" data-uid="Lucene.Net.Index.SegmentInfos.UserData*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_UserData" data-uid="Lucene.Net.Index.SegmentInfos.UserData">UserData</h4>
+  <div class="markdown level1 summary"><p>Gets <span class="xref">Lucene.Net.Index.SegmentInfos.userData</span> saved with this commit.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IDictionary&lt;string, string&gt; UserData { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Index_SegmentInfos_UserData_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Commit">Commit()</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_Version.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.Version%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L728">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_Version_" data-uid="Lucene.Net.Index.SegmentInfos.Version*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_Version" data-uid="Lucene.Net.Index.SegmentInfos.Version">Version</h4>
+  <div class="markdown level1 summary"><p>Version number when this <a class="xref" href="Lucene.Net.Index.SegmentInfos.html">SegmentInfos</a> was generated.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public long Version { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_Add_Lucene_Net_Index_SegmentCommitInfo_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.Add(Lucene.Net.Index.SegmentCommitInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L1422">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_Add_" data-uid="Lucene.Net.Index.SegmentInfos.Add*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_Add_Lucene_Net_Index_SegmentCommitInfo_" data-uid="Lucene.Net.Index.SegmentInfos.Add(Lucene.Net.Index.SegmentCommitInfo)">Add(SegmentCommitInfo)</h4>
+  <div class="markdown level1 summary"><p>Appends the provided <a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Add(SegmentCommitInfo si)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a></td>
+        <td><span class="parametername">si</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_AddAll_System_Collections_Generic_IEnumerable_Lucene_Net_Index_SegmentCommitInfo__.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.AddAll(System.Collections.Generic.IEnumerable%7BLucene.Net.Index.SegmentCommitInfo%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L1429">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_AddAll_" data-uid="Lucene.Net.Index.SegmentInfos.AddAll*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_AddAll_System_Collections_Generic_IEnumerable_Lucene_Net_Index_SegmentCommitInfo__" data-uid="Lucene.Net.Index.SegmentInfos.AddAll(System.Collections.Generic.IEnumerable{Lucene.Net.Index.SegmentCommitInfo})">AddAll(IEnumerable&lt;SegmentCommitInfo&gt;)</h4>
+  <div class="markdown level1 summary"><p>Appends the provided <a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>s. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void AddAll(IEnumerable&lt;SegmentCommitInfo&gt; sis)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>&gt;</td>
+        <td><span class="parametername">sis</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_AsList.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.AsList%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L1408">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_AsList_" data-uid="Lucene.Net.Index.SegmentInfos.AsList*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_AsList" data-uid="Lucene.Net.Index.SegmentInfos.AsList">AsList()</h4>
+  <div class="markdown level1 summary"><p>Returns all contained segments as an <strong>unmodifiable</strong> <span class="xref">IList{SegmentCommitInfo}</span> view. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IList&lt;SegmentCommitInfo&gt; AsList()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_Changed.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.Changed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L1330">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_Changed_" data-uid="Lucene.Net.Index.SegmentInfos.Changed*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_Changed" data-uid="Lucene.Net.Index.SegmentInfos.Changed">Changed()</h4>
+  <div class="markdown level1 summary"><p>Call this before committing if changes have been made to the
+segments.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Changed()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_Clear.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.Clear%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L1439">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_Clear_" data-uid="Lucene.Net.Index.SegmentInfos.Clear*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_Clear" data-uid="Lucene.Net.Index.SegmentInfos.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Clear all <a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>s. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_Clone.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L706">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_Clone_" data-uid="Lucene.Net.Index.SegmentInfos.Clone*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_Clone" data-uid="Lucene.Net.Index.SegmentInfos.Clone">Clone()</h4>
+  <div class="markdown level1 summary"><p>Returns a copy of this instance, also copying each
+<a class="xref" href="Lucene.Net.Index.SegmentInfo.html">SegmentInfo</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public object Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_GenerationFromSegmentsFileName_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.GenerationFromSegmentsFileName(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L263">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_GenerationFromSegmentsFileName_" data-uid="Lucene.Net.Index.SegmentInfos.GenerationFromSegmentsFileName*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_GenerationFromSegmentsFileName_System_String_" data-uid="Lucene.Net.Index.SegmentInfos.GenerationFromSegmentsFileName(System.String)">GenerationFromSegmentsFileName(String)</h4>
+  <div class="markdown level1 summary"><p>Parse the generation off the segments file name and
+return it.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static long GenerationFromSegmentsFileName(string fileName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fileName</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_GetEnumerator.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L1396">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_GetEnumerator_" data-uid="Lucene.Net.Index.SegmentInfos.GetEnumerator*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_GetEnumerator" data-uid="Lucene.Net.Index.SegmentInfos.GetEnumerator">GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an <strong>unmodifiable</strong> <span class="xref">IEnumerator{SegmentCommitInfo}</span> of contained segments in order.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerator&lt;SegmentCommitInfo&gt; GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_GetFiles_Lucene_Net_Store_Directory_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.GetFiles(Lucene.Net.Store.Directory%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L1141">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_GetFiles_" data-uid="Lucene.Net.Index.SegmentInfos.GetFiles*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_GetFiles_Lucene_Net_Store_Directory_System_Boolean_" data-uid="Lucene.Net.Index.SegmentInfos.GetFiles(Lucene.Net.Store.Directory,System.Boolean)">GetFiles(Directory, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Returns all file names referenced by <a class="xref" href="Lucene.Net.Index.SegmentInfo.html">SegmentInfo</a>
+instances matching the provided <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a> (ie files
+associated with any &quot;external&quot; segments are skipped).
+The returned collection is recomputed on each
+invocation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ICollection&lt;string&gt; GetFiles(Directory dir, bool includeSegmentsFile)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">dir</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeSegmentsFile</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_GetLastCommitGeneration_Lucene_Net_Store_Directory_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.GetLastCommitGeneration(Lucene.Net.Store.Directory)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L218">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_GetLastCommitGeneration_" data-uid="Lucene.Net.Index.SegmentInfos.GetLastCommitGeneration*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_GetLastCommitGeneration_Lucene_Net_Store_Directory_" data-uid="Lucene.Net.Index.SegmentInfos.GetLastCommitGeneration(Lucene.Net.Store.Directory)">GetLastCommitGeneration(Directory)</h4>
+  <div class="markdown level1 summary"><p>Get the generation of the most recent commit to the
+index in this directory (N in the segments_N file).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static long GetLastCommitGeneration(Directory directory)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">directory</span></td>
+        <td><p>directory to search for the latest segments_N file </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_GetLastCommitGeneration_System_String___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.GetLastCommitGeneration(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L192">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_GetLastCommitGeneration_" data-uid="Lucene.Net.Index.SegmentInfos.GetLastCommitGeneration*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_GetLastCommitGeneration_System_String___" data-uid="Lucene.Net.Index.SegmentInfos.GetLastCommitGeneration(System.String[])">GetLastCommitGeneration(String[])</h4>
+  <div class="markdown level1 summary"><p>Get the generation of the most recent commit to the
+list of index files (N in the segments_N file).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static long GetLastCommitGeneration(string[] files)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">files</span></td>
+        <td><p>array of file names to check </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_GetLastCommitSegmentsFileName_Lucene_Net_Store_Directory_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.GetLastCommitSegmentsFileName(Lucene.Net.Store.Directory)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L246">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_GetLastCommitSegmentsFileName_" data-uid="Lucene.Net.Index.SegmentInfos.GetLastCommitSegmentsFileName*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_GetLastCommitSegmentsFileName_Lucene_Net_Store_Directory_" data-uid="Lucene.Net.Index.SegmentInfos.GetLastCommitSegmentsFileName(Lucene.Net.Store.Directory)">GetLastCommitSegmentsFileName(Directory)</h4>
+  <div class="markdown level1 summary"><p>Get the filename of the segments_N file for the most
+recent commit to the index in this Directory.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string GetLastCommitSegmentsFileName(Directory directory)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">directory</span></td>
+        <td><p>directory to search for the latest segments_N file </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_GetLastCommitSegmentsFileName_System_String___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.GetLastCommitSegmentsFileName(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L236">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_GetLastCommitSegmentsFileName_" data-uid="Lucene.Net.Index.SegmentInfos.GetLastCommitSegmentsFileName*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_GetLastCommitSegmentsFileName_System_String___" data-uid="Lucene.Net.Index.SegmentInfos.GetLastCommitSegmentsFileName(System.String[])">GetLastCommitSegmentsFileName(String[])</h4>
+  <div class="markdown level1 summary"><p>Get the filename of the segments_N file for the most
+recent commit in the list of index files.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static string GetLastCommitSegmentsFileName(string[] files)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">files</span></td>
+        <td><p>array of file names to check </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_GetNextSegmentFileName.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.GetNextSegmentFileName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L326">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_GetNextSegmentFileName_" data-uid="Lucene.Net.Index.SegmentInfos.GetNextSegmentFileName*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_GetNextSegmentFileName" data-uid="Lucene.Net.Index.SegmentInfos.GetNextSegmentFileName">GetNextSegmentFileName()</h4>
+  <div class="markdown level1 summary"><p>Get the next segments_N filename that will be written.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string GetNextSegmentFileName()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_GetSegmentsFileName.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.GetSegmentsFileName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L254">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_GetSegmentsFileName_" data-uid="Lucene.Net.Index.SegmentInfos.GetSegmentsFileName*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_GetSegmentsFileName" data-uid="Lucene.Net.Index.SegmentInfos.GetSegmentsFileName">GetSegmentsFileName()</h4>
+  <div class="markdown level1 summary"><p>Get the segments_N filename in use by this segment infos.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string GetSegmentsFileName()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_Info_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.Info(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L182">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_Info_" data-uid="Lucene.Net.Index.SegmentInfos.Info*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_Info_System_Int32_" data-uid="Lucene.Net.Index.SegmentInfos.Info(System.Int32)">Info(Int32)</h4>
+  <div class="markdown level1 summary"><p>Returns <a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a> at the provided
+index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SegmentCommitInfo Info(int i)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">i</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_Read_Lucene_Net_Store_Directory_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.Read(Lucene.Net.Store.Directory)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L468">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_Read_" data-uid="Lucene.Net.Index.SegmentInfos.Read*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_Read_Lucene_Net_Store_Directory_" data-uid="Lucene.Net.Index.SegmentInfos.Read(Lucene.Net.Store.Directory)">Read(Directory)</h4>
+  <div class="markdown level1 summary"><p>Find the latest commit (<code>segments_N file</code>) and
+load all <a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>s.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Read(Directory directory)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">directory</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_Read_Lucene_Net_Store_Directory_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.Read(Lucene.Net.Store.Directory%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L349">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_Read_" data-uid="Lucene.Net.Index.SegmentInfos.Read*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_Read_Lucene_Net_Store_Directory_System_String_" data-uid="Lucene.Net.Index.SegmentInfos.Read(Lucene.Net.Store.Directory,System.String)">Read(Directory, String)</h4>
+  <div class="markdown level1 summary"><p>Read a particular <code data-dev-comment-type="paramref" class="paramref">segmentFileName</code>.  Note that this may
+throw an <span class="xref">System.IO.IOException</span> if a commit is in process.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Read(Directory directory, string segmentFileName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">directory</span></td>
+        <td><p>directory containing the segments file </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">segmentFileName</span></td>
+        <td><p>segment file to load </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.CorruptIndexException.html">CorruptIndexException</a></td>
+        <td><p>if the index is corrupt </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>if there is a low-level IO error </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_Remove_Lucene_Net_Index_SegmentCommitInfo_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.Remove(Lucene.Net.Index.SegmentCommitInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L1449">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_Remove_" data-uid="Lucene.Net.Index.SegmentInfos.Remove*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_Remove_Lucene_Net_Index_SegmentCommitInfo_" data-uid="Lucene.Net.Index.SegmentInfos.Remove(Lucene.Net.Index.SegmentCommitInfo)">Remove(SegmentCommitInfo)</h4>
+  <div class="markdown level1 summary"><p>Remove the provided <a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>.</p>
+<p><p><strong>WARNING</strong>: O(N) cost</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Remove(SegmentCommitInfo si)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a></td>
+        <td><span class="parametername">si</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_ToString_Lucene_Net_Store_Directory_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.ToString(Lucene.Net.Store.Directory)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L1261">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_ToString_" data-uid="Lucene.Net.Index.SegmentInfos.ToString*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_ToString_Lucene_Net_Store_Directory_" data-uid="Lucene.Net.Index.SegmentInfos.ToString(Lucene.Net.Store.Directory)">ToString(Directory)</h4>
+  <div class="markdown level1 summary"><p>Returns readable description of this segment. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string ToString(Directory directory)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">directory</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_Write3xInfo_Lucene_Net_Store_Directory_Lucene_Net_Index_SegmentInfo_Lucene_Net_Store_IOContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.Write3xInfo(Lucene.Net.Store.Directory%2CLucene.Net.Index.SegmentInfo%2CLucene.Net.Store.IOContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L649">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_Write3xInfo_" data-uid="Lucene.Net.Index.SegmentInfos.Write3xInfo*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_Write3xInfo_Lucene_Net_Store_Directory_Lucene_Net_Index_SegmentInfo_Lucene_Net_Store_IOContext_" data-uid="Lucene.Net.Index.SegmentInfos.Write3xInfo(Lucene.Net.Store.Directory,Lucene.Net.Index.SegmentInfo,Lucene.Net.Store.IOContext)">Write3xInfo(Directory, SegmentInfo, IOContext)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete]
+public static string Write3xInfo(Directory dir, SegmentInfo si, IOContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">dir</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentInfo.html">SegmentInfo</a></td>
+        <td><span class="parametername">si</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IOContext.html">IOContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_WriteSegmentsGen_Lucene_Net_Store_Directory_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.WriteSegmentsGen(Lucene.Net.Store.Directory%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L289">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_WriteSegmentsGen_" data-uid="Lucene.Net.Index.SegmentInfos.WriteSegmentsGen*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_WriteSegmentsGen_Lucene_Net_Store_Directory_System_Int64_" data-uid="Lucene.Net.Index.SegmentInfos.WriteSegmentsGen(Lucene.Net.Store.Directory,System.Int64)">WriteSegmentsGen(Directory, Int64)</h4>
+  <div class="markdown level1 summary"><p>A utility for writing the <a class="xref" href="Lucene.Net.Index.IndexFileNames.html#Lucene_Net_Index_IndexFileNames_SEGMENTS_GEN">SEGMENTS_GEN</a> file to a
+<a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a>.
+<p>
+<strong>NOTE:</strong> this is an internal utility which is kept public so that it&apos;s
+accessible by code from other packages. You should avoid calling this
+method unless you&apos;re absolutely sure what you&apos;re doing!
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void WriteSegmentsGen(Directory dir, long generation)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">dir</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">generation</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos_System_Collections_IEnumerable_GetEnumerator.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos.System%23Collections%23IEnumerable%23GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L1401">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_SegmentInfos_System_Collections_IEnumerable_GetEnumerator_" data-uid="Lucene.Net.Index.SegmentInfos.System#Collections#IEnumerable#GetEnumerator*"></a>
+  <h4 id="Lucene_Net_Index_SegmentInfos_System_Collections_IEnumerable_GetEnumerator" data-uid="Lucene.Net.Index.SegmentInfos.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerator IEnumerable.GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerator</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_SegmentInfos.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.SegmentInfos%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/SegmentInfos.cs/#L116" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

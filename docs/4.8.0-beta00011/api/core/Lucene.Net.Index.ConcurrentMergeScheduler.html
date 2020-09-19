@@ -1,0 +1,1056 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ConcurrentMergeScheduler
+   | Apache Lucene.NET 4.8.0-beta00011 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ConcurrentMergeScheduler
+   | Apache Lucene.NET 4.8.0-beta00011 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler">
+  
+  
+  <h1 id="Lucene_Net_Index_ConcurrentMergeScheduler" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler" class="text-break">Class ConcurrentMergeScheduler
+  </h1>
+  <div class="markdown level0 summary"><p>A <a class="xref" href="Lucene.Net.Index.MergeScheduler.html">MergeScheduler</a> that runs each merge using a
+separate thread.</p>
+<p>Specify the max number of threads that may run at
+once, and the maximum number of simultaneous merges
+with <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html#Lucene_Net_Index_ConcurrentMergeScheduler_SetMaxMergesAndThreads_System_Int32_System_Int32_">SetMaxMergesAndThreads(Int32, Int32)</a>.</p>
+
+<p>If the number of merges exceeds the max number of threads
+then the largest merges are paused until one of the smaller
+merges completes.</p>
+
+<p>If more than <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html#Lucene_Net_Index_ConcurrentMergeScheduler_MaxMergeCount">MaxMergeCount</a> merges are
+requested then this class will forcefully throttle the
+incoming threads by pausing until one more more merges
+complete.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Index.MergeScheduler.html">MergeScheduler</a></div>
+    <div class="level2"><span class="xref">ConcurrentMergeScheduler</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lucene.Net.Index.IConcurrentMergeScheduler.html">IConcurrentMergeScheduler</a></div>
+    <div><a class="xref" href="Lucene.Net.Index.IMergeScheduler.html">IMergeScheduler</a></div>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergeScheduler.html#Lucene_Net_Index_MergeScheduler_Dispose">MergeScheduler.Dispose()</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Index.html">Lucene.Net.Index</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Index_ConcurrentMergeScheduler_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class ConcurrentMergeScheduler : MergeScheduler, IConcurrentMergeScheduler, IMergeScheduler, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L99">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler__ctor_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler__ctor" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.#ctor">ConcurrentMergeScheduler()</h4>
+  <div class="markdown level1 summary"><p>Sole constructor, with all settings set to default
+values.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ConcurrentMergeScheduler()</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_compareByMergeDocCount.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.compareByMergeDocCount%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L183">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_compareByMergeDocCount" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.compareByMergeDocCount">compareByMergeDocCount</h4>
+  <div class="markdown level1 summary"><p>Sorts <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.MergeThread.html">ConcurrentMergeScheduler.MergeThread</a>s; larger merges come first. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected static readonly IComparer&lt;ConcurrentMergeScheduler.MergeThread&gt; compareByMergeDocCount</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IComparer</span>&lt;<a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.MergeThread.html">ConcurrentMergeScheduler.MergeThread</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_DEFAULT_MAX_MERGE_COUNT.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.DEFAULT_MAX_MERGE_COUNT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L67">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_DEFAULT_MAX_MERGE_COUNT" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.DEFAULT_MAX_MERGE_COUNT">DEFAULT_MAX_MERGE_COUNT</h4>
+  <div class="markdown level1 summary"><p>Default <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html#Lucene_Net_Index_ConcurrentMergeScheduler_MaxMergeCount">MaxMergeCount</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int DEFAULT_MAX_MERGE_COUNT = 2</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_DEFAULT_MAX_THREAD_COUNT.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.DEFAULT_MAX_THREAD_COUNT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L63">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_DEFAULT_MAX_THREAD_COUNT" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.DEFAULT_MAX_THREAD_COUNT">DEFAULT_MAX_THREAD_COUNT</h4>
+  <div class="markdown level1 summary"><p>Default <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html#Lucene_Net_Index_ConcurrentMergeScheduler_MaxThreadCount">MaxThreadCount</a>.
+We default to 1: tests on spinning-magnet drives showed slower
+indexing performance if more than one merge thread runs at
+once (though on an SSD it was faster)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int DEFAULT_MAX_THREAD_COUNT = 1</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_m_dir.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.m_dir%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L83">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_m_dir" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.m_dir">m_dir</h4>
+  <div class="markdown level1 summary"><p><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a> that holds the index. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected Directory m_dir</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_m_mergeThreadCount.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.m_mergeThreadCount%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L93">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_m_mergeThreadCount" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.m_mergeThreadCount">m_mergeThreadCount</h4>
+  <div class="markdown level1 summary"><p>How many <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.MergeThread.html">ConcurrentMergeScheduler.MergeThread</a>s have kicked off (this is use
+to name them).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int m_mergeThreadCount</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_m_mergeThreads.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.m_mergeThreads%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L55">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_m_mergeThreads" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.m_mergeThreads">m_mergeThreads</h4>
+  <div class="markdown level1 summary"><p>List of currently active <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.MergeThread.html">ConcurrentMergeScheduler.MergeThread</a>s. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected IList&lt;ConcurrentMergeScheduler.MergeThread&gt; m_mergeThreads</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.MergeThread.html">ConcurrentMergeScheduler.MergeThread</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_m_writer.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.m_writer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L87">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_m_writer" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.m_writer">m_writer</h4>
+  <div class="markdown level1 summary"><p><a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> that owns this instance. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected IndexWriter m_writer</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_IsVerbose.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.IsVerbose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L285">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_IsVerbose_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.IsVerbose*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_IsVerbose" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.IsVerbose">IsVerbose</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if verbosing is enabled. This method is usually used in
+conjunction with <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html#Lucene_Net_Index_ConcurrentMergeScheduler_Message_System_String_">Message(String)</a>, like that:</p>
+<pre><code>if (IsVerbose) 
+{
+    Message(&quot;your message&quot;);
+}</code></pre>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual bool IsVerbose { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_MaxMergeCount.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.MaxMergeCount%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L140">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_MaxMergeCount_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.MaxMergeCount*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_MaxMergeCount" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.MaxMergeCount">MaxMergeCount</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html#Lucene_Net_Index_ConcurrentMergeScheduler_SetMaxMergesAndThreads_System_Int32_System_Int32_">SetMaxMergesAndThreads(Int32, Int32)</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int MaxMergeCount { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_MaxThreadCount.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.MaxThreadCount%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L136">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_MaxThreadCount_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.MaxThreadCount*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_MaxThreadCount" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.MaxThreadCount">MaxThreadCount</h4>
+  <div class="markdown level1 summary"><p>Returns <span class="xref">Lucene.Net.Index.ConcurrentMergeScheduler.maxThreadCount</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int MaxThreadCount { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Index_ConcurrentMergeScheduler_MaxThreadCount_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html#Lucene_Net_Index_ConcurrentMergeScheduler_SetMaxMergesAndThreads_System_Int32_System_Int32_">SetMaxMergesAndThreads(Int32, Int32)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_MergeThreadCount.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.MergeThreadCount%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L373">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_MergeThreadCount_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.MergeThreadCount*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_MergeThreadCount" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.MergeThreadCount">MergeThreadCount</h4>
+  <div class="markdown level1 summary"><p>Returns the number of merge threads that are alive. Note that this number
+is &lt;= <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html#Lucene_Net_Index_ConcurrentMergeScheduler_m_mergeThreads">m_mergeThreads</a> size.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual int MergeThreadCount { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_MergeThreadPriority.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.MergeThreadPriority%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L148">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_MergeThreadPriority_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.MergeThreadPriority*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_MergeThreadPriority" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.MergeThreadPriority">MergeThreadPriority</h4>
+  <div class="markdown level1 summary"><p>Return the priority that merge threads run at.  By
+default the priority is 1 plus the priority of (ie,
+slightly higher priority than) the first thread that
+calls merge.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int MergeThreadPriority { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_ClearSuppressExceptions.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.ClearSuppressExceptions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L726">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_ClearSuppressExceptions_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.ClearSuppressExceptions*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_ClearSuppressExceptions" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.ClearSuppressExceptions">ClearSuppressExceptions()</h4>
+  <div class="markdown level1 summary"><p>Used for testing </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void ClearSuppressExceptions()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_Clone.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L740">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_Clone_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.Clone*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_Clone" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.Clone">Clone()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override object Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.MergeScheduler.html#Lucene_Net_Index_MergeScheduler_Clone">MergeScheduler.Clone()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L313">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_Dispose_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.Dispose*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_Dispose_System_Boolean_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.Dispose(System.Boolean)">Dispose(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">disposing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.MergeScheduler.html#Lucene_Net_Index_MergeScheduler_Dispose_System_Boolean_">MergeScheduler.Dispose(Boolean)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_DoMerge_Lucene_Net_Index_MergePolicy_OneMerge_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.DoMerge(Lucene.Net.Index.MergePolicy.OneMerge)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L506">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_DoMerge_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.DoMerge*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_DoMerge_Lucene_Net_Index_MergePolicy_OneMerge_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.DoMerge(Lucene.Net.Index.MergePolicy.OneMerge)">DoMerge(MergePolicy.OneMerge)</h4>
+  <div class="markdown level1 summary"><p>Does the actual merge, by calling <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Merge_Lucene_Net_Index_MergePolicy_OneMerge_">Merge(MergePolicy.OneMerge)</a> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void DoMerge(MergePolicy.OneMerge merge)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.MergePolicy.OneMerge.html">MergePolicy.OneMerge</a></td>
+        <td><span class="parametername">merge</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_GetMergeThread_Lucene_Net_Index_IndexWriter_Lucene_Net_Index_MergePolicy_OneMerge_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.GetMergeThread(Lucene.Net.Index.IndexWriter%2CLucene.Net.Index.MergePolicy.OneMerge)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L514">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_GetMergeThread_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.GetMergeThread*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_GetMergeThread_Lucene_Net_Index_IndexWriter_Lucene_Net_Index_MergePolicy_OneMerge_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.GetMergeThread(Lucene.Net.Index.IndexWriter,Lucene.Net.Index.MergePolicy.OneMerge)">GetMergeThread(IndexWriter, MergePolicy.OneMerge)</h4>
+  <div class="markdown level1 summary"><p>Create and return a new <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.MergeThread.html">ConcurrentMergeScheduler.MergeThread</a> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual ConcurrentMergeScheduler.MergeThread GetMergeThread(IndexWriter writer, MergePolicy.OneMerge merge)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a></td>
+        <td><span class="parametername">writer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.MergePolicy.OneMerge.html">MergePolicy.OneMerge</a></td>
+        <td><span class="parametername">merge</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.MergeThread.html">ConcurrentMergeScheduler.MergeThread</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_HandleMergeException_System_Exception_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.HandleMergeException(System.Exception)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L696">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_HandleMergeException_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.HandleMergeException*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_HandleMergeException_System_Exception_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.HandleMergeException(System.Exception)">HandleMergeException(Exception)</h4>
+  <div class="markdown level1 summary"><p>Called when an exception is hit in a background merge
+thread</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void HandleMergeException(Exception exc)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Exception</span></td>
+        <td><span class="parametername">exc</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_Merge_Lucene_Net_Index_IndexWriter_Lucene_Net_Index_MergeTrigger_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.Merge(Lucene.Net.Index.IndexWriter%2CLucene.Net.Index.MergeTrigger%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L392">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_Merge_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.Merge*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_Merge_Lucene_Net_Index_IndexWriter_Lucene_Net_Index_MergeTrigger_System_Boolean_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.Merge(Lucene.Net.Index.IndexWriter,Lucene.Net.Index.MergeTrigger,System.Boolean)">Merge(IndexWriter, MergeTrigger, Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Merge(IndexWriter writer, MergeTrigger trigger, bool newMergesFound)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a></td>
+        <td><span class="parametername">writer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.MergeTrigger.html">MergeTrigger</a></td>
+        <td><span class="parametername">trigger</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">newMergesFound</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.MergeScheduler.html#Lucene_Net_Index_MergeScheduler_Merge_Lucene_Net_Index_IndexWriter_Lucene_Net_Index_MergeTrigger_System_Boolean_">MergeScheduler.Merge(IndexWriter, MergeTrigger, Boolean)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_Message_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.Message(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L291">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_Message_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.Message*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_Message_System_String_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.Message(System.String)">Message(String)</h4>
+  <div class="markdown level1 summary"><p>Outputs the given message - this method assumes <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html#Lucene_Net_Index_ConcurrentMergeScheduler_IsVerbose">IsVerbose</a> was
+called and returned <code>true</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void Message(string message)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">message</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_SetMaxMergesAndThreads_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.SetMaxMergesAndThreads(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L114">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_SetMaxMergesAndThreads_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.SetMaxMergesAndThreads*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_SetMaxMergesAndThreads_System_Int32_System_Int32_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.SetMaxMergesAndThreads(System.Int32,System.Int32)">SetMaxMergesAndThreads(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Sets the maximum number of merge threads and simultaneous merges allowed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetMaxMergesAndThreads(int maxMergeCount, int maxThreadCount)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxMergeCount</span></td>
+        <td><p>the max # simultaneous merges that are allowed.
+     If a merge is necessary yet we already have this many
+     threads running, the incoming thread (that is calling
+     add/updateDocument) will block until a merge thread
+     has completed.  Note that we will only run the
+     smallest <code data-dev-comment-type="paramref" class="paramref">maxThreadCount</code> merges at a time. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxThreadCount</span></td>
+        <td><p>The max # simultaneous merge threads that should
+     be running at once.  This must be &lt;= <code data-dev-comment-type="paramref" class="paramref">maxMergeCount</code> </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_SetMergeThreadPriority_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.SetMergeThreadPriority(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L168">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_SetMergeThreadPriority_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.SetMergeThreadPriority*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_SetMergeThreadPriority_System_Int32_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.SetMergeThreadPriority(System.Int32)">SetMergeThreadPriority(Int32)</h4>
+  <div class="markdown level1 summary"><p>Set the base priority that merge threads run at.
+Note that CMS may increase priority of some merge
+threads beyond this base priority.  It&apos;s best not to
+set this any higher than
+<span class="xref">System.Threading.ThreadPriority.Highest</span>(4)-maxThreadCount, so that CMS has
+room to set relative priority among threads.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetMergeThreadPriority(int priority)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">priority</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_SetSuppressExceptions.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.SetSuppressExceptions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L719">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_SetSuppressExceptions_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.SetSuppressExceptions*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_SetSuppressExceptions" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.SetSuppressExceptions">SetSuppressExceptions()</h4>
+  <div class="markdown level1 summary"><p>Used for testing </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetSuppressExceptions()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_Sync.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.Sync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L320">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_Sync_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.Sync*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_Sync" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.Sync">Sync()</h4>
+  <div class="markdown level1 summary"><p>Wait for any running merge threads to finish. This call is not interruptible as used by <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html#Lucene_Net_Index_ConcurrentMergeScheduler_Dispose_System_Boolean_">Dispose(Boolean)</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Sync()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L731">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_ToString_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.ToString*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_ToString" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler_UpdateMergeThreads.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler.UpdateMergeThreads%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L200">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_ConcurrentMergeScheduler_UpdateMergeThreads_" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.UpdateMergeThreads*"></a>
+  <h4 id="Lucene_Net_Index_ConcurrentMergeScheduler_UpdateMergeThreads" data-uid="Lucene.Net.Index.ConcurrentMergeScheduler.UpdateMergeThreads">UpdateMergeThreads()</h4>
+  <div class="markdown level1 summary"><p>Called whenever the running merges have changed, to pause &amp; unpause
+threads. This method sorts the merge threads by their merge size in
+descending order and then pauses/unpauses threads from first to last --
+that way, smaller merges are guaranteed to run before larger ones.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void UpdateMergeThreads()</code></pre>
+  </div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Index.IConcurrentMergeScheduler.html">IConcurrentMergeScheduler</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Index.IMergeScheduler.html">IMergeScheduler</a>
+  </div>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_ConcurrentMergeScheduler.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.ConcurrentMergeScheduler%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Index/ConcurrentMergeScheduler.cs/#L49" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

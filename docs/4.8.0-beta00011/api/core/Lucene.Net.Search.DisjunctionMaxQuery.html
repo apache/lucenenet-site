@@ -1,0 +1,805 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class DisjunctionMaxQuery
+   | Apache Lucene.NET 4.8.0-beta00011 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class DisjunctionMaxQuery
+   | Apache Lucene.NET 4.8.0-beta00011 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.DisjunctionMaxQuery">
+  
+  
+  <h1 id="Lucene_Net_Search_DisjunctionMaxQuery" data-uid="Lucene.Net.Search.DisjunctionMaxQuery" class="text-break">Class DisjunctionMaxQuery
+  </h1>
+  <div class="markdown level0 summary"><p>A query that generates the union of documents produced by its subqueries, and that scores each document with the maximum
+score for that document as produced by any subquery, plus a tie breaking increment for any additional matching subqueries.
+This is useful when searching for a word in multiple fields with different boost factors (so that the fields cannot be
+combined equivalently into a single search field).  We want the primary score to be the one associated with the highest boost,
+not the sum of the field scores (as <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a> would give).
+<p>
+If the query is &quot;albino elephant&quot; this ensures that &quot;albino&quot; matching one field and &quot;elephant&quot; matching
+another gets a higher score than &quot;albino&quot; matching both fields.
+<p>
+To get this result, use both <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a> and <a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.html">DisjunctionMaxQuery</a>:  for each term a <a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.html">DisjunctionMaxQuery</a> searches for it in
+each field, while the set of these <a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.html">DisjunctionMaxQuery</a>&apos;s is combined into a <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>.
+The tie breaker capability allows results that include the same term in multiple fields to be judged better than results that
+include this term in only the best of those multiple fields, without confusing this with the better case of two different terms
+in the multiple fields.
+<p>
+Collection initializer note: To create and populate a <a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.html">DisjunctionMaxQuery</a>
+in a single statement, you can use the following example as a guide:</p>
+<pre><code>var disjunctionMaxQuery = new DisjunctionMaxQuery(0.1f) {
+    new TermQuery(new Term(&quot;field1&quot;, &quot;albino&quot;)), 
+    new TermQuery(new Term(&quot;field2&quot;, &quot;elephant&quot;))
+};</code></pre>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></div>
+    <div class="level2"><span class="xref">DisjunctionMaxQuery</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Search.Query.html">Query</a>&gt;</div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Boost">Query.Boost</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ToString">Query.ToString()</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Search.html">Lucene.Net.Search</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Search_DisjunctionMaxQuery_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class DisjunctionMaxQuery : Query, IEnumerable&lt;Query&gt;, IEnumerable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery__ctor_System_Collections_Generic_ICollection_Lucene_Net_Search_Query__System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery.%23ctor(System.Collections.Generic.ICollection%7BLucene.Net.Search.Query%7D%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L86">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_DisjunctionMaxQuery__ctor_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_DisjunctionMaxQuery__ctor_System_Collections_Generic_ICollection_Lucene_Net_Search_Query__System_Single_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.#ctor(System.Collections.Generic.ICollection{Lucene.Net.Search.Query},System.Single)">DisjunctionMaxQuery(ICollection&lt;Query&gt;, Single)</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.html">DisjunctionMaxQuery</a> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DisjunctionMaxQuery(ICollection&lt;Query&gt; disjuncts, float tieBreakerMultiplier)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Lucene.Net.Search.Query.html">Query</a>&gt;</td>
+        <td><span class="parametername">disjuncts</span></td>
+        <td><p>A <span class="xref">ICollection{Query}</span> of all the disjuncts to add </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">tieBreakerMultiplier</span></td>
+        <td><p>The weight to give to each matching non-maximum disjunct </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery__ctor_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery.%23ctor(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L77">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_DisjunctionMaxQuery__ctor_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_DisjunctionMaxQuery__ctor_System_Single_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.#ctor(System.Single)">DisjunctionMaxQuery(Single)</h4>
+  <div class="markdown level1 summary"><p>Creates a new empty <a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.html">DisjunctionMaxQuery</a>.  Use <a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.html#Lucene_Net_Search_DisjunctionMaxQuery_Add_Lucene_Net_Search_Query_">Add(Query)</a> to add the subqueries. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DisjunctionMaxQuery(float tieBreakerMultiplier)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">tieBreakerMultiplier</span></td>
+        <td><p>The score of each non-maximum disjunct for a document is multiplied by this weight
+      and added into the final score.  If non-zero, the value should be small, on the order of 0.1, which says that
+      10 occurrences of word in a lower-scored field that is also in a higher scored field is just as good as a unique
+      word in the lower scored field (i.e., one that is not in any higher scored field). </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery_Disjuncts.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery.Disjuncts%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L122">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_DisjunctionMaxQuery_Disjuncts_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.Disjuncts*"></a>
+  <h4 id="Lucene_Net_Search_DisjunctionMaxQuery_Disjuncts" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.Disjuncts">Disjuncts</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IList&lt;Query&gt; Disjuncts { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Search.Query.html">Query</a>&gt;</td>
+        <td><p>The disjuncts. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery_TieBreakerMultiplier.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery.TieBreakerMultiplier%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L125">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_DisjunctionMaxQuery_TieBreakerMultiplier_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.TieBreakerMultiplier*"></a>
+  <h4 id="Lucene_Net_Search_DisjunctionMaxQuery_TieBreakerMultiplier" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.TieBreakerMultiplier">TieBreakerMultiplier</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual float TieBreakerMultiplier { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><p>Tie breaker value for multiple matches. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery_Add_Lucene_Net_Search_Query_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery.Add(Lucene.Net.Search.Query)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L95">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_DisjunctionMaxQuery_Add_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.Add*"></a>
+  <h4 id="Lucene_Net_Search_DisjunctionMaxQuery_Add_Lucene_Net_Search_Query_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.Add(Lucene.Net.Search.Query)">Add(Query)</h4>
+  <div class="markdown level1 summary"><p>Add a subquery to this disjunction </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Add(Query query)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td><p>The disjunct added </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery_Add_System_Collections_Generic_ICollection_Lucene_Net_Search_Query__.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery.Add(System.Collections.Generic.ICollection%7BLucene.Net.Search.Query%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L104">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_DisjunctionMaxQuery_Add_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.Add*"></a>
+  <h4 id="Lucene_Net_Search_DisjunctionMaxQuery_Add_System_Collections_Generic_ICollection_Lucene_Net_Search_Query__" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.Add(System.Collections.Generic.ICollection{Lucene.Net.Search.Query})">Add(ICollection&lt;Query&gt;)</h4>
+  <div class="markdown level1 summary"><p>Add a collection of disjuncts to this disjunction
+via <span class="xref">IEnumerable{Query}</span> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Add(ICollection&lt;Query&gt; disjuncts)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Lucene.Net.Search.Query.html">Query</a>&gt;</td>
+        <td><span class="parametername">disjuncts</span></td>
+        <td><p>A collection of queries to add as disjuncts. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery_Clone.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L288">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_DisjunctionMaxQuery_Clone_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.Clone*"></a>
+  <h4 id="Lucene_Net_Search_DisjunctionMaxQuery_Clone" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.Clone">Clone()</h4>
+  <div class="markdown level1 summary"><p>Create a shallow copy of us -- used in rewriting if necessary </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override object Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><p>A copy of us (but reuse, don&apos;t copy, our subqueries)  </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Clone">Query.Clone()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery_CreateWeight_Lucene_Net_Search_IndexSearcher_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery.CreateWeight(Lucene.Net.Search.IndexSearcher)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L235">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_DisjunctionMaxQuery_CreateWeight_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.CreateWeight*"></a>
+  <h4 id="Lucene_Net_Search_DisjunctionMaxQuery_CreateWeight_Lucene_Net_Search_IndexSearcher_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.CreateWeight(Lucene.Net.Search.IndexSearcher)">CreateWeight(IndexSearcher)</h4>
+  <div class="markdown level1 summary"><p>Create the <a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a> used to score us </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Weight CreateWeight(IndexSearcher searcher)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a></td>
+        <td><span class="parametername">searcher</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_CreateWeight_Lucene_Net_Search_IndexSearcher_">Query.CreateWeight(IndexSearcher)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L353">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_DisjunctionMaxQuery_Equals_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.Equals*"></a>
+  <h4 id="Lucene_Net_Search_DisjunctionMaxQuery_Equals_System_Object_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"><p>Return <code>true</code> if we represent the same query as <code data-dev-comment-type="paramref" class="paramref">o</code> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object o)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">o</span></td>
+        <td><p>Another object </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if <code data-dev-comment-type="paramref" class="paramref">o</code> is a <a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.html">DisjunctionMaxQuery</a> with the same boost and the same subqueries, in the same order, as us </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Equals_System_Object_">Query.Equals(Object)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery.ExtractTerms(System.Collections.Generic.ISet%7BLucene.Net.Index.Term%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L300">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_DisjunctionMaxQuery_ExtractTerms_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.ExtractTerms*"></a>
+  <h4 id="Lucene_Net_Search_DisjunctionMaxQuery_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.ExtractTerms(System.Collections.Generic.ISet{Lucene.Net.Index.Term})">ExtractTerms(ISet&lt;Term&gt;)</h4>
+  <div class="markdown level1 summary"><p>Expert: adds all terms occurring in this query to the terms set. Only
+works if this query is in its rewritten (<a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.html#Lucene_Net_Search_DisjunctionMaxQuery_Rewrite_Lucene_Net_Index_IndexReader_">Rewrite(IndexReader)</a>) form.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void ExtractTerms(ISet&lt;Term&gt; terms)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ISet</span>&lt;<a class="xref" href="Lucene.Net.Index.Term.html">Term</a>&gt;</td>
+        <td><span class="parametername">terms</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__">Query.ExtractTerms(ISet&lt;Term&gt;)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.InvalidOperationException</span></td>
+        <td><p>If this query is not yet rewritten </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery_GetEnumerator.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery.GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L110">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_DisjunctionMaxQuery_GetEnumerator_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.GetEnumerator*"></a>
+  <h4 id="Lucene_Net_Search_DisjunctionMaxQuery_GetEnumerator" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.GetEnumerator">GetEnumerator()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IEnumerator&lt;Query&gt; GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<a class="xref" href="Lucene.Net.Search.Query.html">Query</a>&gt;</td>
+        <td><p>An <span class="xref">IEnumerator{Query}</span> over the disjuncts </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery_GetHashCode.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L368">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_DisjunctionMaxQuery_GetHashCode_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.GetHashCode*"></a>
+  <h4 id="Lucene_Net_Search_DisjunctionMaxQuery_GetHashCode" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"><p>Compute a hash code for hashing us </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>the hash code </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_GetHashCode">Query.GetHashCode()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery_Rewrite_Lucene_Net_Index_IndexReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery.Rewrite(Lucene.Net.Index.IndexReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L244">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_DisjunctionMaxQuery_Rewrite_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.Rewrite*"></a>
+  <h4 id="Lucene_Net_Search_DisjunctionMaxQuery_Rewrite_Lucene_Net_Index_IndexReader_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.Rewrite(Lucene.Net.Index.IndexReader)">Rewrite(IndexReader)</h4>
+  <div class="markdown level1 summary"><p>Optimize our representation and our subqueries representations </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Query Rewrite(IndexReader reader)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a></td>
+        <td><span class="parametername">reader</span></td>
+        <td><p>The <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> we query </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><p>An optimized copy of us (which may not be a copy if there is nothing to optimize)  </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Rewrite_Lucene_Net_Index_IndexReader_">Query.Rewrite(IndexReader)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery_ToString_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery.ToString(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L312">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_DisjunctionMaxQuery_ToString_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.ToString*"></a>
+  <h4 id="Lucene_Net_Search_DisjunctionMaxQuery_ToString_System_String_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.ToString(System.String)">ToString(String)</h4>
+  <div class="markdown level1 summary"><p>Prettyprint us. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString(string field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td><p>The field to which we are applied </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>A string that shows what we do, of the form &quot;(disjunct1 | disjunct2 | ... | disjunctn)^boost&quot; </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ToString_System_String_">Query.ToString(String)</a></div>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery_System_Collections_IEnumerable_GetEnumerator.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery.System%23Collections%23IEnumerable%23GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L116">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_DisjunctionMaxQuery_System_Collections_IEnumerable_GetEnumerator_" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.System#Collections#IEnumerable#GetEnumerator*"></a>
+  <h4 id="Lucene_Net_Search_DisjunctionMaxQuery_System_Collections_IEnumerable_GetEnumerator" data-uid="Lucene.Net.Search.DisjunctionMaxQuery.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerator IEnumerable.GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerator</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_DisjunctionMaxQuery.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.DisjunctionMaxQuery%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Search/DisjunctionMaxQuery.cs/#L59" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>
