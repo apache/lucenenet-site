@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Lucene41StoredFieldsFormat
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Lucene41StoredFieldsFormat
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.Lucene41.Lucene41StoredFieldsFormat">
+  
+  
+  <h1 id="Lucene_Net_Codecs_Lucene41_Lucene41StoredFieldsFormat" data-uid="Lucene.Net.Codecs.Lucene41.Lucene41StoredFieldsFormat" class="text-break">Class Lucene41StoredFieldsFormat
+  </h1>
+  <div class="markdown level0 summary"><p>Lucene 4.1 stored fields format.</p>
+<p><p><strong>Principle</strong></p>
+<p>This <a class="xref" href="Lucene.Net.Codecs.StoredFieldsFormat.html">StoredFieldsFormat</a> compresses blocks of 16KB of documents in
+order to improve the compression ratio compared to document-level
+compression. It uses the <a href="http://code.google.com/p/lz4/">LZ4</a>
+compression algorithm, which is fast to compress and very fast to decompress
+data. Although the compression method that is used focuses more on speed
+than on compression ratio, it should provide interesting compression ratios
+for redundant inputs (such as log files, HTML or plain text).</p>
+<p><strong>File formats</strong></p>
+<p>Stored fields are represented by two files:</p>
+<ol><li><a name="field_data" id="field_data"></a>
+<p>A fields data file (extension <code>.fdt</code>). this file stores a compact
+representation of documents in compressed blocks of 16KB or more. When
+writing a segment, documents are appended to an in-memory <code>byte[]</code>
+buffer. When its size reaches 16KB or more, some metadata about the documents
+is flushed to disk, immediately followed by a compressed representation of
+the buffer using the
+<a href="http://code.google.com/p/lz4/">LZ4</a>
+<a href="http://fastcompression.blogspot.fr/2011/05/lz4-explained.html">compression format</a>.</p>
+<p>Here is a more detailed description of the field data file format:</p>
+<ul><li>FieldData (.fdt) --&gt; &lt;Header&gt;, PackedIntsVersion, &lt;Chunk&gt;<sup>ChunkCount</sup></li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>PackedIntsVersion --&gt; <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html#Lucene_Net_Util_Packed_PackedInt32s_VERSION_CURRENT">VERSION_CURRENT</a> as a VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>ChunkCount is not known in advance and is the number of chunks necessary to store all document of the segment</li><li>Chunk --&gt; DocBase, ChunkDocs, DocFieldCounts, DocLengths, &lt;CompressedDocs&gt;</li><li>DocBase --&gt; the ID of the first document of the chunk as a VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>ChunkDocs --&gt; the number of documents in the chunk as a VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>DocFieldCounts --&gt; the number of stored fields of every document in the chunk, encoded as followed:
+<ul><li>if chunkDocs=1, the unique value is encoded as a VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>else read a VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) (let&apos;s call it <code>bitsRequired</code>)
+<ul><li>if <code>bitsRequired</code> is <code>0</code> then all values are equal, and the common value is the following VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>else <code>bitsRequired</code> is the number of bits required to store any value, and values are stored in a packed (<a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html">PackedInt32s</a>) array where every value is stored on exactly <code>bitsRequired</code> bits</li></ul>
+</li></ul>
+</li><li>DocLengths --&gt; the lengths of all documents in the chunk, encoded with the same method as DocFieldCounts</li><li>CompressedDocs --&gt; a compressed representation of &lt;Docs&gt; using the LZ4 compression format</li><li>Docs --&gt; &lt;Doc&gt;<sup>ChunkDocs</sup></li><li>Doc --&gt; &lt;FieldNumAndType, Value&gt;<sup>DocFieldCount</sup></li><li>FieldNumAndType --&gt; a VLong (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt64_System_Int64_">WriteVInt64(Int64)</a>), whose 3 last bits are Type and other bits are FieldNum</li><li>Type --&gt;
+<ul><li>0: Value is String</li><li>1: Value is BinaryValue</li><li>2: Value is Int</li><li>3: Value is Float</li><li>4: Value is Long</li><li>5: Value is Double</li><li>6, 7: unused</li></ul>
+</li><li>FieldNum --&gt; an ID of the field</li><li>Value --&gt; String (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteString_System_String_">WriteString(String)</a>) | BinaryValue | Int | Float | Long | Double depending on Type</li><li>BinaryValue --&gt; ValueLength &lt;Byte&gt;<sup>ValueLength</sup></li></ul>
+<p>Notes</p>
+<ul><li>If documents are larger than 16KB then chunks will likely contain only
+one document. However, documents can never spread across several chunks (all
+fields of a single document are in the same chunk).</li><li>When at least one document in a chunk is large enough so that the chunk
+is larger than 32KB, the chunk will actually be compressed in several LZ4
+blocks of 16KB. this allows <a class="xref" href="Lucene.Net.Index.StoredFieldVisitor.html">StoredFieldVisitor</a>s which are only
+interested in the first fields of a document to not have to decompress 10MB
+of data if the document is 10MB, but only 16KB.</li><li>Given that the original lengths are written in the metadata of the chunk,
+the decompressor can leverage this information to stop decoding as soon as
+enough data has been decompressed.</li><li>In case documents are incompressible, CompressedDocs will be less than
+0.5% larger than Docs.</li></ul>
+</li><li><a name="field_index" id="field_index"></a>
+<p>A fields index file (extension <code>.fdx</code>).</p>
+<ul><li>FieldsIndex (.fdx) --&gt; &lt;Header&gt;, &lt;ChunkIndex&gt;</li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>ChunkIndex: See <a class="xref" href="Lucene.Net.Codecs.Compressing.CompressingStoredFieldsIndexWriter.html">CompressingStoredFieldsIndexWriter</a></li></ul>
+</li></ol>
+<p><strong>Known limitations</strong></p>
+<p>This <a class="xref" href="Lucene.Net.Codecs.StoredFieldsFormat.html">StoredFieldsFormat</a> does not support individual documents
+larger than (<code>2<sup>31</sup> - 2<sup>14</sup></code>) bytes. In case this
+is a problem, you should use another format, such as
+<a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40StoredFieldsFormat.html">Lucene40StoredFieldsFormat</a>.</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Codecs.StoredFieldsFormat.html">StoredFieldsFormat</a></div>
+    <div class="level2"><a class="xref" href="Lucene.Net.Codecs.Compressing.CompressingStoredFieldsFormat.html">CompressingStoredFieldsFormat</a></div>
+    <div class="level3"><span class="xref">Lucene41StoredFieldsFormat</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.Compressing.CompressingStoredFieldsFormat.html#Lucene_Net_Codecs_Compressing_CompressingStoredFieldsFormat_FieldsReader_Lucene_Net_Store_Directory_Lucene_Net_Index_SegmentInfo_Lucene_Net_Index_FieldInfos_Lucene_Net_Store_IOContext_">CompressingStoredFieldsFormat.FieldsReader(Directory, SegmentInfo, FieldInfos, IOContext)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.Compressing.CompressingStoredFieldsFormat.html#Lucene_Net_Codecs_Compressing_CompressingStoredFieldsFormat_FieldsWriter_Lucene_Net_Store_Directory_Lucene_Net_Index_SegmentInfo_Lucene_Net_Store_IOContext_">CompressingStoredFieldsFormat.FieldsWriter(Directory, SegmentInfo, IOContext)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.Compressing.CompressingStoredFieldsFormat.html#Lucene_Net_Codecs_Compressing_CompressingStoredFieldsFormat_ToString">CompressingStoredFieldsFormat.ToString()</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Codecs.Lucene41.html">Lucene.Net.Codecs.Lucene41</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Codecs_Lucene41_Lucene41StoredFieldsFormat_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class Lucene41StoredFieldsFormat : CompressingStoredFieldsFormat</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene41_Lucene41StoredFieldsFormat__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene41.Lucene41StoredFieldsFormat.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Lucene41/Lucene41StoredFieldsFormat.cs/#L126">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene41_Lucene41StoredFieldsFormat__ctor_" data-uid="Lucene.Net.Codecs.Lucene41.Lucene41StoredFieldsFormat.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene41_Lucene41StoredFieldsFormat__ctor" data-uid="Lucene.Net.Codecs.Lucene41.Lucene41StoredFieldsFormat.#ctor">Lucene41StoredFieldsFormat()</h4>
+  <div class="markdown level1 summary"><p>Sole constructor. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Lucene41StoredFieldsFormat()</code></pre>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene41_Lucene41StoredFieldsFormat.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene41.Lucene41StoredFieldsFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Lucene41/Lucene41StoredFieldsFormat.cs/#L122" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

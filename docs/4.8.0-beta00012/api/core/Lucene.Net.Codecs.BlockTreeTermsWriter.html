@@ -1,0 +1,747 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class BlockTreeTermsWriter
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class BlockTreeTermsWriter
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter">
+  
+  
+  <h1 id="Lucene_Net_Codecs_BlockTreeTermsWriter" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter" class="text-break">Class BlockTreeTermsWriter
+  </h1>
+  <div class="markdown level0 summary"><p>Block-based terms index and dictionary writer.
+<p>
+Writes terms dict and index, block-encoding (column
+stride) each term&apos;s metadata for each set of terms
+between two index terms.
+<p>
+Files:
+<ul><li>.tim:<a href="#Termdictionary">Term Dictionary</a></li><li>.tip:<a href="#Termindex">Term Index</a></li></ul>
+<p>
+<a name="Termdictionary" id="Termdictionary"></a>
+<h3>Term Dictionary</h3></p>
+<p>The .tim file contains the list of terms in each
+field along with per-term statistics (such as docfreq)
+and per-term metadata (typically pointers to the postings list
+for that term in the inverted index).
+</p>
+
+<p>The .tim is arranged in blocks: with blocks containing
+a variable number of entries (by default 25-48), where
+each entry is either a term or a reference to a
+sub-block.</p>
+
+<p>NOTE: The term dictionary can plug into different postings implementations:
+the postings writer/reader are actually responsible for encoding
+and decoding the Postings Metadata and Term Metadata sections.</p>
+
+<p><ul><li>TermsDict (.tim) --&gt; Header, <em>PostingsHeader</em>, NodeBlock<sup>NumBlocks</sup>,
+                              FieldSummary, DirOffset, Footer</li><li>NodeBlock --&gt; (OuterNode | InnerNode)</li><li>OuterNode --&gt; EntryCount, SuffixLength, Byte<sup>SuffixLength</sup>, StatsLength, &lt; TermStats &gt;<sup>EntryCount</sup>, MetaLength, &lt;<em>TermMetadata</em>&gt;<sup>EntryCount</sup></li><li>InnerNode --&gt; EntryCount, SuffixLength[,Sub?], Byte<sup>SuffixLength</sup>, StatsLength, &lt; TermStats ? &gt;<sup>EntryCount</sup>, MetaLength, &lt;<em>TermMetadata ? </em>&gt;<sup>EntryCount</sup></li><li>TermStats --&gt; DocFreq, TotalTermFreq </li><li>FieldSummary --&gt; NumFields, &lt;FieldNumber, NumTerms, RootCodeLength, Byte<sup>RootCodeLength</sup>,
+                           SumTotalTermFreq?, SumDocFreq, DocCount&gt;<sup>NumFields</sup></li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a></li><li>DirOffset --&gt; Uint64 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a>)</li><li>EntryCount,SuffixLength,StatsLength,DocFreq,MetaLength,NumFields,
+       FieldNumber,RootCodeLength,DocCount --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>_</li><li>TotalTermFreq,NumTerms,SumTotalTermFreq,SumDocFreq --&gt;
+       VLong (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt64_System_Int64_">WriteVInt64(Int64)</a>)</li><li>Footer --&gt; CodecFooter (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteFooter_Lucene_Net_Store_IndexOutput_">WriteFooter(IndexOutput)</a>)</li></ul>
+<p>Notes:</p>
+<ul><li>Header is a CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) storing the version information
+       for the BlockTree implementation.</li><li>DirOffset is a pointer to the FieldSummary section.</li><li>DocFreq is the count of documents which contain the term.</li><li>TotalTermFreq is the total number of occurrences of the term. this is encoded
+       as the difference between the total number of occurrences and the DocFreq.</li><li>FieldNumber is the fields number from <span class="xref">Lucene.Net.Codecs.BlockTreeTermsWriter.fieldInfos</span>. (.fnm)</li><li>NumTerms is the number of unique terms for the field.</li><li>RootCode points to the root block for the field.</li><li>SumDocFreq is the total number of postings, the number of term-document pairs across
+       the entire field.</li><li>DocCount is the number of documents that have at least one posting for this field.</li><li>PostingsHeader and TermMetadata are plugged into by the specific postings implementation:
+       these contain arbitrary per-file data (such as parameters or versioning information)
+       and per-term data (such as pointers to inverted files).</li><li>For inner nodes of the tree, every entry will steal one bit to mark whether it points
+       to child nodes(sub-block). If so, the corresponding <a class="xref" href="Lucene.Net.Codecs.TermStats.html">TermStats</a> and TermMetadata are omitted </li></ul>
+<a name="Termindex" id="Termindex"></a>
+<h3>Term Index</h3>
+<p>The .tip file contains an index into the term dictionary, so that it can be
+accessed randomly.  The index is also used to determine
+when a given term cannot exist on disk (in the .tim file), saving a disk seek.</p>
+<ul><li>TermsIndex (.tip) --&gt; Header, FSTIndex<sup>NumFields</sup>
+                               &lt;IndexStartFP&gt;<sup>NumFields</sup>, DirOffset, Footer</li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>)</li><li>DirOffset --&gt; Uint64 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a></li><li>IndexStartFP --&gt; VLong (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt64_System_Int64_">WriteVInt64(Int64)</a></li><li>FSTIndex --&gt; <span class="xref">FST{byte[]}</span></li><li>Footer --&gt; CodecFooter (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteFooter_Lucene_Net_Store_IndexOutput_">WriteFooter(IndexOutput)</a></li></ul>
+<p>Notes:</p>
+<ul><li>The .tip file contains a separate FST for each
+      field.  The FST maps a term prefix to the on-disk
+      block that holds all terms starting with that
+      prefix.  Each field&apos;s IndexStartFP points to its
+      FST.</li><li>DirOffset is a pointer to the start of the IndexStartFPs
+      for all fields</li><li>It&apos;s possible that an on-disk block would contain
+      too many terms (more than the allowed maximum
+      (default: 48)).  When this happens, the block is
+      sub-divided into new blocks (called &quot;floor
+      blocks&quot;), and then the output in the FST for the
+      block&apos;s prefix encodes the leading byte of each
+      sub-block, and its file pointer.</li></ul>
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Codecs.FieldsConsumer.html">FieldsConsumer</a></div>
+    <div class="level2"><span class="xref">BlockTreeTermsWriter</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.FieldsConsumer.html#Lucene_Net_Codecs_FieldsConsumer_Dispose">FieldsConsumer.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.FieldsConsumer.html#Lucene_Net_Codecs_FieldsConsumer_Merge_Lucene_Net_Index_MergeState_Lucene_Net_Index_Fields_">FieldsConsumer.Merge(MergeState, Fields)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Codecs.html">Lucene.Net.Codecs</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Codecs_BlockTreeTermsWriter_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class BlockTreeTermsWriter : FieldsConsumer, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsWriter__ctor_Lucene_Net_Index_SegmentWriteState_Lucene_Net_Codecs_PostingsWriterBase_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsWriter.%23ctor(Lucene.Net.Index.SegmentWriteState%2CLucene.Net.Codecs.PostingsWriterBase%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/BlockTreeTermsWriter.cs/#L284">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsWriter__ctor_" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsWriter__ctor_Lucene_Net_Index_SegmentWriteState_Lucene_Net_Codecs_PostingsWriterBase_System_Int32_System_Int32_" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.#ctor(Lucene.Net.Index.SegmentWriteState,Lucene.Net.Codecs.PostingsWriterBase,System.Int32,System.Int32)">BlockTreeTermsWriter(SegmentWriteState, PostingsWriterBase, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Create a new writer.  The number of items (terms or
+sub-blocks) per block will aim to be between
+<code data-dev-comment-type="paramref" class="paramref">minItemsInBlock</code> and <code data-dev-comment-type="paramref" class="paramref">maxItemsInBlock</code>, though in some
+cases the blocks may be smaller than the min.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BlockTreeTermsWriter(SegmentWriteState state, PostingsWriterBase postingsWriter, int minItemsInBlock, int maxItemsInBlock)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentWriteState.html">SegmentWriteState</a></td>
+        <td><span class="parametername">state</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.PostingsWriterBase.html">PostingsWriterBase</a></td>
+        <td><span class="parametername">postingsWriter</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">minItemsInBlock</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxItemsInBlock</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsWriter_DEFAULT_MAX_BLOCK_SIZE.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsWriter.DEFAULT_MAX_BLOCK_SIZE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/BlockTreeTermsWriter.cs/#L194">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsWriter_DEFAULT_MAX_BLOCK_SIZE" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.DEFAULT_MAX_BLOCK_SIZE">DEFAULT_MAX_BLOCK_SIZE</h4>
+  <div class="markdown level1 summary"><p>Suggested default value for the 
+<code>maxItemsInBlock</code> parameter to 
+<a class="xref" href="Lucene.Net.Codecs.BlockTreeTermsWriter.html#Lucene_Net_Codecs_BlockTreeTermsWriter__ctor_Lucene_Net_Index_SegmentWriteState_Lucene_Net_Codecs_PostingsWriterBase_System_Int32_System_Int32_">BlockTreeTermsWriter(SegmentWriteState, PostingsWriterBase, Int32, Int32)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int DEFAULT_MAX_BLOCK_SIZE = 48</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsWriter_DEFAULT_MIN_BLOCK_SIZE.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsWriter.DEFAULT_MIN_BLOCK_SIZE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/BlockTreeTermsWriter.cs/#L187">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsWriter_DEFAULT_MIN_BLOCK_SIZE" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.DEFAULT_MIN_BLOCK_SIZE">DEFAULT_MIN_BLOCK_SIZE</h4>
+  <div class="markdown level1 summary"><p>Suggested default value for the 
+<code>minItemsInBlock</code> parameter to 
+<a class="xref" href="Lucene.Net.Codecs.BlockTreeTermsWriter.html#Lucene_Net_Codecs_BlockTreeTermsWriter__ctor_Lucene_Net_Index_SegmentWriteState_Lucene_Net_Codecs_PostingsWriterBase_System_Int32_System_Int32_">BlockTreeTermsWriter(SegmentWriteState, PostingsWriterBase, Int32, Int32)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int DEFAULT_MIN_BLOCK_SIZE = 25</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsWriter_VERSION_APPEND_ONLY.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsWriter.VERSION_APPEND_ONLY%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/BlockTreeTermsWriter.cs/#L216">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsWriter_VERSION_APPEND_ONLY" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.VERSION_APPEND_ONLY">VERSION_APPEND_ONLY</h4>
+  <div class="markdown level1 summary"><p>Append-only </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int VERSION_APPEND_ONLY = 1</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsWriter_VERSION_CHECKSUM.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsWriter.VERSION_CHECKSUM%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/BlockTreeTermsWriter.cs/#L224">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsWriter_VERSION_CHECKSUM" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.VERSION_CHECKSUM">VERSION_CHECKSUM</h4>
+  <div class="markdown level1 summary"><p>Checksums. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int VERSION_CHECKSUM = 3</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsWriter_VERSION_CURRENT.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsWriter.VERSION_CURRENT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/BlockTreeTermsWriter.cs/#L228">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsWriter_VERSION_CURRENT" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.VERSION_CURRENT">VERSION_CURRENT</h4>
+  <div class="markdown level1 summary"><p>Current terms format. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int VERSION_CURRENT = 3</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsWriter_VERSION_META_ARRAY.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsWriter.VERSION_META_ARRAY%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/BlockTreeTermsWriter.cs/#L220">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsWriter_VERSION_META_ARRAY" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.VERSION_META_ARRAY">VERSION_META_ARRAY</h4>
+  <div class="markdown level1 summary"><p>Meta data as array. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int VERSION_META_ARRAY = 2</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsWriter_VERSION_START.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsWriter.VERSION_START%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/BlockTreeTermsWriter.cs/#L212">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsWriter_VERSION_START" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.VERSION_START">VERSION_START</h4>
+  <div class="markdown level1 summary"><p>Initial terms format. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int VERSION_START = 0</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsWriter_AddField_Lucene_Net_Index_FieldInfo_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsWriter.AddField(Lucene.Net.Index.FieldInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/BlockTreeTermsWriter.cs/#L367">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsWriter_AddField_" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.AddField*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsWriter_AddField_Lucene_Net_Index_FieldInfo_" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.AddField(Lucene.Net.Index.FieldInfo)">AddField(FieldInfo)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override TermsConsumer AddField(FieldInfo field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.FieldInfo.html">FieldInfo</a></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.TermsConsumer.html">TermsConsumer</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Codecs.FieldsConsumer.html#Lucene_Net_Codecs_FieldsConsumer_AddField_Lucene_Net_Index_FieldInfo_">FieldsConsumer.AddField(FieldInfo)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsWriter_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsWriter.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/BlockTreeTermsWriter.cs/#L1257">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsWriter_Dispose_" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.Dispose*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsWriter_Dispose_System_Boolean_" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.Dispose(System.Boolean)">Dispose(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Disposes all resources used by this object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">disposing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Codecs.FieldsConsumer.html#Lucene_Net_Codecs_FieldsConsumer_Dispose_System_Boolean_">FieldsConsumer.Dispose(Boolean)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsWriter_WriteHeader_Lucene_Net_Store_IndexOutput_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsWriter.WriteHeader(Lucene.Net.Store.IndexOutput)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/BlockTreeTermsWriter.cs/#L341">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsWriter_WriteHeader_" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.WriteHeader*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsWriter_WriteHeader_Lucene_Net_Store_IndexOutput_" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.WriteHeader(Lucene.Net.Store.IndexOutput)">WriteHeader(IndexOutput)</h4>
+  <div class="markdown level1 summary"><p>Writes the terms file header. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void WriteHeader(IndexOutput out)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IndexOutput.html">IndexOutput</a></td>
+        <td><span class="parametername">out</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsWriter_WriteIndexHeader_Lucene_Net_Store_IndexOutput_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsWriter.WriteIndexHeader(Lucene.Net.Store.IndexOutput)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/BlockTreeTermsWriter.cs/#L348">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsWriter_WriteIndexHeader_" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.WriteIndexHeader*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsWriter_WriteIndexHeader_Lucene_Net_Store_IndexOutput_" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.WriteIndexHeader(Lucene.Net.Store.IndexOutput)">WriteIndexHeader(IndexOutput)</h4>
+  <div class="markdown level1 summary"><p>Writes the index file header. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void WriteIndexHeader(IndexOutput out)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IndexOutput.html">IndexOutput</a></td>
+        <td><span class="parametername">out</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsWriter_WriteIndexTrailer_Lucene_Net_Store_IndexOutput_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsWriter.WriteIndexTrailer(Lucene.Net.Store.IndexOutput%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/BlockTreeTermsWriter.cs/#L362">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsWriter_WriteIndexTrailer_" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.WriteIndexTrailer*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsWriter_WriteIndexTrailer_Lucene_Net_Store_IndexOutput_System_Int64_" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.WriteIndexTrailer(Lucene.Net.Store.IndexOutput,System.Int64)">WriteIndexTrailer(IndexOutput, Int64)</h4>
+  <div class="markdown level1 summary"><p>Writes the index file trailer. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void WriteIndexTrailer(IndexOutput indexOut, long dirStart)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IndexOutput.html">IndexOutput</a></td>
+        <td><span class="parametername">indexOut</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">dirStart</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsWriter_WriteTrailer_Lucene_Net_Store_IndexOutput_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsWriter.WriteTrailer(Lucene.Net.Store.IndexOutput%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/BlockTreeTermsWriter.cs/#L355">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsWriter_WriteTrailer_" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.WriteTrailer*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsWriter_WriteTrailer_Lucene_Net_Store_IndexOutput_System_Int64_" data-uid="Lucene.Net.Codecs.BlockTreeTermsWriter.WriteTrailer(Lucene.Net.Store.IndexOutput,System.Int64)">WriteTrailer(IndexOutput, Int64)</h4>
+  <div class="markdown level1 summary"><p>Writes the terms file trailer. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void WriteTrailer(IndexOutput out, long dirStart)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IndexOutput.html">IndexOutput</a></td>
+        <td><span class="parametername">out</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">dirStart</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Codecs.BlockTreeTermsReader.html">BlockTreeTermsReader</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsWriter.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsWriter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/BlockTreeTermsWriter.cs/#L180" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>
