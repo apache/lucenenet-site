@@ -1,0 +1,766 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class SimpleQueryParser
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class SimpleQueryParser
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="queryparser/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser">
+  
+  
+  <h1 id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser" class="text-break">Class SimpleQueryParser
+  </h1>
+  <div class="markdown level0 summary"><p><a class="xref" href="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.html">SimpleQueryParser</a> is used to parse human readable query syntax.
+<p>
+The main idea behind this parser is that a person should be able to type
+whatever they want to represent a query, and this parser will do its best
+to interpret what to search for no matter how poorly composed the request
+may be. Tokens are considered to be any of a term, phrase, or subquery for the
+operations described below.  Whitespace including &apos; &apos; &apos;\n&apos; &apos;\r&apos; and &apos;\t&apos;
+and certain operators may be used to delimit tokens ( ) + | &quot; .
+<p>
+Any errors in query syntax will be ignored and the parser will attempt
+to decipher what it can; however, this may mean odd or unexpected results.
+<h4>Query Operators</h4>
+<ul><li>&apos;<code>+</code>&apos; specifies <code>AND</code> operation: <code>token1+token2</code></li><li>&apos;<code>|</code>&apos; specifies <code>OR</code> operation: <code>token1|token2</code></li><li>&apos;<code>-</code>&apos; negates a single token: <code>-token0</code></li><li>&apos;<code>&quot;</code>&apos; creates phrases of terms: <code>&quot;term1 term2 ...&quot;</code></li><li>&apos;<code><em></em></code>&apos; at the end of terms specifies prefix query: <code>term</code></li><li>&apos;<code>~</code>N&apos; at the end of terms specifies fuzzy query: <code>term~1</code></li><li>&apos;<code>~</code>N&apos; at the end of phrases specifies near query: <code>&quot;term1 term2&quot;~5</code></li><li>&apos;<code>(</code>&apos; and &apos;<code>)</code>&apos; specifies precedence: <code>token1 + (token2 | token3)</code></li></ul>
+<p>
+The default operator is <code>OR</code> if no other operator is specified.
+For example, the following will <code>OR</code> <code>token1</code> and <code>token2</code> together:
+<code>token1 token2</code>
+<p>
+Normal operator precedence will be simple order from right to left.
+For example, the following will evaluate <code>token1 OR token2</code> first,
+then <code>AND</code> with <code>token3</code>:</p>
+<pre><code>token1 | token2 + token3</code></pre>
+<p><h4>Escaping</h4>
+<p>
+An individual term may contain any possible character with certain characters
+requiring escaping using a &apos;<code>&lt;/code&gt;&apos;.  The following characters will need to be escaped in
+terms and phrases:
+<code>+ | &quot; ( ) &apos; &lt;/code&gt;
+<p>
+The &apos;<code>-</code>&apos; operator is a special case.  On individual terms (not phrases) the first
+character of a term that is <code>-</code> must be escaped; however, any &apos;<code>-</code>&apos; characters
+beyond the first character do not need to be escaped.
+For example:
+<ul><li><code>-term1</code>   -- Specifies <code>NOT</code> operation against <code>term1</code></li><li><code>-term1</code>  -- Searches for the term <code>-term1</code>.</li><li><code>term-1</code>   -- Searches for the term <code>term-1</code>.</li><li><code>term-1</code>  -- Searches for the term <code>term-1</code>.</li></ul>
+<p>
+The &apos;<code><em></em></code>&apos; operator is a special case. On individual terms (not phrases) the last
+character of a term that is &apos;<code></code>&apos; must be escaped; however, any &apos;<code><em></em></code>&apos; characters
+before the last character do not need to be escaped:
+<ul><li><code>term1</code>  --  Searches for the prefix <code>term1</code></li><li><code>term1*</code> --  Searches for the term <code>term1<em></em></code></li><li><code>term1</code>  --  Searches for the term <code>term<em>1</em></code></li><li><code>term*1</code> --  Searches for the term <code>term1</code></li></ul>
+<p>
+Note that above examples consider the terms before text processing.</p>
+</code></code></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Lucene.Net.Util.QueryBuilder</span></div>
+    <div class="level2"><span class="xref">SimpleQueryParser</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.QueryBuilder.html#Lucene_Net_Util_QueryBuilder_CreateBooleanQuery_System_String_System_String_">QueryBuilder.CreateBooleanQuery(String, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.QueryBuilder.html#Lucene_Net_Util_QueryBuilder_CreateBooleanQuery_System_String_System_String_Lucene_Net_Search_Occur_">QueryBuilder.CreateBooleanQuery(String, String, Occur)</a>
+    </div>
+    <div>
+      <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.QueryBuilder.html#Lucene_Net_Util_QueryBuilder_CreatePhraseQuery_System_String_System_String_">QueryBuilder.CreatePhraseQuery(String, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.QueryBuilder.html#Lucene_Net_Util_QueryBuilder_CreatePhraseQuery_System_String_System_String_System_Int32_">QueryBuilder.CreatePhraseQuery(String, String, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.QueryBuilder.html#Lucene_Net_Util_QueryBuilder_CreateMinShouldMatchQuery_System_String_System_String_System_Single_">QueryBuilder.CreateMinShouldMatchQuery(String, String, Single)</a>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Util.QueryBuilder.Analyzer</span>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Util.QueryBuilder.EnablePositionIncrements</span>
+    </div>
+    <div>
+      <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.QueryBuilder.html#Lucene_Net_Util_QueryBuilder_CreateFieldQuery_Lucene_Net_Analysis_Analyzer_Lucene_Net_Search_Occur_System_String_System_String_System_Boolean_System_Int32_">QueryBuilder.CreateFieldQuery(Analyzer, Occur, String, String, Boolean, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.QueryBuilder.html#Lucene_Net_Util_QueryBuilder_NewBooleanQuery_System_Boolean_">QueryBuilder.NewBooleanQuery(Boolean)</a>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Util.QueryBuilder.NewTermQuery(Lucene.Net.Index.Term)</span>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Util.QueryBuilder.NewPhraseQuery()</span>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Util.QueryBuilder.NewMultiPhraseQuery()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.QueryParsers.Simple.html">Lucene.Net.QueryParsers.Simple</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.QueryParser.dll</h6>
+  <h5 id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class SimpleQueryParser : QueryBuilder</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Simple_SimpleQueryParser__ctor_Lucene_Net_Analysis_Analyzer_System_Collections_Generic_IDictionary_System_String_System_Single__.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Simple.SimpleQueryParser.%23ctor(Lucene.Net.Analysis.Analyzer%2CSystem.Collections.Generic.IDictionary%7BSystem.String%2CSystem.Single%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.QueryParser/Simple/SimpleQueryParser.cs/#L138">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser__ctor_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.#ctor*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser__ctor_Lucene_Net_Analysis_Analyzer_System_Collections_Generic_IDictionary_System_String_System_Single__" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.#ctor(Lucene.Net.Analysis.Analyzer,System.Collections.Generic.IDictionary{System.String,System.Single})">SimpleQueryParser(Analyzer, IDictionary&lt;String, Single&gt;)</h4>
+  <div class="markdown level1 summary"><p>Creates a new parser searching over multiple fields with different weights.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SimpleQueryParser(Analyzer analyzer, IDictionary&lt;string, float&gt; weights)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Analysis.Analyzer</span></td>
+        <td><span class="parametername">analyzer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.Single</span>&gt;</td>
+        <td><span class="parametername">weights</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Simple_SimpleQueryParser__ctor_Lucene_Net_Analysis_Analyzer_System_Collections_Generic_IDictionary_System_String_System_Single__Lucene_Net_QueryParsers_Simple_Operator_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Simple.SimpleQueryParser.%23ctor(Lucene.Net.Analysis.Analyzer%2CSystem.Collections.Generic.IDictionary%7BSystem.String%2CSystem.Single%7D%2CLucene.Net.QueryParsers.Simple.Operator)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.QueryParser/Simple/SimpleQueryParser.cs/#L144">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser__ctor_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.#ctor*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser__ctor_Lucene_Net_Analysis_Analyzer_System_Collections_Generic_IDictionary_System_String_System_Single__Lucene_Net_QueryParsers_Simple_Operator_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.#ctor(Lucene.Net.Analysis.Analyzer,System.Collections.Generic.IDictionary{System.String,System.Single},Lucene.Net.QueryParsers.Simple.Operator)">SimpleQueryParser(Analyzer, IDictionary&lt;String, Single&gt;, Operator)</h4>
+  <div class="markdown level1 summary"><p>Creates a new parser with custom flags used to enable/disable certain features.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SimpleQueryParser(Analyzer analyzer, IDictionary&lt;string, float&gt; weights, Operator flags)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Analysis.Analyzer</span></td>
+        <td><span class="parametername">analyzer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.Single</span>&gt;</td>
+        <td><span class="parametername">weights</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Simple.Operator.html">Operator</a></td>
+        <td><span class="parametername">flags</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Simple_SimpleQueryParser__ctor_Lucene_Net_Analysis_Analyzer_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Simple.SimpleQueryParser.%23ctor(Lucene.Net.Analysis.Analyzer%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.QueryParser/Simple/SimpleQueryParser.cs/#L132">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser__ctor_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.#ctor*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser__ctor_Lucene_Net_Analysis_Analyzer_System_String_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.#ctor(Lucene.Net.Analysis.Analyzer,System.String)">SimpleQueryParser(Analyzer, String)</h4>
+  <div class="markdown level1 summary"><p>Creates a new parser searching over a single field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SimpleQueryParser(Analyzer analyzer, string field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Analysis.Analyzer</span></td>
+        <td><span class="parametername">analyzer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Simple_SimpleQueryParser_m_flags.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Simple.SimpleQueryParser.m_flags%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.QueryParser/Simple/SimpleQueryParser.cs/#L127">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_m_flags" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.m_flags">m_flags</h4>
+  <div class="markdown level1 summary"><p>flags to the parser (to turn features on/off)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly Operator m_flags</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Simple.Operator.html">Operator</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Simple_SimpleQueryParser_m_weights.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Simple.SimpleQueryParser.m_weights%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.QueryParser/Simple/SimpleQueryParser.cs/#L122">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_m_weights" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.m_weights">m_weights</h4>
+  <div class="markdown level1 summary"><p>Map of fields to query against with their weights</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly IDictionary&lt;string, float&gt; m_weights</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.Single</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Simple_SimpleQueryParser_DefaultOperator.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Simple.SimpleQueryParser.DefaultOperator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.QueryParser/Simple/SimpleQueryParser.cs/#L694">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_DefaultOperator_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.DefaultOperator*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_DefaultOperator" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.DefaultOperator">DefaultOperator</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the implicit operator setting, which will be
+either <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Occur.html#Lucene_Net_Search_Occur_SHOULD">SHOULD</a> or <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Occur.html#Lucene_Net_Search_Occur_MUST">MUST</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Occur DefaultOperator { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Occur</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Simple_SimpleQueryParser_NewDefaultQuery_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Simple.SimpleQueryParser.NewDefaultQuery(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.QueryParser/Simple/SimpleQueryParser.cs/#L605">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_NewDefaultQuery_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.NewDefaultQuery*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_NewDefaultQuery_System_String_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.NewDefaultQuery(System.String)">NewDefaultQuery(String)</h4>
+  <div class="markdown level1 summary"><p>Factory method to generate a standard query (no phrase or prefix operators).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual Query NewDefaultQuery(string text)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">text</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Query</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Simple_SimpleQueryParser_NewFuzzyQuery_System_String_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Simple.SimpleQueryParser.NewFuzzyQuery(System.String%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.QueryParser/Simple/SimpleQueryParser.cs/#L623">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_NewFuzzyQuery_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.NewFuzzyQuery*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_NewFuzzyQuery_System_String_System_Int32_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.NewFuzzyQuery(System.String,System.Int32)">NewFuzzyQuery(String, Int32)</h4>
+  <div class="markdown level1 summary"><p>Factory method to generate a fuzzy query.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual Query NewFuzzyQuery(string text, int fuzziness)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">text</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">fuzziness</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Query</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Simple_SimpleQueryParser_NewPhraseQuery_System_String_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Simple.SimpleQueryParser.NewPhraseQuery(System.String%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.QueryParser/Simple/SimpleQueryParser.cs/#L641">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_NewPhraseQuery_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.NewPhraseQuery*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_NewPhraseQuery_System_String_System_Int32_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.NewPhraseQuery(System.String,System.Int32)">NewPhraseQuery(String, Int32)</h4>
+  <div class="markdown level1 summary"><p>Factory method to generate a phrase query with slop.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual Query NewPhraseQuery(string text, int slop)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">text</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">slop</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Query</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Simple_SimpleQueryParser_NewPrefixQuery_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Simple.SimpleQueryParser.NewPrefixQuery(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.QueryParser/Simple/SimpleQueryParser.cs/#L659">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_NewPrefixQuery_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.NewPrefixQuery*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_NewPrefixQuery_System_String_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.NewPrefixQuery(System.String)">NewPrefixQuery(String)</h4>
+  <div class="markdown level1 summary"><p>Factory method to generate a prefix query.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual Query NewPrefixQuery(string text)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">text</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Query</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Simple_SimpleQueryParser_Parse_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Simple.SimpleQueryParser.Parse(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.QueryParser/Simple/SimpleQueryParser.cs/#L152">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_Parse_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.Parse*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_Parse_System_String_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.Parse(System.String)">Parse(String)</h4>
+  <div class="markdown level1 summary"><p>Parses the query text and returns parsed query (or null if empty)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Query Parse(string queryText)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">queryText</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Query</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Simple_SimpleQueryParser_Simplify_Lucene_Net_Search_BooleanQuery_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Simple.SimpleQueryParser.Simplify(Lucene.Net.Search.BooleanQuery)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.QueryParser/Simple/SimpleQueryParser.cs/#L674">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_Simplify_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.Simplify*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Simple_SimpleQueryParser_Simplify_Lucene_Net_Search_BooleanQuery_" data-uid="Lucene.Net.QueryParsers.Simple.SimpleQueryParser.Simplify(Lucene.Net.Search.BooleanQuery)">Simplify(BooleanQuery)</h4>
+  <div class="markdown level1 summary"><p>Helper to simplify boolean queries with 0 or 1 clause</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual Query Simplify(BooleanQuery bq)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.BooleanQuery</span></td>
+        <td><span class="parametername">bq</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Query</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Simple_SimpleQueryParser.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Simple.SimpleQueryParser%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.QueryParser/Simple/SimpleQueryParser.cs/#L119" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

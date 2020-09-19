@@ -1,0 +1,1304 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class CommonTermsQuery
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class CommonTermsQuery
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="queries/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Queries.CommonTermsQuery">
+  
+  
+  <h1 id="Lucene_Net_Queries_CommonTermsQuery" data-uid="Lucene.Net.Queries.CommonTermsQuery" class="text-break">Class CommonTermsQuery
+  </h1>
+  <div class="markdown level0 summary"><p>A query that executes high-frequency terms in a optional sub-query to prevent
+slow queries due to &quot;common&quot; terms like stopwords. This query
+builds 2 queries off the <a class="xref" href="Lucene.Net.Queries.CommonTermsQuery.html#Lucene_Net_Queries_CommonTermsQuery_Add_Lucene_Net_Index_Term_">Add(Term)</a> added terms: low-frequency
+terms are added to a required boolean clause and high-frequency terms are
+added to an optional boolean clause. The optional clause is only executed if
+the required &quot;low-frequency&quot; clause matches. Scores produced by this query
+will be slightly different than plain <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a> scorer mainly due to
+differences in the <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Similarities.Similarity.html#Lucene_Net_Search_Similarities_Similarity_Coord_System_Int32_System_Int32_">Coord(Int32, Int32)</a> number of leaf queries
+in the required boolean clause. In most cases, high-frequency terms are
+unlikely to significantly contribute to the document score unless at least
+one of the low-frequency terms are matched.  This query can improve
+query execution times significantly if applicable.
+<p>
+<a class="xref" href="Lucene.Net.Queries.CommonTermsQuery.html">CommonTermsQuery</a> has several advantages over stopword filtering at
+index or query time since a term can be &quot;classified&quot; based on the actual
+document frequency in the index and can prevent slow queries even across
+domains without specialized stopword files.
+</p>
+<p>
+<strong>Note:</strong> if the query only contains high-frequency terms the query is
+rewritten into a plain conjunction query ie. all high-frequency terms need to
+match in order to match a document.
+</p>
+<p>
+Collection initializer note: To create and populate a <a class="xref" href="Lucene.Net.Queries.CommonTermsQuery.html">CommonTermsQuery</a>
+in a single statement, you can use the following example as a guide:</p>
+<pre><code>var query = new CommonTermsQuery() {
+    new Term(&quot;field&quot;, &quot;microsoft&quot;), 
+    new Term(&quot;field&quot;, &quot;office&quot;)
+};</code></pre>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Lucene.Net.Search.Query</span></div>
+    <div class="level2"><span class="xref">CommonTermsQuery</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">Lucene.Net.Index.Term</span>&gt;</div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">Lucene.Net.Search.Query.Boost</span>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Search.Query.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Search.Query.CreateWeight(Lucene.Net.Search.IndexSearcher)</span>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Search.Query.Clone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Queries.html">Lucene.Net.Queries</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Queries.dll</h6>
+  <h5 id="Lucene_Net_Queries_CommonTermsQuery_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class CommonTermsQuery : Query, IEnumerable&lt;Term&gt;, IEnumerable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery__ctor_Lucene_Net_Search_Occur_Lucene_Net_Search_Occur_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.%23ctor(Lucene.Net.Search.Occur%2CLucene.Net.Search.Occur%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L98">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery__ctor_" data-uid="Lucene.Net.Queries.CommonTermsQuery.#ctor*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery__ctor_Lucene_Net_Search_Occur_Lucene_Net_Search_Occur_System_Single_" data-uid="Lucene.Net.Queries.CommonTermsQuery.#ctor(Lucene.Net.Search.Occur,Lucene.Net.Search.Occur,System.Single)">CommonTermsQuery(Occur, Occur, Single)</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Queries.CommonTermsQuery.html">CommonTermsQuery</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CommonTermsQuery(Occur highFreqOccur, Occur lowFreqOccur, float maxTermFrequency)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Occur</span></td>
+        <td><span class="parametername">highFreqOccur</span></td>
+        <td><p><span class="xref">Lucene.Net.Search.Occur</span> used for high frequency terms </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Occur</span></td>
+        <td><span class="parametername">lowFreqOccur</span></td>
+        <td><p><span class="xref">Lucene.Net.Search.Occur</span> used for low frequency terms </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">maxTermFrequency</span></td>
+        <td><p>a value in [0..1) (or absolute number &gt;=1) representing the
+maximum threshold of a terms document frequency to be considered a
+low frequency term. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>if <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Occur.html#Lucene_Net_Search_Occur_MUST_NOT">MUST_NOT</a> is pass as <code data-dev-comment-type="paramref" class="paramref">lowFreqOccur</code> or
+<code data-dev-comment-type="paramref" class="paramref">highFreqOccur</code> </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery__ctor_Lucene_Net_Search_Occur_Lucene_Net_Search_Occur_System_Single_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.%23ctor(Lucene.Net.Search.Occur%2CLucene.Net.Search.Occur%2CSystem.Single%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L120">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery__ctor_" data-uid="Lucene.Net.Queries.CommonTermsQuery.#ctor*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery__ctor_Lucene_Net_Search_Occur_Lucene_Net_Search_Occur_System_Single_System_Boolean_" data-uid="Lucene.Net.Queries.CommonTermsQuery.#ctor(Lucene.Net.Search.Occur,Lucene.Net.Search.Occur,System.Single,System.Boolean)">CommonTermsQuery(Occur, Occur, Single, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Queries.CommonTermsQuery.html">CommonTermsQuery</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CommonTermsQuery(Occur highFreqOccur, Occur lowFreqOccur, float maxTermFrequency, bool disableCoord)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Occur</span></td>
+        <td><span class="parametername">highFreqOccur</span></td>
+        <td><p><span class="xref">Lucene.Net.Search.Occur</span> used for high frequency terms </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Occur</span></td>
+        <td><span class="parametername">lowFreqOccur</span></td>
+        <td><p><span class="xref">Lucene.Net.Search.Occur</span> used for low frequency terms </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">maxTermFrequency</span></td>
+        <td><p>a value in [0..1) (or absolute number &gt;=1) representing the
+maximum threshold of a terms document frequency to be considered a
+low frequency term. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">disableCoord</span></td>
+        <td><p>disables <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Similarities.Similarity.html#Lucene_Net_Search_Similarities_Similarity_Coord_System_Int32_System_Int32_">Coord(Int32, Int32)</a> in scoring for the low
+/ high frequency sub-queries </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>if <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Occur.html#Lucene_Net_Search_Occur_MUST_NOT">MUST_NOT</a> is pass as <code data-dev-comment-type="paramref" class="paramref">lowFreqOccur</code> or
+<code data-dev-comment-type="paramref" class="paramref">highFreqOccur</code> </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_m_disableCoord.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.m_disableCoord%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L75">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_m_disableCoord" data-uid="Lucene.Net.Queries.CommonTermsQuery.m_disableCoord">m_disableCoord</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly bool m_disableCoord</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_m_highFreqBoost.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.m_highFreqBoost%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L80">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_m_highFreqBoost" data-uid="Lucene.Net.Queries.CommonTermsQuery.m_highFreqBoost">m_highFreqBoost</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected float m_highFreqBoost</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_m_highFreqMinNrShouldMatch.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.m_highFreqMinNrShouldMatch%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L82">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_m_highFreqMinNrShouldMatch" data-uid="Lucene.Net.Queries.CommonTermsQuery.m_highFreqMinNrShouldMatch">m_highFreqMinNrShouldMatch</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected float m_highFreqMinNrShouldMatch</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_m_highFreqOccur.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.m_highFreqOccur%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L78">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_m_highFreqOccur" data-uid="Lucene.Net.Queries.CommonTermsQuery.m_highFreqOccur">m_highFreqOccur</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly Occur m_highFreqOccur</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Occur</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_m_lowFreqBoost.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.m_lowFreqBoost%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L79">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_m_lowFreqBoost" data-uid="Lucene.Net.Queries.CommonTermsQuery.m_lowFreqBoost">m_lowFreqBoost</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected float m_lowFreqBoost</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_m_lowFreqMinNrShouldMatch.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.m_lowFreqMinNrShouldMatch%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L81">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_m_lowFreqMinNrShouldMatch" data-uid="Lucene.Net.Queries.CommonTermsQuery.m_lowFreqMinNrShouldMatch">m_lowFreqMinNrShouldMatch</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected float m_lowFreqMinNrShouldMatch</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_m_lowFreqOccur.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.m_lowFreqOccur%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L77">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_m_lowFreqOccur" data-uid="Lucene.Net.Queries.CommonTermsQuery.m_lowFreqOccur">m_lowFreqOccur</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly Occur m_lowFreqOccur</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Occur</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_m_maxTermFrequency.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.m_maxTermFrequency%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L76">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_m_maxTermFrequency" data-uid="Lucene.Net.Queries.CommonTermsQuery.m_maxTermFrequency">m_maxTermFrequency</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly float m_maxTermFrequency</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_m_terms.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.m_terms%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L74">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_m_terms" data-uid="Lucene.Net.Queries.CommonTermsQuery.m_terms">m_terms</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly IList&lt;Term&gt; m_terms</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">Lucene.Net.Index.Term</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_HighFreqMinimumNumberShouldMatch.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.HighFreqMinimumNumberShouldMatch%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L344">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_HighFreqMinimumNumberShouldMatch_" data-uid="Lucene.Net.Queries.CommonTermsQuery.HighFreqMinimumNumberShouldMatch*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_HighFreqMinimumNumberShouldMatch" data-uid="Lucene.Net.Queries.CommonTermsQuery.HighFreqMinimumNumberShouldMatch">HighFreqMinimumNumberShouldMatch</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets a minimum number of the high frequent optional BooleanClauses which must be
+satisfied in order to produce a match on the low frequency terms query
+part. This method accepts a float value in the range [0..1) as a fraction
+of the actual query terms in the low frequent clause or a number
+<tt>&gt;=1</tt> as an absolut number of clauses that need to match.</p>
+<p>
+By default no optional clauses are necessary for a match (unless there are
+no required clauses). If this method is used, then the specified number of
+clauses is required.
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual float HighFreqMinimumNumberShouldMatch { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_IsCoordDisabled.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.IsCoordDisabled%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L309">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_IsCoordDisabled_" data-uid="Lucene.Net.Queries.CommonTermsQuery.IsCoordDisabled*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_IsCoordDisabled" data-uid="Lucene.Net.Queries.CommonTermsQuery.IsCoordDisabled">IsCoordDisabled</h4>
+  <div class="markdown level1 summary"><p>Returns true iff <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Similarities.Similarity.html#Lucene_Net_Search_Similarities_Similarity_Coord_System_Int32_System_Int32_">Coord(Int32, Int32)</a> is disabled in scoring
+for the high and low frequency query instance. The top level query will
+always disable coords.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsCoordDisabled { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_LowFreqMinimumNumberShouldMatch.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.LowFreqMinimumNumberShouldMatch%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L324">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_LowFreqMinimumNumberShouldMatch_" data-uid="Lucene.Net.Queries.CommonTermsQuery.LowFreqMinimumNumberShouldMatch*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_LowFreqMinimumNumberShouldMatch" data-uid="Lucene.Net.Queries.CommonTermsQuery.LowFreqMinimumNumberShouldMatch">LowFreqMinimumNumberShouldMatch</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets a minimum number of the low frequent optional BooleanClauses which must be
+satisfied in order to produce a match on the low frequency terms query
+part. This method accepts a float value in the range [0..1) as a fraction
+of the actual query terms in the low frequent clause or a number
+<tt>&gt;=1</tt> as an absolut number of clauses that need to match.</p>
+<p>
+By default no optional clauses are necessary for a match (unless there are
+no required clauses). If this method is used, then the specified number of
+clauses is required.
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual float LowFreqMinimumNumberShouldMatch { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_Add_Lucene_Net_Index_Term_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.Add(Lucene.Net.Index.Term)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L142">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_Add_" data-uid="Lucene.Net.Queries.CommonTermsQuery.Add*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_Add_Lucene_Net_Index_Term_" data-uid="Lucene.Net.Queries.CommonTermsQuery.Add(Lucene.Net.Index.Term)">Add(Term)</h4>
+  <div class="markdown level1 summary"><p>Adds a term to the <a class="xref" href="Lucene.Net.Queries.CommonTermsQuery.html">CommonTermsQuery</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Add(Term term)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.Term</span></td>
+        <td><span class="parametername">term</span></td>
+        <td><p>the term to add </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_BuildQuery_System_Int32_Lucene_Net_Index_TermContext___Lucene_Net_Index_Term___.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.BuildQuery(System.Int32%2CLucene.Net.Index.TermContext%5B%5D%2CLucene.Net.Index.Term%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L190">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_BuildQuery_" data-uid="Lucene.Net.Queries.CommonTermsQuery.BuildQuery*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_BuildQuery_System_Int32_Lucene_Net_Index_TermContext___Lucene_Net_Index_Term___" data-uid="Lucene.Net.Queries.CommonTermsQuery.BuildQuery(System.Int32,Lucene.Net.Index.TermContext[],Lucene.Net.Index.Term[])">BuildQuery(Int32, TermContext[], Term[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual Query BuildQuery(int maxDoc, TermContext[] contextArray, Term[] queryTerms)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxDoc</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.TermContext</span>[]</td>
+        <td><span class="parametername">contextArray</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.Term</span>[]</td>
+        <td><span class="parametername">queryTerms</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Query</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_CalcHighFreqMinimumNumberShouldMatch_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.CalcHighFreqMinimumNumberShouldMatch(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L176">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_CalcHighFreqMinimumNumberShouldMatch_" data-uid="Lucene.Net.Queries.CommonTermsQuery.CalcHighFreqMinimumNumberShouldMatch*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_CalcHighFreqMinimumNumberShouldMatch_System_Int32_" data-uid="Lucene.Net.Queries.CommonTermsQuery.CalcHighFreqMinimumNumberShouldMatch(System.Int32)">CalcHighFreqMinimumNumberShouldMatch(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual int CalcHighFreqMinimumNumberShouldMatch(int numOptional)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numOptional</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_CalcLowFreqMinimumNumberShouldMatch_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.CalcLowFreqMinimumNumberShouldMatch(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L171">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_CalcLowFreqMinimumNumberShouldMatch_" data-uid="Lucene.Net.Queries.CommonTermsQuery.CalcLowFreqMinimumNumberShouldMatch*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_CalcLowFreqMinimumNumberShouldMatch_System_Int32_" data-uid="Lucene.Net.Queries.CommonTermsQuery.CalcLowFreqMinimumNumberShouldMatch(System.Int32)">CalcLowFreqMinimumNumberShouldMatch(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual int CalcLowFreqMinimumNumberShouldMatch(int numOptional)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numOptional</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_CollectTermContext_Lucene_Net_Index_IndexReader_System_Collections_Generic_IList_Lucene_Net_Index_AtomicReaderContext__Lucene_Net_Index_TermContext___Lucene_Net_Index_Term___.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.CollectTermContext(Lucene.Net.Index.IndexReader%2CSystem.Collections.Generic.IList%7BLucene.Net.Index.AtomicReaderContext%7D%2CLucene.Net.Index.TermContext%5B%5D%2CLucene.Net.Index.Term%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L259">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_CollectTermContext_" data-uid="Lucene.Net.Queries.CommonTermsQuery.CollectTermContext*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_CollectTermContext_Lucene_Net_Index_IndexReader_System_Collections_Generic_IList_Lucene_Net_Index_AtomicReaderContext__Lucene_Net_Index_TermContext___Lucene_Net_Index_Term___" data-uid="Lucene.Net.Queries.CommonTermsQuery.CollectTermContext(Lucene.Net.Index.IndexReader,System.Collections.Generic.IList{Lucene.Net.Index.AtomicReaderContext},Lucene.Net.Index.TermContext[],Lucene.Net.Index.Term[])">CollectTermContext(IndexReader, IList&lt;AtomicReaderContext&gt;, TermContext[], Term[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void CollectTermContext(IndexReader reader, IList&lt;AtomicReaderContext&gt; leaves, TermContext[] contextArray, Term[] queryTerms)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.IndexReader</span></td>
+        <td><span class="parametername">reader</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">Lucene.Net.Index.AtomicReaderContext</span>&gt;</td>
+        <td><span class="parametername">leaves</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.TermContext</span>[]</td>
+        <td><span class="parametername">contextArray</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.Term</span>[]</td>
+        <td><span class="parametername">queryTerms</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L410">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_Equals_" data-uid="Lucene.Net.Queries.CommonTermsQuery.Equals*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_Equals_System_Object_" data-uid="Lucene.Net.Queries.CommonTermsQuery.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Equals_System_Object_">Query.Equals(Object)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.ExtractTerms(System.Collections.Generic.ISet%7BLucene.Net.Index.Term%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L351">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_ExtractTerms_" data-uid="Lucene.Net.Queries.CommonTermsQuery.ExtractTerms*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__" data-uid="Lucene.Net.Queries.CommonTermsQuery.ExtractTerms(System.Collections.Generic.ISet{Lucene.Net.Index.Term})">ExtractTerms(ISet&lt;Term&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void ExtractTerms(ISet&lt;Term&gt; terms)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ISet</span>&lt;<span class="xref">Lucene.Net.Index.Term</span>&gt;</td>
+        <td><span class="parametername">terms</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__">Query.ExtractTerms(ISet&lt;Term&gt;)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_GetEnumerator.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L488">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_GetEnumerator_" data-uid="Lucene.Net.Queries.CommonTermsQuery.GetEnumerator*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_GetEnumerator" data-uid="Lucene.Net.Queries.CommonTermsQuery.GetEnumerator">GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an enumerator that iterates through the <a class="xref" href="Lucene.Net.Queries.CommonTermsQuery.html#Lucene_Net_Queries_CommonTermsQuery_m_terms">m_terms</a> collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerator&lt;Term&gt; GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<span class="xref">Lucene.Net.Index.Term</span>&gt;</td>
+        <td><p>An enumerator that can be used to iterate through the <a class="xref" href="Lucene.Net.Queries.CommonTermsQuery.html#Lucene_Net_Queries_CommonTermsQuery_m_terms">m_terms</a> collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_GetHashCode.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L393">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_GetHashCode_" data-uid="Lucene.Net.Queries.CommonTermsQuery.GetHashCode*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_GetHashCode" data-uid="Lucene.Net.Queries.CommonTermsQuery.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Search.Query.GetHashCode()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_NewTermQuery_Lucene_Net_Index_Term_Lucene_Net_Index_TermContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.NewTermQuery(Lucene.Net.Index.Term%2CLucene.Net.Index.TermContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L478">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_NewTermQuery_" data-uid="Lucene.Net.Queries.CommonTermsQuery.NewTermQuery*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_NewTermQuery_Lucene_Net_Index_Term_Lucene_Net_Index_TermContext_" data-uid="Lucene.Net.Queries.CommonTermsQuery.NewTermQuery(Lucene.Net.Index.Term,Lucene.Net.Index.TermContext)">NewTermQuery(Term, TermContext)</h4>
+  <div class="markdown level1 summary"><p>Builds a new <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.TermQuery.html">TermQuery</a> instance.
+<p>This is intended for subclasses that wish to customize the generated queries.</p> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual Query NewTermQuery(Term term, TermContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.Term</span></td>
+        <td><span class="parametername">term</span></td>
+        <td><p>term </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.TermContext</span></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>the <span class="xref">Lucene.Net.Index.TermContext</span> to be used to create the low level term query. Can be <code>null</code>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Query</span></td>
+        <td><p>new <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.TermQuery.html">TermQuery</a> instance </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_Rewrite_Lucene_Net_Index_IndexReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.Rewrite(Lucene.Net.Index.IndexReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L151">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_Rewrite_" data-uid="Lucene.Net.Queries.CommonTermsQuery.Rewrite*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_Rewrite_Lucene_Net_Index_IndexReader_" data-uid="Lucene.Net.Queries.CommonTermsQuery.Rewrite(Lucene.Net.Index.IndexReader)">Rewrite(IndexReader)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Query Rewrite(IndexReader reader)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.IndexReader</span></td>
+        <td><span class="parametername">reader</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Query</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Search.Query.Rewrite(Lucene.Net.Index.IndexReader)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_ToString_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.ToString(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L356">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_ToString_" data-uid="Lucene.Net.Queries.CommonTermsQuery.ToString*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_ToString_System_String_" data-uid="Lucene.Net.Queries.CommonTermsQuery.ToString(System.String)">ToString(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString(string field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ToString_System_String_">Query.ToString(String)</a></div>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery_System_Collections_IEnumerable_GetEnumerator.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery.System%23Collections%23IEnumerable%23GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L498">View Source</a>
+  </span>
+  <a id="Lucene_Net_Queries_CommonTermsQuery_System_Collections_IEnumerable_GetEnumerator_" data-uid="Lucene.Net.Queries.CommonTermsQuery.System#Collections#IEnumerable#GetEnumerator*"></a>
+  <h4 id="Lucene_Net_Queries_CommonTermsQuery_System_Collections_IEnumerable_GetEnumerator" data-uid="Lucene.Net.Queries.CommonTermsQuery.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an enumerator that iterates through the <a class="xref" href="Lucene.Net.Queries.CommonTermsQuery.html#Lucene_Net_Queries_CommonTermsQuery_m_terms">m_terms</a> collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerator IEnumerable.GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerator</span></td>
+        <td><p>An enumerator that can be used to iterate through the <a class="xref" href="Lucene.Net.Queries.CommonTermsQuery.html#Lucene_Net_Queries_CommonTermsQuery_m_terms">m_terms</a> collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Queries_CommonTermsQuery.md&amp;value=---%0Auid%3A%20Lucene.Net.Queries.CommonTermsQuery%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Queries/CommonTermsQuery.cs/#L67" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

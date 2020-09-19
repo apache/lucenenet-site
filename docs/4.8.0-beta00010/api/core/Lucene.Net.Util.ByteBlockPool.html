@@ -1,0 +1,843 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ByteBlockPool
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ByteBlockPool
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Util.ByteBlockPool">
+  
+  
+  <h1 id="Lucene_Net_Util_ByteBlockPool" data-uid="Lucene.Net.Util.ByteBlockPool" class="text-break">Class ByteBlockPool
+  </h1>
+  <div class="markdown level0 summary"><p>Class that Posting and PostingVector use to write byte
+streams into shared fixed-size <span class="xref">byte[]</span> arrays.  The idea
+is to allocate slices of increasing lengths. For
+example, the first slice is 5 bytes, the next slice is
+14, etc.  We start by writing our bytes into the first
+5 bytes.  When we hit the end of the slice, we allocate
+the next slice and then write the address of the new
+slice into the last 4 bytes of the previous slice (the
+&quot;forwarding address&quot;).
+<p>
+Each slice is filled with 0&apos;s initially, and we mark
+the end with a non-zero byte.  This way the methods
+that are writing into the slice don&apos;t need to record
+its length and instead allocate a new slice once they
+hit a non-zero byte.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">ByteBlockPool</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Util.html">Lucene.Net.Util</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Util_ByteBlockPool_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class ByteBlockPool</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool__ctor_Lucene_Net_Util_ByteBlockPool_Allocator_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.%23ctor(Lucene.Net.Util.ByteBlockPool.Allocator)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L173">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_ByteBlockPool__ctor_" data-uid="Lucene.Net.Util.ByteBlockPool.#ctor*"></a>
+  <h4 id="Lucene_Net_Util_ByteBlockPool__ctor_Lucene_Net_Util_ByteBlockPool_Allocator_" data-uid="Lucene.Net.Util.ByteBlockPool.#ctor(Lucene.Net.Util.ByteBlockPool.Allocator)">ByteBlockPool(ByteBlockPool.Allocator)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ByteBlockPool(ByteBlockPool.Allocator allocator)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.ByteBlockPool.Allocator.html">ByteBlockPool.Allocator</a></td>
+        <td><span class="parametername">allocator</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_BYTE_BLOCK_MASK.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.BYTE_BLOCK_MASK%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L51">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_BYTE_BLOCK_MASK" data-uid="Lucene.Net.Util.ByteBlockPool.BYTE_BLOCK_MASK">BYTE_BLOCK_MASK</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int BYTE_BLOCK_MASK</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_BYTE_BLOCK_SHIFT.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.BYTE_BLOCK_SHIFT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L49">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_BYTE_BLOCK_SHIFT" data-uid="Lucene.Net.Util.ByteBlockPool.BYTE_BLOCK_SHIFT">BYTE_BLOCK_SHIFT</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int BYTE_BLOCK_SHIFT</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_BYTE_BLOCK_SIZE.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.BYTE_BLOCK_SIZE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L50">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_BYTE_BLOCK_SIZE" data-uid="Lucene.Net.Util.ByteBlockPool.BYTE_BLOCK_SIZE">BYTE_BLOCK_SIZE</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int BYTE_BLOCK_SIZE</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_FIRST_LEVEL_SIZE.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.FIRST_LEVEL_SIZE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L299">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_FIRST_LEVEL_SIZE" data-uid="Lucene.Net.Util.ByteBlockPool.FIRST_LEVEL_SIZE">FIRST_LEVEL_SIZE</h4>
+  <div class="markdown level1 summary"><p>The first level size for new slices </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int FIRST_LEVEL_SIZE</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Util_ByteBlockPool_FIRST_LEVEL_SIZE_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Util.ByteBlockPool.html#Lucene_Net_Util_ByteBlockPool_NewSlice_System_Int32_">NewSlice(Int32)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_LEVEL_SIZE_ARRAY.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.LEVEL_SIZE_ARRAY%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L294">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_LEVEL_SIZE_ARRAY" data-uid="Lucene.Net.Util.ByteBlockPool.LEVEL_SIZE_ARRAY">LEVEL_SIZE_ARRAY</h4>
+  <div class="markdown level1 summary"><p>An array holding the level sizes for byte slices.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int[] LEVEL_SIZE_ARRAY</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_NEXT_LEVEL_ARRAY.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.NEXT_LEVEL_ARRAY%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L289">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_NEXT_LEVEL_ARRAY" data-uid="Lucene.Net.Util.ByteBlockPool.NEXT_LEVEL_ARRAY">NEXT_LEVEL_ARRAY</h4>
+  <div class="markdown level1 summary"><p>An array holding the offset into the <a class="xref" href="Lucene.Net.Util.ByteBlockPool.html#Lucene_Net_Util_ByteBlockPool_LEVEL_SIZE_ARRAY">LEVEL_SIZE_ARRAY</a>
+to quickly navigate to the next slice level.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int[] NEXT_LEVEL_ARRAY</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_Buffer.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.Buffer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L158">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_ByteBlockPool_Buffer_" data-uid="Lucene.Net.Util.ByteBlockPool.Buffer*"></a>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_Buffer" data-uid="Lucene.Net.Util.ByteBlockPool.Buffer">Buffer</h4>
+  <div class="markdown level1 summary"><p>Current head buffer</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte[] Buffer { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_Buffers.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.Buffers%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L138">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_ByteBlockPool_Buffers_" data-uid="Lucene.Net.Util.ByteBlockPool.Buffers*"></a>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_Buffers" data-uid="Lucene.Net.Util.ByteBlockPool.Buffers">Buffers</h4>
+  <div class="markdown level1 summary"><p>Array of buffers currently used in the pool. Buffers are allocated if
+needed don&apos;t modify this outside of this class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public byte[][] Buffers { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[][]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_ByteOffset.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.ByteOffset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L169">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_ByteBlockPool_ByteOffset_" data-uid="Lucene.Net.Util.ByteBlockPool.ByteOffset*"></a>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_ByteOffset" data-uid="Lucene.Net.Util.ByteBlockPool.ByteOffset">ByteOffset</h4>
+  <div class="markdown level1 summary"><p>Current head offset </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int ByteOffset { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_ByteUpto.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.ByteUpto%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L153">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_ByteBlockPool_ByteUpto_" data-uid="Lucene.Net.Util.ByteBlockPool.ByteUpto*"></a>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_ByteUpto" data-uid="Lucene.Net.Util.ByteBlockPool.ByteUpto">ByteUpto</h4>
+  <div class="markdown level1 summary"><p>Where we are in head buffer </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int ByteUpto { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_AllocSlice_System_Byte___System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.AllocSlice(System.Byte%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L305">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_ByteBlockPool_AllocSlice_" data-uid="Lucene.Net.Util.ByteBlockPool.AllocSlice*"></a>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_AllocSlice_System_Byte___System_Int32_" data-uid="Lucene.Net.Util.ByteBlockPool.AllocSlice(System.Byte[],System.Int32)">AllocSlice(Byte[], Int32)</h4>
+  <div class="markdown level1 summary"><p>Creates a new byte slice with the given starting size and
+returns the slices offset in the pool.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int AllocSlice(byte[] slice, int upto)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">slice</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">upto</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_Append_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.Append(Lucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L364">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_ByteBlockPool_Append_" data-uid="Lucene.Net.Util.ByteBlockPool.Append*"></a>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_Append_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Util.ByteBlockPool.Append(Lucene.Net.Util.BytesRef)">Append(BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Appends the bytes in the provided <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> at
+the current position.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Append(BytesRef bytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">bytes</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_NewSlice_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.NewSlice(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L267">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_ByteBlockPool_NewSlice_" data-uid="Lucene.Net.Util.ByteBlockPool.NewSlice*"></a>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_NewSlice_System_Int32_" data-uid="Lucene.Net.Util.ByteBlockPool.NewSlice(System.Int32)">NewSlice(Int32)</h4>
+  <div class="markdown level1 summary"><p>Allocates a new slice with the given size.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int NewSlice(int size)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">size</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Util_ByteBlockPool_NewSlice_System_Int32__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Util.ByteBlockPool.html#Lucene_Net_Util_ByteBlockPool_FIRST_LEVEL_SIZE">FIRST_LEVEL_SIZE</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_NextBuffer.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.NextBuffer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L249">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_ByteBlockPool_NextBuffer_" data-uid="Lucene.Net.Util.ByteBlockPool.NextBuffer*"></a>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_NextBuffer" data-uid="Lucene.Net.Util.ByteBlockPool.NextBuffer">NextBuffer()</h4>
+  <div class="markdown level1 summary"><p>Advances the pool to its next buffer. This method should be called once
+after the constructor to initialize the pool. In contrast to the
+constructor a <a class="xref" href="Lucene.Net.Util.ByteBlockPool.html#Lucene_Net_Util_ByteBlockPool_Reset">Reset()</a> call will advance the pool to
+its first buffer immediately.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void NextBuffer()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_ReadBytes_System_Int64_System_Byte___System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.ReadBytes(System.Int64%2CSystem.Byte%5B%5D%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L401">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_ByteBlockPool_ReadBytes_" data-uid="Lucene.Net.Util.ByteBlockPool.ReadBytes*"></a>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_ReadBytes_System_Int64_System_Byte___System_Int32_System_Int32_" data-uid="Lucene.Net.Util.ByteBlockPool.ReadBytes(System.Int64,System.Byte[],System.Int32,System.Int32)">ReadBytes(Int64, Byte[], Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Reads bytes bytes out of the pool starting at the given offset with the given
+length into the given byte array at offset <code>off</code>.
+<p>Note: this method allows to copy across block boundaries.</p></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void ReadBytes(long offset, byte[] bytes, int off, int length)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Byte</span>[]</td>
+        <td><span class="parametername">bytes</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">off</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">length</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_Reset.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.Reset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L188">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_ByteBlockPool_Reset_" data-uid="Lucene.Net.Util.ByteBlockPool.Reset*"></a>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_Reset" data-uid="Lucene.Net.Util.ByteBlockPool.Reset">Reset()</h4>
+  <div class="markdown level1 summary"><p>Resets the pool to its initial state reusing the first buffer and fills all
+buffers with <code>0</code> bytes before they reused or passed to
+<a class="xref" href="Lucene.Net.Util.ByteBlockPool.Allocator.html#Lucene_Net_Util_ByteBlockPool_Allocator_RecycleByteBlocks_System_Byte_____System_Int32_System_Int32_">RecycleByteBlocks(Byte[][], Int32, Int32)</a>. Calling
+<a class="xref" href="Lucene.Net.Util.ByteBlockPool.html#Lucene_Net_Util_ByteBlockPool_NextBuffer">NextBuffer()</a> is not needed after reset.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Reset()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_Reset_System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.Reset(System.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L201">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_ByteBlockPool_Reset_" data-uid="Lucene.Net.Util.ByteBlockPool.Reset*"></a>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_Reset_System_Boolean_System_Boolean_" data-uid="Lucene.Net.Util.ByteBlockPool.Reset(System.Boolean,System.Boolean)">Reset(Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Expert: Resets the pool to its initial state reusing the first buffer. Calling
+<a class="xref" href="Lucene.Net.Util.ByteBlockPool.html#Lucene_Net_Util_ByteBlockPool_NextBuffer">NextBuffer()</a> is not needed after reset. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Reset(bool zeroFillBuffers, bool reuseFirst)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">zeroFillBuffers</span></td>
+        <td><p>if <code>true</code> the buffers are filled with <tt>0</tt>.
+      this should be set to <code>true</code> if this pool is used with slices. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">reuseFirst</span></td>
+        <td><p>if <code>true</code> the first buffer will be reused and calling
+<a class="xref" href="Lucene.Net.Util.ByteBlockPool.html#Lucene_Net_Util_ByteBlockPool_NextBuffer">NextBuffer()</a> is not needed after reset if the
+block pool was used before ie. <a class="xref" href="Lucene.Net.Util.ByteBlockPool.html#Lucene_Net_Util_ByteBlockPool_NextBuffer">NextBuffer()</a> was called before. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool_SetBytesRef_Lucene_Net_Util_BytesRef_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool.SetBytesRef(Lucene.Net.Util.BytesRef%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L341">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_ByteBlockPool_SetBytesRef_" data-uid="Lucene.Net.Util.ByteBlockPool.SetBytesRef*"></a>
+  <h4 id="Lucene_Net_Util_ByteBlockPool_SetBytesRef_Lucene_Net_Util_BytesRef_System_Int32_" data-uid="Lucene.Net.Util.ByteBlockPool.SetBytesRef(Lucene.Net.Util.BytesRef,System.Int32)">SetBytesRef(BytesRef, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetBytesRef(BytesRef term, int textStart)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">term</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">textStart</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_ByteBlockPool.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.ByteBlockPool%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Util/ByteBlockPool.cs/#L47" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>
