@@ -1,0 +1,437 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class AssociationsFacetsExample
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class AssociationsFacetsExample
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Demo.Facet.AssociationsFacetsExample">
+  
+  
+  <h1 id="Lucene_Net_Demo_Facet_AssociationsFacetsExample" data-uid="Lucene.Net.Demo.Facet.AssociationsFacetsExample" class="text-break">Class AssociationsFacetsExample
+  </h1>
+  <div class="markdown level0 summary"><p>Shows example usage of category associations.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">AssociationsFacetsExample</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Demo.Facet.html">Lucene.Net.Demo.Facet</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Demo.dll</h6>
+  <h5 id="Lucene_Net_Demo_Facet_AssociationsFacetsExample_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class AssociationsFacetsExample</code></pre>
+  </div>
+  <h5 id="Lucene_Net_Demo_Facet_AssociationsFacetsExample_examples"><strong>Examples</strong></h5>
+  <pre><code>using Lucene.Net.Analysis.Core;
+using Lucene.Net.Documents;
+using Lucene.Net.Facet;
+using Lucene.Net.Facet.Taxonomy;
+using Lucene.Net.Facet.Taxonomy.Directory;
+using Lucene.Net.Index;
+using Lucene.Net.Search;
+using Lucene.Net.Store;
+using Lucene.Net.Util;
+using System;
+using System.Collections.Generic;
+
+namespace Lucene.Net.Demo.Facet
+{
+    /// &lt;summary&gt;
+    /// Shows example usage of category associations.
+    /// &lt;/summary&gt;
+    public class AssociationsFacetsExample
+    {
+        /// &lt;summary&gt;
+        /// Using a constant for all functionality related to a specific index
+        /// is the best strategy. This allows you to upgrade Lucene.Net first
+        /// and plan the upgrade of the index binary format for a later time. 
+        /// Once the index is upgraded, you simply need to update the constant 
+        /// version and redeploy your application.
+        /// &lt;/summary&gt;
+        private const LuceneVersion EXAMPLE_VERSION = LuceneVersion.LUCENE_48;
+
+        private readonly Directory indexDir = new RAMDirectory();
+        private readonly Directory taxoDir = new RAMDirectory();
+        private readonly FacetsConfig config;
+
+        /// &lt;summary&gt;Empty constructor&lt;/summary&gt;
+        public AssociationsFacetsExample()
+        {
+            config = new FacetsConfig();
+            config.SetMultiValued(&quot;tags&quot;, true);
+            config.SetIndexFieldName(&quot;tags&quot;, &quot;$tags&quot;);
+            config.SetMultiValued(&quot;genre&quot;, true);
+            config.SetIndexFieldName(&quot;genre&quot;, &quot;$genre&quot;);
+        }
+
+        /// &lt;summary&gt;Build the example index.&lt;/summary&gt;
+        private void Index()
+        {
+            IndexWriterConfig iwc = new IndexWriterConfig(EXAMPLE_VERSION,
+                                                  new WhitespaceAnalyzer(EXAMPLE_VERSION));
+            using (IndexWriter indexWriter = new IndexWriter(indexDir, iwc))
+
+            // Writes facet ords to a separate directory from the main index
+            using (DirectoryTaxonomyWriter taxoWriter = new DirectoryTaxonomyWriter(taxoDir))
+            {
+
+                Document doc = new Document();
+                // 3 occurrences for tag &#39;lucene&#39;
+
+                doc.AddInt32AssociationFacetField(3, &quot;tags&quot;, &quot;lucene&quot;);
+                // 87% confidence level of genre &#39;computing&#39;
+                doc.AddSingleAssociationFacetField(0.87f, &quot;genre&quot;, &quot;computing&quot;);
+                indexWriter.AddDocument(config.Build(taxoWriter, doc));
+
+                doc = new Document();
+                // 1 occurrence for tag &#39;lucene&#39;
+                doc.AddInt32AssociationFacetField(1, &quot;tags&quot;, &quot;lucene&quot;);
+                // 2 occurrence for tag &#39;solr&#39;
+                doc.AddInt32AssociationFacetField(2, &quot;tags&quot;, &quot;solr&quot;);
+                // 75% confidence level of genre &#39;computing&#39;
+                doc.AddSingleAssociationFacetField(0.75f, &quot;genre&quot;, &quot;computing&quot;);
+                // 34% confidence level of genre &#39;software&#39;
+                doc.AddSingleAssociationFacetField(0.34f, &quot;genre&quot;, &quot;software&quot;);
+                indexWriter.AddDocument(config.Build(taxoWriter, doc));
+
+            } // Disposes indexWriter and taxoWriter
+        }
+
+        /// &lt;summary&gt;User runs a query and aggregates facets by summing their association values.&lt;/summary&gt;
+        private IList&lt;FacetResult&gt; SumAssociations()
+        {
+            using (DirectoryReader indexReader = DirectoryReader.Open(indexDir))
+            using (TaxonomyReader taxoReader = new DirectoryTaxonomyReader(taxoDir))
+            {
+                IndexSearcher searcher = new IndexSearcher(indexReader);
+
+                FacetsCollector fc = new FacetsCollector();
+
+                // MatchAllDocsQuery is for &quot;browsing&quot; (counts facets
+                // for all non-deleted docs in the index); normally
+                // you&#39;d use a &quot;normal&quot; query:
+                FacetsCollector.Search(searcher, new MatchAllDocsQuery(), 10, fc);
+
+                Facets tags = new TaxonomyFacetSumInt32Associations(&quot;$tags&quot;, taxoReader, config, fc);
+                Facets genre = new TaxonomyFacetSumSingleAssociations(&quot;$genre&quot;, taxoReader, config, fc);
+
+                // Retrieve results
+                IList&lt;FacetResult&gt; results = new List&lt;FacetResult&gt;();
+
+                results.Add(tags.GetTopChildren(10, &quot;tags&quot;));
+                results.Add(genre.GetTopChildren(10, &quot;genre&quot;));
+
+                return results;
+
+            } // Disposes indexReader and taxoReader
+        }
+
+        /// &lt;summary&gt;User drills down on &#39;tags/solr&#39;.&lt;/summary&gt;
+        private FacetResult DrillDown()
+        {
+            using (DirectoryReader indexReader = DirectoryReader.Open(indexDir))
+            using (TaxonomyReader taxoReader = new DirectoryTaxonomyReader(taxoDir))
+            {
+                IndexSearcher searcher = new IndexSearcher(indexReader);
+
+                // Passing no baseQuery means we drill down on all
+                // documents (&quot;browse only&quot;):
+                DrillDownQuery q = new DrillDownQuery(config);
+
+                // Now user drills down on Publish Date/2010:
+                q.Add(&quot;tags&quot;, &quot;solr&quot;);
+                FacetsCollector fc = new FacetsCollector();
+                FacetsCollector.Search(searcher, q, 10, fc);
+
+                // Retrieve results
+                Facets facets = new TaxonomyFacetSumSingleAssociations(&quot;$genre&quot;, taxoReader, config, fc);
+                FacetResult result = facets.GetTopChildren(10, &quot;genre&quot;);
+
+                return result;
+
+            } // Disposes indexReader and taxoReader
+        }
+
+        /// &lt;summary&gt;Runs summing association example.&lt;/summary&gt;
+        public IList&lt;FacetResult&gt; RunSumAssociations()
+        {
+            Index();
+            return SumAssociations();
+        }
+
+        /// &lt;summary&gt;Runs the drill-down example.&lt;/summary&gt;
+        public FacetResult RunDrillDown()
+        {
+            Index();
+            return DrillDown();
+        }
+
+        /// &lt;summary&gt;Runs the sum int/float associations examples and prints the results.&lt;/summary&gt;
+        public static void Main(string[] args)
+        {
+            Console.WriteLine(&quot;Sum associations example:&quot;);
+            Console.WriteLine(&quot;-------------------------&quot;);
+            IList&lt;FacetResult&gt; results = new AssociationsFacetsExample().RunSumAssociations();
+            Console.WriteLine(&quot;tags: &quot; + results[0]);
+            Console.WriteLine(&quot;genre: &quot; + results[1]);
+        }
+    }
+}
+</code></pre>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Demo_Facet_AssociationsFacetsExample__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Demo.Facet.AssociationsFacetsExample.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Demo/Facet/AssociationsFacetsExample.cs/#L56">View Source</a>
+  </span>
+  <a id="Lucene_Net_Demo_Facet_AssociationsFacetsExample__ctor_" data-uid="Lucene.Net.Demo.Facet.AssociationsFacetsExample.#ctor*"></a>
+  <h4 id="Lucene_Net_Demo_Facet_AssociationsFacetsExample__ctor" data-uid="Lucene.Net.Demo.Facet.AssociationsFacetsExample.#ctor">AssociationsFacetsExample()</h4>
+  <div class="markdown level1 summary"><p>Empty constructor</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public AssociationsFacetsExample()</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Demo_Facet_AssociationsFacetsExample_Main_System_String___.md&amp;value=---%0Auid%3A%20Lucene.Net.Demo.Facet.AssociationsFacetsExample.Main(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Demo/Facet/AssociationsFacetsExample.cs/#L168">View Source</a>
+  </span>
+  <a id="Lucene_Net_Demo_Facet_AssociationsFacetsExample_Main_" data-uid="Lucene.Net.Demo.Facet.AssociationsFacetsExample.Main*"></a>
+  <h4 id="Lucene_Net_Demo_Facet_AssociationsFacetsExample_Main_System_String___" data-uid="Lucene.Net.Demo.Facet.AssociationsFacetsExample.Main(System.String[])">Main(String[])</h4>
+  <div class="markdown level1 summary"><p>Runs the sum int/float associations examples and prints the results.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Main(string[] args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">args</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Demo_Facet_AssociationsFacetsExample_RunDrillDown.md&amp;value=---%0Auid%3A%20Lucene.Net.Demo.Facet.AssociationsFacetsExample.RunDrillDown%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Demo/Facet/AssociationsFacetsExample.cs/#L161">View Source</a>
+  </span>
+  <a id="Lucene_Net_Demo_Facet_AssociationsFacetsExample_RunDrillDown_" data-uid="Lucene.Net.Demo.Facet.AssociationsFacetsExample.RunDrillDown*"></a>
+  <h4 id="Lucene_Net_Demo_Facet_AssociationsFacetsExample_RunDrillDown" data-uid="Lucene.Net.Demo.Facet.AssociationsFacetsExample.RunDrillDown">RunDrillDown()</h4>
+  <div class="markdown level1 summary"><p>Runs the drill-down example.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FacetResult RunDrillDown()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net.Facet/Lucene.Net.Facet.FacetResult.html">FacetResult</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/master/websites/apidocs/apiSpec/new?filename=Lucene_Net_Demo_Facet_AssociationsFacetsExample_RunSumAssociations.md&amp;value=---%0Auid%3A%20Lucene.Net.Demo.Facet.AssociationsFacetsExample.RunSumAssociations%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Demo/Facet/AssociationsFacetsExample.cs/#L154">View Source</a>
+  </span>
+  <a id="Lucene_Net_Demo_Facet_AssociationsFacetsExample_RunSumAssociations_" data-uid="Lucene.Net.Demo.Facet.AssociationsFacetsExample.RunSumAssociations*"></a>
+  <h4 id="Lucene_Net_Demo_Facet_AssociationsFacetsExample_RunSumAssociations" data-uid="Lucene.Net.Demo.Facet.AssociationsFacetsExample.RunSumAssociations">RunSumAssociations()</h4>
+  <div class="markdown level1 summary"><p>Runs summing association example.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IList&lt;FacetResult&gt; RunSumAssociations()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="../Lucene.Net.Facet/Lucene.Net.Facet.FacetResult.html">FacetResult</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/master/websites/apidocs/apiSpec/Lucene_Net_Demo_Facet_AssociationsFacetsExample.md/#L2" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/doc-updates-nov/src/Lucene.Net.Demo/Facet/AssociationsFacetsExample.cs/#L40" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

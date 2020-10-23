@@ -1,0 +1,925 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class FuzzySet
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class FuzzySet
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="codecs/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet">
+  
+  
+  <h1 id="Lucene_Net_Codecs_Bloom_FuzzySet" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet" class="text-break">Class FuzzySet
+  </h1>
+  <div class="markdown level0 summary"><p>A class used to represent a set of many, potentially large, values (e.g. many
+long strings such as URLs), using a significantly smaller amount of memory.
+<p>
+The set is &quot;lossy&quot; in that it cannot definitively state that is does contain
+a value but it <em>can</em> definitively say if a value is <em>not</em> in
+the set. It can therefore be used as a Bloom Filter.
+<p>
+Another application of the set is that it can be used to perform fuzzy counting because
+it can estimate reasonably accurately how many unique values are contained in the set. 
+<p>
+This class is NOT threadsafe.
+<p>
+Internally a Bitset is used to record values and once a client has finished recording
+a stream of values the <a class="xref" href="Lucene.Net.Codecs.Bloom.FuzzySet.html#Lucene_Net_Codecs_Bloom_FuzzySet_Downsize_System_Single_">Downsize(Single)</a> method can be used to create a suitably smaller set that
+is sized appropriately for the number of values recorded and desired saturation levels. 
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">FuzzySet</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Codecs.Bloom.html">Lucene.Net.Codecs.Bloom</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Codecs.dll</h6>
+  <h5 id="Lucene_Net_Codecs_Bloom_FuzzySet_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class FuzzySet</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_VERSION_CURRENT.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.VERSION_CURRENT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L50">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_VERSION_CURRENT" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.VERSION_CURRENT">VERSION_CURRENT</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int VERSION_CURRENT</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_VERSION_SPI.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.VERSION_SPI%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L48">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_VERSION_SPI" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.VERSION_SPI">VERSION_SPI</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int VERSION_SPI</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_VERSION_START.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.VERSION_START%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L49">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_VERSION_START" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.VERSION_START">VERSION_START</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int VERSION_START</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_AddValue_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.AddValue(Lucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L244">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_FuzzySet_AddValue_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.AddValue*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_AddValue_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.AddValue(Lucene.Net.Util.BytesRef)">AddValue(BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Records a value in the set. The referenced bytes are hashed and then modulo n&apos;d where n is the
+chosen size of the internal bitset.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void AddValue(BytesRef value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Util.BytesRef</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>The Key value to be hashed.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>If there is a low-level I/O error.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_Contains_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.Contains(Lucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L169">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_FuzzySet_Contains_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.Contains*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_Contains_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.Contains(Lucene.Net.Util.BytesRef)">Contains(BytesRef)</h4>
+  <div class="markdown level1 summary"><p>The main method required for a Bloom filter which, given a value determines set membership.
+Unlike a conventional set, the fuzzy set returns <a class="xref" href="Lucene.Net.Codecs.Bloom.FuzzySet.ContainsResult.html#Lucene_Net_Codecs_Bloom_FuzzySet_ContainsResult_NO">NO</a> or 
+<a class="xref" href="Lucene.Net.Codecs.Bloom.FuzzySet.ContainsResult.html#Lucene_Net_Codecs_Bloom_FuzzySet_ContainsResult_MAYBE">MAYBE</a> rather than <code>true</code> or <code>false</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual FuzzySet.ContainsResult Contains(BytesRef value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Util.BytesRef</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.Bloom.FuzzySet.ContainsResult.html">FuzzySet.ContainsResult</a></td>
+        <td><a class="xref" href="Lucene.Net.Codecs.Bloom.FuzzySet.ContainsResult.html#Lucene_Net_Codecs_Bloom_FuzzySet_ContainsResult_NO">NO</a> or <a class="xref" href="Lucene.Net.Codecs.Bloom.FuzzySet.ContainsResult.html#Lucene_Net_Codecs_Bloom_FuzzySet_ContainsResult_MAYBE">MAYBE</a></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_CreateSetBasedOnMaxMemory_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.CreateSetBasedOnMaxMemory(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L144">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_FuzzySet_CreateSetBasedOnMaxMemory_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.CreateSetBasedOnMaxMemory*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_CreateSetBasedOnMaxMemory_System_Int32_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.CreateSetBasedOnMaxMemory(System.Int32)">CreateSetBasedOnMaxMemory(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FuzzySet CreateSetBasedOnMaxMemory(int maxNumBytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxNumBytes</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.Bloom.FuzzySet.html">FuzzySet</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_CreateSetBasedOnQuality_System_Int32_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.CreateSetBasedOnQuality(System.Int32%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L150">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_FuzzySet_CreateSetBasedOnQuality_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.CreateSetBasedOnQuality*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_CreateSetBasedOnQuality_System_Int32_System_Single_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.CreateSetBasedOnQuality(System.Int32,System.Single)">CreateSetBasedOnQuality(Int32, Single)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FuzzySet CreateSetBasedOnQuality(int maxNumUniqueValues, float desiredMaxSaturation)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxNumUniqueValues</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">desiredMaxSaturation</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.Bloom.FuzzySet.html">FuzzySet</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_Deserialize_Lucene_Net_Store_DataInput_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.Deserialize(Lucene.Net.Store.DataInput)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L211">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_FuzzySet_Deserialize_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.Deserialize*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_Deserialize_Lucene_Net_Store_DataInput_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.Deserialize(Lucene.Net.Store.DataInput)">Deserialize(DataInput)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FuzzySet Deserialize(DataInput input)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Store.DataInput</span></td>
+        <td><span class="parametername">input</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.Bloom.FuzzySet.html">FuzzySet</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_Downsize_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.Downsize(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L261">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_FuzzySet_Downsize_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.Downsize*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_Downsize_System_Single_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.Downsize(System.Single)">Downsize(Single)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual FuzzySet Downsize(float targetMaxSaturation)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">targetMaxSaturation</span></td>
+        <td><p>A number between 0 and 1 describing the % of bits that would ideally be set in the result. 
+Lower values have better accuracy but require more space.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.Bloom.FuzzySet.html">FuzzySet</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_GetEstimatedNumberUniqueValuesAllowingForCollisions_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.GetEstimatedNumberUniqueValuesAllowingForCollisions(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L312">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_FuzzySet_GetEstimatedNumberUniqueValuesAllowingForCollisions_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.GetEstimatedNumberUniqueValuesAllowingForCollisions*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_GetEstimatedNumberUniqueValuesAllowingForCollisions_System_Int32_System_Int32_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.GetEstimatedNumberUniqueValuesAllowingForCollisions(System.Int32,System.Int32)">GetEstimatedNumberUniqueValuesAllowingForCollisions(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Given a <code data-dev-comment-type="paramref" class="paramref">setSize</code> and a the number of set bits, produces an estimate of the number of unique values recorded.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int GetEstimatedNumberUniqueValuesAllowingForCollisions(int setSize, int numRecordedBits)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">setSize</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numRecordedBits</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_GetEstimatedUniqueValues.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.GetEstimatedUniqueValues%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L304">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_FuzzySet_GetEstimatedUniqueValues_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.GetEstimatedUniqueValues*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_GetEstimatedUniqueValues" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.GetEstimatedUniqueValues">GetEstimatedUniqueValues()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int GetEstimatedUniqueValues()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_GetNearestSetSize_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.GetNearestSetSize(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L106">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_FuzzySet_GetNearestSetSize_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.GetNearestSetSize*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_GetNearestSetSize_System_Int32_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.GetNearestSetSize(System.Int32)">GetNearestSetSize(Int32)</h4>
+  <div class="markdown level1 summary"><p>Rounds down required <code data-dev-comment-type="paramref" class="paramref">maxNumberOfBits</code> to the nearest number that is made up
+of all ones as a binary number.<br>Use this method where controlling memory use is paramount.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int GetNearestSetSize(int maxNumberOfBits)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxNumberOfBits</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_GetNearestSetSize_System_Int32_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.GetNearestSetSize(System.Int32%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L126">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_FuzzySet_GetNearestSetSize_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.GetNearestSetSize*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_GetNearestSetSize_System_Int32_System_Single_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.GetNearestSetSize(System.Int32,System.Single)">GetNearestSetSize(Int32, Single)</h4>
+  <div class="markdown level1 summary"><p>Use this method to choose a set size where accuracy (low content saturation) is more important
+than deciding how much memory to throw at the problem.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int GetNearestSetSize(int maxNumberOfValuesExpected, float desiredSaturation)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxNumberOfValuesExpected</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">desiredSaturation</span></td>
+        <td><p>A number between 0 and 1 expressing the % of bits set once all values have been recorded.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The size of the set nearest to the required size.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_GetSaturation.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.GetSaturation%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L322">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_FuzzySet_GetSaturation_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.GetSaturation*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_GetSaturation" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.GetSaturation">GetSaturation()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual float GetSaturation()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_HashFunctionForVersion_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.HashFunctionForVersion(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L52">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_FuzzySet_HashFunctionForVersion_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.HashFunctionForVersion*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_HashFunctionForVersion_System_Int32_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.HashFunctionForVersion(System.Int32)">HashFunctionForVersion(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static HashFunction HashFunctionForVersion(int version)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">version</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.Bloom.HashFunction.html">HashFunction</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_RamBytesUsed.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.RamBytesUsed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L328">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_FuzzySet_RamBytesUsed_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.RamBytesUsed*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_RamBytesUsed" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.RamBytesUsed">RamBytesUsed()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual long RamBytesUsed()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet_Serialize_Lucene_Net_Store_DataOutput_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet.Serialize(Lucene.Net.Store.DataOutput)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L197">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_FuzzySet_Serialize_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.Serialize*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_FuzzySet_Serialize_Lucene_Net_Store_DataOutput_" data-uid="Lucene.Net.Codecs.Bloom.FuzzySet.Serialize(Lucene.Net.Store.DataOutput)">Serialize(DataOutput)</h4>
+  <div class="markdown level1 summary"><p>Serializes the data set to file using the following format:
+<ul><li>FuzzySet --&gt;FuzzySetVersion,HashFunctionName,BloomSize,
+        NumBitSetWords,BitSetWord<sup>NumBitSetWords</sup></li><li>HashFunctionName --&gt; String (<a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteString_System_String_">WriteString(String)</a>) The
+        name of a ServiceProvider registered <a class="xref" href="Lucene.Net.Codecs.Bloom.HashFunction.html">HashFunction</a></li><li>FuzzySetVersion --&gt; Uint32 (<a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a>) The version number of the <a class="xref" href="Lucene.Net.Codecs.Bloom.FuzzySet.html">FuzzySet</a> class</li><li>BloomSize --&gt; Uint32 (<a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a>) The modulo value used
+        to project hashes into the field&apos;s Bitset</li><li>NumBitSetWords --&gt; Uint32 (<a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a>) The number of
+        longs (as returned from <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.FixedBitSet.html#Lucene_Net_Util_FixedBitSet_GetBits">GetBits()</a>)</li><li>BitSetWord --&gt; Long (<a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a>) A long from the array
+        returned by <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.FixedBitSet.html#Lucene_Net_Util_FixedBitSet_GetBits">GetBits()</a></li></ul></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Serialize(DataOutput output)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Store.DataOutput</span></td>
+        <td><span class="parametername">output</span></td>
+        <td><p>Data output stream.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>If there is a low-level I/O error.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_FuzzySet.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.FuzzySet%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Codecs/Bloom/FuzzySet.cs/#L46" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

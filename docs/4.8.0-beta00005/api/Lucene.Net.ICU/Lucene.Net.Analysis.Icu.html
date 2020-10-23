@@ -1,0 +1,384 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Lucene.Net.Analysis.Icu
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Lucene.Net.Analysis.Icu
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Analysis.Icu">
+  
+  <h1 id="Lucene_Net_Analysis_Icu" data-uid="Lucene.Net.Analysis.Icu" class="text-break">Namespace Lucene.Net.Analysis.Icu
+  </h1>
+  <div class="markdown level0 summary"><!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!-- :Post-Release-Update-Version.LUCENE_XY: - several mentions in this file -->
+<p>This module exposes functionality from 
+<a href="http://site.icu-project.org/">ICU</a> to Apache Lucene. ICU4J is a Java
+library that enhances Java&#39;s internationalization support by improving 
+performance, keeping current with the Unicode Standard, and providing richer
+APIs. </p>
+<p>For an introduction to Lucene&#39;s analysis API, see the <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.html">Lucene.Net.Analysis</a> package documentation.</p>
+<p> This module exposes the following functionality: </p>
+<ul>
+<li><p><a href="#segmentation">Text Segmentation</a>: Tokenizes text based on 
+properties and rules defined in Unicode.</p>
+</li>
+<li><p><a href="#collation">Collation</a>: Compare strings according to the 
+conventions and standards of a particular language, region or country.</p>
+</li>
+<li><p><a href="#normalization">Normalization</a>: Converts text to a unique,
+equivalent form.</p>
+</li>
+<li><p><a href="#casefolding">Case Folding</a>: Removes case distinctions with
+Unicode&#39;s Default Caseless Matching algorithm.</p>
+</li>
+<li><p><a href="#searchfolding">Search Term Folding</a>: Removes distinctions
+(such as accent marks) between similar characters for a loose or fuzzy search.</p>
+</li>
+<li><p><a href="#transform">Text Transformation</a>: Transforms Unicode text in
+a context-sensitive fashion: e.g. mapping Traditional to Simplified Chinese</p>
+</li>
+</ul>
+<hr>
+<h1 id="text-segmentation"><a href="">Text Segmentation</a></h1>
+<p> Text Segmentation (Tokenization) divides document and query text into index terms (typically words). Unicode provides special properties and rules so that this can be done in a manner that works well with most languages. </p>
+<p> Text Segmentation implements the word segmentation specified in <a href="http://unicode.org/reports/tr29/">Unicode Text Segmentation</a>. Additionally the algorithm can be tailored based on writing system, for example text in the Thai script is automatically delegated to a dictionary-based segmentation algorithm. </p>
+<h2 id="use-cases">Use Cases</h2>
+<ul>
+<li>As a more thorough replacement for StandardTokenizer that works well for
+most languages. </li>
+</ul>
+<h2 id="example-usages">Example Usages</h2>
+<h3 id="tokenizing-multilanguage-text">Tokenizing multilanguage text</h3>
+<pre><code>  /**
+   * This tokenizer will work well in general for most languages.
+   */
+  Tokenizer tokenizer = new ICUTokenizer(reader);
+</code></pre><hr>
+<h1 id="collation"><a href="">Collation</a></h1>
+<p> <code>ICUCollationKeyAnalyzer</code> converts each token into its binary <code>CollationKey</code> using the provided <code>Collator</code>, allowing it to be stored as an index term. </p>
+<p> <code>ICUCollationKeyAnalyzer</code> depends on ICU4J to produce the <code>CollationKey</code>s. </p>
+<h2 id="use-cases-1">Use Cases</h2>
+<ul>
+<li><p>Efficient sorting of terms in languages that use non-Unicode character 
+orderings.  (Lucene Sort using a Locale can be very slow.) </p>
+</li>
+<li><p>Efficient range queries over fields that contain terms in languages that 
+use non-Unicode character orderings.  (Range queries using a Locale can be
+very slow.)</p>
+</li>
+<li><p>Effective Locale-specific normalization (case differences, diacritics, etc.).
+(<a class="xref" href="../Lucene.Net.Analysis/Lucene.Net.Analysis.Core.LowerCaseFilter.html">LowerCaseFilter</a> and 
+<a class="xref" href="../Lucene.Net.Analysis/Lucene.Net.Analysis.Miscellaneous.ASCIIFoldingFilter.html">ASCIIFoldingFilter</a> provide these services
+in a generic way that doesn&#39;t take into account locale-specific needs.)</p>
+</li>
+</ul>
+<h2 id="example-usages-1">Example Usages</h2>
+<h3 id="farsi-range-queries">Farsi Range Queries</h3>
+<pre><code>  Collator collator = Collator.getInstance(new ULocale(&quot;ar&quot;));
+  ICUCollationKeyAnalyzer analyzer = new ICUCollationKeyAnalyzer(Version.LUCENE_48, collator);
+  RAMDirectory ramDir = new RAMDirectory();
+  IndexWriter writer = new IndexWriter(ramDir, new IndexWriterConfig(Version.LUCENE_48, analyzer));
+  Document doc = new Document();
+  doc.add(new Field(&quot;content&quot;, &quot;\u0633\u0627\u0628&quot;, 
+                    Field.Store.YES, Field.Index.ANALYZED));
+  writer.addDocument(doc);
+  writer.close();
+  IndexSearcher is = new IndexSearcher(ramDir, true);
+</code></pre><p>  QueryParser aqp = new QueryParser(Version.LUCENE_48, &quot;content&quot;, analyzer);
+      aqp.setAnalyzeRangeTerms(true);</p>
+<pre><code>  // Unicode order would include U+0633 in [ U+062F - U+0698 ], but Farsi
+  // orders the U+0698 character before the U+0633 character, so the single
+  // indexed Term above should NOT be returned by a ConstantScoreRangeQuery
+  // with a Farsi Collator (or an Arabic one for the case when Farsi is not
+  // supported).
+  ScoreDoc[] result
+    = is.search(aqp.parse(&quot;[ \u062F TO \u0698 ]&quot;), null, 1000).scoreDocs;
+  assertEquals(&quot;The index Term should not be included.&quot;, 0, result.length);
+</code></pre><h3 id="danish-sorting">Danish Sorting</h3>
+<pre><code>  Analyzer analyzer 
+    = new ICUCollationKeyAnalyzer(Version.LUCENE_48, Collator.getInstance(new ULocale(&quot;da&quot;, &quot;dk&quot;)));
+  RAMDirectory indexStore = new RAMDirectory();
+  IndexWriter writer = new IndexWriter(indexStore, new IndexWriterConfig(Version.LUCENE_48, analyzer));
+  String[] tracer = new String[] { &quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot; };
+  String[] data = new String[] { &quot;HAT&quot;, &quot;HUT&quot;, &quot;H\u00C5T&quot;, &quot;H\u00D8T&quot;, &quot;HOT&quot; };
+  String[] sortedTracerOrder = new String[] { &quot;A&quot;, &quot;E&quot;, &quot;B&quot;, &quot;D&quot;, &quot;C&quot; };
+  for (int i = 0 ; i &lt; data.length=&quot;&quot; ;=&quot;&quot; ++i)=&quot;&quot; {=&quot;&quot; document=&quot;&quot; doc=&quot;new&quot; document();=&quot;&quot; doc.add(new=&quot;&quot; field(&quot;tracer&quot;,=&quot;&quot; tracer[i],=&quot;&quot; field.store.yes,=&quot;&quot; field.index.no));=&quot;&quot; doc.add(new=&quot;&quot; field(&quot;contents&quot;,=&quot;&quot; data[i],=&quot;&quot; field.store.no,=&quot;&quot; field.index.analyzed));=&quot;&quot; writer.adddocument(doc);=&quot;&quot; }=&quot;&quot; writer.close();=&quot;&quot; indexsearcher=&quot;&quot; searcher=&quot;new&quot; indexsearcher(indexstore,=&quot;&quot; true);=&quot;&quot; sort=&quot;&quot; sort=&quot;new&quot; sort();=&quot;&quot; sort.setsort(new=&quot;&quot; sortfield(&quot;contents&quot;,=&quot;&quot; sortfield.string));=&quot;&quot; query=&quot;&quot; query=&quot;new&quot; matchalldocsquery();=&quot;&quot; scoredoc[]=&quot;&quot; result=&quot;searcher.search(query,&quot; null,=&quot;&quot; 1000,=&quot;&quot; sort).scoredocs;=&quot;&quot; for=&quot;&quot; (int=&quot;&quot; i=&quot;0&quot; ;=&quot;&quot; i=&quot;&quot;&gt;&lt; result.length=&quot;&quot; ;=&quot;&quot; ++i)=&quot;&quot; {=&quot;&quot; document=&quot;&quot; doc=&quot;searcher.doc(result[i].doc);&quot; assertequals(sortedtracerorder[i],=&quot;&quot; doc.getvalues(&quot;tracer&quot;)[0]);=&quot;&quot; }=&quot;&quot;&gt;
+</code></pre><h3 id="turkish-case-normalization">Turkish Case Normalization</h3>
+<pre><code>  Collator collator = Collator.getInstance(new ULocale(&quot;tr&quot;, &quot;TR&quot;));
+  collator.setStrength(Collator.PRIMARY);
+  Analyzer analyzer = new ICUCollationKeyAnalyzer(Version.LUCENE_48, collator);
+  RAMDirectory ramDir = new RAMDirectory();
+  IndexWriter writer = new IndexWriter(ramDir, new IndexWriterConfig(Version.LUCENE_48, analyzer));
+  Document doc = new Document();
+  doc.add(new Field(&quot;contents&quot;, &quot;DIGY&quot;, Field.Store.NO, Field.Index.ANALYZED));
+  writer.addDocument(doc);
+  writer.close();
+  IndexSearcher is = new IndexSearcher(ramDir, true);
+  QueryParser parser = new QueryParser(Version.LUCENE_48, &quot;contents&quot;, analyzer);
+  Query query = parser.parse(&quot;d\u0131gy&quot;);   // U+0131: dotless i
+  ScoreDoc[] result = is.search(query, null, 1000).scoreDocs;
+  assertEquals(&quot;The index Term should be included.&quot;, 1, result.length);
+</code></pre><h2 id="caveats-and-comparisons">Caveats and Comparisons</h2>
+<p> <strong>WARNING:</strong> Make sure you use exactly the same <code>Collator</code> at index and query time -- <code>CollationKey</code>s are only comparable when produced by the same <code>Collator</code>. Since {@link java.text.RuleBasedCollator}s are not independently versioned, it is unsafe to search against stored <code>CollationKey</code>s unless the following are exactly the same (best practice is to store this information with the index and check that they remain the same at query time): </p>
+<ol>
+<li><p>JVM vendor</p>
+</li>
+<li><p>JVM version, including patch version</p>
+</li>
+<li><p>The language (and country and variant, if specified) of the Locale
+used when constructing the collator via
+{@link java.text.Collator#getInstance(java.util.Locale)}.</p>
+</li>
+<li><p>The collation strength used - see {@link java.text.Collator#setStrength(int)}</p>
+<p><code>ICUCollationKeyAnalyzer</code> uses ICU4J&#39;s <code>Collator</code>, which makes its version available, thus allowing collation to be versioned independently from the JVM. <code>ICUCollationKeyAnalyzer</code> is also significantly faster and generates significantly shorter keys than <code>CollationKeyAnalyzer</code>. See <a href="http://site.icu-project.org/charts/collation-icu4j-sun">http://site.icu-project.org/charts/collation-icu4j-sun</a> for key generation timing and key length comparisons between ICU4J and <code>java.text.Collator</code> over several languages. </p>
+<p><code>CollationKey</code>s generated by <code>java.text.Collator</code>s are not compatible with those those generated by ICU Collators. Specifically, if you use <code>CollationKeyAnalyzer</code> to generate index terms, do not use <code>ICUCollationKeyAnalyzer</code> on the query side, or vice versa. </p>
+</li>
+</ol>
+<hr>
+<h1 id="normalization"><a href="">Normalization</a></h1>
+<p> <code>ICUNormalizer2Filter</code> normalizes term text to a <a href="http://unicode.org/reports/tr15/">Unicode Normalization Form</a>, so that <a href="http://en.wikipedia.org/wiki/Unicode_equivalence">equivalent</a> forms are standardized to a unique form. </p>
+<h2 id="use-cases-2">Use Cases</h2>
+<ul>
+<li><p>Removing differences in width for Asian-language text. </p>
+</li>
+<li><p>Standardizing complex text with non-spacing marks so that characters are 
+ordered consistently.</p>
+</li>
+</ul>
+<h2 id="example-usages-2">Example Usages</h2>
+<h3 id="normalizing-text-to-nfc">Normalizing text to NFC</h3>
+<pre><code>  /**
+   * Normalizer2 objects are unmodifiable and immutable.
+   */
+  Normalizer2 normalizer = Normalizer2.getInstance(null, &quot;nfc&quot;, Normalizer2.Mode.COMPOSE);
+  /**
+   * This filter will normalize to NFC.
+   */
+  TokenStream tokenstream = new ICUNormalizer2Filter(tokenizer, normalizer);
+</code></pre><hr>
+<h1 id="case-folding"><a href="">Case Folding</a></h1>
+<p> Default caseless matching, or case-folding is more than just conversion to lowercase. For example, it handles cases such as the Greek sigma, so that &quot;Μάϊος&quot; and &quot;ΜΆΪΟΣ&quot; will match correctly. </p>
+<p> Case-folding is still only an approximation of the language-specific rules governing case. If the specific language is known, consider using ICUCollationKeyFilter and indexing collation keys instead. This implementation performs the &quot;full&quot; case-folding specified in the Unicode standard, and this may change the length of the term. For example, the German ß is case-folded to the string &#39;ss&#39;. </p>
+<p> Case folding is related to normalization, and as such is coupled with it in this integration. To perform case-folding, you use normalization with the form &quot;nfkc_cf&quot; (which is the default). </p>
+<h2 id="use-cases-3">Use Cases</h2>
+<ul>
+<li>As a more thorough replacement for LowerCaseFilter that has good behavior
+for most languages.</li>
+</ul>
+<h2 id="example-usages-3">Example Usages</h2>
+<h3 id="lowercasing-text">Lowercasing text</h3>
+<pre><code>  /**
+   * This filter will case-fold and normalize to NFKC.
+   */
+  TokenStream tokenstream = new ICUNormalizer2Filter(tokenizer);
+</code></pre><hr>
+<h1 id="search-term-folding"><a href="">Search Term Folding</a></h1>
+<p> Search term folding removes distinctions (such as accent marks) between similar characters. It is useful for a fuzzy or loose search. </p>
+<p> Search term folding implements many of the foldings specified in <a href="http://www.unicode.org/reports/tr30/tr30-4.html">Character Foldings</a> as a special normalization form. This folding applies NFKC, Case Folding, and many character foldings recursively. </p>
+<h2 id="use-cases-4">Use Cases</h2>
+<ul>
+<li>As a more thorough replacement for ASCIIFoldingFilter and LowerCaseFilter 
+that applies the same ideas to many more languages. </li>
+</ul>
+<h2 id="example-usages-4">Example Usages</h2>
+<h3 id="removing-accents">Removing accents</h3>
+<pre><code>  /**
+   * This filter will case-fold, remove accents and other distinctions, and
+   * normalize to NFKC.
+   */
+  TokenStream tokenstream = new ICUFoldingFilter(tokenizer);
+</code></pre><hr>
+<h1 id="text-transformation"><a href="">Text Transformation</a></h1>
+<p> ICU provides text-transformation functionality via its Transliteration API. This allows you to transform text in a variety of ways, taking context into account. </p>
+<p> For more information, see the <a href="http://userguide.icu-project.org/transforms/general">User&#39;s Guide</a> and <a href="http://userguide.icu-project.org/transforms/general/rules">Rule Tutorial</a>. </p>
+<h2 id="use-cases-5">Use Cases</h2>
+<ul>
+<li><p>Convert Traditional to Simplified </p>
+</li>
+<li><p>Transliterate between different writing systems: e.g. Romanization</p>
+</li>
+</ul>
+<h2 id="example-usages-5">Example Usages</h2>
+<h3 id="convert-traditional-to-simplified">Convert Traditional to Simplified</h3>
+<pre><code>  /**
+   * This filter will map Traditional Chinese to Simplified Chinese
+   */
+  TokenStream tokenstream = new ICUTransformFilter(tokenizer, Transliterator.getInstance(&quot;Traditional-Simplified&quot;));
+</code></pre><h3 id="transliterate-serbian-cyrillic-to-serbian-latin">Transliterate Serbian Cyrillic to Serbian Latin</h3>
+<pre><code>  /**
+   * This filter will map Serbian Cyrillic to Serbian Latin according to BGN rules
+   */
+  TokenStream tokenstream = new ICUTransformFilter(tokenizer, Transliterator.getInstance(&quot;Serbian-Latin/BGN&quot;));
+</code></pre><hr>
+<h1 id="backwards-compatibility"><a href="">Backwards Compatibility</a></h1>
+<p> This module exists to provide up-to-date Unicode functionality that supports the most recent version of Unicode (currently 6.3). However, some users who wish for stronger backwards compatibility can restrict <a class="xref" href="Lucene.Net.Analysis.Icu.ICUNormalizer2Filter.html">ICUNormalizer2Filter</a> to operate on only a specific Unicode Version by using a {@link com.ibm.icu.text.FilteredNormalizer2}. </p>
+<h2 id="example-usages-6">Example Usages</h2>
+<h3 id="restricting-normalization-to-unicode-50">Restricting normalization to Unicode 5.0</h3>
+<pre><code>  /**
+   * This filter will do NFC normalization, but will ignore any characters that
+   * did not exist as of Unicode 5.0. Because of the normalization stability policy
+   * of Unicode, this is an easy way to force normalization to a specific version.
+   */
+    Normalizer2 normalizer = Normalizer2.getInstance(null, &quot;nfc&quot;, Normalizer2.Mode.COMPOSE);
+    UnicodeSet set = new UnicodeSet(&quot;[:age=5.0:]&quot;);
+    // see FilteredNormalizer2 docs, the set should be frozen or performance will suffer
+    set.freeze(); 
+    FilteredNormalizer2 unicode50 = new FilteredNormalizer2(normalizer, set);
+    TokenStream tokenstream = new ICUNormalizer2Filter(tokenizer, unicode50);
+</code></pre></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Icu.ICUFoldingFilter.html">ICUFoldingFilter</a></h4>
+      <section><p>A <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a> that applies search term folding to Unicode text,
+applying foldings from UTR#30 Character Foldings.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Icu.ICUFoldingFilterFactory.html">ICUFoldingFilterFactory</a></h4>
+      <section><p>Factory for <a class="xref" href="Lucene.Net.Analysis.Icu.ICUFoldingFilter.html">ICUFoldingFilter</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Icu.ICUNormalizer2CharFilter.html">ICUNormalizer2CharFilter</a></h4>
+      <section><p>Normalize token text with ICU&apos;s <span class="xref">ICU4N.Text.Normalizer2</span>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Icu.ICUNormalizer2CharFilterFactory.html">ICUNormalizer2CharFilterFactory</a></h4>
+      <section><p>Factory for <a class="xref" href="Lucene.Net.Analysis.Icu.ICUNormalizer2CharFilter.html">ICUNormalizer2CharFilter</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Icu.ICUNormalizer2Filter.html">ICUNormalizer2Filter</a></h4>
+      <section><p>Normalize token text with ICU&apos;s <span class="xref">ICU4N.Text.Normalizer2</span>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Icu.ICUNormalizer2FilterFactory.html">ICUNormalizer2FilterFactory</a></h4>
+      <section><p>Factory for <a class="xref" href="Lucene.Net.Analysis.Icu.ICUNormalizer2Filter.html">ICUNormalizer2Filter</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Icu.ICUTransformFilter.html">ICUTransformFilter</a></h4>
+      <section><p>A <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a> that transforms text with ICU.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Icu.ICUTransformFilterFactory.html">ICUTransformFilterFactory</a></h4>
+      <section><p>Factory for <a class="xref" href="Lucene.Net.Analysis.Icu.ICUTransformFilter.html">ICUTransformFilter</a>.</p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/master/src/Lucene.Net.Analysis.ICU/overview.md/#L2" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,526 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ToParentBlockJoinQuery
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ToParentBlockJoinQuery
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="join/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery">
+  
+  
+  <h1 id="Lucene_Net_Join_ToParentBlockJoinQuery" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery" class="text-break">Class ToParentBlockJoinQuery
+  </h1>
+  <div class="markdown level0 summary"><p>This query requires that you index
+children and parent docs as a single block, using the
+<a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocuments_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___Lucene_Net_Analysis_Analyzer_">AddDocuments(IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;, Analyzer)</a> 
+or <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_UpdateDocuments_Lucene_Net_Index_Term_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___Lucene_Net_Analysis_Analyzer_">UpdateDocuments(Term, IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;, Analyzer)</a>
+API.  In each block, the
+child documents must appear first, ending with the parent
+document.  At search time you provide a <span class="xref">Lucene.Net.Search.Filter</span>
+identifying the parents, however this <span class="xref">Lucene.Net.Search.Filter</span> must provide
+an <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.FixedBitSet.html">FixedBitSet</a> per sub-reader.</p>
+<p>Once the block index is built, use this query to wrap
+any sub-query matching only child docs and join matches in that
+child document space up to the parent document space.
+You can then use this <span class="xref">Lucene.Net.Search.Query</span> as a clause with
+other queries in the parent document space.</p>
+
+<p>See <a class="xref" href="Lucene.Net.Join.ToChildBlockJoinQuery.html">ToChildBlockJoinQuery</a> if you need to join
+in the reverse order.</p>
+
+<p>The child documents must be orthogonal to the parent
+documents: the wrapped child query must never
+return a parent document.</p>
+
+<p>If you&apos;d like to retrieve <span class="xref">Lucene.Net.Search.Grouping.ITopGroups&lt;TGroupValue&gt;</span> for the
+resulting query, use the <a class="xref" href="Lucene.Net.Join.ToParentBlockJoinCollector.html">ToParentBlockJoinCollector</a>.
+Note that this is not necessary, ie, if you simply want
+to collect the parent documents and don&apos;t need to see
+which child documents matched under that parent, then
+you can use any collector.</p>
+
+<p><strong>NOTE</strong>: If the overall query contains parent-only
+matches, for example you OR a parent-only query with a
+joined child-only query, then the resulting collected documents
+will be correct, however the <span class="xref">Lucene.Net.Search.Grouping.ITopGroups&lt;TGroupValue&gt;</span> you get
+from <a class="xref" href="Lucene.Net.Join.ToParentBlockJoinCollector.html">ToParentBlockJoinCollector</a> will not contain every
+child for parents that had matched.</p>
+
+<p>See <a href="http://lucene.apache.org/core/4_8_0/join/">http://lucene.apache.org/core/4_8_0/join/</a> for an
+overview. </p>
+
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Lucene.Net.Search.Query</span></div>
+    <div class="level2"><span class="xref">ToParentBlockJoinQuery</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">Lucene.Net.Search.Query.Boost</span>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Search.Query.ToString()</span>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Search.Query.Clone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Join.html">Lucene.Net.Join</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Join.dll</h6>
+  <h5 id="Lucene_Net_Join_ToParentBlockJoinQuery_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class ToParentBlockJoinQuery : Query</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinQuery__ctor_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_Lucene_Net_Join_ScoreMode_.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinQuery.%23ctor(Lucene.Net.Search.Query%2CLucene.Net.Search.Filter%2CLucene.Net.Join.ScoreMode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Join/ToParentBlockJoinQuery.cs/#L94">View Source</a>
+  </span>
+  <a id="Lucene_Net_Join_ToParentBlockJoinQuery__ctor_" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery.#ctor*"></a>
+  <h4 id="Lucene_Net_Join_ToParentBlockJoinQuery__ctor_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_Lucene_Net_Join_ScoreMode_" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery.#ctor(Lucene.Net.Search.Query,Lucene.Net.Search.Filter,Lucene.Net.Join.ScoreMode)">ToParentBlockJoinQuery(Query, Filter, ScoreMode)</h4>
+  <div class="markdown level1 summary"><p>Create a <a class="xref" href="Lucene.Net.Join.ToParentBlockJoinQuery.html">ToParentBlockJoinQuery</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ToParentBlockJoinQuery(Query childQuery, Filter parentsFilter, ScoreMode scoreMode)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Query</span></td>
+        <td><span class="parametername">childQuery</span></td>
+        <td><p><span class="xref">Lucene.Net.Search.Query</span> matching child documents. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Filter</span></td>
+        <td><span class="parametername">parentsFilter</span></td>
+        <td><p><span class="xref">Lucene.Net.Search.Filter</span> (must produce <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.FixedBitSet.html">FixedBitSet</a>
+   per-segment, like <a class="xref" href="Lucene.Net.Join.FixedBitSetCachingWrapperFilter.html">FixedBitSetCachingWrapperFilter</a>)
+   identifying the parent documents. </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Join.ScoreMode.html">ScoreMode</a></td>
+        <td><span class="parametername">scoreMode</span></td>
+        <td><p>How to aggregate multiple child scores
+into a single parent score.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinQuery_CreateWeight_Lucene_Net_Search_IndexSearcher_.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinQuery.CreateWeight(Lucene.Net.Search.IndexSearcher)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Join/ToParentBlockJoinQuery.cs/#L112">View Source</a>
+  </span>
+  <a id="Lucene_Net_Join_ToParentBlockJoinQuery_CreateWeight_" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery.CreateWeight*"></a>
+  <h4 id="Lucene_Net_Join_ToParentBlockJoinQuery_CreateWeight_Lucene_Net_Search_IndexSearcher_" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery.CreateWeight(Lucene.Net.Search.IndexSearcher)">CreateWeight(IndexSearcher)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Weight CreateWeight(IndexSearcher searcher)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.IndexSearcher</span></td>
+        <td><span class="parametername">searcher</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Weight</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Search.Query.CreateWeight(Lucene.Net.Search.IndexSearcher)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinQuery_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinQuery.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Join/ToParentBlockJoinQuery.cs/#L472">View Source</a>
+  </span>
+  <a id="Lucene_Net_Join_ToParentBlockJoinQuery_Equals_" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery.Equals*"></a>
+  <h4 id="Lucene_Net_Join_ToParentBlockJoinQuery_Equals_System_Object_" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Equals_System_Object_">Query.Equals(Object)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinQuery_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinQuery.ExtractTerms(System.Collections.Generic.ISet%7BLucene.Net.Index.Term%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Join/ToParentBlockJoinQuery.cs/#L450">View Source</a>
+  </span>
+  <a id="Lucene_Net_Join_ToParentBlockJoinQuery_ExtractTerms_" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery.ExtractTerms*"></a>
+  <h4 id="Lucene_Net_Join_ToParentBlockJoinQuery_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery.ExtractTerms(System.Collections.Generic.ISet{Lucene.Net.Index.Term})">ExtractTerms(ISet&lt;Term&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void ExtractTerms(ISet&lt;Term&gt; terms)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ISet</span>&lt;<a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Index.Term.html">Term</a>&gt;</td>
+        <td><span class="parametername">terms</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__">Query.ExtractTerms(ISet&lt;Term&gt;)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinQuery_GetHashCode.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinQuery.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Join/ToParentBlockJoinQuery.cs/#L488">View Source</a>
+  </span>
+  <a id="Lucene_Net_Join_ToParentBlockJoinQuery_GetHashCode_" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery.GetHashCode*"></a>
+  <h4 id="Lucene_Net_Join_ToParentBlockJoinQuery_GetHashCode" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Search.Query.GetHashCode()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinQuery_Rewrite_Lucene_Net_Index_IndexReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinQuery.Rewrite(Lucene.Net.Index.IndexReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Join/ToParentBlockJoinQuery.cs/#L455">View Source</a>
+  </span>
+  <a id="Lucene_Net_Join_ToParentBlockJoinQuery_Rewrite_" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery.Rewrite*"></a>
+  <h4 id="Lucene_Net_Join_ToParentBlockJoinQuery_Rewrite_Lucene_Net_Index_IndexReader_" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery.Rewrite(Lucene.Net.Index.IndexReader)">Rewrite(IndexReader)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Query Rewrite(IndexReader reader)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.IndexReader</span></td>
+        <td><span class="parametername">reader</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Query</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Search.Query.Rewrite(Lucene.Net.Index.IndexReader)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinQuery_ToString_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinQuery.ToString(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Join/ToParentBlockJoinQuery.cs/#L467">View Source</a>
+  </span>
+  <a id="Lucene_Net_Join_ToParentBlockJoinQuery_ToString_" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery.ToString*"></a>
+  <h4 id="Lucene_Net_Join_ToParentBlockJoinQuery_ToString_System_String_" data-uid="Lucene.Net.Join.ToParentBlockJoinQuery.ToString(System.String)">ToString(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString(string field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ToString_System_String_">Query.ToString(String)</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinQuery.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinQuery%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Join/ToParentBlockJoinQuery.cs/#L71" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

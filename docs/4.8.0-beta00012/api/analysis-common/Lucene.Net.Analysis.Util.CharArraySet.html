@@ -1,0 +1,2328 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class CharArraySet
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class CharArraySet
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="analysis-common/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Analysis.Util.CharArraySet">
+  
+  
+  <h1 id="Lucene_Net_Analysis_Util_CharArraySet" data-uid="Lucene.Net.Analysis.Util.CharArraySet" class="text-break">Class CharArraySet
+  </h1>
+  <div class="markdown level0 summary"><p>A simple class that stores <span class="xref">System.String</span>s as <span class="xref">char[]</span>&apos;s in a
+hash table.  Note that this is not a general purpose
+class.  For example, it cannot remove items from the
+set, nor does it resize its hash table to be smaller,
+etc.  It is designed to be quick to test if a <span class="xref">char[]</span>
+is in the set without the necessity of converting it
+to a <span class="xref">System.String</span> first.</p>
+<p><a name="version"></a>
+<p>You must specify the required <span class="xref">Lucene.Net.Util.LuceneVersion</span>
+compatibility when creating <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a>:
+<ul>
+<li> As of 3.1, supplementary characters are
+    properly lowercased.</li>
+</ul>
+Before 3.1 supplementary characters could not be
+lowercased correctly due to the lack of Unicode 4
+support in JDK 1.4. To use instances of
+<a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> with the behavior before Lucene
+3.1 pass a <span class="xref">Lucene.Net.Util.LuceneVersion</span> to the constructors.
+</p>
+<p>
+<em>Please note:</em> This class implements <span class="xref">System.Collections.Generic.ISet&lt;T&gt;</span> but
+does not behave like it should in all cases. The generic type is
+<span class="xref">System.String</span>, because you can add any object to it,
+that has a string representation (which is converted to a string). The add methods will use
+<span class="xref">System.Object.ToString()</span> and store the result using a <span class="xref">char[]</span>
+buffer. The same behavior have the <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html#Lucene_Net_Analysis_Util_CharArraySet_Contains_System_String_">Contains(String)</a> methods.
+The <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html#Lucene_Net_Analysis_Util_CharArraySet_GetEnumerator">GetEnumerator()</a> returns an <span class="xref">IEnumerator{char[]}</span>
+</p></p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">CharArraySet</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.Collections.Generic.ISet</span>&lt;<span class="xref">System.String</span>&gt;</div>
+    <div><span class="xref">System.Collections.Generic.ICollection</span>&lt;<span class="xref">System.String</span>&gt;</div>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Analysis.Util.html">Lucene.Net.Analysis.Util</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Analysis.Common.dll</h6>
+  <h5 id="Lucene_Net_Analysis_Util_CharArraySet_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class CharArraySet : ISet&lt;string&gt;, ICollection&lt;string&gt;, IEnumerable&lt;string&gt;, IEnumerable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet__ctor_Lucene_Net_Util_LuceneVersion_System_Collections_Generic_ICollection_System_String__System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.%23ctor(Lucene.Net.Util.LuceneVersion%2CSystem.Collections.Generic.ICollection%7BSystem.String%7D%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L96">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet__ctor_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet__ctor_Lucene_Net_Util_LuceneVersion_System_Collections_Generic_ICollection_System_String__System_Boolean_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.#ctor(Lucene.Net.Util.LuceneVersion,System.Collections.Generic.ICollection{System.String},System.Boolean)">CharArraySet(LuceneVersion, ICollection&lt;String&gt;, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a set from a collection of objects. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CharArraySet(LuceneVersion matchVersion, ICollection&lt;string&gt; c, bool ignoreCase)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Util.LuceneVersion</span></td>
+        <td><span class="parametername">matchVersion</span></td>
+        <td><p>compatibility match version see <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> for details. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">c</span></td>
+        <td><p>a collection whose elements to be placed into the set </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">ignoreCase</span></td>
+        <td><p><code>false</code> if and only if the set should be case sensitive
+otherwise <code>true</code>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet__ctor_Lucene_Net_Util_LuceneVersion_System_Int32_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.%23ctor(Lucene.Net.Util.LuceneVersion%2CSystem.Int32%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L81">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet__ctor_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet__ctor_Lucene_Net_Util_LuceneVersion_System_Int32_System_Boolean_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.#ctor(Lucene.Net.Util.LuceneVersion,System.Int32,System.Boolean)">CharArraySet(LuceneVersion, Int32, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Create set with enough capacity to hold <code data-dev-comment-type="paramref" class="paramref">startSize</code> terms</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CharArraySet(LuceneVersion matchVersion, int startSize, bool ignoreCase)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Util.LuceneVersion</span></td>
+        <td><span class="parametername">matchVersion</span></td>
+        <td><p>compatibility match version see <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> for details. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startSize</span></td>
+        <td><p>the initial capacity </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">ignoreCase</span></td>
+        <td><p><code>false</code> if and only if the set should be case sensitive
+otherwise <code>true</code>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_EMPTY_SET.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.EMPTY_SET%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L66">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_EMPTY_SET" data-uid="Lucene.Net.Analysis.Util.CharArraySet.EMPTY_SET">EMPTY_SET</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly CharArraySet EMPTY_SET</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_Count.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.Count%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L213">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_Count_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Count*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_Count" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Count">Count</h4>
+  <div class="markdown level1 summary"><p>Gets the number of elements contained in the <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_IsReadOnly.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.IsReadOnly%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L218">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_IsReadOnly_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsReadOnly*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_IsReadOnly" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsReadOnly">IsReadOnly</h4>
+  <div class="markdown level1 summary"><p><code>true</code> if the <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> is read-only; otherwise <code>false</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsReadOnly { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_Add_J2N_Text_ICharSequence_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.Add(J2N.Text.ICharSequence)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L177">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_Add_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Add*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_Add_J2N_Text_ICharSequence_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Add(J2N.Text.ICharSequence)">Add(ICharSequence)</h4>
+  <div class="markdown level1 summary"><p>Add this <span class="xref">J2N.Text.ICharSequence</span> into the set</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Add(ICharSequence text)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">J2N.Text.ICharSequence</span></td>
+        <td><span class="parametername">text</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if <code data-dev-comment-type="paramref" class="paramref">text</code> was added to the set; <code>false</code> if it already existed prior to this call</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_Add_System_Char___.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.Add(System.Char%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L197">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_Add_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Add*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_Add_System_Char___" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Add(System.Char[])">Add(Char[])</h4>
+  <div class="markdown level1 summary"><p>Add this <span class="xref">char[]</span> directly to the set.
+If <code>ignoreCase</code> is true for this <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a>, the text array will be directly modified.
+The user should never modify this text array after calling this method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Add(char[] text)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">text</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if <code data-dev-comment-type="paramref" class="paramref">text</code> was added to the set; <code>false</code> if it already existed prior to this call</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_Add_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.Add(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L168">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_Add_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Add*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_Add_System_Object_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Add(System.Object)">Add(Object)</h4>
+  <div class="markdown level1 summary"><p>Add the <span class="xref">System.Object.ToString()</span> representation of <code data-dev-comment-type="paramref" class="paramref">o</code> into the set.
+The <span class="xref">System.Object.ToString()</span> method is called after setting the thread to <span class="xref">System.Globalization.CultureInfo.InvariantCulture</span>.
+If the type of <code data-dev-comment-type="paramref" class="paramref">o</code> is a value type, it will be converted using the 
+<span class="xref">System.Globalization.CultureInfo.InvariantCulture</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Add(object o)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">o</span></td>
+        <td><p>A string-able object</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if <code data-dev-comment-type="paramref" class="paramref">o</code> was added to the set; <code>false</code> if it already existed prior to this call</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_Add_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.Add(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L186">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_Add_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Add*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_Add_System_String_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Add(System.String)">Add(String)</h4>
+  <div class="markdown level1 summary"><p>Add this <span class="xref">System.String</span> into the set</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Add(string text)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">text</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if <code data-dev-comment-type="paramref" class="paramref">text</code> was added to the set; <code>false</code> if it already existed prior to this call</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_Clear.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.Clear%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L113">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_Clear_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Clear*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_Clear" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Clear">Clear()</h4>
+  <div class="markdown level1 summary"><p>Clears all entries in this set. This method is supported for reusing, but not <span class="xref">ICollection{string}.Remove(string)</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Clear()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_Contains_J2N_Text_ICharSequence_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.Contains(J2N.Text.ICharSequence)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L139">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_Contains_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Contains*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_Contains_J2N_Text_ICharSequence_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Contains(J2N.Text.ICharSequence)">Contains(ICharSequence)</h4>
+  <div class="markdown level1 summary"><p><code>true</code> if the <span class="xref">J2N.Text.ICharSequence</span> is in the set</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Contains(ICharSequence cs)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">J2N.Text.ICharSequence</span></td>
+        <td><span class="parametername">cs</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_Contains_System_Char___.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.Contains(System.Char%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L131">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_Contains_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Contains*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_Contains_System_Char___" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Contains(System.Char[])">Contains(Char[])</h4>
+  <div class="markdown level1 summary"><p><code>true</code> if the <span class="xref">char[]</span>s 
+are in the set </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Contains(char[] text)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">text</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_Contains_System_Char___System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.Contains(System.Char%5B%5D%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L122">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_Contains_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Contains*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_Contains_System_Char___System_Int32_System_Int32_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Contains(System.Char[],System.Int32,System.Int32)">Contains(Char[], Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p><code>true</code> if the <code data-dev-comment-type="paramref" class="paramref">length</code> chars of <code data-dev-comment-type="paramref" class="paramref">text</code> starting at <code data-dev-comment-type="paramref" class="paramref">offset</code>
+are in the set </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Contains(char[] text, int offset, int length)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">text</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">length</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_Contains_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.Contains(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L155">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_Contains_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Contains*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_Contains_System_Object_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Contains(System.Object)">Contains(Object)</h4>
+  <div class="markdown level1 summary"><p><code>true</code> if the <span class="xref">System.Object.ToString()</span> representation of <code data-dev-comment-type="paramref" class="paramref">o</code> is in the set</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Contains(object o)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">o</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_Contains_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.Contains(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L147">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_Contains_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Contains*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_Contains_System_String_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Contains(System.String)">Contains(String)</h4>
+  <div class="markdown level1 summary"><p><code>true</code> if the <span class="xref">System.String</span> is in the set</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Contains(string cs)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">cs</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_ContainsAll_System_Collections_Generic_IEnumerable_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.ContainsAll(System.Collections.Generic.IEnumerable%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L830">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_ContainsAll_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.ContainsAll*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_ContainsAll_System_Collections_Generic_IEnumerable_System_String__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.ContainsAll(System.Collections.Generic.IEnumerable{System.String})">ContainsAll(IEnumerable&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if this collection contains all of the elements
+in the specified collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool ContainsAll(IEnumerable&lt;string&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>collection to be checked for containment in this collection</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if this <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> contains all of the elements in the specified collection; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_ContainsAll__1_System_Collections_Generic_IEnumerable___0__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.ContainsAll%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L848">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_ContainsAll_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.ContainsAll*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_ContainsAll__1_System_Collections_Generic_IEnumerable___0__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.ContainsAll``1(System.Collections.Generic.IEnumerable{``0})">ContainsAll&lt;T&gt;(IEnumerable&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if this collection contains all of the elements
+in the specified collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool ContainsAll&lt;T&gt;(IEnumerable&lt;T&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>collection to be checked for containment in this collection</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if this <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> contains all of the elements in the specified collection; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_Copy__1_Lucene_Net_Util_LuceneVersion_System_Collections_Generic_ICollection___0__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.Copy%60%601(Lucene.Net.Util.LuceneVersion%2CSystem.Collections.Generic.ICollection%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L265">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_Copy_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Copy*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_Copy__1_Lucene_Net_Util_LuceneVersion_System_Collections_Generic_ICollection___0__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Copy``1(Lucene.Net.Util.LuceneVersion,System.Collections.Generic.ICollection{``0})">Copy&lt;T&gt;(LuceneVersion, ICollection&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Returns a copy of the given set as a <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a>. If the given set
+is a <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> the ignoreCase property will be preserved.
+<p>
+<strong>Note:</strong> If you intend to create a copy of another <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> where
+the <span class="xref">Lucene.Net.Util.LuceneVersion</span> of the source set differs from its copy
+<a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html#Lucene_Net_Analysis_Util_CharArraySet__ctor_Lucene_Net_Util_LuceneVersion_System_Collections_Generic_ICollection_System_String__System_Boolean_">CharArraySet(LuceneVersion, ICollection&lt;String&gt;, Boolean)</a> should be used instead.
+The <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html#Lucene_Net_Analysis_Util_CharArraySet_Copy__1_Lucene_Net_Util_LuceneVersion_System_Collections_Generic_ICollection___0__">Copy&lt;T&gt;(LuceneVersion, ICollection&lt;T&gt;)</a> will preserve the <span class="xref">Lucene.Net.Util.LuceneVersion</span> of the
+source set it is an instance of <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a>.
+</p></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static CharArraySet Copy&lt;T&gt;(LuceneVersion matchVersion, ICollection&lt;T&gt; set)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Util.LuceneVersion</span></td>
+        <td><span class="parametername">matchVersion</span></td>
+        <td><p>compatibility match version. This argument will be ignored if the
+given set is a <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a>. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;T&gt;</td>
+        <td><span class="parametername">set</span></td>
+        <td><p>a set to copy </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a></td>
+        <td><p>a copy of the given set as a <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a>. If the given set
+       is a <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> the <span class="xref">Lucene.Net.Analysis.Util.CharArrayMap`1.ignoreCase</span> field as well as the
+<a class="xref" href="Lucene.Net.Analysis.Util.CharArrayMap-1.html#Lucene_Net_Analysis_Util_CharArrayMap_1_MatchVersion">MatchVersion</a> will be preserved. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_CopyTo_System_String___System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.CopyTo(System.String%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L368">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_CopyTo_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.CopyTo*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_CopyTo_System_String___System_Int32_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.CopyTo(System.String[],System.Int32)">CopyTo(String[], Int32)</h4>
+  <div class="markdown level1 summary"><p>Copies the entire <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> to a one-dimensional <span class="xref">string[]</span> array, 
+starting at the specified index of the target array.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void CopyTo(string[] array, int arrayIndex)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">array</span></td>
+        <td><p>The one-dimensional <span class="xref">string[]</span> Array that is the destination of the 
+elements copied from <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a>. The Array must have zero-based indexing.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">arrayIndex</span></td>
+        <td><p>The zero-based index in array at which copying begins.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L339">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_Equals_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Equals*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_Equals_System_Object_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"><p>Compares the specified object with this set for equality. Returns <code>true</code> if the 
+given object is also a set, the two sets have the same size, and every member of the 
+given set is contained in this set. This ensures that the equals method works properly 
+across different implementations of the <span class="xref">ISet{string}</span> interface.
+<p>
+This implementation first checks if the specified object is this set; if so it 
+returns <code>true</code>. Then, it checks if the specified object is a set whose 
+size is identical to the size of this set; if not, it returns <code>false</code>. If so, 
+it uses the enumerator of this set and the specified object to determine if all of the
+contained values are present (using <span class="xref">System.String.Equals(System.String)</span>).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td><p>object to be compared for equality with this set</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the specified object is equal to this set</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.Equals(System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_GetEnumerator.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L294">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_GetEnumerator_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.GetEnumerator*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_GetEnumerator" data-uid="Lucene.Net.Analysis.Util.CharArraySet.GetEnumerator">GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an <span class="xref">System.Collections.IEnumerator</span> for <span class="xref">char[]</span> instances in this set.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IEnumerator GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerator</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_GetHashCode.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L356">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_GetHashCode_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.GetHashCode*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_GetHashCode" data-uid="Lucene.Net.Analysis.Util.CharArraySet.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"><p>Returns the hash code value for this set. The hash code of a set 
+is defined to be the sum of the hash codes of the elements in the 
+set, where the hash code of a <code>null</code> element is defined to be zero. 
+This ensures that <code>s1.Equals(s2)</code> implies that 
+<code>s1.GetHashCode()==s2.GetHashCode()</code> for any two sets s1 and s2.
+This implementation iterates over the set, calling the GetHashCode() 
+method on each element in the set, and adding up the results.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>the hash code value for this set</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.GetHashCode()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_IsProperSubsetOf_System_Collections_Generic_IEnumerable_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.IsProperSubsetOf(System.Collections.Generic.IEnumerable%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L659">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_IsProperSubsetOf_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsProperSubsetOf*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_IsProperSubsetOf_System_Collections_Generic_IEnumerable_System_String__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsProperSubsetOf(System.Collections.Generic.IEnumerable{System.String})">IsProperSubsetOf(IEnumerable&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"><p>Determines whether a <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a proper subset of the specified collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsProperSubsetOf(IEnumerable&lt;string&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The collection to compare to the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if this <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a proper subset of <code data-dev-comment-type="paramref" class="paramref">other</code>; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_IsProperSubsetOf__1_System_Collections_Generic_IEnumerable___0__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.IsProperSubsetOf%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L695">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_IsProperSubsetOf_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsProperSubsetOf*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_IsProperSubsetOf__1_System_Collections_Generic_IEnumerable___0__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsProperSubsetOf``1(System.Collections.Generic.IEnumerable{``0})">IsProperSubsetOf&lt;T&gt;(IEnumerable&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Determines whether a <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a proper subset of the specified collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsProperSubsetOf&lt;T&gt;(IEnumerable&lt;T&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The collection to compare to the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if this <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a proper subset of <code data-dev-comment-type="paramref" class="paramref">other</code>; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_IsProperSupersetOf_System_Collections_Generic_IEnumerable_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.IsProperSupersetOf(System.Collections.Generic.IEnumerable%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L719">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_IsProperSupersetOf_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsProperSupersetOf*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_IsProperSupersetOf_System_Collections_Generic_IEnumerable_System_String__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsProperSupersetOf(System.Collections.Generic.IEnumerable{System.String})">IsProperSupersetOf(IEnumerable&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"><p>Determines whether a <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a proper superset of the specified collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsProperSupersetOf(IEnumerable&lt;string&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The collection to compare to the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if this <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a proper superset of <code data-dev-comment-type="paramref" class="paramref">other</code>; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_IsProperSupersetOf__1_System_Collections_Generic_IEnumerable___0__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.IsProperSupersetOf%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L756">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_IsProperSupersetOf_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsProperSupersetOf*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_IsProperSupersetOf__1_System_Collections_Generic_IEnumerable___0__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsProperSupersetOf``1(System.Collections.Generic.IEnumerable{``0})">IsProperSupersetOf&lt;T&gt;(IEnumerable&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Determines whether a <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a proper superset of the specified collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsProperSupersetOf&lt;T&gt;(IEnumerable&lt;T&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The collection to compare to the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if this <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a proper superset of <code data-dev-comment-type="paramref" class="paramref">other</code>; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_IsSubsetOf_System_Collections_Generic_IEnumerable_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.IsSubsetOf(System.Collections.Generic.IEnumerable%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L558">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_IsSubsetOf_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsSubsetOf*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_IsSubsetOf_System_Collections_Generic_IEnumerable_System_String__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsSubsetOf(System.Collections.Generic.IEnumerable{System.String})">IsSubsetOf(IEnumerable&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"><p>Determines whether a <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a subset of the specified collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsSubsetOf(IEnumerable&lt;string&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The collection to compare to the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if this <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a subset of <code data-dev-comment-type="paramref" class="paramref">other</code>; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_IsSubsetOf__1_System_Collections_Generic_IEnumerable___0__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.IsSubsetOf%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L590">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_IsSubsetOf_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsSubsetOf*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_IsSubsetOf__1_System_Collections_Generic_IEnumerable___0__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsSubsetOf``1(System.Collections.Generic.IEnumerable{``0})">IsSubsetOf&lt;T&gt;(IEnumerable&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Determines whether a <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a subset of the specified collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsSubsetOf&lt;T&gt;(IEnumerable&lt;T&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The collection to compare to the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if this <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a subset of <code data-dev-comment-type="paramref" class="paramref">other</code>; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_IsSupersetOf_System_Collections_Generic_IEnumerable_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.IsSupersetOf(System.Collections.Generic.IEnumerable%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L613">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_IsSupersetOf_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsSupersetOf*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_IsSupersetOf_System_Collections_Generic_IEnumerable_System_String__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsSupersetOf(System.Collections.Generic.IEnumerable{System.String})">IsSupersetOf(IEnumerable&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"><p>Determines whether a <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a superset of the specified collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsSupersetOf(IEnumerable&lt;string&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The collection to compare to the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if this <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a superset of <code data-dev-comment-type="paramref" class="paramref">other</code>; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_IsSupersetOf__1_System_Collections_Generic_IEnumerable___0__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.IsSupersetOf%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L640">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_IsSupersetOf_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsSupersetOf*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_IsSupersetOf__1_System_Collections_Generic_IEnumerable___0__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.IsSupersetOf``1(System.Collections.Generic.IEnumerable{``0})">IsSupersetOf&lt;T&gt;(IEnumerable&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Determines whether a <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a superset of the specified collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsSupersetOf&lt;T&gt;(IEnumerable&lt;T&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The collection to compare to the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if this <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object is a superset of <code data-dev-comment-type="paramref" class="paramref">other</code>; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_Overlaps_System_Collections_Generic_IEnumerable_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.Overlaps(System.Collections.Generic.IEnumerable%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L781">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_Overlaps_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Overlaps*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_Overlaps_System_Collections_Generic_IEnumerable_System_String__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Overlaps(System.Collections.Generic.IEnumerable{System.String})">Overlaps(IEnumerable&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"><p>Determines whether the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object and a specified collection share common elements.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Overlaps(IEnumerable&lt;string&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The collection to compare to the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object and <code data-dev-comment-type="paramref" class="paramref">other</code> share at least one common element; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_Overlaps__1_System_Collections_Generic_IEnumerable___0__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.Overlaps%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L805">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_Overlaps_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Overlaps*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_Overlaps__1_System_Collections_Generic_IEnumerable___0__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.Overlaps``1(System.Collections.Generic.IEnumerable{``0})">Overlaps&lt;T&gt;(IEnumerable&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Determines whether the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object and a specified collection share common elements.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool Overlaps&lt;T&gt;(IEnumerable&lt;T&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The collection to compare to the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if this <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> object and <code data-dev-comment-type="paramref" class="paramref">other</code> share at least one common element; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_SetEquals_System_Collections_Generic_IEnumerable_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.SetEquals(System.Collections.Generic.IEnumerable%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L394">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_SetEquals_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.SetEquals*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_SetEquals_System_Collections_Generic_IEnumerable_System_String__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.SetEquals(System.Collections.Generic.IEnumerable{System.String})">SetEquals(IEnumerable&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"><p>Determines whether the current set and the specified collection contain the same elements.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool SetEquals(IEnumerable&lt;string&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The collection to compare to the current set.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the current set is equal to other; otherwise, <code>false</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L309">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_ToString_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.ToString*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_ToString" data-uid="Lucene.Net.Analysis.Util.CharArraySet.ToString">ToString()</h4>
+  <div class="markdown level1 summary"><p>Returns a string that represents the current object. (Inherited from <span class="xref">System.Object</span>.)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_UnionWith_System_Collections_Generic_IEnumerable_J2N_Text_ICharSequence__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.UnionWith(System.Collections.Generic.IEnumerable%7BJ2N.Text.ICharSequence%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L438">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_UnionWith_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.UnionWith*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_UnionWith_System_Collections_Generic_IEnumerable_J2N_Text_ICharSequence__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.UnionWith(System.Collections.Generic.IEnumerable{J2N.Text.ICharSequence})">UnionWith(IEnumerable&lt;ICharSequence&gt;)</h4>
+  <div class="markdown level1 summary"><p>Modifies the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> to contain all elements that are present 
+in itself, the specified collection, or both.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool UnionWith(IEnumerable&lt;ICharSequence&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">J2N.Text.ICharSequence</span>&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The collection whose elements should be merged into the <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if this <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> changed as a result of the call</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_UnionWith_System_Collections_Generic_IEnumerable_System_Char____.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.UnionWith(System.Collections.Generic.IEnumerable%7BSystem.Char%5B%5D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L411">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_UnionWith_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.UnionWith*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_UnionWith_System_Collections_Generic_IEnumerable_System_Char____" data-uid="Lucene.Net.Analysis.Util.CharArraySet.UnionWith(System.Collections.Generic.IEnumerable{System.Char[]})">UnionWith(IEnumerable&lt;Char[]&gt;)</h4>
+  <div class="markdown level1 summary"><p>Modifies the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> to contain all elements that are present 
+in itself, the specified collection, or both.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool UnionWith(IEnumerable&lt;char[]&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.Char</span>[]&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The collection whose elements should be merged into the <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if this <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> changed as a result of the call</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_UnionWith_System_Collections_Generic_IEnumerable_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.UnionWith(System.Collections.Generic.IEnumerable%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L464">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_UnionWith_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.UnionWith*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_UnionWith_System_Collections_Generic_IEnumerable_System_String__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.UnionWith(System.Collections.Generic.IEnumerable{System.String})">UnionWith(IEnumerable&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"><p>Modifies the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> to contain all elements that are present 
+in itself, the specified collection, or both.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void UnionWith(IEnumerable&lt;string&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The collection whose elements should be merged into the <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_UnionWith__1_System_Collections_Generic_IEnumerable___0__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.UnionWith%60%601(System.Collections.Generic.IEnumerable%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L486">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_UnionWith_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.UnionWith*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_UnionWith__1_System_Collections_Generic_IEnumerable___0__" data-uid="Lucene.Net.Analysis.Util.CharArraySet.UnionWith``1(System.Collections.Generic.IEnumerable{``0})">UnionWith&lt;T&gt;(IEnumerable&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>Modifies the current <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> to contain all elements that are present 
+in itself, the specified collection, or both.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool UnionWith&lt;T&gt;(IEnumerable&lt;T&gt; other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;T&gt;</td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The collection whose elements should be merged into the <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if this <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a> changed as a result of the call</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_UnmodifiableSet_Lucene_Net_Analysis_Util_CharArraySet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.UnmodifiableSet(Lucene.Net.Analysis.Util.CharArraySet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L229">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_UnmodifiableSet_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.UnmodifiableSet*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_UnmodifiableSet_Lucene_Net_Analysis_Util_CharArraySet_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.UnmodifiableSet(Lucene.Net.Analysis.Util.CharArraySet)">UnmodifiableSet(CharArraySet)</h4>
+  <div class="markdown level1 summary"><p>Returns an unmodifiable <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a>. This allows to provide
+unmodifiable views of internal sets for &quot;read-only&quot; use.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static CharArraySet UnmodifiableSet(CharArraySet set)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a></td>
+        <td><span class="parametername">set</span></td>
+        <td><p>a set for which the unmodifiable set is returned. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a></td>
+        <td><p>an new unmodifiable <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>if the given set is <code>null</code>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_System_Collections_Generic_ICollection_System_String__Add_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.System%23Collections%23Generic%23ICollection%7BSystem%23String%7D%23Add(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L205">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_System_Collections_Generic_ICollection_System_String__Add_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.System#Collections#Generic#ICollection{System#String}#Add*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_System_Collections_Generic_ICollection_System_String__Add_System_String_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.System#Collections#Generic#ICollection{System#String}#Add(System.String)">ICollection&lt;String&gt;.Add(String)</h4>
+  <div class="markdown level1 summary"><p>LUCENENET specific for supporting <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">void ICollection&lt;string&gt;.Add(string item)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">item</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet_System_Collections_Generic_IEnumerable_System_String__GetEnumerator.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet.System%23Collections%23Generic%23IEnumerable%7BSystem%23String%7D%23GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L300">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Util_CharArraySet_System_Collections_Generic_IEnumerable_System_String__GetEnumerator_" data-uid="Lucene.Net.Analysis.Util.CharArraySet.System#Collections#Generic#IEnumerable{System#String}#GetEnumerator*"></a>
+  <h4 id="Lucene_Net_Analysis_Util_CharArraySet_System_Collections_Generic_IEnumerable_System_String__GetEnumerator" data-uid="Lucene.Net.Analysis.Util.CharArraySet.System#Collections#Generic#IEnumerable{System#String}#GetEnumerator">IEnumerable&lt;String&gt;.GetEnumerator()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerator&lt;string&gt; IEnumerable&lt;string&gt;.GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.Collections.Generic.ISet&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.ICollection&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Add_Lucene_Net_Analysis_Util_CharArraySet_System_Boolean_">CharArraySetExtensions.Add(CharArraySet, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Add_Lucene_Net_Analysis_Util_CharArraySet_System_Byte_">CharArraySetExtensions.Add(CharArraySet, Byte)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Add_Lucene_Net_Analysis_Util_CharArraySet_System_Char_">CharArraySetExtensions.Add(CharArraySet, Char)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Add_Lucene_Net_Analysis_Util_CharArraySet_System_Int32_">CharArraySetExtensions.Add(CharArraySet, Int32)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Add_Lucene_Net_Analysis_Util_CharArraySet_System_Int64_">CharArraySetExtensions.Add(CharArraySet, Int64)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Add_Lucene_Net_Analysis_Util_CharArraySet_System_SByte_">CharArraySetExtensions.Add(CharArraySet, SByte)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Add_Lucene_Net_Analysis_Util_CharArraySet_System_Int16_">CharArraySetExtensions.Add(CharArraySet, Int16)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Add_Lucene_Net_Analysis_Util_CharArraySet_System_UInt32_">CharArraySetExtensions.Add(CharArraySet, UInt32)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Add_Lucene_Net_Analysis_Util_CharArraySet_System_UInt64_">CharArraySetExtensions.Add(CharArraySet, UInt64)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Add_Lucene_Net_Analysis_Util_CharArraySet_System_UInt16_">CharArraySetExtensions.Add(CharArraySet, UInt16)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Contains_Lucene_Net_Analysis_Util_CharArraySet_System_Boolean_">CharArraySetExtensions.Contains(CharArraySet, Boolean)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Contains_Lucene_Net_Analysis_Util_CharArraySet_System_Byte_">CharArraySetExtensions.Contains(CharArraySet, Byte)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Contains_Lucene_Net_Analysis_Util_CharArraySet_System_Char_">CharArraySetExtensions.Contains(CharArraySet, Char)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Contains_Lucene_Net_Analysis_Util_CharArraySet_System_Int32_">CharArraySetExtensions.Contains(CharArraySet, Int32)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Contains_Lucene_Net_Analysis_Util_CharArraySet_System_Int64_">CharArraySetExtensions.Contains(CharArraySet, Int64)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Contains_Lucene_Net_Analysis_Util_CharArraySet_System_SByte_">CharArraySetExtensions.Contains(CharArraySet, SByte)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Contains_Lucene_Net_Analysis_Util_CharArraySet_System_Int16_">CharArraySetExtensions.Contains(CharArraySet, Int16)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Contains_Lucene_Net_Analysis_Util_CharArraySet_System_UInt32_">CharArraySetExtensions.Contains(CharArraySet, UInt32)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Contains_Lucene_Net_Analysis_Util_CharArraySet_System_UInt64_">CharArraySetExtensions.Contains(CharArraySet, UInt64)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_Contains_Lucene_Net_Analysis_Util_CharArraySet_System_UInt16_">CharArraySetExtensions.Contains(CharArraySet, UInt16)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_UnionWith_Lucene_Net_Analysis_Util_CharArraySet_System_Collections_Generic_IEnumerable_System_Byte__">CharArraySetExtensions.UnionWith(CharArraySet, IEnumerable&lt;Byte&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_UnionWith_Lucene_Net_Analysis_Util_CharArraySet_System_Collections_Generic_IEnumerable_System_Char__">CharArraySetExtensions.UnionWith(CharArraySet, IEnumerable&lt;Char&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_UnionWith_Lucene_Net_Analysis_Util_CharArraySet_System_Collections_Generic_IEnumerable_System_Int32__">CharArraySetExtensions.UnionWith(CharArraySet, IEnumerable&lt;Int32&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_UnionWith_Lucene_Net_Analysis_Util_CharArraySet_System_Collections_Generic_IEnumerable_System_Int64__">CharArraySetExtensions.UnionWith(CharArraySet, IEnumerable&lt;Int64&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_UnionWith_Lucene_Net_Analysis_Util_CharArraySet_System_Collections_Generic_IEnumerable_System_SByte__">CharArraySetExtensions.UnionWith(CharArraySet, IEnumerable&lt;SByte&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_UnionWith_Lucene_Net_Analysis_Util_CharArraySet_System_Collections_Generic_IEnumerable_System_Int16__">CharArraySetExtensions.UnionWith(CharArraySet, IEnumerable&lt;Int16&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_UnionWith_Lucene_Net_Analysis_Util_CharArraySet_System_Collections_Generic_IEnumerable_System_UInt32__">CharArraySetExtensions.UnionWith(CharArraySet, IEnumerable&lt;UInt32&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_UnionWith_Lucene_Net_Analysis_Util_CharArraySet_System_Collections_Generic_IEnumerable_System_UInt64__">CharArraySetExtensions.UnionWith(CharArraySet, IEnumerable&lt;UInt64&gt;)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.CharArraySetExtensions.html#Lucene_Net_Analysis_Util_CharArraySetExtensions_UnionWith_Lucene_Net_Analysis_Util_CharArraySet_System_Collections_Generic_IEnumerable_System_UInt16__">CharArraySetExtensions.UnionWith(CharArraySet, IEnumerable&lt;UInt16&gt;)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Util_CharArraySet.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Util.CharArraySet%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net.Analysis.Common/Analysis/Util/CharArraySet.cs/#L64" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

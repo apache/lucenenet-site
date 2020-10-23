@@ -1,0 +1,225 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Lucene42TermVectorsFormat
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Lucene42TermVectorsFormat
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42TermVectorsFormat">
+  
+  
+  <h1 id="Lucene_Net_Codecs_Lucene42_Lucene42TermVectorsFormat" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42TermVectorsFormat" class="text-break">Class Lucene42TermVectorsFormat
+  </h1>
+  <div class="markdown level0 summary"><p>Lucene 4.2 term vectors format (<a class="xref" href="Lucene.Net.Codecs.TermVectorsFormat.html">TermVectorsFormat</a>).
+<p>
+Very similarly to <a class="xref" href="Lucene.Net.Codecs.Lucene41.Lucene41StoredFieldsFormat.html">Lucene41StoredFieldsFormat</a>, this format is based
+on compressed chunks of data, with document-level granularity so that a
+document can never span across distinct chunks. Moreover, data is made as
+compact as possible:
+<ul><li>textual data is compressed using the very light,
+<a href="http://code.google.com/p/lz4/">LZ4</a> compression algorithm,</li><li>binary data is written using fixed-size blocks of
+packed <span class="xref">System.Int32</span>s (<a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html">PackedInt32s</a>).</li></ul>
+<p>
+Term vectors are stored using two files
+<ul><li>a data file where terms, frequencies, positions, offsets and payloads
+        are stored,</li><li>an index file, loaded into memory, used to locate specific documents in
+        the data file.</li></ul>
+Looking up term vectors for any document requires at most 1 disk seek.
+<p><strong>File formats</strong>
+<ol><li><a name="vector_data" id="vector_data"></a>
+<p>A vector data file (extension <code>.tvd</code>). this file stores terms,
+frequencies, positions, offsets and payloads for every document. Upon writing
+a new segment, it accumulates data into memory until the buffer used to store
+terms and payloads grows beyond 4KB. Then it flushes all metadata, terms
+and positions to disk using <a href="http://code.google.com/p/lz4/">LZ4</a>
+compression for terms and payloads and
+blocks of packed <span class="xref">System.Int32</span>s (<a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>) for positions.</p>
+<p>Here is a more detailed description of the field data file format:</p>
+<ul><li>VectorData (.tvd) --&gt; &lt;Header&gt;, PackedIntsVersion, ChunkSize, &lt;Chunk&gt;<sup>ChunkCount</sup>, Footer</li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>PackedIntsVersion --&gt; <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html#Lucene_Net_Util_Packed_PackedInt32s_VERSION_CURRENT">VERSION_CURRENT</a> as a VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>ChunkSize is the number of bytes of terms to accumulate before flushing, as a VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>ChunkCount is not known in advance and is the number of chunks necessary to store all document of the segment</li><li>Chunk --&gt; DocBase, ChunkDocs, &lt; NumFields &gt;, &lt; FieldNums &gt;, &lt; FieldNumOffs &gt;, &lt; Flags &gt;,
+        &lt; NumTerms &gt;, &lt; TermLengths &gt;, &lt; TermFreqs &gt;, &lt; Positions &gt;, &lt; StartOffsets &gt;, &lt; Lengths &gt;,
+        &lt; PayloadLengths &gt;, &lt; TermAndPayloads &gt;</li><li>DocBase is the ID of the first doc of the chunk as a VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>ChunkDocs is the number of documents in the chunk</li><li>NumFields --&gt; DocNumFields<sup>ChunkDocs</sup></li><li>DocNumFields is the number of fields for each doc, written as a VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) if ChunkDocs==1 and as a <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html">PackedInt32s</a> array otherwise</li><li>FieldNums --&gt; FieldNumDelta<sup>TotalDistincFields</sup>, a delta-encoded list of the sorted unique field numbers present in the chunk</li><li>FieldNumOffs --&gt; FieldNumOff<sup>TotalFields</sup>, as a <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html">PackedInt32s</a> array</li><li>FieldNumOff is the offset of the field number in FieldNums</li><li>TotalFields is the total number of fields (sum of the values of NumFields)</li><li>Flags --&gt; Bit &lt; FieldFlags &gt;</li><li>Bit  is a single bit which when true means that fields have the same options for every document in the chunk</li><li>FieldFlags --&gt; if Bit==1: Flag<sup>TotalDistinctFields</sup> else Flag<sup>TotalFields</sup></li><li>Flag: a 3-bits int where:
+<ul><li>the first bit means that the field has positions</li><li>the second bit means that the field has offsets</li><li>the third bit means that the field has payloads</li></ul>
+</li><li>NumTerms --&gt; FieldNumTerms<sup>TotalFields</sup></li><li>FieldNumTerms: the number of terms for each field, using blocks of 64 packed <span class="xref">System.Int32</span>s (<a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>) </li><li>TermLengths --&gt; PrefixLength<sup>TotalTerms</sup> SuffixLength<sup>TotalTerms</sup></li><li>TotalTerms: total number of terms (sum of NumTerms)</li><li>PrefixLength: 0 for the first term of a field, the common prefix with the previous term otherwise using blocks of 64 packed <span class="xref">System.Int32</span>s (<a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>) </li><li>SuffixLength: length of the term minus PrefixLength for every term using blocks of 64 packed <span class="xref">System.Int32</span>s (<a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>) </li><li>TermFreqs --&gt; TermFreqMinus1<sup>TotalTerms</sup></li><li>TermFreqMinus1: (frequency - 1) for each term using blocks of 64 packed <span class="xref">System.Int32</span>s (<a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>) </li><li>Positions --&gt; PositionDelta<sup>TotalPositions</sup></li><li>TotalPositions is the sum of frequencies of terms of all fields that have positions</li><li>PositionDelta: the absolute position for the first position of a term, and the difference with the previous positions for following positions using blocks of 64 packed <span class="xref">System.Int32</span>s (<a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>) </li><li>StartOffsets --&gt; (AvgCharsPerTerm<sup>TotalDistinctFields</sup>) StartOffsetDelta<sup>TotalOffsets</sup></li><li>TotalOffsets is the sum of frequencies of terms of all fields that have offsets</li><li>AvgCharsPerTerm: average number of chars per term, encoded as a float on 4 bytes. They are not present if no field has both positions and offsets enabled.</li><li>StartOffsetDelta: (startOffset - previousStartOffset - AvgCharsPerTerm * PositionDelta). previousStartOffset is 0 for the first offset and AvgCharsPerTerm is 0 if the field has no positions using blocks of 64 packed <span class="xref">System.Int32</span>s (<a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>) </li><li>Lengths --&gt; LengthMinusTermLength<sup>TotalOffsets</sup></li><li>LengthMinusTermLength: (endOffset - startOffset - termLength) using blocks of 64 packed <span class="xref">System.Int32</span>s (<a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>) </li><li>PayloadLengths --&gt; PayloadLength<sup>TotalPayloads</sup></li><li>TotalPayloads is the sum of frequencies of terms of all fields that have payloads</li><li>PayloadLength is the payload length encoded using blocks of 64 packed <span class="xref">System.Int32</span>s (<a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>) </li><li>TermAndPayloads --&gt; LZ4-compressed representation of &lt; FieldTermsAndPayLoads &gt;<sup>TotalFields</sup></li><li>FieldTermsAndPayLoads --&gt; Terms (Payloads)</li><li>Terms: term bytes</li><li>Payloads: payload bytes (if the field has payloads)</li><li>Footer --&gt; CodecFooter (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteFooter_Lucene_Net_Store_IndexOutput_">WriteFooter(IndexOutput)</a>) </li></ul>
+</li><li><a name="vector_index" id="vector_index"></a>
+<p>An index file (extension <code>.tvx</code>).</p>
+<ul><li>VectorIndex (.tvx) --&gt; &lt;Header&gt;, &lt;ChunkIndex&gt;, Footer</li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>ChunkIndex: See <a class="xref" href="Lucene.Net.Codecs.Compressing.CompressingStoredFieldsIndexWriter.html">CompressingStoredFieldsIndexWriter</a></li><li>Footer --&gt; CodecFooter (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteFooter_Lucene_Net_Store_IndexOutput_">WriteFooter(IndexOutput)</a>) </li></ul>
+</li></ol>
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Codecs.TermVectorsFormat.html">TermVectorsFormat</a></div>
+    <div class="level2"><a class="xref" href="Lucene.Net.Codecs.Compressing.CompressingTermVectorsFormat.html">CompressingTermVectorsFormat</a></div>
+    <div class="level3"><span class="xref">Lucene42TermVectorsFormat</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.Compressing.CompressingTermVectorsFormat.html#Lucene_Net_Codecs_Compressing_CompressingTermVectorsFormat_VectorsReader_Lucene_Net_Store_Directory_Lucene_Net_Index_SegmentInfo_Lucene_Net_Index_FieldInfos_Lucene_Net_Store_IOContext_">CompressingTermVectorsFormat.VectorsReader(Directory, SegmentInfo, FieldInfos, IOContext)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.Compressing.CompressingTermVectorsFormat.html#Lucene_Net_Codecs_Compressing_CompressingTermVectorsFormat_VectorsWriter_Lucene_Net_Store_Directory_Lucene_Net_Index_SegmentInfo_Lucene_Net_Store_IOContext_">CompressingTermVectorsFormat.VectorsWriter(Directory, SegmentInfo, IOContext)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.Compressing.CompressingTermVectorsFormat.html#Lucene_Net_Codecs_Compressing_CompressingTermVectorsFormat_ToString">CompressingTermVectorsFormat.ToString()</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="../Lucene.Net.TestFramework/Lucene.Net.Codecs.Lucene42.html">Lucene.Net.Codecs.Lucene42</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Codecs_Lucene42_Lucene42TermVectorsFormat_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class Lucene42TermVectorsFormat : CompressingTermVectorsFormat</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene42_Lucene42TermVectorsFormat__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene42.Lucene42TermVectorsFormat.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Codecs/Lucene42/Lucene42TermVectorsFormat.cs/#L127">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene42_Lucene42TermVectorsFormat__ctor_" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42TermVectorsFormat.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene42_Lucene42TermVectorsFormat__ctor" data-uid="Lucene.Net.Codecs.Lucene42.Lucene42TermVectorsFormat.#ctor">Lucene42TermVectorsFormat()</h4>
+  <div class="markdown level1 summary"><p>Sole constructor. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Lucene42TermVectorsFormat()</code></pre>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene42_Lucene42TermVectorsFormat.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene42.Lucene42TermVectorsFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Codecs/Lucene42/Lucene42TermVectorsFormat.cs/#L123" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

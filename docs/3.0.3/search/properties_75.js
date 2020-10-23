@@ -1,0 +1,10 @@
+var searchData=
+[
+  ['uniquetermcount',['UniqueTermCount',['../d6/d27/class_lucene_1_1_net_1_1_index_1_1_index_reader.html#a40b1733b493afbca6307b8132e195fbd',1,'Lucene.Net.Index.IndexReader.UniqueTermCount()'],['../dc/d8f/class_lucene_1_1_net_1_1_index_1_1_segment_reader.html#af5ae495b40b502057d77143c7d779bcc',1,'Lucene.Net.Index.SegmentReader.UniqueTermCount()']]],
+  ['updateaction',['UpdateAction',['../d7/d56/class_lucene_1_1_net_1_1_analysis_1_1_miscellaneous_1_1_injectable_prefix_aware_token_filter.html#a8175e0b753d550007b3edf1a633c56e3',1,'Lucene::Net::Analysis::Miscellaneous::InjectablePrefixAwareTokenFilter']]],
+  ['upperterm',['UpperTerm',['../de/df3/class_lucene_1_1_net_1_1_search_1_1_term_range_filter.html#a4e397120faa0940fc70d2901ae1e2b4c',1,'Lucene.Net.Search.TermRangeFilter.UpperTerm()'],['../dc/d5a/class_lucene_1_1_net_1_1_search_1_1_term_range_query.html#a63c9a963ce4f4016c78327bf72d31363',1,'Lucene.Net.Search.TermRangeQuery.UpperTerm()']]],
+  ['uppervalue',['UpperValue',['../d5/de0/class_lucene_1_1_net_1_1_search_1_1_field_cache_range_filter_3_01_t_01_4.html#a7dc6c91c55b7eaf81a1cbcfb2ad4d24c',1,'Lucene::Net::Search::FieldCacheRangeFilter&lt; T &gt;']]],
+  ['usecompoundfile',['UseCompoundFile',['../d2/d1d/class_lucene_1_1_net_1_1_index_1_1_index_writer.html#a36aac4bd54d03505193f5679f1298df6',1,'Lucene::Net::Index::IndexWriter']]],
+  ['userdata',['UserData',['../df/dc3/class_lucene_1_1_net_1_1_index_1_1_segments_gen_commit.html#a2db745378de1e4331404249d65889aaf',1,'Lucene.Net.Index.SegmentsGenCommit.UserData()'],['../d8/de7/class_lucene_1_1_net_1_1_index_1_1_index_commit.html#a0cb2d89a20a47640463c174e41d60201',1,'Lucene.Net.Index.IndexCommit.UserData()'],['../de/d44/class_lucene_1_1_net_1_1_index_1_1_segment_infos.html#af07da15e9ae8dc41c4514d3d64885afa',1,'Lucene.Net.Index.SegmentInfos.UserData()']]],
+  ['useunmap',['UseUnmap',['../dc/d13/class_lucene_1_1_net_1_1_store_1_1_m_map_directory.html#a30ad4d157e6a9d157f53e027fd9daac9',1,'Lucene::Net::Store::MMapDirectory']]]
+];

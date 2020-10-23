@@ -1,0 +1,1185 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class FuzzyTermsEnum
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class FuzzyTermsEnum
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.FuzzyTermsEnum">
+  
+  
+  <h1 id="Lucene_Net_Search_FuzzyTermsEnum" data-uid="Lucene.Net.Search.FuzzyTermsEnum" class="text-break">Class FuzzyTermsEnum
+  </h1>
+  <div class="markdown level0 summary"><p>Subclass of <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> for enumerating all terms that are similar
+to the specified filter term.</p>
+<p>Term enumerations are always ordered by
+<a class="xref" href="Lucene.Net.Search.FuzzyTermsEnum.html#Lucene_Net_Search_FuzzyTermsEnum_Comparer">Comparer</a>.  Each term in the enumeration is
+greater than all that precede it.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a></div>
+    <div class="level2"><span class="xref">FuzzyTermsEnum</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lucene.Net.Util.IBytesRefIterator.html">IBytesRefIterator</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Attributes">TermsEnum.Attributes</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Docs_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsEnum_">TermsEnum.Docs(IBits, DocsEnum)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_DocsAndPositions_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsAndPositionsEnum_">TermsEnum.DocsAndPositions(IBits, DocsAndPositionsEnum)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_EMPTY">TermsEnum.EMPTY</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="../Lucene.Net.TestFramework/Lucene.Net.Search.html">Lucene.Net.Search</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Search_FuzzyTermsEnum_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class FuzzyTermsEnum : TermsEnum, IBytesRefIterator</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum__ctor_Lucene_Net_Index_Terms_Lucene_Net_Util_AttributeSource_Lucene_Net_Index_Term_System_Single_System_Int32_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.%23ctor(Lucene.Net.Index.Terms%2CLucene.Net.Util.AttributeSource%2CLucene.Net.Index.Term%2CSystem.Single%2CSystem.Int32%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L109">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum__ctor_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum__ctor_Lucene_Net_Index_Terms_Lucene_Net_Util_AttributeSource_Lucene_Net_Index_Term_System_Single_System_Int32_System_Boolean_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.#ctor(Lucene.Net.Index.Terms,Lucene.Net.Util.AttributeSource,Lucene.Net.Index.Term,System.Single,System.Int32,System.Boolean)">FuzzyTermsEnum(Terms, AttributeSource, Term, Single, Int32, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Constructor for enumeration of all terms from specified <code>reader</code> which share a prefix of
+length <code data-dev-comment-type="paramref" class="paramref">prefixLength</code> with <code data-dev-comment-type="paramref" class="paramref">term</code> and which have a fuzzy similarity &gt;
+<code data-dev-comment-type="paramref" class="paramref">minSimilarity</code>.
+<p>
+After calling the constructor the enumeration is already pointing to the first
+valid term if such a term exists.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FuzzyTermsEnum(Terms terms, AttributeSource atts, Term term, float minSimilarity, int prefixLength, bool transpositions)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.Terms.html">Terms</a></td>
+        <td><span class="parametername">terms</span></td>
+        <td><p>Delivers terms. </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.AttributeSource.html">AttributeSource</a></td>
+        <td><span class="parametername">atts</span></td>
+        <td><p><a class="xref" href="Lucene.Net.Util.AttributeSource.html">AttributeSource</a> created by the rewrite method of <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html">MultiTermQuery</a>
+   thats contains information about competitive boosts during rewrite. It is also used
+   to cache DFAs between segment transitions. </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.Term.html">Term</a></td>
+        <td><span class="parametername">term</span></td>
+        <td><p>Pattern term. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">minSimilarity</span></td>
+        <td><p>Minimum required similarity for terms from the reader. Pass an integer value
+      representing edit distance. Passing a fraction is deprecated. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">prefixLength</span></td>
+        <td><p>Length of required common prefix. Default value is 0. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">transpositions</span></td>
+        <td><p>Transpositions </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_m_maxEdits.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.m_maxEdits%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L81">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_m_maxEdits" data-uid="Lucene.Net.Search.FuzzyTermsEnum.m_maxEdits">m_maxEdits</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int m_maxEdits</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_m_minSimilarity.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.m_minSimilarity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L76">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_m_minSimilarity" data-uid="Lucene.Net.Search.FuzzyTermsEnum.m_minSimilarity">m_minSimilarity</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly float m_minSimilarity</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_m_raw.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.m_raw%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L82">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_m_raw" data-uid="Lucene.Net.Search.FuzzyTermsEnum.m_raw">m_raw</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly bool m_raw</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_m_realPrefixLength.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.m_realPrefixLength%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L87">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_m_realPrefixLength" data-uid="Lucene.Net.Search.FuzzyTermsEnum.m_realPrefixLength">m_realPrefixLength</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly int m_realPrefixLength</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_m_scaleFactor.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.m_scaleFactor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L77">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_m_scaleFactor" data-uid="Lucene.Net.Search.FuzzyTermsEnum.m_scaleFactor">m_scaleFactor</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly float m_scaleFactor</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_m_termLength.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.m_termLength%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L79">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_m_termLength" data-uid="Lucene.Net.Search.FuzzyTermsEnum.m_termLength">m_termLength</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly int m_termLength</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_m_terms.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.m_terms%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L84">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_m_terms" data-uid="Lucene.Net.Search.FuzzyTermsEnum.m_terms">m_terms</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly Terms m_terms</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.Terms.html">Terms</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_m_termText.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.m_termText%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L86">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_m_termText" data-uid="Lucene.Net.Search.FuzzyTermsEnum.m_termText">m_termText</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly int[] m_termText</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_Comparer.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.Comparer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L328">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_Comparer_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.Comparer*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_Comparer" data-uid="Lucene.Net.Search.FuzzyTermsEnum.Comparer">Comparer</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IComparer&lt;BytesRef&gt; Comparer { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IComparer</span>&lt;<a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Comparer">TermsEnum.Comparer</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_DocFreq.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.DocFreq%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L298">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_DocFreq_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.DocFreq*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_DocFreq" data-uid="Lucene.Net.Search.FuzzyTermsEnum.DocFreq">DocFreq</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int DocFreq { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_DocFreq">TermsEnum.DocFreq</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_MinSimilarity.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.MinSimilarity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L454">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_MinSimilarity_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.MinSimilarity*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_MinSimilarity" data-uid="Lucene.Net.Search.FuzzyTermsEnum.MinSimilarity">MinSimilarity</h4>
+  <div class="markdown level1 summary"><p>@lucene.internal </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual float MinSimilarity { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_Ord.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.Ord%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L336">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_Ord_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.Ord*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_Ord" data-uid="Lucene.Net.Search.FuzzyTermsEnum.Ord">Ord</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override long Ord { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Ord">TermsEnum.Ord</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_ScaleFactor.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.ScaleFactor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L464">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_ScaleFactor_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.ScaleFactor*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_ScaleFactor" data-uid="Lucene.Net.Search.FuzzyTermsEnum.ScaleFactor">ScaleFactor</h4>
+  <div class="markdown level1 summary"><p>@lucene.internal </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual float ScaleFactor { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_Term.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.Term%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L356">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_Term_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.Term*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_Term" data-uid="Lucene.Net.Search.FuzzyTermsEnum.Term">Term</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override BytesRef Term { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Term">TermsEnum.Term</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_TotalTermFreq.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.TotalTermFreq%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L303">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_TotalTermFreq_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.TotalTermFreq*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_TotalTermFreq" data-uid="Lucene.Net.Search.FuzzyTermsEnum.TotalTermFreq">TotalTermFreq</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override long TotalTermFreq { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_TotalTermFreq">TermsEnum.TotalTermFreq</a></div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_Docs_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsEnum_Lucene_Net_Index_DocsFlags_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.Docs(Lucene.Net.Util.IBits%2CLucene.Net.Index.DocsEnum%2CLucene.Net.Index.DocsFlags)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L308">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_Docs_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.Docs*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_Docs_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsEnum_Lucene_Net_Index_DocsFlags_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.Docs(Lucene.Net.Util.IBits,Lucene.Net.Index.DocsEnum,Lucene.Net.Index.DocsFlags)">Docs(IBits, DocsEnum, DocsFlags)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override DocsEnum Docs(IBits liveDocs, DocsEnum reuse, DocsFlags flags)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td><span class="parametername">liveDocs</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a></td>
+        <td><span class="parametername">reuse</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsFlags.html">DocsFlags</a></td>
+        <td><span class="parametername">flags</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Docs_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsEnum_Lucene_Net_Index_DocsFlags_">TermsEnum.Docs(IBits, DocsEnum, DocsFlags)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_DocsAndPositions_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsAndPositionsEnum_Lucene_Net_Index_DocsAndPositionsFlags_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.DocsAndPositions(Lucene.Net.Util.IBits%2CLucene.Net.Index.DocsAndPositionsEnum%2CLucene.Net.Index.DocsAndPositionsFlags)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L313">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_DocsAndPositions_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.DocsAndPositions*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_DocsAndPositions_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsAndPositionsEnum_Lucene_Net_Index_DocsAndPositionsFlags_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.DocsAndPositions(Lucene.Net.Util.IBits,Lucene.Net.Index.DocsAndPositionsEnum,Lucene.Net.Index.DocsAndPositionsFlags)">DocsAndPositions(IBits, DocsAndPositionsEnum, DocsAndPositionsFlags)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override DocsAndPositionsEnum DocsAndPositions(IBits liveDocs, DocsAndPositionsEnum reuse, DocsAndPositionsFlags flags)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td><span class="parametername">liveDocs</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html">DocsAndPositionsEnum</a></td>
+        <td><span class="parametername">reuse</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsAndPositionsFlags.html">DocsAndPositionsFlags</a></td>
+        <td><span class="parametername">flags</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html">DocsAndPositionsEnum</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_DocsAndPositions_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsAndPositionsEnum_Lucene_Net_Index_DocsAndPositionsFlags_">TermsEnum.DocsAndPositions(IBits, DocsAndPositionsEnum, DocsAndPositionsFlags)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_GetAutomatonEnum_System_Int32_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.GetAutomatonEnum(System.Int32%2CLucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L171">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_GetAutomatonEnum_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.GetAutomatonEnum*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_GetAutomatonEnum_System_Int32_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.GetAutomatonEnum(System.Int32,Lucene.Net.Util.BytesRef)">GetAutomatonEnum(Int32, BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Return an automata-based enum for matching up to <code data-dev-comment-type="paramref" class="paramref">editDistance</code> from
+<code data-dev-comment-type="paramref" class="paramref">lastTerm</code>, if possible</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual TermsEnum GetAutomatonEnum(int editDistance, BytesRef lastTerm)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">editDistance</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">lastTerm</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_GetTermState.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.GetTermState%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L323">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_GetTermState_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.GetTermState*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_GetTermState" data-uid="Lucene.Net.Search.FuzzyTermsEnum.GetTermState">GetTermState()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override TermState GetTermState()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_GetTermState">TermsEnum.GetTermState()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_MaxEditDistanceChanged_Lucene_Net_Util_BytesRef_System_Int32_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.MaxEditDistanceChanged(Lucene.Net.Util.BytesRef%2CSystem.Int32%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L244">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_MaxEditDistanceChanged_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.MaxEditDistanceChanged*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_MaxEditDistanceChanged_Lucene_Net_Util_BytesRef_System_Int32_System_Boolean_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.MaxEditDistanceChanged(Lucene.Net.Util.BytesRef,System.Int32,System.Boolean)">MaxEditDistanceChanged(BytesRef, Int32, Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void MaxEditDistanceChanged(BytesRef lastTerm, int maxEdits, bool init)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">lastTerm</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxEdits</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">init</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_Next.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.Next%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L272">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_Next_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.Next*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_Next" data-uid="Lucene.Net.Search.FuzzyTermsEnum.Next">Next()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override BytesRef Next()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Next">TermsEnum.Next()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_SeekCeil_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.SeekCeil(Lucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L346">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_SeekCeil_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.SeekCeil*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_SeekCeil_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.SeekCeil(Lucene.Net.Util.BytesRef)">SeekCeil(BytesRef)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override TermsEnum.SeekStatus SeekCeil(BytesRef text)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">text</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermsEnum.SeekStatus.html">TermsEnum.SeekStatus</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_SeekCeil_Lucene_Net_Util_BytesRef_">TermsEnum.SeekCeil(BytesRef)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_SeekExact_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.SeekExact(Lucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L341">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_SeekExact_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.SeekExact*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_SeekExact_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.SeekExact(Lucene.Net.Util.BytesRef)">SeekExact(BytesRef)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool SeekExact(BytesRef text)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">text</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_SeekExact_Lucene_Net_Util_BytesRef_">TermsEnum.SeekExact(BytesRef)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_SeekExact_Lucene_Net_Util_BytesRef_Lucene_Net_Index_TermState_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.SeekExact(Lucene.Net.Util.BytesRef%2CLucene.Net.Index.TermState)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L318">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_SeekExact_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.SeekExact*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_SeekExact_Lucene_Net_Util_BytesRef_Lucene_Net_Index_TermState_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.SeekExact(Lucene.Net.Util.BytesRef,Lucene.Net.Index.TermState)">SeekExact(BytesRef, TermState)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void SeekExact(BytesRef term, TermState state)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">term</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a></td>
+        <td><span class="parametername">state</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_SeekExact_Lucene_Net_Util_BytesRef_Lucene_Net_Index_TermState_">TermsEnum.SeekExact(BytesRef, TermState)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_SeekExact_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.SeekExact(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L351">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_SeekExact_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.SeekExact*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_SeekExact_System_Int64_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.SeekExact(System.Int64)">SeekExact(Int64)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void SeekExact(long ord)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">ord</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_SeekExact_System_Int64_">TermsEnum.SeekExact(Int64)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum_SetEnum_Lucene_Net_Index_TermsEnum_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum.SetEnum(Lucene.Net.Index.TermsEnum)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L214">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FuzzyTermsEnum_SetEnum_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.SetEnum*"></a>
+  <h4 id="Lucene_Net_Search_FuzzyTermsEnum_SetEnum_Lucene_Net_Index_TermsEnum_" data-uid="Lucene.Net.Search.FuzzyTermsEnum.SetEnum(Lucene.Net.Index.TermsEnum)">SetEnum(TermsEnum)</h4>
+  <div class="markdown level1 summary"><p>Swap in a new actual enum to proxy to </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void SetEnum(TermsEnum actualEnum)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a></td>
+        <td><span class="parametername">actualEnum</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Util.IBytesRefIterator.html">IBytesRefIterator</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FuzzyTermsEnum.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FuzzyTermsEnum%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FuzzyTermsEnum.cs/#L55" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,157 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>kuromoji-build-dictionary | Apache Lucene.NET 4.8.0-beta00012 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="kuromoji-build-dictionary | Apache Lucene.NET 4.8.0-beta00012 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+  <h1 id="kuromoji-build-dictionary">kuromoji-build-dictionary</h1>
+
+
+<h3 id="name">Name</h3>
+<p><code>analysis-kuromoji-build-dictionary</code> - Generates a set of custom dictionary files for the Lucene.Net.Analysis.Kuromoji library.</p>
+<h3 id="synopsis">Synopsis</h3>
+<p><code>lucene analysis kuromoji-build-dictionary &lt;FORMAT&gt; &lt;INPUT_DIRECTORY&gt; &lt;OUTPUT_DIRECTORY&gt; [-e|--encoding] [-n|--normalize] [?|-h|--help]</code></p>
+<h3 id="description">Description</h3>
+<p>Generates the following set of binary files:</p>
+<ul>
+<li>CharacterDefinition.dat</li>
+<li>ConnectionCosts.dat</li>
+<li>TokenInfoDictionary$buffer.dat</li>
+<li>TokenInfoDictionary$fst.dat</li>
+<li>TokenInfoDictionary$posDict.dat</li>
+<li>TokenInfoDictionary$targetMap.dat</li>
+<li>UnknownDictionary$buffer.dat</li>
+<li>UnknownDictionary$posDict.dat</li>
+<li>UnknownDictionary$targetMap.dat</li>
+</ul>
+<p>If these files are placed into a subdirectory of your application named <code>kuromoji-data</code>, they will be used automatically by Lucene.Net.Analysis.Kuromoji features such as the JapaneseAnalyzer or JapaneseTokenizer. To use an alternate directory location, put the path in an environment variable named <code>kuromoji.data.dir</code>. The files must be placed in a subdirectory of this location named <code>kuromoji-data</code>.</p>
+<p>See <a href="http://mentaldetritus.blogspot.com/2013/03/compiling-custom-dictionary-for.html">this blog post</a> for information about the dictionary format. A sample is available at <a href="https://sourceforge.net/projects/mecab/files/mecab-ipadic/2.7.0-20070801/">https://sourceforge.net/projects/mecab/files/mecab-ipadic/2.7.0-20070801/</a>. The <a href="https://github.com/atilika/kuromoji">Kuromoji project documentation</a> may also be helpful. </p>
+<h3 id="arguments">Arguments</h3>
+<p><code>FORMAT</code></p>
+<p>The dictionary format. Valid values are IPADIC and UNIDIC. If an invalid value is passed, IPADIC is assumed.</p>
+<p><code>INPUT_DIRECTORY</code></p>
+<p>The directory where the dictionary input files are located.</p>
+<p><code>OUTPUT_DIRECTORY</code></p>
+<p>The directory to put the dictionary output.</p>
+<h3 id="options">Options</h3>
+<p><code>?|-h|--help</code></p>
+<p>Prints out a short help for the command.</p>
+<p><code>-e|--encoding &lt;ENCODING&gt;</code></p>
+<p>The file encoding used by the input files. If not supplied, the default value is <code>EUC-JP</code>.</p>
+<p><code>-n|--normalize</code></p>
+<p>Normalize the entries using normalization form KC.</p>
+<h3 id="example">Example</h3>
+<p><code>lucene analysis kuromoji-build-dictionary IPADIC X:\kuromoji-data X:\kuromoji-dictionary --normalize</code></p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00012/src/dotnet/tools/lucene-cli/docs/analysis/kuromoji-build-dictionary.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

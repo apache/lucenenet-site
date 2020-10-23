@@ -1,0 +1,593 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class PostingsFormat
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class PostingsFormat
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.PostingsFormat">
+  
+  
+  <h1 id="Lucene_Net_Codecs_PostingsFormat" data-uid="Lucene.Net.Codecs.PostingsFormat" class="text-break">Class PostingsFormat
+  </h1>
+  <div class="markdown level0 summary"><p>Encodes/decodes terms, postings, and proximity data.
+<p>
+Note, when extending this class, the name (<a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_Name">Name</a>) may
+written into the index in certain configurations. In order for the segment
+to be read, the name must resolve to your implementation via <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_ForName_System_String_">ForName(String)</a>.
+This method uses <a class="xref" href="Lucene.Net.Codecs.IPostingsFormatFactory.html#Lucene_Net_Codecs_IPostingsFormatFactory_GetPostingsFormat_System_String_">GetPostingsFormat(String)</a> to resolve format names.
+<p>
+If you implement your own format:
+<ol><li>Subclass this class.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html">DefaultPostingsFormatFactory</a>, override <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_Initialize">Initialize()</a>,
+        and add the line <code>base.ScanForPostingsFormats(typeof(YourPostingsFormat).Assembly)</code>. 
+        If you have any format classes in your assembly 
+        that are not meant for reading, you can add the <a class="xref" href="Lucene.Net.Codecs.ExcludePostingsFormatFromScanAttribute.html">ExcludePostingsFormatFromScanAttribute</a> 
+        to them so they are ignored by the scan.</li><li>Set the new <a class="xref" href="Lucene.Net.Codecs.IPostingsFormatFactory.html">IPostingsFormatFactory</a> by calling <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_SetPostingsFormatFactory_Lucene_Net_Codecs_IPostingsFormatFactory_">SetPostingsFormatFactory(IPostingsFormatFactory)</a> 
+        at application startup.</li></ol>
+If your format has dependencies, you may also override <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_GetPostingsFormat_System_Type_">GetPostingsFormat(Type)</a> to inject 
+them via pure DI or a DI container. See <a href="http://blog.ploeh.dk/2014/05/19/di-friendly-framework/">DI-Friendly Framework</a>
+to understand the approach used.
+<p>
+<strong>PostingsFormat Names</strong>
+<p>
+Unlike the Java version, format names are by default convention-based on the class name. 
+If you name your custom format class &quot;MyCustomPostingsFormat&quot;, the codec name will the same name 
+without the &quot;PostingsFormat&quot; suffix: &quot;MyCustom&quot;.
+<p>
+You can override this default behavior by using the <a class="xref" href="Lucene.Net.Codecs.PostingsFormatNameAttribute.html">PostingsFormatNameAttribute</a> to
+name the format differently than this convention. Format names must be all ASCII alphanumeric, 
+and less than 128 characters in length.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">PostingsFormat</span></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.html">Lucene40PostingsFormat</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Codecs.Lucene41.Lucene41PostingsFormat.html">Lucene41PostingsFormat</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Codecs.PerField.PerFieldPostingsFormat.html">PerFieldPostingsFormat</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Codecs.html">Lucene.Net.Codecs</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Codecs_PostingsFormat_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class PostingsFormat</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_PostingsFormat__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.PostingsFormat.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Codecs/PostingsFormat.cs/#L115">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_PostingsFormat__ctor_" data-uid="Lucene.Net.Codecs.PostingsFormat.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_PostingsFormat__ctor" data-uid="Lucene.Net.Codecs.PostingsFormat.#ctor">PostingsFormat()</h4>
+  <div class="markdown level1 summary"><p>Creates a new postings format.
+<p>
+The provided name will be written into the index segment in some configurations
+(such as when using <a class="xref" href="Lucene.Net.Codecs.PerField.PerFieldPostingsFormat.html">PerFieldPostingsFormat</a>): in such configurations,
+for the segment to be read this class should be registered by subclassing <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html">DefaultPostingsFormatFactory</a> and
+calling <a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html#Lucene_Net_Codecs_DefaultPostingsFormatFactory_ScanForPostingsFormats_System_Reflection_Assembly_">ScanForPostingsFormats(Assembly)</a> in the class constructor. 
+The new <a class="xref" href="Lucene.Net.Codecs.IPostingsFormatFactory.html">IPostingsFormatFactory</a> can be registered by calling <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_SetPostingsFormatFactory_Lucene_Net_Codecs_IPostingsFormatFactory_">SetPostingsFormatFactory(IPostingsFormatFactory)</a> at application startup.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected PostingsFormat()</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_PostingsFormat_EMPTY.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.PostingsFormat.EMPTY%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Codecs/PostingsFormat.cs/#L72">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_PostingsFormat_EMPTY" data-uid="Lucene.Net.Codecs.PostingsFormat.EMPTY">EMPTY</h4>
+  <div class="markdown level1 summary"><p>Zero-length <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a> array. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly PostingsFormat[] EMPTY</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_PostingsFormat_AvailablePostingsFormats.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.PostingsFormat.AvailablePostingsFormats%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Codecs/PostingsFormat.cs/#L154">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_PostingsFormat_AvailablePostingsFormats_" data-uid="Lucene.Net.Codecs.PostingsFormat.AvailablePostingsFormats*"></a>
+  <h4 id="Lucene_Net_Codecs_PostingsFormat_AvailablePostingsFormats" data-uid="Lucene.Net.Codecs.PostingsFormat.AvailablePostingsFormats">AvailablePostingsFormats</h4>
+  <div class="markdown level1 summary"><p>Returns a list of all available format names. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ICollection&lt;string&gt; AvailablePostingsFormats { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_PostingsFormat_Name.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.PostingsFormat.Name%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Codecs/PostingsFormat.cs/#L122">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_PostingsFormat_Name_" data-uid="Lucene.Net.Codecs.PostingsFormat.Name*"></a>
+  <h4 id="Lucene_Net_Codecs_PostingsFormat_Name" data-uid="Lucene.Net.Codecs.PostingsFormat.Name">Name</h4>
+  <div class="markdown level1 summary"><p>Returns this posting format&apos;s name. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Name { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_PostingsFormat_FieldsConsumer_Lucene_Net_Index_SegmentWriteState_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.PostingsFormat.FieldsConsumer(Lucene.Net.Index.SegmentWriteState)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Codecs/PostingsFormat.cs/#L126">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_PostingsFormat_FieldsConsumer_" data-uid="Lucene.Net.Codecs.PostingsFormat.FieldsConsumer*"></a>
+  <h4 id="Lucene_Net_Codecs_PostingsFormat_FieldsConsumer_Lucene_Net_Index_SegmentWriteState_" data-uid="Lucene.Net.Codecs.PostingsFormat.FieldsConsumer(Lucene.Net.Index.SegmentWriteState)">FieldsConsumer(SegmentWriteState)</h4>
+  <div class="markdown level1 summary"><p>Writes a new segment. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract FieldsConsumer FieldsConsumer(SegmentWriteState state)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentWriteState.html">SegmentWriteState</a></td>
+        <td><span class="parametername">state</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.FieldsConsumer.html">FieldsConsumer</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_PostingsFormat_FieldsProducer_Lucene_Net_Index_SegmentReadState_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.PostingsFormat.FieldsProducer(Lucene.Net.Index.SegmentReadState)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Codecs/PostingsFormat.cs/#L138">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_PostingsFormat_FieldsProducer_" data-uid="Lucene.Net.Codecs.PostingsFormat.FieldsProducer*"></a>
+  <h4 id="Lucene_Net_Codecs_PostingsFormat_FieldsProducer_Lucene_Net_Index_SegmentReadState_" data-uid="Lucene.Net.Codecs.PostingsFormat.FieldsProducer(Lucene.Net.Index.SegmentReadState)">FieldsProducer(SegmentReadState)</h4>
+  <div class="markdown level1 summary"><p>Reads a segment.  NOTE: by the time this call
+returns, it must hold open any files it will need to
+use; else, those files may be deleted.
+Additionally, required files may be deleted during the execution of
+this call before there is a chance to open them. Under these
+circumstances an <span class="xref">System.IO.IOException</span> should be thrown by the implementation.
+<span class="xref">System.IO.IOException</span>s are expected and will automatically cause a retry of the
+segment opening logic with the newly revised segments.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract FieldsProducer FieldsProducer(SegmentReadState state)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentReadState.html">SegmentReadState</a></td>
+        <td><span class="parametername">state</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.FieldsProducer.html">FieldsProducer</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_PostingsFormat_ForName_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.PostingsFormat.ForName(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Codecs/PostingsFormat.cs/#L147">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_PostingsFormat_ForName_" data-uid="Lucene.Net.Codecs.PostingsFormat.ForName*"></a>
+  <h4 id="Lucene_Net_Codecs_PostingsFormat_ForName_System_String_" data-uid="Lucene.Net.Codecs.PostingsFormat.ForName(System.String)">ForName(String)</h4>
+  <div class="markdown level1 summary"><p>Looks up a format by name. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static PostingsFormat ForName(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_PostingsFormat_GetPostingsFormatFactory.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.PostingsFormat.GetPostingsFormatFactory%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Codecs/PostingsFormat.cs/#L102">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_PostingsFormat_GetPostingsFormatFactory_" data-uid="Lucene.Net.Codecs.PostingsFormat.GetPostingsFormatFactory*"></a>
+  <h4 id="Lucene_Net_Codecs_PostingsFormat_GetPostingsFormatFactory" data-uid="Lucene.Net.Codecs.PostingsFormat.GetPostingsFormatFactory">GetPostingsFormatFactory()</h4>
+  <div class="markdown level1 summary"><p>Gets the associated <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a> factory.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IPostingsFormatFactory GetPostingsFormatFactory()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.IPostingsFormatFactory.html">IPostingsFormatFactory</a></td>
+        <td><p>The <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a> factory.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_PostingsFormat_SetPostingsFormatFactory_Lucene_Net_Codecs_IPostingsFormatFactory_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.PostingsFormat.SetPostingsFormatFactory(Lucene.Net.Codecs.IPostingsFormatFactory)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Codecs/PostingsFormat.cs/#L91">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_PostingsFormat_SetPostingsFormatFactory_" data-uid="Lucene.Net.Codecs.PostingsFormat.SetPostingsFormatFactory*"></a>
+  <h4 id="Lucene_Net_Codecs_PostingsFormat_SetPostingsFormatFactory_Lucene_Net_Codecs_IPostingsFormatFactory_" data-uid="Lucene.Net.Codecs.PostingsFormat.SetPostingsFormatFactory(Lucene.Net.Codecs.IPostingsFormatFactory)">SetPostingsFormatFactory(IPostingsFormatFactory)</h4>
+  <div class="markdown level1 summary"><p>Sets the <a class="xref" href="Lucene.Net.Codecs.IPostingsFormatFactory.html">IPostingsFormatFactory</a> instance used to instantiate
+<a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a> subclasses.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetPostingsFormatFactory(IPostingsFormatFactory postingsFormatFactory)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.IPostingsFormatFactory.html">IPostingsFormatFactory</a></td>
+        <td><span class="parametername">postingsFormatFactory</span></td>
+        <td><p>The new <a class="xref" href="Lucene.Net.Codecs.IPostingsFormatFactory.html">IPostingsFormatFactory</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>The <code data-dev-comment-type="paramref" class="paramref">postingsFormatFactory</code> parameter is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_PostingsFormat_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.PostingsFormat.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Codecs/PostingsFormat.cs/#L140">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_PostingsFormat_ToString_" data-uid="Lucene.Net.Codecs.PostingsFormat.ToString*"></a>
+  <h4 id="Lucene_Net_Codecs_PostingsFormat_ToString" data-uid="Lucene.Net.Codecs.PostingsFormat.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Codecs.DefaultPostingsFormatFactory.html">DefaultPostingsFormatFactory</a></div>
+      <div><a class="xref" href="Lucene.Net.Codecs.IPostingsFormatFactory.html">IPostingsFormatFactory</a></div>
+      <div><a class="xref" href="Lucene.Net.Codecs.PostingsFormatNameAttribute.html">PostingsFormatNameAttribute</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_PostingsFormat.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.PostingsFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Codecs/PostingsFormat.cs/#L66" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

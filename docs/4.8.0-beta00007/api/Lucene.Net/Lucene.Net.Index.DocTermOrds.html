@@ -1,0 +1,1260 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class DocTermOrds
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class DocTermOrds
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Index.DocTermOrds">
+  
+  
+  <h1 id="Lucene_Net_Index_DocTermOrds" data-uid="Lucene.Net.Index.DocTermOrds" class="text-break">Class DocTermOrds
+  </h1>
+  <div class="markdown level0 summary"><p>This class enables fast access to multiple term ords for
+a specified field across all docIDs.
+<p>
+Like <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>, it uninverts the index and holds a
+packed data structure in RAM to enable fast access.
+Unlike <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>, it can handle multi-valued fields,
+and, it does not hold the term bytes in RAM.  Rather, you
+must obtain a <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> from the <a class="xref" href="Lucene.Net.Index.DocTermOrds.html#Lucene_Net_Index_DocTermOrds_GetOrdTermsEnum_Lucene_Net_Index_AtomicReader_">GetOrdTermsEnum(AtomicReader)</a>
+method, and then seek-by-ord to get the term&apos;s bytes.
+<p>
+While normally term ords are type <see cref="!:System.Int64"></see>, in this API they are
+<see cref="!:System.Int32"></see> as the internal representation here cannot address
+more than <a class="xref" href="Lucene.Net.Index.BufferedUpdates.html#Lucene_Net_Index_BufferedUpdates_MAX_INT32">MAX_INT32</a> unique terms.  Also, typically this
+class is used on fields with relatively few unique terms
+vs the number of documents.  In addition, there is an
+internal limit (16 MB) on how many bytes each chunk of
+documents may consume.  If you trip this limit you&apos;ll hit
+an <see cref="!:InvalidOperationException"></see>.
+<p>
+Deleted documents are skipped during uninversion, and if
+you look them up you&apos;ll get 0 ords.
+<p>
+The returned per-document ords do not retain their
+original order in the document.  Instead they are returned
+in sorted (by ord, ie term&apos;s <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> comparer) order.  They
+are also de-dup&apos;d (ie if doc has same term more than once
+in this field, you&apos;ll only get that ord back once).
+<p>
+This class tests whether the provided reader is able to
+retrieve terms by ord (ie, it&apos;s single segment, and it
+uses an ord-capable terms index).  If not, this class
+will create its own term index internally, allowing to
+create a wrapped <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> that can handle ord.  The
+<a class="xref" href="Lucene.Net.Index.DocTermOrds.html#Lucene_Net_Index_DocTermOrds_GetOrdTermsEnum_Lucene_Net_Index_AtomicReader_">GetOrdTermsEnum(AtomicReader)</a> method then provides this
+wrapped enum, if necessary.
+<p>
+The RAM consumption of this class can be high!
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">DocTermOrds</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="../Lucene.Net.Misc/Lucene.Net.Index.html">Lucene.Net.Index</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Index_DocTermOrds_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class DocTermOrds : object</code></pre>
+  </div>
+  <h5 id="Lucene_Net_Index_DocTermOrds_remarks"><strong>Remarks</strong></h5>
+  <div class="markdown level0 remarks"><p>Final form of the un-inverted field:
+<ul><li>Each document points to a list of term numbers that are contained in that document.</li><li>
+        Term numbers are in sorted order, and are encoded as variable-length deltas from the
+        previous term number.  Real term numbers start at 2 since 0 and 1 are reserved.  A
+        term number of 0 signals the end of the termNumber list.
+</li><li>
+    There is a single int[maxDoc()] which either contains a pointer into a byte[] for
+    the termNumber lists, or directly contains the termNumber list if it fits in the 4
+    bytes of an integer.  If the first byte in the integer is 1, the next 3 bytes
+    are a pointer into a byte[] where the termNumber list starts.
+</li><li>
+    There are actually 256 byte arrays, to compensate for the fact that the pointers
+    into the byte arrays are only 3 bytes long.  The correct byte array for a document
+    is a function of it&apos;s id.
+</li><li>
+    To save space and speed up faceting, any term that matches enough documents will
+    not be un-inverted... it will be skipped while building the un-inverted field structure,
+    and will use a set intersection method during faceting.
+</li><li>
+    To further save memory, the terms (the actual string values) are not all stored in
+    memory, but a TermIndex is used to convert term numbers to term values only
+    for the terms needed after faceting has completed.  Only every 128th term value
+    is stored, along with it&apos;s corresponding term number, and this is used as an
+    index to find the closest term and iterate until the desired number is hit (very
+    much like Lucene&apos;s own internal term index).
+</li></ul></p>
+</div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds__ctor_Lucene_Net_Index_AtomicReader_Lucene_Net_Util_IBits_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.%23ctor(Lucene.Net.Index.AtomicReader%2CLucene.Net.Util.IBits%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L209">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_DocTermOrds__ctor_" data-uid="Lucene.Net.Index.DocTermOrds.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_DocTermOrds__ctor_Lucene_Net_Index_AtomicReader_Lucene_Net_Util_IBits_System_String_" data-uid="Lucene.Net.Index.DocTermOrds.#ctor(Lucene.Net.Index.AtomicReader,Lucene.Net.Util.IBits,System.String)">DocTermOrds(AtomicReader, IBits, String)</h4>
+  <div class="markdown level1 summary"><p>Inverts all terms </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DocTermOrds(AtomicReader reader, IBits liveDocs, string field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a></td>
+        <td><span class="parametername">reader</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td><span class="parametername">liveDocs</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds__ctor_Lucene_Net_Index_AtomicReader_Lucene_Net_Util_IBits_System_String_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.%23ctor(Lucene.Net.Index.AtomicReader%2CLucene.Net.Util.IBits%2CSystem.String%2CLucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L216">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_DocTermOrds__ctor_" data-uid="Lucene.Net.Index.DocTermOrds.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_DocTermOrds__ctor_Lucene_Net_Index_AtomicReader_Lucene_Net_Util_IBits_System_String_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Index.DocTermOrds.#ctor(Lucene.Net.Index.AtomicReader,Lucene.Net.Util.IBits,System.String,Lucene.Net.Util.BytesRef)">DocTermOrds(AtomicReader, IBits, String, BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Inverts only terms starting w/ prefix </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DocTermOrds(AtomicReader reader, IBits liveDocs, string field, BytesRef termPrefix)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a></td>
+        <td><span class="parametername">reader</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td><span class="parametername">liveDocs</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">termPrefix</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds__ctor_Lucene_Net_Index_AtomicReader_Lucene_Net_Util_IBits_System_String_Lucene_Net_Util_BytesRef_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.%23ctor(Lucene.Net.Index.AtomicReader%2CLucene.Net.Util.IBits%2CSystem.String%2CLucene.Net.Util.BytesRef%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L226">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_DocTermOrds__ctor_" data-uid="Lucene.Net.Index.DocTermOrds.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_DocTermOrds__ctor_Lucene_Net_Index_AtomicReader_Lucene_Net_Util_IBits_System_String_Lucene_Net_Util_BytesRef_System_Int32_" data-uid="Lucene.Net.Index.DocTermOrds.#ctor(Lucene.Net.Index.AtomicReader,Lucene.Net.Util.IBits,System.String,Lucene.Net.Util.BytesRef,System.Int32)">DocTermOrds(AtomicReader, IBits, String, BytesRef, Int32)</h4>
+  <div class="markdown level1 summary"><p>Inverts only terms starting w/ prefix, and only terms
+whose docFreq (not taking deletions into account) is
+&lt;= <code data-dev-comment-type="paramref" class="paramref">maxTermDocFreq</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DocTermOrds(AtomicReader reader, IBits liveDocs, string field, BytesRef termPrefix, int maxTermDocFreq)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a></td>
+        <td><span class="parametername">reader</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td><span class="parametername">liveDocs</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">termPrefix</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxTermDocFreq</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds__ctor_Lucene_Net_Index_AtomicReader_Lucene_Net_Util_IBits_System_String_Lucene_Net_Util_BytesRef_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.%23ctor(Lucene.Net.Index.AtomicReader%2CLucene.Net.Util.IBits%2CSystem.String%2CLucene.Net.Util.BytesRef%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L237">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_DocTermOrds__ctor_" data-uid="Lucene.Net.Index.DocTermOrds.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_DocTermOrds__ctor_Lucene_Net_Index_AtomicReader_Lucene_Net_Util_IBits_System_String_Lucene_Net_Util_BytesRef_System_Int32_System_Int32_" data-uid="Lucene.Net.Index.DocTermOrds.#ctor(Lucene.Net.Index.AtomicReader,Lucene.Net.Util.IBits,System.String,Lucene.Net.Util.BytesRef,System.Int32,System.Int32)">DocTermOrds(AtomicReader, IBits, String, BytesRef, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Inverts only terms starting w/ prefix, and only terms
+whose docFreq (not taking deletions into account) is
+&lt;=  <code data-dev-comment-type="paramref" class="paramref">maxTermDocFreq</code>, with a custom indexing interval
+(default is every 128nd term).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DocTermOrds(AtomicReader reader, IBits liveDocs, string field, BytesRef termPrefix, int maxTermDocFreq, int indexIntervalBits)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a></td>
+        <td><span class="parametername">reader</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td><span class="parametername">liveDocs</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">termPrefix</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxTermDocFreq</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">indexIntervalBits</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds__ctor_System_String_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.%23ctor(System.String%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L247">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_DocTermOrds__ctor_" data-uid="Lucene.Net.Index.DocTermOrds.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_DocTermOrds__ctor_System_String_System_Int32_System_Int32_" data-uid="Lucene.Net.Index.DocTermOrds.#ctor(System.String,System.Int32,System.Int32)">DocTermOrds(String, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Subclass inits w/ this, but be sure you then call
+uninvert, only once</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected DocTermOrds(string field, int maxTermDocFreq, int indexIntervalBits)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxTermDocFreq</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">indexIntervalBits</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_DEFAULT_INDEX_INTERVAL_BITS.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.DEFAULT_INDEX_INTERVAL_BITS%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L119">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_DocTermOrds_DEFAULT_INDEX_INTERVAL_BITS" data-uid="Lucene.Net.Index.DocTermOrds.DEFAULT_INDEX_INTERVAL_BITS">DEFAULT_INDEX_INTERVAL_BITS</h4>
+  <div class="markdown level1 summary"><p>Every 128th term is indexed, by default. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int DEFAULT_INDEX_INTERVAL_BITS</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_m_docsEnum.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.m_docsEnum%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L183">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_DocTermOrds_m_docsEnum" data-uid="Lucene.Net.Index.DocTermOrds.m_docsEnum">m_docsEnum</h4>
+  <div class="markdown level1 summary"><p>Used while uninverting. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected DocsEnum m_docsEnum</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_m_field.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.m_field%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L131">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_DocTermOrds_m_field" data-uid="Lucene.Net.Index.DocTermOrds.m_field">m_field</h4>
+  <div class="markdown level1 summary"><p>Field we are uninverting. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly string m_field</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_m_index.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.m_index%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L153">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_DocTermOrds_m_index" data-uid="Lucene.Net.Index.DocTermOrds.m_index">m_index</h4>
+  <div class="markdown level1 summary"><p>Holds the per-document ords or a pointer to the ords. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int[] m_index</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_m_indexedTermsArray.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.m_indexedTermsArray%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L166">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_DocTermOrds_m_indexedTermsArray" data-uid="Lucene.Net.Index.DocTermOrds.m_indexedTermsArray">m_indexedTermsArray</h4>
+  <div class="markdown level1 summary"><p>Holds the indexed (by default every 128th) terms. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected BytesRef[] m_indexedTermsArray</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_m_maxTermDocFreq.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.m_maxTermDocFreq%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L127">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_DocTermOrds_m_maxTermDocFreq" data-uid="Lucene.Net.Index.DocTermOrds.m_maxTermDocFreq">m_maxTermDocFreq</h4>
+  <div class="markdown level1 summary"><p>Don&apos;t uninvert terms that exceed this count. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly int m_maxTermDocFreq</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_m_numTermsInField.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.m_numTermsInField%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L135">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_DocTermOrds_m_numTermsInField" data-uid="Lucene.Net.Index.DocTermOrds.m_numTermsInField">m_numTermsInField</h4>
+  <div class="markdown level1 summary"><p>Number of terms in the field. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int m_numTermsInField</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_m_ordBase.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.m_ordBase%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L179">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_DocTermOrds_m_ordBase" data-uid="Lucene.Net.Index.DocTermOrds.m_ordBase">m_ordBase</h4>
+  <div class="markdown level1 summary"><p>Ordinal of the first term in the field, or 0 if the
+<a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a> does not implement 
+<a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Ord">Ord</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int m_ordBase</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_m_phase1_time.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.m_phase1_time%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L149">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_DocTermOrds_m_phase1_time" data-uid="Lucene.Net.Index.DocTermOrds.m_phase1_time">m_phase1_time</h4>
+  <div class="markdown level1 summary"><p>Time for phase1 of the uninvert process. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int m_phase1_time</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_m_prefix.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.m_prefix%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L172">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_DocTermOrds_m_prefix" data-uid="Lucene.Net.Index.DocTermOrds.m_prefix">m_prefix</h4>
+  <div class="markdown level1 summary"><p>If non-null, only terms matching this prefix were
+indexed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected BytesRef m_prefix</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_m_sizeOfIndexedStrings.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.m_sizeOfIndexedStrings%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L162">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_DocTermOrds_m_sizeOfIndexedStrings" data-uid="Lucene.Net.Index.DocTermOrds.m_sizeOfIndexedStrings">m_sizeOfIndexedStrings</h4>
+  <div class="markdown level1 summary"><p>Total bytes (sum of term lengths) for all indexed terms. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected long m_sizeOfIndexedStrings</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_m_termInstances.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.m_termInstances%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L139">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_DocTermOrds_m_termInstances" data-uid="Lucene.Net.Index.DocTermOrds.m_termInstances">m_termInstances</h4>
+  <div class="markdown level1 summary"><p>Total number of references to term numbers. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected long m_termInstances</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_m_tnums.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.m_tnums%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L158">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_DocTermOrds_m_tnums" data-uid="Lucene.Net.Index.DocTermOrds.m_tnums">m_tnums</h4>
+  <div class="markdown level1 summary"><p>Holds term ords for documents. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected sbyte[][] m_tnums</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.SByte</span>[][]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_m_total_time.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.m_total_time%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L145">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_DocTermOrds_m_total_time" data-uid="Lucene.Net.Index.DocTermOrds.m_total_time">m_total_time</h4>
+  <div class="markdown level1 summary"><p>Total time to uninvert the field. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int m_total_time</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_IsEmpty.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.IsEmpty%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L307">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_DocTermOrds_IsEmpty_" data-uid="Lucene.Net.Index.DocTermOrds.IsEmpty*"></a>
+  <h4 id="Lucene_Net_Index_DocTermOrds_IsEmpty" data-uid="Lucene.Net.Index.DocTermOrds.IsEmpty">IsEmpty</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if no terms were indexed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsEmpty { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_NumTerms.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.NumTerms%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L299">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_DocTermOrds_NumTerms_" data-uid="Lucene.Net.Index.DocTermOrds.NumTerms*"></a>
+  <h4 id="Lucene_Net_Index_DocTermOrds_NumTerms" data-uid="Lucene.Net.Index.DocTermOrds.NumTerms">NumTerms</h4>
+  <div class="markdown level1 summary"><p>Returns the number of terms in this field</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int NumTerms { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_GetIterator_Lucene_Net_Index_AtomicReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.GetIterator(Lucene.Net.Index.AtomicReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L944">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_DocTermOrds_GetIterator_" data-uid="Lucene.Net.Index.DocTermOrds.GetIterator*"></a>
+  <h4 id="Lucene_Net_Index_DocTermOrds_GetIterator_Lucene_Net_Index_AtomicReader_" data-uid="Lucene.Net.Index.DocTermOrds.GetIterator(Lucene.Net.Index.AtomicReader)">GetIterator(AtomicReader)</h4>
+  <div class="markdown level1 summary"><p>Returns a <a class="xref" href="Lucene.Net.Index.SortedSetDocValues.html">SortedSetDocValues</a> view of this instance </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual SortedSetDocValues GetIterator(AtomicReader reader)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a></td>
+        <td><span class="parametername">reader</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SortedSetDocValues.html">SortedSetDocValues</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_GetOrdTermsEnum_Lucene_Net_Index_AtomicReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.GetOrdTermsEnum(Lucene.Net.Index.AtomicReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L269">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_DocTermOrds_GetOrdTermsEnum_" data-uid="Lucene.Net.Index.DocTermOrds.GetOrdTermsEnum*"></a>
+  <h4 id="Lucene_Net_Index_DocTermOrds_GetOrdTermsEnum_Lucene_Net_Index_AtomicReader_" data-uid="Lucene.Net.Index.DocTermOrds.GetOrdTermsEnum(Lucene.Net.Index.AtomicReader)">GetOrdTermsEnum(AtomicReader)</h4>
+  <div class="markdown level1 summary"><p>Returns a <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> that implements <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Ord">Ord</a>.  If the
+provided <code data-dev-comment-type="paramref" class="paramref">reader</code> supports <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Ord">Ord</a>, we just return its
+<a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a>; if it does not, we build a &quot;private&quot; terms
+index internally (WARNING: consumes RAM) and use that
+index to implement <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Ord">Ord</a>.  This also enables <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Ord">Ord</a> on top
+of a composite reader.  The returned <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> is
+unpositioned.  This returns <code>null</code> if there are no terms.</p>
+<p><p><strong>NOTE</strong>: you must pass the same reader that was
+used when creating this class</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TermsEnum GetOrdTermsEnum(AtomicReader reader)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a></td>
+        <td><span class="parametername">reader</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_LookupTerm_Lucene_Net_Index_TermsEnum_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.LookupTerm(Lucene.Net.Index.TermsEnum%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L936">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_DocTermOrds_LookupTerm_" data-uid="Lucene.Net.Index.DocTermOrds.LookupTerm*"></a>
+  <h4 id="Lucene_Net_Index_DocTermOrds_LookupTerm_Lucene_Net_Index_TermsEnum_System_Int32_" data-uid="Lucene.Net.Index.DocTermOrds.LookupTerm(Lucene.Net.Index.TermsEnum,System.Int32)">LookupTerm(TermsEnum, Int32)</h4>
+  <div class="markdown level1 summary"><p>Returns the term (<a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a>) corresponding to
+the provided ordinal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual BytesRef LookupTerm(TermsEnum termsEnum, int ord)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a></td>
+        <td><span class="parametername">termsEnum</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">ord</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_RamUsedInBytes.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.RamUsedInBytes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L187">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_DocTermOrds_RamUsedInBytes_" data-uid="Lucene.Net.Index.DocTermOrds.RamUsedInBytes*"></a>
+  <h4 id="Lucene_Net_Index_DocTermOrds_RamUsedInBytes" data-uid="Lucene.Net.Index.DocTermOrds.RamUsedInBytes">RamUsedInBytes()</h4>
+  <div class="markdown level1 summary"><p>Returns total bytes used. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual long RamUsedInBytes()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_SetActualDocFreq_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.SetActualDocFreq(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L326">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_DocTermOrds_SetActualDocFreq_" data-uid="Lucene.Net.Index.DocTermOrds.SetActualDocFreq*"></a>
+  <h4 id="Lucene_Net_Index_DocTermOrds_SetActualDocFreq_System_Int32_System_Int32_" data-uid="Lucene.Net.Index.DocTermOrds.SetActualDocFreq(System.Int32,System.Int32)">SetActualDocFreq(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Invoked during <a class="xref" href="Lucene.Net.Index.DocTermOrds.html#Lucene_Net_Index_DocTermOrds_Uninvert_Lucene_Net_Index_AtomicReader_Lucene_Net_Util_IBits_Lucene_Net_Util_BytesRef_">Uninvert(AtomicReader, IBits, BytesRef)</a>
+to record the document frequency for each uninverted
+term.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void SetActualDocFreq(int termNum, int df)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">termNum</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">df</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_Uninvert_Lucene_Net_Index_AtomicReader_Lucene_Net_Util_IBits_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.Uninvert(Lucene.Net.Index.AtomicReader%2CLucene.Net.Util.IBits%2CLucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L332">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_DocTermOrds_Uninvert_" data-uid="Lucene.Net.Index.DocTermOrds.Uninvert*"></a>
+  <h4 id="Lucene_Net_Index_DocTermOrds_Uninvert_Lucene_Net_Index_AtomicReader_Lucene_Net_Util_IBits_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Index.DocTermOrds.Uninvert(Lucene.Net.Index.AtomicReader,Lucene.Net.Util.IBits,Lucene.Net.Util.BytesRef)">Uninvert(AtomicReader, IBits, BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Call this only once (if you subclass!) </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void Uninvert(AtomicReader reader, IBits liveDocs, BytesRef termPrefix)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a></td>
+        <td><span class="parametername">reader</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td><span class="parametername">liveDocs</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">termPrefix</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds_VisitTerm_Lucene_Net_Index_TermsEnum_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds.VisitTerm(Lucene.Net.Index.TermsEnum%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L317">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_DocTermOrds_VisitTerm_" data-uid="Lucene.Net.Index.DocTermOrds.VisitTerm*"></a>
+  <h4 id="Lucene_Net_Index_DocTermOrds_VisitTerm_Lucene_Net_Index_TermsEnum_System_Int32_" data-uid="Lucene.Net.Index.DocTermOrds.VisitTerm(Lucene.Net.Index.TermsEnum,System.Int32)">VisitTerm(TermsEnum, Int32)</h4>
+  <div class="markdown level1 summary"><p>Subclass can override this </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void VisitTerm(TermsEnum te, int termNum)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a></td>
+        <td><span class="parametername">te</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">termNum</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_DocTermOrds.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.DocTermOrds%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Index/DocTermOrds.cs/#L109" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

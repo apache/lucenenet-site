@@ -1,0 +1,2050 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class SafeTextWriterWrapper
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class SafeTextWriterWrapper
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper">
+  
+  
+  <h1 id="Lucene_Net_Support_IO_SafeTextWriterWrapper" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper" class="text-break">Class SafeTextWriterWrapper
+  </h1>
+  <div class="markdown level0 summary"><p>Decorates a <see cref="!:TextWriter"></see> instance and
+makes no assumptions about whether <see cref="!:IDisposable.Dispose"></see>
+has been called on the inner instance or not. Acts like a circuit breaker -
+the first <see cref="!:ObjectDisposedException"></see> caught turns it off and
+the rest of the calls are ignored after that point until <a class="xref" href="Lucene.Net.Support.IO.SafeTextWriterWrapper.html#Lucene_Net_Support_IO_SafeTextWriterWrapper_Reset">Reset()</a>
+is called.
+<p>
+The primary purpose is for using a <see cref="!:TextWriter"></see> instance within a non-disposable
+parent object. Since the creator of the <see cref="!:TextWriter"></see> ultimately is responsible for
+disposing it, our non-disposable object has no way of knowing whether it is safe to use the <see cref="!:TextWriter"></see>.
+Wraping the <see cref="!:TextWriter"></see> within a <a class="xref" href="Lucene.Net.Support.IO.SafeTextWriterWrapper.html">SafeTextWriterWrapper</a> ensures the
+non-disposable object can continue to make calls to the <see cref="!:TextWriter"></see> without raising
+exceptions (it is presumed that the <see cref="!:TextWriter"></see> functionality is optional).</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">SafeTextWriterWrapper</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Support.IO.html">Lucene.Net.Support.IO</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class SafeTextWriterWrapper : TextWriter</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper__ctor_TextWriter_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.%23ctor(TextWriter)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L49">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper__ctor_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.#ctor*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper__ctor_TextWriter_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.#ctor(TextWriter)">SafeTextWriterWrapper(TextWriter)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SafeTextWriterWrapper(TextWriter textWriter)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TextWriter</span></td>
+        <td><span class="parametername">textWriter</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Encoding.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Encoding%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L59">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Encoding_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Encoding*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Encoding" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Encoding">Encoding</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Encoding Encoding { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Encoding</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_FormatProvider.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.FormatProvider%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L67">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_FormatProvider_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.FormatProvider*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_FormatProvider" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.FormatProvider">FormatProvider</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IFormatProvider FormatProvider { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IFormatProvider</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_NewLine.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.NewLine%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L75">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_NewLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.NewLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_NewLine" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.NewLine">NewLine</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string NewLine { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Close.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Close%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L89">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Close_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Close*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Close" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Close">Close()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Close()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L382">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Dispose_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Dispose*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Dispose_System_Boolean_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Dispose(System.Boolean)">Dispose(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">disposing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L101">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Equals_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Equals*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Equals_System_Object_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Flush.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Flush%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L106">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Flush_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Flush*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Flush" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Flush">Flush()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Flush()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_FlushAsync.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.FlushAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L112">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_FlushAsync_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.FlushAsync*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_FlushAsync" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.FlushAsync">FlushAsync()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task FlushAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_GetHashCode.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L117">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_GetHashCode_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.GetHashCode*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_GetHashCode" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_InitializeLifetimeService.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.InitializeLifetimeService%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L123">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_InitializeLifetimeService_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.InitializeLifetimeService*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_InitializeLifetimeService" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.InitializeLifetimeService">InitializeLifetimeService()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override object InitializeLifetimeService()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Reset.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Reset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L377">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Reset_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Reset*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Reset" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Reset">Reset()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Reset()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L129">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_ToString_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.ToString*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_ToString" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L134">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Boolean_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Boolean)">Write(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(bool value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Char_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Char)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L139">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Char_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Char)">Write(Char)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(char value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Char___.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Char%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L144">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Char___" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Char[])">Write(Char[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(char[] buffer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">buffer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Char___System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Char%5B%5D%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L149">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Char___System_Int32_System_Int32_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Char[],System.Int32,System.Int32)">Write(Char[], Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(char[] buffer, int index, int count)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">buffer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">count</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Decimal_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Decimal)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L154">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Decimal_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Decimal)">Write(Decimal)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(decimal value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Decimal</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Double_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L159">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Double_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Double)">Write(Double)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(double value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L169">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Int32_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Int32)">Write(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(int value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L174">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Int64_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Int64)">Write(Int64)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(long value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L179">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Object_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Object)">Write(Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(object value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L164">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_Single_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.Single)">Write(Single)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(float value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L204">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_String_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.String)">Write(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(string value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_String_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.String%2CSystem.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L184">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_String_System_Object_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.String,System.Object)">Write(String, Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(string format, object arg0)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">format</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">arg0</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_String_System_Object_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.String%2CSystem.Object%2CSystem.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L189">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_String_System_Object_System_Object_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.String,System.Object,System.Object)">Write(String, Object, Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(string format, object arg0, object arg1)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">format</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">arg0</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">arg1</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_String_System_Object_System_Object_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.String%2CSystem.Object%2CSystem.Object%2CSystem.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L194">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_String_System_Object_System_Object_System_Object_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.String,System.Object,System.Object,System.Object)">Write(String, Object, Object, Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(string format, object arg0, object arg1, object arg2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">format</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">arg0</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">arg1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">arg2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_String_System_Object___.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.String%2CSystem.Object%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L199">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_String_System_Object___" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.String,System.Object[])">Write(String, Object[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(string format, params object[] arg)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">format</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span>[]</td>
+        <td><span class="parametername">arg</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_UInt32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L209">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_UInt32_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.UInt32)">Write(UInt32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(uint value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_UInt64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.UInt64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L215">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_Write_System_UInt64_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.Write(System.UInt64)">Write(UInt64)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Write(ulong value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt64</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteAsync_System_Char_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteAsync(System.Char)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L221">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteAsync_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteAsync*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteAsync_System_Char_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteAsync(System.Char)">WriteAsync(Char)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task WriteAsync(char value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteAsync_System_Char___System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteAsync(System.Char%5B%5D%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L226">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteAsync_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteAsync*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteAsync_System_Char___System_Int32_System_Int32_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteAsync(System.Char[],System.Int32,System.Int32)">WriteAsync(Char[], Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task WriteAsync(char[] buffer, int index, int count)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">buffer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">count</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteAsync_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L231">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteAsync_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteAsync*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteAsync_System_String_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteAsync(System.String)">WriteAsync(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task WriteAsync(string value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L236">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine">WriteLine()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L241">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Boolean_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Boolean)">WriteLine(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(bool value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Char_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Char)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L246">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Char_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Char)">WriteLine(Char)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(char value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Char___.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Char%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L251">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Char___" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Char[])">WriteLine(Char[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(char[] buffer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">buffer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Char___System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Char%5B%5D%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L256">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Char___System_Int32_System_Int32_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Char[],System.Int32,System.Int32)">WriteLine(Char[], Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(char[] buffer, int index, int count)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">buffer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">count</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Decimal_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Decimal)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L261">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Decimal_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Decimal)">WriteLine(Decimal)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(decimal value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Decimal</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Double_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L266">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Double_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Double)">WriteLine(Double)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(double value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L276">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Int32_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Int32)">WriteLine(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(int value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L281">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Int64_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Int64)">WriteLine(Int64)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(long value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L286">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Object_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Object)">WriteLine(Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(object value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L271">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_Single_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.Single)">WriteLine(Single)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(float value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L311">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_String_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.String)">WriteLine(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(string value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_String_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.String%2CSystem.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L291">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_String_System_Object_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.String,System.Object)">WriteLine(String, Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(string format, object arg0)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">format</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">arg0</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_String_System_Object_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.String%2CSystem.Object%2CSystem.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L296">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_String_System_Object_System_Object_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.String,System.Object,System.Object)">WriteLine(String, Object, Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(string format, object arg0, object arg1)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">format</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">arg0</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">arg1</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_String_System_Object_System_Object_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.String%2CSystem.Object%2CSystem.Object%2CSystem.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L301">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_String_System_Object_System_Object_System_Object_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.String,System.Object,System.Object,System.Object)">WriteLine(String, Object, Object, Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(string format, object arg0, object arg1, object arg2)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">format</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">arg0</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">arg1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">arg2</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_String_System_Object___.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.String%2CSystem.Object%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L306">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_String_System_Object___" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.String,System.Object[])">WriteLine(String, Object[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(string format, params object[] arg)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">format</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Object</span>[]</td>
+        <td><span class="parametername">arg</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_UInt32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.UInt32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L316">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_UInt32_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.UInt32)">WriteLine(UInt32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(uint value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt32</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_UInt64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.UInt64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L322">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLine_System_UInt64_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLine(System.UInt64)">WriteLine(UInt64)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLine(ulong value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.UInt64</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLineAsync.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLineAsync%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L328">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLineAsync_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLineAsync*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLineAsync" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLineAsync">WriteLineAsync()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task WriteLineAsync()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLineAsync_System_Char_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLineAsync(System.Char)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L333">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLineAsync_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLineAsync*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLineAsync_System_Char_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLineAsync(System.Char)">WriteLineAsync(Char)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task WriteLineAsync(char value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLineAsync_System_Char___System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLineAsync(System.Char%5B%5D%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L338">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLineAsync_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLineAsync*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLineAsync_System_Char___System_Int32_System_Int32_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLineAsync(System.Char[],System.Int32,System.Int32)">WriteLineAsync(Char[], Int32, Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task WriteLineAsync(char[] buffer, int index, int count)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Char</span>[]</td>
+        <td><span class="parametername">buffer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">index</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">count</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLineAsync_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLineAsync(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L343">View Source</a>
+  </span>
+  <a id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLineAsync_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLineAsync*"></a>
+  <h4 id="Lucene_Net_Support_IO_SafeTextWriterWrapper_WriteLineAsync_System_String_" data-uid="Lucene.Net.Support.IO.SafeTextWriterWrapper.WriteLineAsync(System.String)">WriteLineAsync(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Task WriteLineAsync(string value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Task</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Support_IO_SafeTextWriterWrapper.md&amp;value=---%0Auid%3A%20Lucene.Net.Support.IO.SafeTextWriterWrapper%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Support/IO/SafeTextWriterWrapper.cs/#L44" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

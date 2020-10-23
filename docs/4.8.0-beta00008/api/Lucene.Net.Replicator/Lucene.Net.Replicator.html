@@ -1,0 +1,293 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Lucene.Net.Replicator
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Lucene.Net.Replicator
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Replicator">
+  
+  <h1 id="Lucene_Net_Replicator" data-uid="Lucene.Net.Replicator" class="text-break">Namespace Lucene.Net.Replicator
+  </h1>
+  <div class="markdown level0 summary"><!-- 
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<h1 id="files-replication-framework">Files replication framework</h1>
+<p>The
+<a href="Replicator.html">Replicator</a> allows replicating files between a server and client(s). Producers publish
+<a href="Revision.html">revisions</a> and consumers update to the latest revision available.
+<a href="ReplicationClient.html">ReplicationClient</a> is a helper utility for performing the update operation. It can
+be invoked either
+<a href="ReplicationClient.html#updateNow()">manually</a> or periodically by
+[starting an update thread](ReplicationClient.html#startUpdateThread(long, java.lang.String)).
+<a href="http/HttpReplicator.html">HttpReplicator</a> can be used to replicate revisions by consumers that reside on
+a different node than the producer.</p>
+<p>The replication framework supports replicating any type of files, with built-in support for a single search index as
+well as an index and taxonomy pair. For a single index, the application should publish an
+<a href="IndexRevision.html">IndexRevision</a> and set
+<a href="IndexReplicationHandler.html">IndexReplicationHandler</a> on the client. For an index and taxonomy pair, the
+application should publish an <a href="IndexAndTaxonomyRevision.html">IndexAndTaxonomyRevision</a> and set
+<a href="IndexAndTaxonomyReplicationHandler.html">IndexAndTaxonomyReplicationHandler</a> on the client.</p>
+<p>When the replication client detects that there is a newer revision available, it copies the files of the revision and
+then invokes the handler to complete the operation (e.g. copy the files to the index directory, fsync them, reopen an
+index reader etc.). By default, only files that do not exist in the handler&#39;s
+<a href="ReplicationClient.ReplicationHandler.html#currentRevisionFiles()">current revision files</a> are copied,
+however this can be overridden by extending the client.</p>
+<p>An example usage of the Replicator:</p>
+<p>// ++++++++++++++ SERVER SIDE ++++++++++++++ //
+IndexWriter publishWriter; // the writer used for indexing
+Replicator replicator = new LocalReplicator();
+replicator.publish(new IndexRevision(publishWriter));</p>
+<p>// ++++++++++++++ CLIENT SIDE ++++++++++++++ //
+// either LocalReplictor, or HttpReplicator if client and server are on different nodes
+Replicator replicator;</p>
+<p>// callback invoked after handler finished handling the revision and e.g. can reopen the reader.
+Callable<boolean> callback = null; // can also be null if no callback is needed
+ReplicationHandler handler = new IndexReplicationHandler(indexDir, callback);
+SourceDirectoryFactory factory = new PerSessionDirectoryFactory(workDir);
+ReplicationClient client = new ReplicationClient(replicator, handler, factory);<p>
+<p>// invoke client manually
+client.updateNow();</p>
+<p>// or, periodically
+client.startUpdateThread(100); // check for update every 100 milliseconds</p>
+</boolean></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Replicator.IndexAndTaxonomyReplicationHandler.html">IndexAndTaxonomyReplicationHandler</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Replicator.IReplicationHandler.html">IReplicationHandler</a> for replication of an index and taxonomy pair.
+See <a class="xref" href="Lucene.Net.Replicator.IReplicationHandler.html">IReplicationHandler</a> for more detail. This handler ensures
+that the search and taxonomy indexes are replicated in a consistent way.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Replicator.IndexAndTaxonomyRevision.html">IndexAndTaxonomyRevision</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Replicator.IRevision.html">IRevision</a> of a single index and taxonomy index files which comprises
+the list of files from both indexes. This revision should be used whenever a
+pair of search and taxonomy indexes need to be replicated together to
+guarantee consistency of both on the replicating (client) side.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Replicator.IndexAndTaxonomyRevision.SnapshotDirectoryTaxonomyWriter.html">IndexAndTaxonomyRevision.SnapshotDirectoryTaxonomyWriter</a></h4>
+      <section><p>A <a class="xref" href="../Lucene.Net.Facet/Lucene.Net.Facet.Taxonomy.Directory.DirectoryTaxonomyWriter.html">DirectoryTaxonomyWriter</a> which sets the underlying
+<a class="xref" href="../Lucene.Net/Lucene.Net.Index.IndexWriter.html">IndexWriter</a>&apos;s <a class="xref" href="../Lucene.Net/Lucene.Net.Index.IndexDeletionPolicy.html">IndexDeletionPolicy</a> to
+<a class="xref" href="../Lucene.Net/Lucene.Net.Index.SnapshotDeletionPolicy.html">SnapshotDeletionPolicy</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Replicator.IndexInputStream.html">IndexInputStream</a></h4>
+      <section><p>A <span class="xref">System.IO.Stream</span> which wraps an <a class="xref" href="../Lucene.Net/Lucene.Net.Store.IndexInput.html">IndexInput</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Replicator.IndexReplicationHandler.html">IndexReplicationHandler</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Replicator.IReplicationHandler.html">IReplicationHandler</a> for replication of an index. Implements
+<a class="xref" href="Lucene.Net.Replicator.IndexReplicationHandler.html#Lucene_Net_Replicator_IndexReplicationHandler_RevisionReady_System_String_System_Collections_Generic_IDictionary_System_String_System_Collections_Generic_IList_Lucene_Net_Replicator_RevisionFile___System_Collections_Generic_IDictionary_System_String_System_Collections_Generic_IList_System_String___System_Collections_Generic_IDictionary_System_String_Lucene_Net_Store_Directory__">RevisionReady(String, IDictionary&lt;String, IList&lt;RevisionFile&gt;&gt;, IDictionary&lt;String, IList&lt;String&gt;&gt;, IDictionary&lt;String, Directory&gt;)</a> by copying the files pointed by the client resolver to
+the index <a class="xref" href="../Lucene.Net/Lucene.Net.Store.Directory.html">Directory</a> and then touches the index with
+<a class="xref" href="../Lucene.Net/Lucene.Net.Index.IndexWriter.html">IndexWriter</a> to make sure any unused files are deleted.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Replicator.IndexRevision.html">IndexRevision</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Replicator.IRevision.html">IRevision</a> of a single index files which comprises the list of files
+that are part of the current <a class="xref" href="../Lucene.Net/Lucene.Net.Index.IndexCommit.html">IndexCommit</a>. To ensure the files are not
+deleted by <a class="xref" href="../Lucene.Net/Lucene.Net.Index.IndexWriter.html">IndexWriter</a> for as long as this revision stays alive (i.e.
+until <a class="xref" href="Lucene.Net.Replicator.IndexRevision.html#Lucene_Net_Replicator_IndexRevision_Release">Release()</a>, the current commit point is snapshotted, using
+<a class="xref" href="../Lucene.Net/Lucene.Net.Index.SnapshotDeletionPolicy.html">SnapshotDeletionPolicy</a> (this means that the given writer&apos;s
+<a class="xref" href="../Lucene.Net/Lucene.Net.Index.IndexWriterConfig.html#Lucene_Net_Index_IndexWriterConfig_IndexDeletionPolicy">IndexDeletionPolicy</a> should return
+<a class="xref" href="../Lucene.Net/Lucene.Net.Index.SnapshotDeletionPolicy.html">SnapshotDeletionPolicy</a>).
+<p>
+When this revision is <a class="xref" href="Lucene.Net.Replicator.IndexRevision.html#Lucene_Net_Replicator_IndexRevision_Release">Release()</a>d, it releases the obtained
+snapshot as well as calls <a class="xref" href="../Lucene.Net/Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_DeleteUnusedFiles">DeleteUnusedFiles()</a> so that the
+snapshotted files are deleted (if they are no longer needed).</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Replicator.LocalReplicator.html">LocalReplicator</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Replicator.IReplicator.html">IReplicator</a> implementation for use by the side that publishes
+<a class="xref" href="Lucene.Net.Replicator.IRevision.html">IRevision</a>s, as well for clients to <a class="xref" href="Lucene.Net.Replicator.LocalReplicator.html#Lucene_Net_Replicator_LocalReplicator_CheckForUpdate_System_String_">CheckForUpdate(String)</a>
+check for updates}. When a client needs to be updated, it is returned a
+<a class="xref" href="Lucene.Net.Replicator.SessionToken.html">SessionToken</a> through which it can
+<a class="xref" href="Lucene.Net.Replicator.LocalReplicator.html#Lucene_Net_Replicator_LocalReplicator_ObtainFile_System_String_System_String_System_String_">ObtainFile(String, String, String)</a> the files of that
+revision. As long as a revision is being replicated, this replicator
+guarantees that it will not be <a class="xref" href="Lucene.Net.Replicator.IRevision.html#Lucene_Net_Replicator_IRevision_Release">Release()</a>.
+<p>
+Replication sessions expire by default after
+<seea cref="F:Lucene.Net.Replicator.LocalReplicator.DEFAULT_SESSION_EXPIRATION_THRESHOLD"></seea>, and the threshold can be
+configured through <a class="xref" href="Lucene.Net.Replicator.LocalReplicator.html#Lucene_Net_Replicator_LocalReplicator_ExpirationThreshold">ExpirationThreshold</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Replicator.PerSessionDirectoryFactory.html">PerSessionDirectoryFactory</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Replicator.ISourceDirectoryFactory.html">ISourceDirectoryFactory</a> which returns <a class="xref" href="../Lucene.Net/Lucene.Net.Store.FSDirectory.html">FSDirectory</a> under a
+dedicated session directory. When a session is over, the entire directory is
+deleted.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Replicator.ReplicationClient.html">ReplicationClient</a></h4>
+      <section><p>A client which monitors and obtains new revisions from a <a class="xref" href="Lucene.Net.Replicator.IReplicator.html">IReplicator</a>.
+It can be used to either periodically check for updates by invoking
+<a class="xref" href="Lucene.Net.Replicator.ReplicationClient.html#Lucene_Net_Replicator_ReplicationClient_StartUpdateThread_System_Int64_System_String_">StartUpdateThread(Int64, String)</a>, or manually by calling <a class="xref" href="Lucene.Net.Replicator.ReplicationClient.html#Lucene_Net_Replicator_ReplicationClient_UpdateNow">UpdateNow()</a>.
+<p>
+Whenever a new revision is available, the <a class="xref" href="Lucene.Net.Replicator.ReplicationClient.html#Lucene_Net_Replicator_ReplicationClient_RequiredFiles_System_Collections_Generic_IDictionary_System_String_System_Collections_Generic_IList_Lucene_Net_Replicator_RevisionFile___">RequiredFiles(IDictionary&lt;String, IList&lt;RevisionFile&gt;&gt;)</a> are
+copied to the <a class="xref" href="../Lucene.Net/Lucene.Net.Store.Directory.html">Directory</a> specified by <a class="xref" href="Lucene.Net.Replicator.PerSessionDirectoryFactory.html">PerSessionDirectoryFactory</a> and
+a handler is notified.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Replicator.RevisionFile.html">RevisionFile</a></h4>
+      <section><p>Describes a file in a <a class="xref" href="Lucene.Net.Replicator.IRevision.html">IRevision</a>. A file has a source, which allows a
+single revision to contain files from multiple sources (e.g. multiple indexes).</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Replicator.SessionExpiredException.html">SessionExpiredException</a></h4>
+      <section><p>Exception indicating that a revision update session was expired due to lack of activity.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Replicator.SessionToken.html">SessionToken</a></h4>
+      <section><p>Token for a replication session, for guaranteeing that source replicated
+files will be kept safe until the replication completes.</p>
+</section>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Replicator.IReplicationHandler.html">IReplicationHandler</a></h4>
+      <section><p>Handler for revisions obtained by the client.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Replicator.IReplicator.html">IReplicator</a></h4>
+      <section><p>An interface for replicating files. Allows a producer to 
+<a class="xref" href="Lucene.Net.Replicator.IReplicator.html#Lucene_Net_Replicator_IReplicator_Publish_Lucene_Net_Replicator_IRevision_">Publish(IRevision)</a> <a class="xref" href="Lucene.Net.Replicator.IRevision.html">IRevision</a>s and consumers to
+<a class="xref" href="Lucene.Net.Replicator.IReplicator.html#Lucene_Net_Replicator_IReplicator_CheckForUpdate_System_String_">CheckForUpdate(String)</a>. When a client needs to be
+updated, it is given a <a class="xref" href="Lucene.Net.Replicator.SessionToken.html">SessionToken</a> through which it can
+<a class="xref" href="Lucene.Net.Replicator.IReplicator.html#Lucene_Net_Replicator_IReplicator_ObtainFile_System_String_System_String_System_String_">ObtainFile(String, String, String)</a> the files of that
+revision. After the client has finished obtaining all the files, it should
+<a class="xref" href="Lucene.Net.Replicator.IReplicator.html#Lucene_Net_Replicator_IReplicator_Release_System_String_">Release(String)</a> the given session, so that the files can be
+reclaimed if they are not needed anymore.
+<p>
+A client is always updated to the newest revision available. That is, if a
+client is on revision <em>r1</em> and revisions <em>r2</em> and <em>r3</em>
+were published, then when the client will next check for update, it will
+receive <em>r3</em>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Replicator.IRevision.html">IRevision</a></h4>
+      <section><p>A revision comprises lists of files that come from different sources and need
+to be replicated together to e.g. guarantee that all resources are in sync.
+In most cases an application will replicate a single index, and so the
+revision will contain files from a single source. However, some applications
+may require to treat a collection of indexes as a single entity so that the
+files from all sources are replicated together, to guarantee consistency
+beween them. For example, an application which indexes facets will need to
+replicate both the search and taxonomy indexes together, to guarantee that
+they match at the client side.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Replicator.ISourceDirectoryFactory.html">ISourceDirectoryFactory</a></h4>
+      <section><p>Resolves a session and source into a <a class="xref" href="../Lucene.Net/Lucene.Net.Store.Directory.html">Directory</a> to use for copying
+the session files to.</p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00008/src/Lucene.Net.Replicator/package.md/#L2" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

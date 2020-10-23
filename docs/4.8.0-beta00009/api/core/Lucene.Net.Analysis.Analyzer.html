@@ -1,0 +1,1113 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Analyzer
+   | Apache Lucene.NET 4.8.0-beta00009 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Analyzer
+   | Apache Lucene.NET 4.8.0-beta00009 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Analysis.Analyzer">
+  
+  
+  <h1 id="Lucene_Net_Analysis_Analyzer" data-uid="Lucene.Net.Analysis.Analyzer" class="text-break">Class Analyzer
+  </h1>
+  <div class="markdown level0 summary"><p>An <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a> builds <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>s, which analyze text.  It thus represents a
+policy for extracting index terms from text.
+<p>
+In order to define what analysis is done, subclasses must define their
+<a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a> in <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_CreateComponents_System_String_System_IO_TextReader_">CreateComponents(String, TextReader)</a>.
+The components are then reused in each call to <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_IO_TextReader_">GetTokenStream(String, TextReader)</a>.
+<p>
+Simple example:</p>
+<pre><code>Analyzer analyzer = Analyzer.NewAnonymous(createComponents: (fieldName, reader) => 
+{
+    Tokenizer source = new FooTokenizer(reader);
+    TokenStream filter = new FooFilter(source);
+    filter = new BarFilter(filter);
+    return new TokenStreamComponents(source, filter);
+});</code></pre>
+<p>For more examples, see the <a class="xref" href="Lucene.Net.Analysis.html">Lucene.Net.Analysis</a> namespace documentation.
+<p>
+For some concrete implementations bundled with Lucene, look in the analysis modules:
+<ul><li>Common:
+      Analyzers for indexing content in different languages and domains.</li><li>ICU:
+      Exposes functionality from ICU to Apache Lucene.</li><li>Kuromoji:
+      Morphological analyzer for Japanese text.</li><li>Morfologik:
+      Dictionary-driven lemmatization for the Polish language.</li><li>Phonetic:
+      Analysis for indexing phonetic signatures (for sounds-alike search).</li><li>Smart Chinese:
+      Analyzer for Simplified Chinese, which indexes words.</li><li>Stempel:
+      Algorithmic Stemmer for the Polish Language.</li><li>UIMA:
+      Analysis integration with Apache UIMA.</li></ul></p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Analyzer</span></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Analysis.AnalyzerWrapper.html">AnalyzerWrapper</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Analysis.html">Lucene.Net.Analysis</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Analysis_Analyzer_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class Analyzer : IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L78">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Analyzer__ctor_" data-uid="Lucene.Net.Analysis.Analyzer.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Analyzer__ctor" data-uid="Lucene.Net.Analysis.Analyzer.#ctor">Analyzer()</h4>
+  <div class="markdown level1 summary"><p>Create a new <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a>, reusing the same set of components per-thread
+across calls to <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_IO_TextReader_">GetTokenStream(String, TextReader)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Analyzer()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer__ctor_Lucene_Net_Analysis_ReuseStrategy_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.%23ctor(Lucene.Net.Analysis.ReuseStrategy)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L91">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Analyzer__ctor_" data-uid="Lucene.Net.Analysis.Analyzer.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Analyzer__ctor_Lucene_Net_Analysis_ReuseStrategy_" data-uid="Lucene.Net.Analysis.Analyzer.#ctor(Lucene.Net.Analysis.ReuseStrategy)">Analyzer(ReuseStrategy)</h4>
+  <div class="markdown level1 summary"><p>Expert: create a new Analyzer with a custom <a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a>.
+<p>
+NOTE: if you just want to reuse on a per-field basis, its easier to
+use a subclass of <a class="xref" href="Lucene.Net.Analysis.AnalyzerWrapper.html">AnalyzerWrapper</a> such as
+<code>Lucene.Net.Analysis.Common.Miscellaneous.PerFieldAnalyzerWrapper</code>
+instead.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Analyzer(ReuseStrategy reuseStrategy)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a></td>
+        <td><span class="parametername">reuseStrategy</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer_GLOBAL_REUSE_STRATEGY.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.GLOBAL_REUSE_STRATEGY%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L399">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Analyzer_GLOBAL_REUSE_STRATEGY" data-uid="Lucene.Net.Analysis.Analyzer.GLOBAL_REUSE_STRATEGY">GLOBAL_REUSE_STRATEGY</h4>
+  <div class="markdown level1 summary"><p>A predefined <a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a>  that reuses the same components for
+every field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly ReuseStrategy GLOBAL_REUSE_STRATEGY</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer_PER_FIELD_REUSE_STRATEGY.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.PER_FIELD_REUSE_STRATEGY%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L431">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Analyzer_PER_FIELD_REUSE_STRATEGY" data-uid="Lucene.Net.Analysis.Analyzer.PER_FIELD_REUSE_STRATEGY">PER_FIELD_REUSE_STRATEGY</h4>
+  <div class="markdown level1 summary"><p>A predefined <a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a> that reuses components per-field by
+maintaining a Map of <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a> per field name.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly ReuseStrategy PER_FIELD_REUSE_STRATEGY</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer_Strategy.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.Strategy%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L360">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Analyzer_Strategy_" data-uid="Lucene.Net.Analysis.Analyzer.Strategy*"></a>
+  <h4 id="Lucene_Net_Analysis_Analyzer_Strategy" data-uid="Lucene.Net.Analysis.Analyzer.Strategy">Strategy</h4>
+  <div class="markdown level1 summary"><p>Returns the used <a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ReuseStrategy Strategy { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer_CreateComponents_System_String_System_IO_TextReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.CreateComponents(System.String%2CSystem.IO.TextReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L229">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Analyzer_CreateComponents_" data-uid="Lucene.Net.Analysis.Analyzer.CreateComponents*"></a>
+  <h4 id="Lucene_Net_Analysis_Analyzer_CreateComponents_System_String_System_IO_TextReader_" data-uid="Lucene.Net.Analysis.Analyzer.CreateComponents(System.String,System.IO.TextReader)">CreateComponents(String, TextReader)</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a> instance for this analyzer.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract TokenStreamComponents CreateComponents(string fieldName, TextReader reader)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>the name of the fields content passed to the
+<a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a> sink as a reader </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">reader</span></td>
+        <td><p>the reader passed to the <a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a> constructor </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a></td>
+        <td><p>the <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a> for this analyzer. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer_Dispose.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L371">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Analyzer_Dispose_" data-uid="Lucene.Net.Analysis.Analyzer.Dispose*"></a>
+  <h4 id="Lucene_Net_Analysis_Analyzer_Dispose" data-uid="Lucene.Net.Analysis.Analyzer.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"><p>Frees persistent resources used by this <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L380">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Analyzer_Dispose_" data-uid="Lucene.Net.Analysis.Analyzer.Dispose*"></a>
+  <h4 id="Lucene_Net_Analysis_Analyzer_Dispose_System_Boolean_" data-uid="Lucene.Net.Analysis.Analyzer.Dispose(System.Boolean)">Dispose(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Frees persistent resources used by this <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">disposing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer_GetOffsetGap_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.GetOffsetGap(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L352">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Analyzer_GetOffsetGap_" data-uid="Lucene.Net.Analysis.Analyzer.GetOffsetGap*"></a>
+  <h4 id="Lucene_Net_Analysis_Analyzer_GetOffsetGap_System_String_" data-uid="Lucene.Net.Analysis.Analyzer.GetOffsetGap(System.String)">GetOffsetGap(String)</h4>
+  <div class="markdown level1 summary"><p>Just like <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GetPositionIncrementGap_System_String_">GetPositionIncrementGap(String)</a>, except for
+<a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> offsets instead.  By default this returns 1.
+this method is only called if the field
+produced at least one token for indexing.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int GetOffsetGap(string fieldName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>the field just indexed </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>offset gap, added to the next token emitted from <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_IO_TextReader_">GetTokenStream(String, TextReader)</a>.
+       this value must be <code>&gt;= 0</code>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer_GetPositionIncrementGap_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.GetPositionIncrementGap(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L338">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Analyzer_GetPositionIncrementGap_" data-uid="Lucene.Net.Analysis.Analyzer.GetPositionIncrementGap*"></a>
+  <h4 id="Lucene_Net_Analysis_Analyzer_GetPositionIncrementGap_System_String_" data-uid="Lucene.Net.Analysis.Analyzer.GetPositionIncrementGap(System.String)">GetPositionIncrementGap(String)</h4>
+  <div class="markdown level1 summary"><p>Invoked before indexing a <a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a> instance if
+terms have already been added to that field.  This allows custom
+analyzers to place an automatic position increment gap between
+<a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a> instances using the same field name.  The default value
+position increment gap is 0.  With a 0 position increment gap and
+the typical default token position increment of 1, all terms in a field,
+including across <a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a> instances, are in successive positions, allowing
+exact <a class="xref" href="Lucene.Net.Search.PhraseQuery.html">PhraseQuery</a> matches, for instance, across <a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a> instance boundaries.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int GetPositionIncrementGap(string fieldName)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p><a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a> name being indexed. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>position increment gap, added to the next token emitted from <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_IO_TextReader_">GetTokenStream(String, TextReader)</a>.
+       this value must be <code>&gt;= 0</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_IO_TextReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.GetTokenStream(System.String%2CSystem.IO.TextReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L252">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Analyzer_GetTokenStream_" data-uid="Lucene.Net.Analysis.Analyzer.GetTokenStream*"></a>
+  <h4 id="Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_IO_TextReader_" data-uid="Lucene.Net.Analysis.Analyzer.GetTokenStream(System.String,System.IO.TextReader)">GetTokenStream(String, TextReader)</h4>
+  <div class="markdown level1 summary"><p>Returns a <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> suitable for <code data-dev-comment-type="paramref" class="paramref">fieldName</code>, tokenizing
+the contents of <code>text</code>.
+<p>
+This method uses <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_CreateComponents_System_String_System_IO_TextReader_">CreateComponents(String, TextReader)</a> to obtain an
+instance of <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a>. It returns the sink of the
+components and stores the components internally. Subsequent calls to this
+method will reuse the previously stored components after resetting them
+through <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html#Lucene_Net_Analysis_TokenStreamComponents_SetReader_System_IO_TextReader_">SetReader(TextReader)</a>.
+<p>
+<strong>NOTE:</strong> After calling this method, the consumer must follow the
+workflow described in <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> to properly consume its contents.
+See the <a class="xref" href="Lucene.Net.Analysis.html">Lucene.Net.Analysis</a> namespace documentation for
+some examples demonstrating this.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TokenStream GetTokenStream(string fieldName, TextReader reader)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>the name of the field the created <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> is used for </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">reader</span></td>
+        <td><p>the reader the streams source reads from </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a></td>
+        <td><a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> for iterating the analyzed content of <span class="xref">System.IO.TextReader</span> </td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ObjectDisposedException</span></td>
+        <td><p>if the Analyzer is disposed. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>if an i/o error occurs (may rarely happen for strings). </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_IO_TextReader__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_String_">GetTokenStream(String, String)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.GetTokenStream(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L289">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Analyzer_GetTokenStream_" data-uid="Lucene.Net.Analysis.Analyzer.GetTokenStream*"></a>
+  <h4 id="Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_String_" data-uid="Lucene.Net.Analysis.Analyzer.GetTokenStream(System.String,System.String)">GetTokenStream(String, String)</h4>
+  <div class="markdown level1 summary"><p>Returns a <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> suitable for <code data-dev-comment-type="paramref" class="paramref">fieldName</code>, tokenizing
+the contents of <code data-dev-comment-type="paramref" class="paramref">text</code>.
+<p>
+This method uses <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_CreateComponents_System_String_System_IO_TextReader_">CreateComponents(String, TextReader)</a> to obtain an
+instance of <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a>. It returns the sink of the
+components and stores the components internally. Subsequent calls to this
+method will reuse the previously stored components after resetting them
+through <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html#Lucene_Net_Analysis_TokenStreamComponents_SetReader_System_IO_TextReader_">SetReader(TextReader)</a>.
+<p>
+<strong>NOTE:</strong> After calling this method, the consumer must follow the 
+workflow described in <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> to properly consume its contents.
+See the <a class="xref" href="Lucene.Net.Analysis.html">Lucene.Net.Analysis</a> namespace documentation for
+some examples demonstrating this.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TokenStream GetTokenStream(string fieldName, string text)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>the name of the field the created <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> is used for</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">text</span></td>
+        <td><p>the <span class="xref">System.String</span> the streams source reads from </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a></td>
+        <td><p><a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> for iterating the analyzed content of <code>reader</code></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ObjectDisposedException</span></td>
+        <td><p>if the Analyzer is disposed. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>if an i/o error occurs (may rarely happen for strings). </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_String__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_IO_TextReader_">GetTokenStream(String, TextReader)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer_InitReader_System_String_System_IO_TextReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.InitReader(System.String%2CSystem.IO.TextReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L320">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Analyzer_InitReader_" data-uid="Lucene.Net.Analysis.Analyzer.InitReader*"></a>
+  <h4 id="Lucene_Net_Analysis_Analyzer_InitReader_System_String_System_IO_TextReader_" data-uid="Lucene.Net.Analysis.Analyzer.InitReader(System.String,System.IO.TextReader)">InitReader(String, TextReader)</h4>
+  <div class="markdown level1 summary"><p>Override this if you want to add a <a class="xref" href="Lucene.Net.Analysis.CharFilter.html">CharFilter</a> chain.
+<p>
+The default implementation returns <code data-dev-comment-type="paramref" class="paramref">reader</code>
+unchanged.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual TextReader InitReader(string fieldName, TextReader reader)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p><a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a> name being indexed </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><span class="parametername">reader</span></td>
+        <td><p>original <span class="xref">System.IO.TextReader</span> </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.TextReader</span></td>
+        <td><p>reader, optionally decorated with <a class="xref" href="Lucene.Net.Analysis.CharFilter.html">CharFilter</a>(s) </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer_NewAnonymous_System_Func_System_String_System_IO_TextReader_Lucene_Net_Analysis_TokenStreamComponents__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.NewAnonymous(System.Func%7BSystem.String%2CSystem.IO.TextReader%2CLucene.Net.Analysis.TokenStreamComponents%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L118">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Analyzer_NewAnonymous_" data-uid="Lucene.Net.Analysis.Analyzer.NewAnonymous*"></a>
+  <h4 id="Lucene_Net_Analysis_Analyzer_NewAnonymous_System_Func_System_String_System_IO_TextReader_Lucene_Net_Analysis_TokenStreamComponents__" data-uid="Lucene.Net.Analysis.Analyzer.NewAnonymous(System.Func{System.String,System.IO.TextReader,Lucene.Net.Analysis.TokenStreamComponents})">NewAnonymous(Func&lt;String, TextReader, TokenStreamComponents&gt;)</h4>
+  <div class="markdown level1 summary"><p>Creates a new instance with the ability to specify the body of the <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_CreateComponents_System_String_System_IO_TextReader_">CreateComponents(String, TextReader)</a>
+method through the <code data-dev-comment-type="paramref" class="paramref">createComponents</code> parameter.
+Simple example: </p>
+<pre><code>    var analyzer = Analyzer.NewAnonymous(createComponents: (fieldName, reader) => 
+    {
+        Tokenizer source = new FooTokenizer(reader);
+        TokenStream filter = new FooFilter(source);
+        filter = new BarFilter(filter);
+        return new TokenStreamComponents(source, filter);
+    });</code></pre>
+<p><p>
+LUCENENET specific</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Analyzer NewAnonymous(Func&lt;string, TextReader, TokenStreamComponents&gt; createComponents)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.IO.TextReader</span>, <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a>&gt;</td>
+        <td><span class="parametername">createComponents</span></td>
+        <td><p>A delegate method that represents (is called by) the <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_CreateComponents_System_String_System_IO_TextReader_">CreateComponents(String, TextReader)</a> 
+method. It accepts a <span class="xref">System.String</span> fieldName and a <span class="xref">System.IO.TextReader</span> reader and 
+returns the <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a> for this analyzer.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a></td>
+        <td><p>A new <span class="xref">Lucene.Net.Analysis.Analyzer.AnonymousAnalyzer</span> instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer_NewAnonymous_System_Func_System_String_System_IO_TextReader_Lucene_Net_Analysis_TokenStreamComponents__Lucene_Net_Analysis_ReuseStrategy_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.NewAnonymous(System.Func%7BSystem.String%2CSystem.IO.TextReader%2CLucene.Net.Analysis.TokenStreamComponents%7D%2CLucene.Net.Analysis.ReuseStrategy)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L146">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Analyzer_NewAnonymous_" data-uid="Lucene.Net.Analysis.Analyzer.NewAnonymous*"></a>
+  <h4 id="Lucene_Net_Analysis_Analyzer_NewAnonymous_System_Func_System_String_System_IO_TextReader_Lucene_Net_Analysis_TokenStreamComponents__Lucene_Net_Analysis_ReuseStrategy_" data-uid="Lucene.Net.Analysis.Analyzer.NewAnonymous(System.Func{System.String,System.IO.TextReader,Lucene.Net.Analysis.TokenStreamComponents},Lucene.Net.Analysis.ReuseStrategy)">NewAnonymous(Func&lt;String, TextReader, TokenStreamComponents&gt;, ReuseStrategy)</h4>
+  <div class="markdown level1 summary"><p>Creates a new instance with the ability to specify the body of the <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_CreateComponents_System_String_System_IO_TextReader_">CreateComponents(String, TextReader)</a>
+method through the <code data-dev-comment-type="paramref" class="paramref">createComponents</code> parameter and allows the use of a <a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a>.
+Simple example: </p>
+<pre><code>    var analyzer = Analyzer.NewAnonymous(createComponents: (fieldName, reader) => 
+    {
+        Tokenizer source = new FooTokenizer(reader);
+        TokenStream filter = new FooFilter(source);
+        filter = new BarFilter(filter);
+        return new TokenStreamComponents(source, filter);
+    }, reuseStrategy);</code></pre>
+<p><p>
+LUCENENET specific</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Analyzer NewAnonymous(Func&lt;string, TextReader, TokenStreamComponents&gt; createComponents, ReuseStrategy reuseStrategy)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.IO.TextReader</span>, <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a>&gt;</td>
+        <td><span class="parametername">createComponents</span></td>
+        <td><p>An delegate method that represents (is called by) the <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_CreateComponents_System_String_System_IO_TextReader_">CreateComponents(String, TextReader)</a> 
+method. It accepts a <span class="xref">System.String</span> fieldName and a <span class="xref">System.IO.TextReader</span> reader and 
+returns the <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a> for this analyzer.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a></td>
+        <td><span class="parametername">reuseStrategy</span></td>
+        <td><p>A custom <a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a> instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a></td>
+        <td><p>A new <span class="xref">Lucene.Net.Analysis.Analyzer.AnonymousAnalyzer</span> instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer_NewAnonymous_System_Func_System_String_System_IO_TextReader_Lucene_Net_Analysis_TokenStreamComponents__System_Func_System_String_System_IO_TextReader_System_IO_TextReader__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.NewAnonymous(System.Func%7BSystem.String%2CSystem.IO.TextReader%2CLucene.Net.Analysis.TokenStreamComponents%7D%2CSystem.Func%7BSystem.String%2CSystem.IO.TextReader%2CSystem.IO.TextReader%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L180">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Analyzer_NewAnonymous_" data-uid="Lucene.Net.Analysis.Analyzer.NewAnonymous*"></a>
+  <h4 id="Lucene_Net_Analysis_Analyzer_NewAnonymous_System_Func_System_String_System_IO_TextReader_Lucene_Net_Analysis_TokenStreamComponents__System_Func_System_String_System_IO_TextReader_System_IO_TextReader__" data-uid="Lucene.Net.Analysis.Analyzer.NewAnonymous(System.Func{System.String,System.IO.TextReader,Lucene.Net.Analysis.TokenStreamComponents},System.Func{System.String,System.IO.TextReader,System.IO.TextReader})">NewAnonymous(Func&lt;String, TextReader, TokenStreamComponents&gt;, Func&lt;String, TextReader, TextReader&gt;)</h4>
+  <div class="markdown level1 summary"><p>Creates a new instance with the ability to specify the body of the <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_CreateComponents_System_String_System_IO_TextReader_">CreateComponents(String, TextReader)</a>
+method through the <code data-dev-comment-type="paramref" class="paramref">createComponents</code> parameter and the body of the <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_InitReader_System_String_System_IO_TextReader_">InitReader(String, TextReader)</a>
+method through the <code data-dev-comment-type="paramref" class="paramref">initReader</code> parameter.
+Simple example: </p>
+<pre><code>    var analyzer = Analyzer.NewAnonymous(createComponents: (fieldName, reader) => 
+    {
+        Tokenizer source = new FooTokenizer(reader);
+        TokenStream filter = new FooFilter(source);
+        filter = new BarFilter(filter);
+        return new TokenStreamComponents(source, filter);
+    }, initReader: (fieldName, reader) => 
+    {
+        return new HTMLStripCharFilter(reader);
+    });</code></pre>
+<p><p>
+LUCENENET specific</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Analyzer NewAnonymous(Func&lt;string, TextReader, TokenStreamComponents&gt; createComponents, Func&lt;string, TextReader, TextReader&gt; initReader)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.IO.TextReader</span>, <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a>&gt;</td>
+        <td><span class="parametername">createComponents</span></td>
+        <td><p>A delegate method that represents (is called by) the <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_CreateComponents_System_String_System_IO_TextReader_">CreateComponents(String, TextReader)</a> 
+method. It accepts a <span class="xref">System.String</span> fieldName and a <span class="xref">System.IO.TextReader</span> reader and 
+returns the <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a> for this analyzer.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.IO.TextReader</span>, <span class="xref">System.IO.TextReader</span>&gt;</td>
+        <td><span class="parametername">initReader</span></td>
+        <td><p>A delegate method that represents (is called by) the <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_InitReader_System_String_System_IO_TextReader_">InitReader(String, TextReader)</a>
+method. It accepts a <span class="xref">System.String</span> fieldName and a <span class="xref">System.IO.TextReader</span> reader and 
+returns the <span class="xref">System.IO.TextReader</span> that can be modified or wrapped by the <code data-dev-comment-type="paramref" class="paramref">initReader</code> method.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a></td>
+        <td><p>A new <span class="xref">Lucene.Net.Analysis.Analyzer.AnonymousAnalyzer</span> instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer_NewAnonymous_System_Func_System_String_System_IO_TextReader_Lucene_Net_Analysis_TokenStreamComponents__System_Func_System_String_System_IO_TextReader_System_IO_TextReader__Lucene_Net_Analysis_ReuseStrategy_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer.NewAnonymous(System.Func%7BSystem.String%2CSystem.IO.TextReader%2CLucene.Net.Analysis.TokenStreamComponents%7D%2CSystem.Func%7BSystem.String%2CSystem.IO.TextReader%2CSystem.IO.TextReader%7D%2CLucene.Net.Analysis.ReuseStrategy)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L215">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Analyzer_NewAnonymous_" data-uid="Lucene.Net.Analysis.Analyzer.NewAnonymous*"></a>
+  <h4 id="Lucene_Net_Analysis_Analyzer_NewAnonymous_System_Func_System_String_System_IO_TextReader_Lucene_Net_Analysis_TokenStreamComponents__System_Func_System_String_System_IO_TextReader_System_IO_TextReader__Lucene_Net_Analysis_ReuseStrategy_" data-uid="Lucene.Net.Analysis.Analyzer.NewAnonymous(System.Func{System.String,System.IO.TextReader,Lucene.Net.Analysis.TokenStreamComponents},System.Func{System.String,System.IO.TextReader,System.IO.TextReader},Lucene.Net.Analysis.ReuseStrategy)">NewAnonymous(Func&lt;String, TextReader, TokenStreamComponents&gt;, Func&lt;String, TextReader, TextReader&gt;, ReuseStrategy)</h4>
+  <div class="markdown level1 summary"><p>Creates a new instance with the ability to specify the body of the <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_CreateComponents_System_String_System_IO_TextReader_">CreateComponents(String, TextReader)</a>
+method through the <code data-dev-comment-type="paramref" class="paramref">createComponents</code> parameter, the body of the <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_InitReader_System_String_System_IO_TextReader_">InitReader(String, TextReader)</a>
+method through the <code data-dev-comment-type="paramref" class="paramref">initReader</code> parameter, and allows the use of a <a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a>.
+Simple example: </p>
+<pre><code>    var analyzer = Analyzer.NewAnonymous(createComponents: (fieldName, reader) => 
+    {
+        Tokenizer source = new FooTokenizer(reader);
+        TokenStream filter = new FooFilter(source);
+        filter = new BarFilter(filter);
+        return new TokenStreamComponents(source, filter);
+    }, initReader: (fieldName, reader) => 
+    {
+        return new HTMLStripCharFilter(reader);
+    }, reuseStrategy);</code></pre>
+<p><p>
+LUCENENET specific</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Analyzer NewAnonymous(Func&lt;string, TextReader, TokenStreamComponents&gt; createComponents, Func&lt;string, TextReader, TextReader&gt; initReader, ReuseStrategy reuseStrategy)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.IO.TextReader</span>, <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a>&gt;</td>
+        <td><span class="parametername">createComponents</span></td>
+        <td><p>A delegate method that represents (is called by) the <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_CreateComponents_System_String_System_IO_TextReader_">CreateComponents(String, TextReader)</a> 
+method. It accepts a <span class="xref">System.String</span> fieldName and a <span class="xref">System.IO.TextReader</span> reader and 
+returns the <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a> for this analyzer.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Func</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.IO.TextReader</span>, <span class="xref">System.IO.TextReader</span>&gt;</td>
+        <td><span class="parametername">initReader</span></td>
+        <td><p>A delegate method that represents (is called by) the <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_InitReader_System_String_System_IO_TextReader_">InitReader(String, TextReader)</a>
+method. It accepts a <span class="xref">System.String</span> fieldName and a <span class="xref">System.IO.TextReader</span> reader and 
+returns the <span class="xref">System.IO.TextReader</span> that can be modified or wrapped by the <code data-dev-comment-type="paramref" class="paramref">initReader</code> method.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a></td>
+        <td><span class="parametername">reuseStrategy</span></td>
+        <td><p>A custom <a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a> instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a></td>
+        <td><p>A new <span class="xref">Lucene.Net.Analysis.Analyzer.AnonymousAnalyzer</span> instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Analyzer.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Analyzer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs-poc/src/Lucene.Net/Analysis/Analyzer.cs/#L67" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

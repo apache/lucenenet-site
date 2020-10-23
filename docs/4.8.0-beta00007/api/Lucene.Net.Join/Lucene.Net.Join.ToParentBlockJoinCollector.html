@@ -1,0 +1,561 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ToParentBlockJoinCollector
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ToParentBlockJoinCollector
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector">
+  
+  
+  <h1 id="Lucene_Net_Join_ToParentBlockJoinCollector" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector" class="text-break">Class ToParentBlockJoinCollector
+  </h1>
+  <div class="markdown level0 summary"><p>Collects parent document hits for a <see cref="!:Query"></see> containing one more more
+BlockJoinQuery clauses, sorted by the
+specified parent <see cref="!:Sort"></see>.  Note that this cannot perform
+arbitrary joins; rather, it requires that all joined
+documents are indexed as a doc block (using 
+<see cref="!:IndexWriter.AddDocuments(IEnumerable&lt;IEnumerable&lt;IIndexableField>>, Analysis.Analyzer)"></see>
+or <see cref="!:IndexWriter.UpdateDocuments(Term, IEnumerable&lt;IEnumerable&lt;IIndexableField>>, Analysis.Analyzer)"></see>. 
+Ie, the join is computed
+at index time.</p>
+<p>The parent <see cref="!:Sort"></see> must only use
+fields from the parent documents; sorting by field in
+the child documents is not supported.</p>
+
+<p>You should only use this
+collector if one or more of the clauses in the query is
+a <a class="xref" href="Lucene.Net.Join.ToParentBlockJoinQuery.html">ToParentBlockJoinQuery</a>.  This collector will find those query
+clauses and record the matching child documents for the
+top scoring parent documents.</p>
+
+<p>Multiple joins (star join) and nested joins and a mix
+of the two are allowed, as long as in all cases the
+documents corresponding to a single row of each joined
+parent table were indexed as a doc block.</p>
+
+<p>For the simple star join you can retrieve the
+<a class="xref" href="../Lucene.Net.Grouping/Lucene.Net.Search.Grouping.ITopGroups-1.html">ITopGroups&lt;TGroupValue&gt;</a> instance containing each <a class="xref" href="Lucene.Net.Join.ToParentBlockJoinQuery.html">ToParentBlockJoinQuery</a>&apos;s
+matching child documents for the top parent groups,
+using <a class="xref" href="Lucene.Net.Join.ToParentBlockJoinCollector.html#Lucene_Net_Join_ToParentBlockJoinCollector_GetTopGroups_Lucene_Net_Join_ToParentBlockJoinQuery_Sort_System_Int32_System_Int32_System_Int32_System_Boolean_">GetTopGroups(ToParentBlockJoinQuery, Sort, Int32, Int32, Int32, Boolean)</a>.  Ie,
+a single query, which will contain two or more
+<a class="xref" href="Lucene.Net.Join.ToParentBlockJoinQuery.html">ToParentBlockJoinQuery</a>&apos;s as clauses representing the star join,
+can then retrieve two or more <a class="xref" href="../Lucene.Net.Grouping/Lucene.Net.Search.Grouping.ITopGroups-1.html">ITopGroups&lt;TGroupValue&gt;</a> instances.</p>
+
+<p>For nested joins, the query will run correctly (ie,
+match the right parent and child documents), however,
+because <a class="xref" href="../Lucene.Net.Grouping/Lucene.Net.Search.Grouping.TopGroups-1.html">TopGroups&lt;TGroupValue&gt;</a> is currently unable to support nesting
+(each group is not able to hold another <a class="xref" href="../Lucene.Net.Grouping/Lucene.Net.Search.Grouping.TopGroups-1.html">TopGroups&lt;TGroupValue&gt;</a>), you
+are only able to retrieve the <a class="xref" href="../Lucene.Net.Grouping/Lucene.Net.Search.Grouping.TopGroups-1.html">TopGroups&lt;TGroupValue&gt;</a> of the first
+join.  The <a class="xref" href="../Lucene.Net.Grouping/Lucene.Net.Search.Grouping.TopGroups-1.html">TopGroups&lt;TGroupValue&gt;</a> of the nested joins will not be
+correct.</p>
+
+<p>See <a href="http://lucene.apache.org/core/4_8_0/join/">http://lucene.apache.org/core/4_8_0/join/</a> for a code
+sample.</p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">ToParentBlockJoinCollector</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Join.html">Lucene.Net.Join</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Join.dll</h6>
+  <h5 id="Lucene_Net_Join_ToParentBlockJoinCollector_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class ToParentBlockJoinCollector : ICollector</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinCollector__ctor_Sort_System_Int32_System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinCollector.%23ctor(Sort%2CSystem.Int32%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Join/ToParentBlockJoinCollector.cs/#L109">View Source</a>
+  </span>
+  <a id="Lucene_Net_Join_ToParentBlockJoinCollector__ctor_" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.#ctor*"></a>
+  <h4 id="Lucene_Net_Join_ToParentBlockJoinCollector__ctor_Sort_System_Int32_System_Boolean_System_Boolean_" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.#ctor(Sort,System.Int32,System.Boolean,System.Boolean)">ToParentBlockJoinCollector(Sort, Int32, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a <a class="xref" href="Lucene.Net.Join.ToParentBlockJoinCollector.html">ToParentBlockJoinCollector</a>.  The provided <code data-dev-comment-type="paramref" class="paramref">sort</code> must
+not be null.  If you pass true <code data-dev-comment-type="paramref" class="paramref">trackScores</code>, all
+ToParentBlockQuery instances must not use
+<a class="xref" href="Lucene.Net.Join.ScoreMode.html#Lucene_Net_Join_ScoreMode_None">None</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ToParentBlockJoinCollector(Sort sort, int numParentHits, bool trackScores, bool trackMaxScore)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Sort</span></td>
+        <td><span class="parametername">sort</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numParentHits</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">trackScores</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">trackMaxScore</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinCollector_AcceptsDocsOutOfOrder.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinCollector.AcceptsDocsOutOfOrder%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Join/ToParentBlockJoinCollector.cs/#L317">View Source</a>
+  </span>
+  <a id="Lucene_Net_Join_ToParentBlockJoinCollector_AcceptsDocsOutOfOrder_" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.AcceptsDocsOutOfOrder*"></a>
+  <h4 id="Lucene_Net_Join_ToParentBlockJoinCollector_AcceptsDocsOutOfOrder" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.AcceptsDocsOutOfOrder">AcceptsDocsOutOfOrder</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool AcceptsDocsOutOfOrder { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinCollector_MaxScore.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinCollector.MaxScore%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Join/ToParentBlockJoinCollector.cs/#L554">View Source</a>
+  </span>
+  <a id="Lucene_Net_Join_ToParentBlockJoinCollector_MaxScore_" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.MaxScore*"></a>
+  <h4 id="Lucene_Net_Join_ToParentBlockJoinCollector_MaxScore" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.MaxScore">MaxScore</h4>
+  <div class="markdown level1 summary"><p>Returns the highest score across all collected parent hits, as long as
+<code>trackMaxScores=true</code> was passed
+<a class="xref" href="Lucene.Net.Join.ToParentBlockJoinCollector.html#Lucene_Net_Join_ToParentBlockJoinCollector__ctor_Sort_System_Int32_System_Boolean_System_Boolean_">ToParentBlockJoinCollector(Sort, Int32, Boolean, Boolean)</a> on
+construction. Else, this returns <see cref="!:float.NaN"></see>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual float MaxScore { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinCollector_Collect_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinCollector.Collect(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Join/ToParentBlockJoinCollector.cs/#L155">View Source</a>
+  </span>
+  <a id="Lucene_Net_Join_ToParentBlockJoinCollector_Collect_" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.Collect*"></a>
+  <h4 id="Lucene_Net_Join_ToParentBlockJoinCollector_Collect_System_Int32_" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.Collect(System.Int32)">Collect(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Collect(int parentDoc)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">parentDoc</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinCollector_GetTopGroups_Lucene_Net_Join_ToParentBlockJoinQuery_Sort_System_Int32_System_Int32_System_Int32_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinCollector.GetTopGroups(Lucene.Net.Join.ToParentBlockJoinQuery%2CSort%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Join/ToParentBlockJoinCollector.cs/#L401">View Source</a>
+  </span>
+  <a id="Lucene_Net_Join_ToParentBlockJoinCollector_GetTopGroups_" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.GetTopGroups*"></a>
+  <h4 id="Lucene_Net_Join_ToParentBlockJoinCollector_GetTopGroups_Lucene_Net_Join_ToParentBlockJoinQuery_Sort_System_Int32_System_Int32_System_Int32_System_Boolean_" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.GetTopGroups(Lucene.Net.Join.ToParentBlockJoinQuery,Sort,System.Int32,System.Int32,System.Int32,System.Boolean)">GetTopGroups(ToParentBlockJoinQuery, Sort, Int32, Int32, Int32, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Returns the <a class="xref" href="../Lucene.Net.Grouping/Lucene.Net.Search.Grouping.ITopGroups-1.html">ITopGroups&lt;TGroupValue&gt;</a> for the specified
+BlockJoinQuery. The groupValue of each GroupDocs will
+be the parent docID for that group.
+The number of documents within each group is calculated as minimum of <code data-dev-comment-type="paramref" class="paramref">maxDocsPerGroup</code>
+and number of matched child documents for that group.
+Returns <code>null</code> if no groups matched.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual ITopGroups&lt;int&gt; GetTopGroups(ToParentBlockJoinQuery query, Sort withinGroupSort, int offset, int maxDocsPerGroup, int withinGroupOffset, bool fillSortFields)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Join.ToParentBlockJoinQuery.html">ToParentBlockJoinQuery</a></td>
+        <td><span class="parametername">query</span></td>
+        <td><p>Search query </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Sort</span></td>
+        <td><span class="parametername">withinGroupSort</span></td>
+        <td><p>Sort criteria within groups </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td><p>Parent docs offset </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxDocsPerGroup</span></td>
+        <td><p>Upper bound of documents per group number </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">withinGroupOffset</span></td>
+        <td><p>Offset within each group of child docs </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">fillSortFields</span></td>
+        <td><p>Specifies whether to add sort fields or not </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net.Grouping/Lucene.Net.Search.Grouping.ITopGroups-1.html">ITopGroups</a>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><p><a class="xref" href="../Lucene.Net.Grouping/Lucene.Net.Search.Grouping.ITopGroups-1.html">ITopGroups&lt;TGroupValue&gt;</a> for specified query </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinCollector_GetTopGroupsWithAllChildDocs_Lucene_Net_Join_ToParentBlockJoinQuery_Sort_System_Int32_System_Int32_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinCollector.GetTopGroupsWithAllChildDocs(Lucene.Net.Join.ToParentBlockJoinQuery%2CSort%2CSystem.Int32%2CSystem.Int32%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Join/ToParentBlockJoinCollector.cs/#L543">View Source</a>
+  </span>
+  <a id="Lucene_Net_Join_ToParentBlockJoinCollector_GetTopGroupsWithAllChildDocs_" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.GetTopGroupsWithAllChildDocs*"></a>
+  <h4 id="Lucene_Net_Join_ToParentBlockJoinCollector_GetTopGroupsWithAllChildDocs_Lucene_Net_Join_ToParentBlockJoinQuery_Sort_System_Int32_System_Int32_System_Boolean_" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.GetTopGroupsWithAllChildDocs(Lucene.Net.Join.ToParentBlockJoinQuery,Sort,System.Int32,System.Int32,System.Boolean)">GetTopGroupsWithAllChildDocs(ToParentBlockJoinQuery, Sort, Int32, Int32, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Returns the <a class="xref" href="../Lucene.Net.Grouping/Lucene.Net.Search.Grouping.TopGroups-1.html">TopGroups&lt;TGroupValue&gt;</a> for the specified BlockJoinQuery. The groupValue of each 
+GroupDocs will be the parent docID for that group. The number of documents within 
+each group equals to the total number of matched child documents for that group.
+Returns <code>null</code> if no groups matched.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual ITopGroups&lt;int&gt; GetTopGroupsWithAllChildDocs(ToParentBlockJoinQuery query, Sort withinGroupSort, int offset, int withinGroupOffset, bool fillSortFields)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Join.ToParentBlockJoinQuery.html">ToParentBlockJoinQuery</a></td>
+        <td><span class="parametername">query</span></td>
+        <td><p>Search query</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Sort</span></td>
+        <td><span class="parametername">withinGroupSort</span></td>
+        <td><p>Sort criteria within groups</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td><p>Parent docs offset</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">withinGroupOffset</span></td>
+        <td><p>Offset within each group of child docs</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">fillSortFields</span></td>
+        <td><p>Specifies whether to add sort fields or not</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net.Grouping/Lucene.Net.Search.Grouping.ITopGroups-1.html">ITopGroups</a>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><p><a class="xref" href="../Lucene.Net.Grouping/Lucene.Net.Search.Grouping.ITopGroups-1.html">ITopGroups&lt;TGroupValue&gt;</a> for specified query</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinCollector_SetNextReader_AtomicReaderContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinCollector.SetNextReader(AtomicReaderContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Join/ToParentBlockJoinCollector.cs/#L307">View Source</a>
+  </span>
+  <a id="Lucene_Net_Join_ToParentBlockJoinCollector_SetNextReader_" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.SetNextReader*"></a>
+  <h4 id="Lucene_Net_Join_ToParentBlockJoinCollector_SetNextReader_AtomicReaderContext_" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.SetNextReader(AtomicReaderContext)">SetNextReader(AtomicReaderContext)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetNextReader(AtomicReaderContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">AtomicReaderContext</span></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinCollector_SetScorer_Scorer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinCollector.SetScorer(Scorer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Join/ToParentBlockJoinCollector.cs/#L341">View Source</a>
+  </span>
+  <a id="Lucene_Net_Join_ToParentBlockJoinCollector_SetScorer_" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.SetScorer*"></a>
+  <h4 id="Lucene_Net_Join_ToParentBlockJoinCollector_SetScorer_Scorer_" data-uid="Lucene.Net.Join.ToParentBlockJoinCollector.SetScorer(Scorer)">SetScorer(Scorer)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetScorer(Scorer scorer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Scorer</span></td>
+        <td><span class="parametername">scorer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Join_ToParentBlockJoinCollector.md&amp;value=---%0Auid%3A%20Lucene.Net.Join.ToParentBlockJoinCollector%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Join/ToParentBlockJoinCollector.cs/#L78" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

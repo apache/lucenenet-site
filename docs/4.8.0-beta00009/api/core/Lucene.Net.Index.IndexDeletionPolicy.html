@@ -1,0 +1,384 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class IndexDeletionPolicy
+   | Apache Lucene.NET 4.8.0-beta00009 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class IndexDeletionPolicy
+   | Apache Lucene.NET 4.8.0-beta00009 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Index.IndexDeletionPolicy">
+  
+  
+  <h1 id="Lucene_Net_Index_IndexDeletionPolicy" data-uid="Lucene.Net.Index.IndexDeletionPolicy" class="text-break">Class IndexDeletionPolicy
+  </h1>
+  <div class="markdown level0 summary"><p>Expert: policy for deletion of stale <a class="xref" href="Lucene.Net.Index.IndexCommit.html">IndexCommit</a>s.</p>
+
+<p>Implement this interface, and pass it to one
+of the <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> or <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a>
+constructors, to customize when older
+point-in-time commits (<a class="xref" href="Lucene.Net.Index.IndexCommit.html">IndexCommit</a>)
+are deleted from the index directory.  The default deletion policy
+is <a class="xref" href="Lucene.Net.Index.KeepOnlyLastCommitDeletionPolicy.html">KeepOnlyLastCommitDeletionPolicy</a>, which always
+removes old commits as soon as a new commit is done (this
+matches the behavior before 2.2).</p>
+
+<p>One expected use case for this (and the reason why it
+was first created) is to work around problems with an
+index directory accessed via filesystems like NFS because
+NFS does not provide the &quot;delete on last close&quot; semantics
+that Lucene&apos;s &quot;point in time&quot; search normally relies on.
+By implementing a custom deletion policy, such as &quot;a
+commit is only removed once it has been stale for more
+than X minutes&quot;, you can give your readers time to
+refresh to the new commit before <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>
+removes the old commits.  Note that doing so will
+increase the storage requirements of the index.  See <a target="top" href="http://issues.apache.org/jira/browse/LUCENE-710">LUCENE-710</a>
+for details.</p>
+
+<p>Implementers of sub-classes should make sure that <a class="xref" href="Lucene.Net.Index.IndexDeletionPolicy.html#Lucene_Net_Index_IndexDeletionPolicy_Clone">Clone()</a>
+returns an independent instance able to work with any other <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>
+or <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a> instance.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">IndexDeletionPolicy</span></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Index.KeepOnlyLastCommitDeletionPolicy.html">KeepOnlyLastCommitDeletionPolicy</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Index.NoDeletionPolicy.html">NoDeletionPolicy</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Index.SnapshotDeletionPolicy.html">SnapshotDeletionPolicy</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Index.html">Lucene.Net.Index</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Index_IndexDeletionPolicy_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class IndexDeletionPolicy</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexDeletionPolicy__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexDeletionPolicy.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Index/IndexDeletionPolicy.cs/#L62">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_IndexDeletionPolicy__ctor_" data-uid="Lucene.Net.Index.IndexDeletionPolicy.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_IndexDeletionPolicy__ctor" data-uid="Lucene.Net.Index.IndexDeletionPolicy.#ctor">IndexDeletionPolicy()</h4>
+  <div class="markdown level1 summary"><p>Sole constructor, typically called by sub-classes constructors. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected IndexDeletionPolicy()</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexDeletionPolicy_Clone.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexDeletionPolicy.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Index/IndexDeletionPolicy.cs/#L111">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_IndexDeletionPolicy_Clone_" data-uid="Lucene.Net.Index.IndexDeletionPolicy.Clone*"></a>
+  <h4 id="Lucene_Net_Index_IndexDeletionPolicy_Clone" data-uid="Lucene.Net.Index.IndexDeletionPolicy.Clone">Clone()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual object Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexDeletionPolicy_OnCommit__1_System_Collections_Generic_IList___0__.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexDeletionPolicy.OnCommit%60%601(System.Collections.Generic.IList%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Index/IndexDeletionPolicy.cs/#L109">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_IndexDeletionPolicy_OnCommit_" data-uid="Lucene.Net.Index.IndexDeletionPolicy.OnCommit*"></a>
+  <h4 id="Lucene_Net_Index_IndexDeletionPolicy_OnCommit__1_System_Collections_Generic_IList___0__" data-uid="Lucene.Net.Index.IndexDeletionPolicy.OnCommit``1(System.Collections.Generic.IList{``0})">OnCommit&lt;T&gt;(IList&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>this is called each time the writer completed a commit.
+this gives the policy a chance to remove old commit points
+with each commit.</p>
+
+<p>The policy may now choose to delete old commit points
+by calling method <a class="xref" href="Lucene.Net.Index.IndexCommit.html#Lucene_Net_Index_IndexCommit_Delete">Delete()</a>
+of <a class="xref" href="Lucene.Net.Index.IndexCommit.html">IndexCommit</a>.</p>
+
+<p>This method is only called when
+<a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Commit">Commit()</a>} or <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Dispose">Dispose()</a> is
+called, or possibly not at all if the 
+<a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Rollback">Rollback()</a>} method is called.</p>
+
+<p><u>Note:</u> the last CommitPoint is the most recent one,
+i.e. the &quot;front index state&quot;. Be careful not to delete it,
+unless you know for sure what you are doing, and unless
+you can afford to lose the index content while doing that.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void OnCommit&lt;T&gt;(IList&lt;T&gt; commits)
+    where T : IndexCommit</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;T&gt;</td>
+        <td><span class="parametername">commits</span></td>
+        <td><p>List of <a class="xref" href="Lucene.Net.Index.IndexCommit.html">IndexCommit</a>s,
+sorted by age (the 0th one is the oldest commit). </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexDeletionPolicy_OnInit__1_System_Collections_Generic_IList___0__.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexDeletionPolicy.OnInit%60%601(System.Collections.Generic.IList%7B%60%600%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Index/IndexDeletionPolicy.cs/#L86">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_IndexDeletionPolicy_OnInit_" data-uid="Lucene.Net.Index.IndexDeletionPolicy.OnInit*"></a>
+  <h4 id="Lucene_Net_Index_IndexDeletionPolicy_OnInit__1_System_Collections_Generic_IList___0__" data-uid="Lucene.Net.Index.IndexDeletionPolicy.OnInit``1(System.Collections.Generic.IList{``0})">OnInit&lt;T&gt;(IList&lt;T&gt;)</h4>
+  <div class="markdown level1 summary"><p>this is called once when a writer is first
+instantiated to give the policy a chance to remove old
+commit points.</p>
+
+<p>The writer locates all index commits present in the
+index directory and calls this method.  The policy may
+choose to delete some of the commit points, doing so by
+calling method <a class="xref" href="Lucene.Net.Index.IndexCommit.html#Lucene_Net_Index_IndexCommit_Delete">Delete()</a>.</p>
+
+<p><u>Note:</u> the last CommitPoint is the most recent one,
+i.e. the &quot;front index state&quot;. Be careful not to delete it,
+unless you know for sure what you are doing, and unless
+you can afford to lose the index content while doing that.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void OnInit&lt;T&gt;(IList&lt;T&gt; commits)
+    where T : IndexCommit</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;T&gt;</td>
+        <td><span class="parametername">commits</span></td>
+        <td><p>List of current point-in-time commits
+(<a class="xref" href="Lucene.Net.Index.IndexCommit.html">IndexCommit</a>),
+sorted by age (the 0th one is the oldest commit).
+Note that for a new index this method is invoked with
+an empty list. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexDeletionPolicy.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexDeletionPolicy%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs-poc/src/Lucene.Net/Index/IndexDeletionPolicy.cs/#L55" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

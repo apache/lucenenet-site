@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Lucene.Net.Collation
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Lucene.Net.Collation
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Collation">
+  
+  <h1 id="Lucene_Net_Collation" data-uid="Lucene.Net.Collation" class="text-break">Namespace Lucene.Net.Collation
+  </h1>
+  <div class="markdown level0 summary"><!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<p> Unicode collation support. <code>Collation</code> converts each token into its binary <code>CollationKey</code> using the provided <code>Collator</code>, allowing it to be stored as an index term. </p>
+<h2 id="use-cases">Use Cases</h2>
+<ul>
+<li><p>Efficient sorting of terms in languages that use non-Unicode character 
+orderings.  (Lucene Sort using a Locale can be very slow.) </p>
+</li>
+<li><p>Efficient range queries over fields that contain terms in languages that 
+use non-Unicode character orderings.  (Range queries using a Locale can be
+very slow.)</p>
+</li>
+<li><p>Effective Locale-specific normalization (case differences, diacritics, etc.).
+(<a class="xref" href="../Lucene.Net.Analysis.Common/Lucene.Net.Analysis.Core.LowerCaseFilter.html">LowerCaseFilter</a> and 
+<a class="xref" href="../Lucene.Net.Analysis.Common/Lucene.Net.Analysis.Miscellaneous.ASCIIFoldingFilter.html">ASCIIFoldingFilter</a> provide these services
+in a generic way that doesn&#39;t take into account locale-specific needs.)</p>
+</li>
+</ul>
+<h2 id="example-usages">Example Usages</h2>
+<h3 id="farsi-range-queries">Farsi Range Queries</h3>
+<pre><code>  // &quot;fa&quot; Locale is not supported by Sun JDK 1.4 or 1.5
+  Collator collator = Collator.getInstance(new Locale(&quot;ar&quot;));
+  CollationKeyAnalyzer analyzer = new CollationKeyAnalyzer(version, collator);
+  RAMDirectory ramDir = new RAMDirectory();
+  IndexWriter writer = new IndexWriter(ramDir, new IndexWriterConfig(version, analyzer));
+  Document doc = new Document();
+  doc.add(new TextField(&quot;content&quot;, &quot;\u0633\u0627\u0628&quot;, Field.Store.YES));
+  writer.addDocument(doc);
+  writer.close();
+  IndexReader ir = DirectoryReader.open(ramDir);
+  IndexSearcher is = new IndexSearcher(ir);
+</code></pre><p>  QueryParser aqp = new QueryParser(version, &quot;content&quot;, analyzer);
+      aqp.setAnalyzeRangeTerms(true);</p>
+<pre><code>  // Unicode order would include U+0633 in [ U+062F - U+0698 ], but Farsi
+  // orders the U+0698 character before the U+0633 character, so the single
+  // indexed Term above should NOT be returned by a ConstantScoreRangeQuery
+  // with a Farsi Collator (or an Arabic one for the case when Farsi is not
+  // supported).
+  ScoreDoc[] result
+    = is.search(aqp.parse(&quot;[ \u062F TO \u0698 ]&quot;), null, 1000).scoreDocs;
+  assertEquals(&quot;The index Term should not be included.&quot;, 0, result.length);
+</code></pre><h3 id="danish-sorting">Danish Sorting</h3>
+<pre><code>  Analyzer analyzer 
+    = new CollationKeyAnalyzer(version, Collator.getInstance(new Locale(&quot;da&quot;, &quot;dk&quot;)));
+  RAMDirectory indexStore = new RAMDirectory();
+  IndexWriter writer = new IndexWriter(indexStore, new IndexWriterConfig(version, analyzer));
+  String[] tracer = new String[] { &quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot; };
+  String[] data = new String[] { &quot;HAT&quot;, &quot;HUT&quot;, &quot;H\u00C5T&quot;, &quot;H\u00D8T&quot;, &quot;HOT&quot; };
+  String[] sortedTracerOrder = new String[] { &quot;A&quot;, &quot;E&quot;, &quot;B&quot;, &quot;D&quot;, &quot;C&quot; };
+  for (int i = 0 ; i &lt; data.length=&quot;&quot; ;=&quot;&quot; ++i)=&quot;&quot; {=&quot;&quot; document=&quot;&quot; doc=&quot;new&quot; document();=&quot;&quot; doc.add(new=&quot;&quot; storedfield(&quot;tracer&quot;,=&quot;&quot; tracer[i]));=&quot;&quot; doc.add(new=&quot;&quot; textfield(&quot;contents&quot;,=&quot;&quot; data[i],=&quot;&quot; field.store.no));=&quot;&quot; writer.adddocument(doc);=&quot;&quot; }=&quot;&quot; writer.close();=&quot;&quot; indexreader=&quot;&quot; ir=&quot;DirectoryReader.open(indexStore);&quot; indexsearcher=&quot;&quot; searcher=&quot;new&quot; indexsearcher(ir);=&quot;&quot; sort=&quot;&quot; sort=&quot;new&quot; sort();=&quot;&quot; sort.setsort(new=&quot;&quot; sortfield(&quot;contents&quot;,=&quot;&quot; sortfield.string));=&quot;&quot; query=&quot;&quot; query=&quot;new&quot; matchalldocsquery();=&quot;&quot; scoredoc[]=&quot;&quot; result=&quot;searcher.search(query,&quot; null,=&quot;&quot; 1000,=&quot;&quot; sort).scoredocs;=&quot;&quot; for=&quot;&quot; (int=&quot;&quot; i=&quot;0&quot; ;=&quot;&quot; i=&quot;&quot;&gt;&lt; result.length=&quot;&quot; ;=&quot;&quot; ++i)=&quot;&quot; {=&quot;&quot; document=&quot;&quot; doc=&quot;searcher.doc(result[i].doc);&quot; assertequals(sortedtracerorder[i],=&quot;&quot; doc.getvalues(&quot;tracer&quot;)[0]);=&quot;&quot; }=&quot;&quot;&gt;
+</code></pre><h3 id="turkish-case-normalization">Turkish Case Normalization</h3>
+<pre><code>  Collator collator = Collator.getInstance(new Locale(&quot;tr&quot;, &quot;TR&quot;));
+  collator.setStrength(Collator.PRIMARY);
+  Analyzer analyzer = new CollationKeyAnalyzer(version, collator);
+  RAMDirectory ramDir = new RAMDirectory();
+  IndexWriter writer = new IndexWriter(ramDir, new IndexWriterConfig(version, analyzer));
+  Document doc = new Document();
+  doc.add(new TextField(&quot;contents&quot;, &quot;DIGY&quot;, Field.Store.NO));
+  writer.addDocument(doc);
+  writer.close();
+  IndexReader ir = DirectoryReader.open(ramDir);
+  IndexSearcher is = new IndexSearcher(ir);
+  QueryParser parser = new QueryParser(version, &quot;contents&quot;, analyzer);
+  Query query = parser.parse(&quot;d\u0131gy&quot;);   // U+0131: dotless i
+  ScoreDoc[] result = is.search(query, null, 1000).scoreDocs;
+  assertEquals(&quot;The index Term should be included.&quot;, 1, result.length);
+</code></pre><h2 id="caveats-and-comparisons">Caveats and Comparisons</h2>
+<p> <strong>WARNING:</strong> Make sure you use exactly the same <code>Collator</code> at index and query time -- <code>CollationKey</code>s are only comparable when produced by the same <code>Collator</code>. Since {@link java.text.RuleBasedCollator}s are not independently versioned, it is unsafe to search against stored <code>CollationKey</code>s unless the following are exactly the same (best practice is to store this information with the index and check that they remain the same at query time): </p>
+<ol>
+<li><p>JVM vendor</p>
+</li>
+<li><p>JVM version, including patch version</p>
+</li>
+<li><p>The language (and country and variant, if specified) of the Locale
+used when constructing the collator via
+{@link java.text.Collator#getInstance(java.util.Locale)}.</p>
+</li>
+<li><p>The collation strength used - see {@link java.text.Collator#setStrength(int)}</p>
+<p><code>ICUCollationKeyAnalyzer</code>, available in the <a href="{@docRoot}/../analyzers-icu/overview-summary.html">icu analysis module</a>, uses ICU4J&#39;s <code>Collator</code>, which makes its version available, thus allowing collation to be versioned independently from the JVM. <code>ICUCollationKeyAnalyzer</code> is also significantly faster and generates significantly shorter keys than <code>CollationKeyAnalyzer</code>. See <a href="http://site.icu-project.org/charts/collation-icu4j-sun">http://site.icu-project.org/charts/collation-icu4j-sun</a> for key generation timing and key length comparisons between ICU4J and <code>java.text.Collator</code> over several languages. </p>
+<p><code>CollationKey</code>s generated by <code>java.text.Collator</code>s are not compatible with those those generated by ICU Collators. Specifically, if you use <code>CollationKeyAnalyzer</code> to generate index terms, do not use <code>ICUCollationKeyAnalyzer</code> on the query side, or vice versa. </p>
+</li>
+</ol>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Collation.ICUCollationAttributeFactory.html">ICUCollationAttributeFactory</a></h4>
+      <section><p>Converts each token into its <see cref="!:CollationKey"></see>, and
+then encodes bytes as an index term.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Collation.ICUCollationDocValuesField.html">ICUCollationDocValuesField</a></h4>
+      <section><p>Indexes sort keys as a single-valued <a class="xref" href="../Lucene.Net/Lucene.Net.Documents.SortedDocValuesField.html">SortedDocValuesField</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Collation.ICUCollationKeyAnalyzer.html">ICUCollationKeyAnalyzer</a></h4>
+      <section><p>Configures <a class="xref" href="../Lucene.Net.Analysis.Common/Lucene.Net.Analysis.Core.KeywordTokenizer.html">KeywordTokenizer</a> with <a class="xref" href="Lucene.Net.Collation.ICUCollationAttributeFactory.html">ICUCollationAttributeFactory</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Collation.ICUCollationKeyFilter.html">ICUCollationKeyFilter</a></h4>
+      <section><p>Converts each token into its <see cref="!:CollationKey"></see>, and
+then encodes the <see cref="!:CollationKey"></see> with <a class="xref" href="../Lucene.Net/Lucene.Net.Util.IndexableBinaryStringTools.html">IndexableBinaryStringTools</a>, to
+allow it to be stored as an index term.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Collation.ICUCollationKeyFilterFactory.html">ICUCollationKeyFilterFactory</a></h4>
+      <section><p>Factory for <a class="xref" href="Lucene.Net.Collation.ICUCollationKeyFilter.html">ICUCollationKeyFilter</a>.</p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00007/src/Lucene.Net.Analysis.Common/Collation/package.md/#L2" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

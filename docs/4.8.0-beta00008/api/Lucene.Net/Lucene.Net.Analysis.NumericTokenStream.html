@@ -1,0 +1,730 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class NumericTokenStream
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class NumericTokenStream
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Analysis.NumericTokenStream">
+  
+  
+  <h1 id="Lucene_Net_Analysis_NumericTokenStream" data-uid="Lucene.Net.Analysis.NumericTokenStream" class="text-break">Class NumericTokenStream
+  </h1>
+  <div class="markdown level0 summary"><p><strong>Expert:</strong> this class provides a <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>
+for indexing numeric values that can be used by <a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a>
+or <a class="xref" href="Lucene.Net.Search.NumericRangeFilter.html">NumericRangeFilter</a>.</p>
+<p>Note that for simple usage, <a class="xref" href="Lucene.Net.Documents.Int32Field.html">Int32Field</a>, <a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a>, 
+<a class="xref" href="Lucene.Net.Documents.SingleField.html">SingleField</a> or <a class="xref" href="Lucene.Net.Documents.DoubleField.html">DoubleField</a> is
+recommended.  These fields disable norms and
+term freqs, as they are not usually needed during
+searching.  If you need to change these settings, you
+should use this class.
+
+<p>Here&apos;s an example usage, for an <span class="xref">System.Int32</span> field:
+
+<pre><code>    IndexableFieldType fieldType = new IndexableFieldType(TextField.TYPE_NOT_STORED)
+    {
+        OmitNorms = true,
+        IndexOptions = IndexOptions.DOCS_ONLY
+    };
+    Field field = new Field(name, new NumericTokenStream(precisionStep).SetInt32Value(value), fieldType);
+    document.Add(field);</code></pre>
+
+<p>For optimal performance, re-use the <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> and <a class="xref" href="Lucene.Net.Documents.Field.html">Field</a> instance
+for more than one document:
+
+<pre><code>    NumericTokenStream stream = new NumericTokenStream(precisionStep);
+    IndexableFieldType fieldType = new IndexableFieldType(TextField.TYPE_NOT_STORED)
+    {
+        OmitNorms = true,
+        IndexOptions = IndexOptions.DOCS_ONLY
+    };
+    Field field = new Field(name, stream, fieldType);
+    Document document = new Document();
+    document.Add(field);
+
+    for(all documents) 
+    {
+        stream.SetInt32Value(value)
+        writer.AddDocument(document);
+    }</code></pre>
+
+<p>this stream is not intended to be used in analyzers;
+it&apos;s more for iterating the different precisions during
+indexing a specific numeric value.</p>
+
+<p><strong>NOTE</strong>: as token streams are only consumed once
+the document is added to the index, if you index more
+than one numeric field, use a separate <a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a>
+instance for each.</p>
+
+<p>See <a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a> for more details on the
+<code>precisionStep</code> parameter as well as how numeric fields work under the hood.
+</p>
+
+<p>@since 2.9</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Util.AttributeSource.html">AttributeSource</a></div>
+    <div class="level2"><a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a></div>
+    <div class="level3"><span class="xref">NumericTokenStream</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_End">TokenStream.End()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_Dispose">TokenStream.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_Dispose_System_Boolean_">TokenStream.Dispose(Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_GetAttributeFactory">AttributeSource.GetAttributeFactory()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_GetAttributeClassesEnumerator">AttributeSource.GetAttributeClassesEnumerator()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_GetAttributeImplsEnumerator">AttributeSource.GetAttributeImplsEnumerator()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_AddAttributeImpl_Lucene_Net_Util_Attribute_">AttributeSource.AddAttributeImpl(Attribute)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_AddAttribute__1">AttributeSource.AddAttribute&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_HasAttributes">AttributeSource.HasAttributes</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_HasAttribute__1">AttributeSource.HasAttribute&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_GetAttribute__1">AttributeSource.GetAttribute&lt;T&gt;()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_ClearAttributes">AttributeSource.ClearAttributes()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_CaptureState">AttributeSource.CaptureState()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_RestoreState_Lucene_Net_Util_AttributeSource_State_">AttributeSource.RestoreState(AttributeSource.State)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_GetHashCode">AttributeSource.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_Equals_System_Object_">AttributeSource.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_ReflectAsString_System_Boolean_">AttributeSource.ReflectAsString(Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_ReflectWith_Lucene_Net_Util_IAttributeReflector_">AttributeSource.ReflectWith(IAttributeReflector)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_CloneAttributes">AttributeSource.CloneAttributes()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_CopyTo_Lucene_Net_Util_AttributeSource_">AttributeSource.CopyTo(AttributeSource)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_ToString">AttributeSource.ToString()</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="../Lucene.Net.TestFramework/Lucene.Net.Analysis.html">Lucene.Net.Analysis</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Analysis_NumericTokenStream_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class NumericTokenStream : TokenStream, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_NumericTokenStream__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.NumericTokenStream.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Analysis/NumericTokenStream.cs/#L249">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_NumericTokenStream__ctor_" data-uid="Lucene.Net.Analysis.NumericTokenStream.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_NumericTokenStream__ctor" data-uid="Lucene.Net.Analysis.NumericTokenStream.#ctor">NumericTokenStream()</h4>
+  <div class="markdown level1 summary"><p>Creates a token stream for numeric values using the default <span class="xref">Lucene.Net.Analysis.NumericTokenStream.precisionStep</span>
+<a class="xref" href="Lucene.Net.Util.NumericUtils.html#Lucene_Net_Util_NumericUtils_PRECISION_STEP_DEFAULT">PRECISION_STEP_DEFAULT</a> (4). The stream is not yet initialized,
+before using set a value using the various Set<em>???</em>Value() methods.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NumericTokenStream()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_NumericTokenStream__ctor_Lucene_Net_Util_AttributeSource_AttributeFactory_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.NumericTokenStream.%23ctor(Lucene.Net.Util.AttributeSource.AttributeFactory%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Analysis/NumericTokenStream.cs/#L273">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_NumericTokenStream__ctor_" data-uid="Lucene.Net.Analysis.NumericTokenStream.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_NumericTokenStream__ctor_Lucene_Net_Util_AttributeSource_AttributeFactory_System_Int32_" data-uid="Lucene.Net.Analysis.NumericTokenStream.#ctor(Lucene.Net.Util.AttributeSource.AttributeFactory,System.Int32)">NumericTokenStream(AttributeSource.AttributeFactory, Int32)</h4>
+  <div class="markdown level1 summary"><p>Expert: Creates a token stream for numeric values with the specified
+<code data-dev-comment-type="paramref" class="paramref">precisionStep</code> using the given
+<a class="xref" href="Lucene.Net.Util.AttributeSource.AttributeFactory.html">AttributeSource.AttributeFactory</a>.
+The stream is not yet initialized,
+before using set a value using the various Set<em>???</em>Value() methods.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NumericTokenStream(AttributeSource.AttributeFactory factory, int precisionStep)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.AttributeSource.AttributeFactory.html">AttributeSource.AttributeFactory</a></td>
+        <td><span class="parametername">factory</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">precisionStep</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_NumericTokenStream__ctor_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.NumericTokenStream.%23ctor(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Analysis/NumericTokenStream.cs/#L260">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_NumericTokenStream__ctor_" data-uid="Lucene.Net.Analysis.NumericTokenStream.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_NumericTokenStream__ctor_System_Int32_" data-uid="Lucene.Net.Analysis.NumericTokenStream.#ctor(System.Int32)">NumericTokenStream(Int32)</h4>
+  <div class="markdown level1 summary"><p>Creates a token stream for numeric values with the specified
+<code data-dev-comment-type="paramref" class="paramref">precisionStep</code>. The stream is not yet initialized,
+before using set a value using the various Set<em>???</em>Value() methods.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NumericTokenStream(int precisionStep)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">precisionStep</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_NumericTokenStream_TOKEN_TYPE_FULL_PREC.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.NumericTokenStream.TOKEN_TYPE_FULL_PREC%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Analysis/NumericTokenStream.cs/#L97">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_NumericTokenStream_TOKEN_TYPE_FULL_PREC" data-uid="Lucene.Net.Analysis.NumericTokenStream.TOKEN_TYPE_FULL_PREC">TOKEN_TYPE_FULL_PREC</h4>
+  <div class="markdown level1 summary"><p>The full precision token gets this token type assigned. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string TOKEN_TYPE_FULL_PREC = &quot;fullPrecNumeric&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_NumericTokenStream_TOKEN_TYPE_LOWER_PREC.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.NumericTokenStream.TOKEN_TYPE_LOWER_PREC%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Analysis/NumericTokenStream.cs/#L101">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_NumericTokenStream_TOKEN_TYPE_LOWER_PREC" data-uid="Lucene.Net.Analysis.NumericTokenStream.TOKEN_TYPE_LOWER_PREC">TOKEN_TYPE_LOWER_PREC</h4>
+  <div class="markdown level1 summary"><p>The lower precision tokens gets this token type assigned. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string TOKEN_TYPE_LOWER_PREC = &quot;lowerPrecNumeric&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_NumericTokenStream_PrecisionStep.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.NumericTokenStream.PrecisionStep%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Analysis/NumericTokenStream.cs/#L365">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_NumericTokenStream_PrecisionStep_" data-uid="Lucene.Net.Analysis.NumericTokenStream.PrecisionStep*"></a>
+  <h4 id="Lucene_Net_Analysis_NumericTokenStream_PrecisionStep" data-uid="Lucene.Net.Analysis.NumericTokenStream.PrecisionStep">PrecisionStep</h4>
+  <div class="markdown level1 summary"><p>Returns the precision step. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int PrecisionStep { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_NumericTokenStream_IncrementToken.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.NumericTokenStream.IncrementToken%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Analysis/NumericTokenStream.cs/#L347">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_NumericTokenStream_IncrementToken_" data-uid="Lucene.Net.Analysis.NumericTokenStream.IncrementToken*"></a>
+  <h4 id="Lucene_Net_Analysis_NumericTokenStream_IncrementToken" data-uid="Lucene.Net.Analysis.NumericTokenStream.IncrementToken">IncrementToken()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool IncrementToken()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_IncrementToken">TokenStream.IncrementToken()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_NumericTokenStream_Reset.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.NumericTokenStream.Reset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Analysis/NumericTokenStream.cs/#L338">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_NumericTokenStream_Reset_" data-uid="Lucene.Net.Analysis.NumericTokenStream.Reset*"></a>
+  <h4 id="Lucene_Net_Analysis_NumericTokenStream_Reset" data-uid="Lucene.Net.Analysis.NumericTokenStream.Reset">Reset()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Reset()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_Reset">TokenStream.Reset()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_NumericTokenStream_SetDoubleValue_System_Double_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.NumericTokenStream.SetDoubleValue(System.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Analysis/NumericTokenStream.cs/#L318">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_NumericTokenStream_SetDoubleValue_" data-uid="Lucene.Net.Analysis.NumericTokenStream.SetDoubleValue*"></a>
+  <h4 id="Lucene_Net_Analysis_NumericTokenStream_SetDoubleValue_System_Double_" data-uid="Lucene.Net.Analysis.NumericTokenStream.SetDoubleValue(System.Double)">SetDoubleValue(Double)</h4>
+  <div class="markdown level1 summary"><p>Initializes the token stream with the supplied <span class="xref">System.Double</span> value. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NumericTokenStream SetDoubleValue(double value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>the value, for which this <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> should enumerate tokens. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a></td>
+        <td><p>this instance, because of this you can use it the following way:</p>
+<pre><code>new Field(name, new NumericTokenStream(precisionStep).SetDoubleValue(value))</code></pre> </td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_NumericTokenStream_SetInt32Value_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.NumericTokenStream.SetInt32Value(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Analysis/NumericTokenStream.cs/#L307">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_NumericTokenStream_SetInt32Value_" data-uid="Lucene.Net.Analysis.NumericTokenStream.SetInt32Value*"></a>
+  <h4 id="Lucene_Net_Analysis_NumericTokenStream_SetInt32Value_System_Int32_" data-uid="Lucene.Net.Analysis.NumericTokenStream.SetInt32Value(System.Int32)">SetInt32Value(Int32)</h4>
+  <div class="markdown level1 summary"><p>Initializes the token stream with the supplied <span class="xref">System.Int32</span> value.
+<p>
+NOTE: This was setIntValue() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NumericTokenStream SetInt32Value(int value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>the value, for which this <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> should enumerate tokens. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a></td>
+        <td><p>this instance, because of this you can use it the following way:</p>
+<pre><code>new Field(name, new NumericTokenStream(precisionStep).SetInt32Value(value))</code></pre> </td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_NumericTokenStream_SetInt64Value_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.NumericTokenStream.SetInt64Value(System.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Analysis/NumericTokenStream.cs/#L293">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_NumericTokenStream_SetInt64Value_" data-uid="Lucene.Net.Analysis.NumericTokenStream.SetInt64Value*"></a>
+  <h4 id="Lucene_Net_Analysis_NumericTokenStream_SetInt64Value_System_Int64_" data-uid="Lucene.Net.Analysis.NumericTokenStream.SetInt64Value(System.Int64)">SetInt64Value(Int64)</h4>
+  <div class="markdown level1 summary"><p>Initializes the token stream with the supplied <span class="xref">System.Int64</span> value. 
+<p>
+NOTE: This was setLongValue() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NumericTokenStream SetInt64Value(long value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>the value, for which this <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> should enumerate tokens. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a></td>
+        <td><p>this instance, because of this you can use it the following way:</p>
+<pre><code>new Field(name, new NumericTokenStream(precisionStep).SetInt64Value(value))</code></pre> </td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_NumericTokenStream_SetSingleValue_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.NumericTokenStream.SetSingleValue(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Analysis/NumericTokenStream.cs/#L332">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_NumericTokenStream_SetSingleValue_" data-uid="Lucene.Net.Analysis.NumericTokenStream.SetSingleValue*"></a>
+  <h4 id="Lucene_Net_Analysis_NumericTokenStream_SetSingleValue_System_Single_" data-uid="Lucene.Net.Analysis.NumericTokenStream.SetSingleValue(System.Single)">SetSingleValue(Single)</h4>
+  <div class="markdown level1 summary"><p>Initializes the token stream with the supplied <span class="xref">System.Single</span> value. 
+<p>
+NOTE: This was setFloatValue() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NumericTokenStream SetSingleValue(float value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>the value, for which this <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> should enumerate tokens. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a></td>
+        <td><p>this instance, because of this you can use it the following way:</p>
+<pre><code>new Field(name, new NumericTokenStream(precisionStep).SetSingleValue(value))</code></pre> </td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_NumericTokenStream.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.NumericTokenStream%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Analysis/NumericTokenStream.cs/#L86" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

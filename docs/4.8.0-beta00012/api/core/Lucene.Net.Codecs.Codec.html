@@ -1,0 +1,741 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Codec
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Codec
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.Codec">
+  
+  
+  <h1 id="Lucene_Net_Codecs_Codec" data-uid="Lucene.Net.Codecs.Codec" class="text-break">Class Codec
+  </h1>
+  <div class="markdown level0 summary"><p>Encodes/decodes an inverted index segment.
+<p>
+Note, when extending this class, the name (<a class="xref" href="Lucene.Net.Codecs.Codec.html#Lucene_Net_Codecs_Codec_Name">Name</a>) is
+written into the index. In order for the segment to be read, the
+name must resolve to your implementation via <a class="xref" href="Lucene.Net.Codecs.Codec.html#Lucene_Net_Codecs_Codec_ForName_System_String_">ForName(String)</a>.
+This method uses <a class="xref" href="Lucene.Net.Codecs.ICodecFactory.html#Lucene_Net_Codecs_ICodecFactory_GetCodec_System_String_">GetCodec(String)</a> to resolve codec names.
+<p>
+To implement your own codec:
+<ol><li>Subclass this class.</li><li>Subclass <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html">DefaultCodecFactory</a>, override the <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_Initialize">Initialize()</a> method,
+        and add the line <code>base.ScanForCodecs(typeof(YourCodec).Assembly)</code>. 
+        If you have any codec classes in your assembly 
+        that are not meant for reading, you can add the <a class="xref" href="Lucene.Net.Codecs.ExcludeCodecFromScanAttribute.html">ExcludeCodecFromScanAttribute</a> 
+        to them so they are ignored by the scan.</li><li>set the new <a class="xref" href="Lucene.Net.Codecs.ICodecFactory.html">ICodecFactory</a> by calling <a class="xref" href="Lucene.Net.Codecs.Codec.html#Lucene_Net_Codecs_Codec_SetCodecFactory_Lucene_Net_Codecs_ICodecFactory_">SetCodecFactory(ICodecFactory)</a> at application startup.</li></ol>
+If your codec has dependencies, you may also override <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_GetCodec_System_Type_">GetCodec(Type)</a> to inject 
+them via pure DI or a DI container. See <a href="http://blog.ploeh.dk/2014/05/19/di-friendly-framework/">DI-Friendly Framework</a>
+to understand the approach used.
+<p>
+<strong>Codec Names</strong>
+<p>
+Unlike the Java version, codec names are by default convention-based on the class name. 
+If you name your custom codec class &quot;MyCustomCodec&quot;, the codec name will the same name 
+without the &quot;Codec&quot; suffix: &quot;MyCustom&quot;.
+<p>
+You can override this default behavior by using the <a class="xref" href="Lucene.Net.Codecs.CodecNameAttribute.html">CodecNameAttribute</a> to
+name the codec differently than this convention. Codec names must be all ASCII alphanumeric, 
+and less than 128 characters in length.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Codec</span></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Codecs.FilterCodec.html">FilterCodec</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Codecs.Lucene3x.Lucene3xCodec.html">Lucene3xCodec</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40Codec.html">Lucene40Codec</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Codecs.Lucene41.Lucene41Codec.html">Lucene41Codec</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Codecs.Lucene42.Lucene42Codec.html">Lucene42Codec</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Codecs.Lucene45.Lucene45Codec.html">Lucene45Codec</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Codecs.Lucene46.Lucene46Codec.html">Lucene46Codec</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Codecs.html">Lucene.Net.Codecs</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Codecs_Codec_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class Codec</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L95">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec__ctor_" data-uid="Lucene.Net.Codecs.Codec.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec__ctor" data-uid="Lucene.Net.Codecs.Codec.#ctor">Codec()</h4>
+  <div class="markdown level1 summary"><p>Creates a new codec.
+<p>
+The <a class="xref" href="Lucene.Net.Codecs.Codec.html#Lucene_Net_Codecs_Codec_Name">Name</a> will be written into the index segment: in order for
+the segment to be read this class should be registered by subclassing <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html">DefaultCodecFactory</a> and
+calling <a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html#Lucene_Net_Codecs_DefaultCodecFactory_ScanForCodecs_System_Reflection_Assembly_">ScanForCodecs(Assembly)</a> in the class constructor. 
+The new <a class="xref" href="Lucene.Net.Codecs.ICodecFactory.html">ICodecFactory</a> can be registered by calling <a class="xref" href="Lucene.Net.Codecs.Codec.html#Lucene_Net_Codecs_Codec_SetCodecFactory_Lucene_Net_Codecs_ICodecFactory_">SetCodecFactory(ICodecFactory)</a> at application startup.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected Codec()</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec_AvailableCodecs.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.AvailableCodecs%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L145">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec_AvailableCodecs_" data-uid="Lucene.Net.Codecs.Codec.AvailableCodecs*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec_AvailableCodecs" data-uid="Lucene.Net.Codecs.Codec.AvailableCodecs">AvailableCodecs</h4>
+  <div class="markdown level1 summary"><p>Returns a list of all available codec names. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ICollection&lt;string&gt; AvailableCodecs { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec_Default.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.Default%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L170">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec_Default_" data-uid="Lucene.Net.Codecs.Codec.Default*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec_Default" data-uid="Lucene.Net.Codecs.Codec.Default">Default</h4>
+  <div class="markdown level1 summary"><p>Expert: returns the default codec used for newly created
+<a class="xref" href="Lucene.Net.Index.IndexWriterConfig.html">IndexWriterConfig</a>s.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Codec Default { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec_DocValuesFormat.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.DocValuesFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L110">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec_DocValuesFormat_" data-uid="Lucene.Net.Codecs.Codec.DocValuesFormat*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec_DocValuesFormat" data-uid="Lucene.Net.Codecs.Codec.DocValuesFormat">DocValuesFormat</h4>
+  <div class="markdown level1 summary"><p>Encodes/decodes docvalues. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract DocValuesFormat DocValuesFormat { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.DocValuesFormat.html">DocValuesFormat</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec_FieldInfosFormat.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.FieldInfosFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L122">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec_FieldInfosFormat_" data-uid="Lucene.Net.Codecs.Codec.FieldInfosFormat*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec_FieldInfosFormat" data-uid="Lucene.Net.Codecs.Codec.FieldInfosFormat">FieldInfosFormat</h4>
+  <div class="markdown level1 summary"><p>Encodes/decodes field infos file. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract FieldInfosFormat FieldInfosFormat { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.FieldInfosFormat.html">FieldInfosFormat</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec_LiveDocsFormat.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.LiveDocsFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L134">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec_LiveDocsFormat_" data-uid="Lucene.Net.Codecs.Codec.LiveDocsFormat*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec_LiveDocsFormat" data-uid="Lucene.Net.Codecs.Codec.LiveDocsFormat">LiveDocsFormat</h4>
+  <div class="markdown level1 summary"><p>Encodes/decodes live docs. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract LiveDocsFormat LiveDocsFormat { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.LiveDocsFormat.html">LiveDocsFormat</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec_Name.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.Name%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L102">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec_Name_" data-uid="Lucene.Net.Codecs.Codec.Name*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec_Name" data-uid="Lucene.Net.Codecs.Codec.Name">Name</h4>
+  <div class="markdown level1 summary"><p>Returns this codec&apos;s name. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string Name { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec_NormsFormat.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.NormsFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L130">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec_NormsFormat_" data-uid="Lucene.Net.Codecs.Codec.NormsFormat*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec_NormsFormat" data-uid="Lucene.Net.Codecs.Codec.NormsFormat">NormsFormat</h4>
+  <div class="markdown level1 summary"><p>Encodes/decodes document normalization values. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract NormsFormat NormsFormat { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.NormsFormat.html">NormsFormat</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec_PostingsFormat.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.PostingsFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L106">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec_PostingsFormat_" data-uid="Lucene.Net.Codecs.Codec.PostingsFormat*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec_PostingsFormat" data-uid="Lucene.Net.Codecs.Codec.PostingsFormat">PostingsFormat</h4>
+  <div class="markdown level1 summary"><p>Encodes/decodes postings. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract PostingsFormat PostingsFormat { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec_SegmentInfoFormat.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.SegmentInfoFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L126">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec_SegmentInfoFormat_" data-uid="Lucene.Net.Codecs.Codec.SegmentInfoFormat*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec_SegmentInfoFormat" data-uid="Lucene.Net.Codecs.Codec.SegmentInfoFormat">SegmentInfoFormat</h4>
+  <div class="markdown level1 summary"><p>Encodes/decodes segment info file. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract SegmentInfoFormat SegmentInfoFormat { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.SegmentInfoFormat.html">SegmentInfoFormat</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec_StoredFieldsFormat.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.StoredFieldsFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L114">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec_StoredFieldsFormat_" data-uid="Lucene.Net.Codecs.Codec.StoredFieldsFormat*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec_StoredFieldsFormat" data-uid="Lucene.Net.Codecs.Codec.StoredFieldsFormat">StoredFieldsFormat</h4>
+  <div class="markdown level1 summary"><p>Encodes/decodes stored fields. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract StoredFieldsFormat StoredFieldsFormat { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.StoredFieldsFormat.html">StoredFieldsFormat</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec_TermVectorsFormat.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.TermVectorsFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L118">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec_TermVectorsFormat_" data-uid="Lucene.Net.Codecs.Codec.TermVectorsFormat*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec_TermVectorsFormat" data-uid="Lucene.Net.Codecs.Codec.TermVectorsFormat">TermVectorsFormat</h4>
+  <div class="markdown level1 summary"><p>Encodes/decodes term vectors. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract TermVectorsFormat TermVectorsFormat { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.TermVectorsFormat.html">TermVectorsFormat</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec_ForName_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.ForName(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L138">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec_ForName_" data-uid="Lucene.Net.Codecs.Codec.ForName*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec_ForName_System_String_" data-uid="Lucene.Net.Codecs.Codec.ForName(System.String)">ForName(String)</h4>
+  <div class="markdown level1 summary"><p>Looks up a codec by name. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Codec ForName(string name)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec_GetCodecFactory.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.GetCodecFactory%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L83">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec_GetCodecFactory_" data-uid="Lucene.Net.Codecs.Codec.GetCodecFactory*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec_GetCodecFactory" data-uid="Lucene.Net.Codecs.Codec.GetCodecFactory">GetCodecFactory()</h4>
+  <div class="markdown level1 summary"><p>Gets the associated codec factory.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static ICodecFactory GetCodecFactory()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.ICodecFactory.html">ICodecFactory</a></td>
+        <td><p>The codec factory.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec_SetCodecFactory_Lucene_Net_Codecs_ICodecFactory_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.SetCodecFactory(Lucene.Net.Codecs.ICodecFactory)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L72">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec_SetCodecFactory_" data-uid="Lucene.Net.Codecs.Codec.SetCodecFactory*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec_SetCodecFactory_Lucene_Net_Codecs_ICodecFactory_" data-uid="Lucene.Net.Codecs.Codec.SetCodecFactory(Lucene.Net.Codecs.ICodecFactory)">SetCodecFactory(ICodecFactory)</h4>
+  <div class="markdown level1 summary"><p>Sets the <a class="xref" href="Lucene.Net.Codecs.ICodecFactory.html">ICodecFactory</a> instance used to instantiate
+<a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a> subclasses.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetCodecFactory(ICodecFactory codecFactory)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.ICodecFactory.html">ICodecFactory</a></td>
+        <td><span class="parametername">codecFactory</span></td>
+        <td><p>The new <a class="xref" href="Lucene.Net.Codecs.ICodecFactory.html">ICodecFactory</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>The <code data-dev-comment-type="paramref" class="paramref">codecFactory</code> parameter is <code>null</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L189">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Codec_ToString_" data-uid="Lucene.Net.Codecs.Codec.ToString*"></a>
+  <h4 id="Lucene_Net_Codecs_Codec_ToString" data-uid="Lucene.Net.Codecs.Codec.ToString">ToString()</h4>
+  <div class="markdown level1 summary"><p>Returns the codec&apos;s name. Subclasses can override to provide
+more detail (such as parameters).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Codecs.DefaultCodecFactory.html">DefaultCodecFactory</a></div>
+      <div><a class="xref" href="Lucene.Net.Codecs.ICodecFactory.html">ICodecFactory</a></div>
+      <div><a class="xref" href="Lucene.Net.Codecs.CodecNameAttribute.html">CodecNameAttribute</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Codec.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Codec%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/Codec.cs/#L61" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

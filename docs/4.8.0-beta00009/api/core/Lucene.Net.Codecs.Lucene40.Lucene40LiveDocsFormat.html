@@ -1,0 +1,465 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Lucene40LiveDocsFormat
+   | Apache Lucene.NET 4.8.0-beta00009 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Lucene40LiveDocsFormat
+   | Apache Lucene.NET 4.8.0-beta00009 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat">
+  
+  
+  <h1 id="Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat" class="text-break">Class Lucene40LiveDocsFormat
+  </h1>
+  <div class="markdown level0 summary"><p>Lucene 4.0 Live Documents Format.
+<p>
+<p>The .del file is optional, and only exists when a segment contains
+deletions.</p>
+<p>Although per-segment, this file is maintained exterior to compound segment
+files.</p>
+<p>Deletions (.del) --&gt; Format,Header,ByteCount,BitCount, Bits | DGaps (depending
+on Format)</p>
+<ul><li>Format,ByteSize,BitCount --&gt; Uint32 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a>) </li><li>Bits --&gt; &lt; Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) &gt; <sup>ByteCount</sup></li><li>DGaps --&gt; &lt;DGap,NonOnesByte&gt; <sup>NonzeroBytesCount</sup></li><li>DGap --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>NonOnesByte --&gt;  Byte(<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) </li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li></ul>
+<p>Format is 1: indicates cleared DGaps.</p>
+<p>ByteCount indicates the number of bytes in Bits. It is typically
+(SegSize/8)+1.</p>
+<p>BitCount indicates the number of bits that are currently set in Bits.</p>
+<p>Bits contains one bit for each document indexed. When the bit corresponding
+to a document number is cleared, that document is marked as deleted. Bit ordering
+is from least to most significant. Thus, if Bits contains two bytes, 0x00 and
+0x02, then document 9 is marked as alive (not deleted).</p>
+<p>DGaps represents sparse bit-vectors more efficiently than Bits. It is made
+of DGaps on indexes of nonOnes bytes in Bits, and the nonOnes bytes themselves.
+The number of nonOnes bytes in Bits (NonOnesBytesCount) is not stored.</p>
+<p>For example, if there are 8000 bits and only bits 10,12,32 are cleared, DGaps
+would be used:</p>
+<p>(VInt) 1 , (byte) 20 , (VInt) 3 , (Byte) 1</p></p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Codecs.LiveDocsFormat.html">LiveDocsFormat</a></div>
+    <div class="level2"><span class="xref">Lucene40LiveDocsFormat</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Codecs.Lucene40.html">Lucene.Net.Codecs.Lucene40</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Lucene40LiveDocsFormat : LiveDocsFormat</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Codecs/Lucene40/Lucene40LiveDocsFormat.cs/#L73">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat__ctor_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat__ctor" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.#ctor">Lucene40LiveDocsFormat()</h4>
+  <div class="markdown level1 summary"><p>Sole constructor. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Lucene40LiveDocsFormat()</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_Files_Lucene_Net_Index_SegmentCommitInfo_System_Collections_Generic_ICollection_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.Files(Lucene.Net.Index.SegmentCommitInfo%2CSystem.Collections.Generic.ICollection%7BSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Codecs/Lucene40/Lucene40LiveDocsFormat.cs/#L111">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_Files_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.Files*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_Files_Lucene_Net_Index_SegmentCommitInfo_System_Collections_Generic_ICollection_System_String__" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.Files(Lucene.Net.Index.SegmentCommitInfo,System.Collections.Generic.ICollection{System.String})">Files(SegmentCommitInfo, ICollection&lt;String&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void Files(SegmentCommitInfo info, ICollection&lt;string&gt; files)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a></td>
+        <td><span class="parametername">info</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">files</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Codecs.LiveDocsFormat.html#Lucene_Net_Codecs_LiveDocsFormat_Files_Lucene_Net_Index_SegmentCommitInfo_System_Collections_Generic_ICollection_System_String__">LiveDocsFormat.Files(SegmentCommitInfo, ICollection&lt;String&gt;)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_NewLiveDocs_Lucene_Net_Util_IBits_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.NewLiveDocs(Lucene.Net.Util.IBits)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Codecs/Lucene40/Lucene40LiveDocsFormat.cs/#L84">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_NewLiveDocs_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.NewLiveDocs*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_NewLiveDocs_Lucene_Net_Util_IBits_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.NewLiveDocs(Lucene.Net.Util.IBits)">NewLiveDocs(IBits)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IMutableBits NewLiveDocs(IBits existing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td><span class="parametername">existing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IMutableBits.html">IMutableBits</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Codecs.LiveDocsFormat.html#Lucene_Net_Codecs_LiveDocsFormat_NewLiveDocs_Lucene_Net_Util_IBits_">LiveDocsFormat.NewLiveDocs(IBits)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_NewLiveDocs_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.NewLiveDocs(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Codecs/Lucene40/Lucene40LiveDocsFormat.cs/#L77">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_NewLiveDocs_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.NewLiveDocs*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_NewLiveDocs_System_Int32_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.NewLiveDocs(System.Int32)">NewLiveDocs(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IMutableBits NewLiveDocs(int size)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">size</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IMutableBits.html">IMutableBits</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Codecs.LiveDocsFormat.html#Lucene_Net_Codecs_LiveDocsFormat_NewLiveDocs_System_Int32_">LiveDocsFormat.NewLiveDocs(Int32)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_ReadLiveDocs_Lucene_Net_Store_Directory_Lucene_Net_Index_SegmentCommitInfo_Lucene_Net_Store_IOContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.ReadLiveDocs(Lucene.Net.Store.Directory%2CLucene.Net.Index.SegmentCommitInfo%2CLucene.Net.Store.IOContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Codecs/Lucene40/Lucene40LiveDocsFormat.cs/#L90">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_ReadLiveDocs_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.ReadLiveDocs*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_ReadLiveDocs_Lucene_Net_Store_Directory_Lucene_Net_Index_SegmentCommitInfo_Lucene_Net_Store_IOContext_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.ReadLiveDocs(Lucene.Net.Store.Directory,Lucene.Net.Index.SegmentCommitInfo,Lucene.Net.Store.IOContext)">ReadLiveDocs(Directory, SegmentCommitInfo, IOContext)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override IBits ReadLiveDocs(Directory dir, SegmentCommitInfo info, IOContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">dir</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a></td>
+        <td><span class="parametername">info</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IOContext.html">IOContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Codecs.LiveDocsFormat.html#Lucene_Net_Codecs_LiveDocsFormat_ReadLiveDocs_Lucene_Net_Store_Directory_Lucene_Net_Index_SegmentCommitInfo_Lucene_Net_Store_IOContext_">LiveDocsFormat.ReadLiveDocs(Directory, SegmentCommitInfo, IOContext)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_WriteLiveDocs_Lucene_Net_Util_IMutableBits_Lucene_Net_Store_Directory_Lucene_Net_Index_SegmentCommitInfo_System_Int32_Lucene_Net_Store_IOContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.WriteLiveDocs(Lucene.Net.Util.IMutableBits%2CLucene.Net.Store.Directory%2CLucene.Net.Index.SegmentCommitInfo%2CSystem.Int32%2CLucene.Net.Store.IOContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Codecs/Lucene40/Lucene40LiveDocsFormat.cs/#L100">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_WriteLiveDocs_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.WriteLiveDocs*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat_WriteLiveDocs_Lucene_Net_Util_IMutableBits_Lucene_Net_Store_Directory_Lucene_Net_Index_SegmentCommitInfo_System_Int32_Lucene_Net_Store_IOContext_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.WriteLiveDocs(Lucene.Net.Util.IMutableBits,Lucene.Net.Store.Directory,Lucene.Net.Index.SegmentCommitInfo,System.Int32,Lucene.Net.Store.IOContext)">WriteLiveDocs(IMutableBits, Directory, SegmentCommitInfo, Int32, IOContext)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void WriteLiveDocs(IMutableBits bits, Directory dir, SegmentCommitInfo info, int newDelCount, IOContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IMutableBits.html">IMutableBits</a></td>
+        <td><span class="parametername">bits</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">dir</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a></td>
+        <td><span class="parametername">info</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">newDelCount</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IOContext.html">IOContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Codecs.LiveDocsFormat.html#Lucene_Net_Codecs_LiveDocsFormat_WriteLiveDocs_Lucene_Net_Util_IMutableBits_Lucene_Net_Store_Directory_Lucene_Net_Index_SegmentCommitInfo_System_Int32_Lucene_Net_Store_IOContext_">LiveDocsFormat.WriteLiveDocs(IMutableBits, Directory, SegmentCommitInfo, Int32, IOContext)</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene40_Lucene40LiveDocsFormat.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs-poc/src/Lucene.Net/Codecs/Lucene40/Lucene40LiveDocsFormat.cs/#L65" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

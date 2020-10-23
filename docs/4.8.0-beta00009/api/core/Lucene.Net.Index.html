@@ -1,0 +1,1354 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Lucene.Net.Index
+   | Apache Lucene.NET 4.8.0-beta00009 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Lucene.Net.Index
+   | Apache Lucene.NET 4.8.0-beta00009 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Index">
+  
+  <h1 id="Lucene_Net_Index" data-uid="Lucene.Net.Index" class="text-break">Namespace Lucene.Net.Index
+  </h1>
+  <div class="markdown level0 summary"><!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<p>Code to maintain and access indices.</p>
+<h2 id="table-of-contents">Table Of Contents</h2>
+<ol>
+<li><a href="#postings">Postings APIs</a> * <a href="#fields">Fields</a> * <a href="#terms">Terms</a> * <a href="#documents">Documents</a> * <a href="#positions">Positions</a> 2. <a href="#stats">Index Statistics</a> * <a href="#termstats">Term-level</a> * <a href="#fieldstats">Field-level</a> * <a href="#segmentstats">Segment-level</a> * <a href="#documentstats">Document-level</a> </li>
+</ol>
+<h2 id="postings-apis">Postings APIs</h2>
+<h4 id="-"></h4>
+<pre><code>Fields
+</code></pre><p> <a class="xref" href="Lucene.Net.Index.Fields.html">Fields</a> is the initial entry point into the postings APIs, this can be obtained in several ways: // access indexed fields for an index segment Fields fields = reader.fields(); // access term vector fields for a specified document Fields fields = reader.getTermVectors(docid); Fields implements Java&#39;s Iterable interface, so its easy to enumerate the list of fields: // enumerate list of fields for (String field : fields) { // access the terms for this field Terms terms = fields.terms(field); } </p>
+<h4 id="--1"></h4>
+<pre><code>Terms
+</code></pre><p> <a class="xref" href="Lucene.Net.Index.Terms.html">Terms</a> represents the collection of terms within a field, exposes some metadata and <a href="#fieldstats">statistics</a>, and an API for enumeration. // metadata about the field System.out.println(&quot;positions? &quot; + terms.hasPositions()); System.out.println(&quot;offsets? &quot; + terms.hasOffsets()); System.out.println(&quot;payloads? &quot; + terms.hasPayloads()); // iterate through terms TermsEnum termsEnum = terms.iterator(null); BytesRef term = null; while ((term = termsEnum.next()) != null) { doSomethingWith(termsEnum.term()); } <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> provides an iterator over the list of terms within a field, some <a href="#termstats">statistics</a> about the term, and methods to access the term&#39;s <a href="#documents">documents</a> and <a href="#positions">positions</a>. // seek to a specific term boolean found = termsEnum.seekExact(new BytesRef(&quot;foobar&quot;)); if (found) { // get the document frequency System.out.println(termsEnum.docFreq()); // enumerate through documents DocsEnum docs = termsEnum.docs(null, null); // enumerate through documents and positions DocsAndPositionsEnum docsAndPositions = termsEnum.docsAndPositions(null, null); } </p>
+<h4 id="--2"></h4>
+<pre><code>Documents
+</code></pre><p> <a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a> is an extension of <a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html">DocIdSetIterator</a>that iterates over the list of documents for a term, along with the term frequency within that document. int docid; while ((docid = docsEnum.nextDoc()) != DocIdSetIterator.NO_MORE_DOCS) { System.out.println(docid); System.out.println(docsEnum.freq()); } </p>
+<h4 id="--3"></h4>
+<pre><code>Positions
+</code></pre><p> <a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html">DocsAndPositionsEnum</a> is an extension of <a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a> that additionally allows iteration of the positions a term occurred within the document, and any additional per-position information (offsets and payload) int docid; while ((docid = docsAndPositionsEnum.nextDoc()) != DocIdSetIterator.NO_MORE_DOCS) { System.out.println(docid); int freq = docsAndPositionsEnum.freq(); for (int i = 0; i &lt; freq;=&quot;&quot; i++)=&quot;&quot; {=&quot;&quot; system.out.println(docsandpositionsenum.nextposition());=&quot;&quot; system.out.println(docsandpositionsenum.startoffset());=&quot;&quot; system.out.println(docsandpositionsenum.endoffset());=&quot;&quot; system.out.println(docsandpositionsenum.getpayload());=&quot;&quot; }=&quot;&quot; }=&quot;&quot;&gt; </p>
+<h2 id="index-statistics">Index Statistics</h2>
+<h4 id="--4"></h4>
+<pre><code>Term statistics
+</code></pre><ul>
+<li><a class="xref" href="Lucene.Net.Index.TermsEnum.html">#docFreq</a>: Returns the number of documents that contain at least one occurrence of the term. This statistic is always available for an indexed term. Note that it will also count deleted documents, when segments are merged the statistic is updated as those deleted documents are merged away. * <a class="xref" href="Lucene.Net.Index.TermsEnum.html">#totalTermFreq</a>: Returns the number of occurrences of this term across all documents. Note that this statistic is unavailable (returns <code>-1</code>) if term frequencies were omitted from the index (<a class="xref" href="Lucene.Net.Index.FieldInfo.html#methods">DOCS_ONLY</a>) for the field. Like docFreq(), it will also count occurrences that appear in deleted documents. </li>
+</ul>
+<h4 id="--5"></h4>
+<pre><code>Field statistics
+</code></pre><ul>
+<li><a class="xref" href="Lucene.Net.Index.Terms.html">#size</a>: Returns the number of unique terms in the field. This statistic may be unavailable (returns <code>-1</code>) for some Terms implementations such as <a class="xref" href="Lucene.Net.Index.MultiTerms.html">MultiTerms</a>, where it cannot be efficiently computed. Note that this count also includes terms that appear only in deleted documents: when segments are merged such terms are also merged away and the statistic is then updated. * <a class="xref" href="Lucene.Net.Index.Terms.html">#getDocCount</a>: Returns the number of documents that contain at least one occurrence of any term for this field. This can be thought of as a Field-level docFreq(). Like docFreq() it will also count deleted documents. * <a class="xref" href="Lucene.Net.Index.Terms.html">#getSumDocFreq</a>: Returns the number of postings (term-document mappings in the inverted index) for the field. This can be thought of as the sum of <a class="xref" href="Lucene.Net.Index.TermsEnum.html">#docFreq</a> across all terms in the field, and like docFreq() it will also count postings that appear in deleted documents. * <a class="xref" href="Lucene.Net.Index.Terms.html">#getSumTotalTermFreq</a>: Returns the number of tokens for the field. This can be thought of as the sum of <a class="xref" href="Lucene.Net.Index.TermsEnum.html">#totalTermFreq</a> across all terms in the field, and like totalTermFreq() it will also count occurrences that appear in deleted documents, and will be unavailable (returns <code>-1</code>) if term frequencies were omitted from the index (<a class="xref" href="Lucene.Net.Index.FieldInfo.html#methods">DOCS_ONLY</a>) for the field. </li>
+</ul>
+<h4 id="--6"></h4>
+<pre><code>Segment statistics
+</code></pre><ul>
+<li><a class="xref" href="Lucene.Net.Index.IndexReader.html">#maxDoc</a>: Returns the number of documents (including deleted documents) in the index. * <a class="xref" href="Lucene.Net.Index.IndexReader.html">#numDocs</a>: Returns the number of live documents (excluding deleted documents) in the index. * <a class="xref" href="Lucene.Net.Index.IndexReader.html">#numDeletedDocs</a>: Returns the number of deleted documents in the index. * <a class="xref" href="Lucene.Net.Index.Fields.html">#size</a>: Returns the number of indexed fields. * <a class="xref" href="Lucene.Net.Index.Fields.html">#getUniqueTermCount</a>: Returns the number of indexed terms, the sum of <a class="xref" href="Lucene.Net.Index.Terms.html">#size</a> across all fields. </li>
+</ul>
+<h4 id="--7"></h4>
+<pre><code>Document statistics
+</code></pre><p> Document statistics are available during the indexing process for an indexed field: typically a <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a> implementation will store some of these values (possibly in a lossy way), into the normalization value for the document in its <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">#computeNorm</a> method. </p>
+<ul>
+<li><p><a class="xref" href="Lucene.Net.Index.FieldInvertState.html">#getLength</a>: Returns the number of tokens for this field in the document. Note that this is just the number of times that <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">#incrementToken</a> returned true, and is unrelated to the values in <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.PositionIncrementAttribute.html">PositionIncrementAttribute</a>. * <a class="xref" href="Lucene.Net.Index.FieldInvertState.html">#getNumOverlap</a>: Returns the number of tokens for this field in the document that had a position increment of zero. This can be used to compute a document length that discounts artificial tokens such as synonyms. * <a class="xref" href="Lucene.Net.Index.FieldInvertState.html">#getPosition</a>: Returns the accumulated position value for this field in the document: computed from the values of <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.PositionIncrementAttribute.html">PositionIncrementAttribute</a> and including <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">#getPositionIncrementGap</a>s across multivalued fields. * <a class="xref" href="Lucene.Net.Index.FieldInvertState.html">#getOffset</a>: Returns the total character offset value for this field in the document: computed from the values of <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.OffsetAttribute.html">OffsetAttribute</a> returned by <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">#end</a>, and including <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">#getOffsetGap</a>s across multivalued fields. * <a class="xref" href="Lucene.Net.Index.FieldInvertState.html">#getUniqueTermCount</a>: Returns the number of unique terms encountered for this field in the document. * <a class="xref" href="Lucene.Net.Index.FieldInvertState.html">#getMaxTermFrequency</a>: Returns the maximum frequency across all unique terms encountered for this field in the document. </p>
+<p>Additional user-supplied statistics can be added to the document as DocValues fields and accessed via <a class="xref" href="Lucene.Net.Index.AtomicReader.html">#getNumericDocValues</a>. </p>
+</li>
+</ul>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a></h4>
+      <section><p><a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a> is an abstract class, providing an interface for accessing an
+index.  Search of an index is done entirely through this abstract interface,
+so that any subclass which implements it is searchable. <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a>s implemented
+by this subclass do not consist of several sub-readers,
+they are atomic. They support retrieval of stored fields, doc values, terms,
+and postings.</p>
+<p><p>For efficiency, in this API documents are often referred to via
+<em>document numbers</em>, non-negative integers which each name a unique
+document in the index.  These document numbers are ephemeral -- they may change
+as documents are added to and deleted from an index.  Clients should thus not
+rely on a given document having the same number between sessions.</p>
+<p><p>
+<strong>NOTE</strong>: <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a>
+instances are completely thread
+safe, meaning multiple threads can call any of its methods,
+concurrently.  If your application requires external
+synchronization, you should <strong>not</strong> synchronize on the
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instance; use your own
+(non-Lucene) objects instead.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a></h4>
+      <section><p><a class="xref" href="Lucene.Net.Index.IndexReaderContext.html">IndexReaderContext</a> for <a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a> instances.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.BaseCompositeReader-1.html">BaseCompositeReader&lt;R&gt;</a></h4>
+      <section><p>Base class for implementing <a class="xref" href="Lucene.Net.Index.CompositeReader.html">CompositeReader</a>s based on an array
+of sub-readers. The implementing class has to add code for
+correctly refcounting and closing the sub-readers.</p>
+<p><p>User code will most likely use <a class="xref" href="Lucene.Net.Index.MultiReader.html">MultiReader</a> to build a
+composite reader on a set of sub-readers (like several
+<a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a>s).</p>
+<p><p> For efficiency, in this API documents are often referred to via
+<em>document numbers</em>, non-negative integers which each name a unique
+document in the index.  These document numbers are ephemeral -- they may change
+as documents are added to and deleted from an index.  Clients should thus not
+rely on a given document having the same number between sessions.</p>
+<p><p><strong>NOTE</strong>: 
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instances are completely thread
+safe, meaning multiple threads can call any of its methods,
+concurrently.  If your application requires external
+synchronization, you should <strong>not</strong> synchronize on the
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instance; use your own
+(non-Lucene) objects instead.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.BinaryDocValues.html">BinaryDocValues</a></h4>
+      <section><p>A per-document <span class="xref">byte[]</span></p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.BufferedUpdates.html">BufferedUpdates</a></h4>
+      <section><p>Holds buffered deletes and updates, by docID, term or query for a
+single segment. this is used to hold buffered pending
+deletes and updates against the to-be-flushed segment.  Once the
+deletes and updates are pushed (on flush in <span class="xref">Lucene.Net.Index.DocumentsWriter</span>), they
+are converted to a FrozenDeletes instance.
+<p>
+NOTE: instances of this class are accessed either via a private
+instance on <span class="xref">Lucene.Net.Index.DocumentsWriterPerThread</span>, or via sync&apos;d code by
+<span class="xref">Lucene.Net.Index.DocumentsWriterDeleteQueue</span></p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.ByteSliceReader.html">ByteSliceReader</a></h4>
+      <section><p><a class="xref" href="Lucene.Net.Store.IndexInput.html">IndexInput</a> that knows how to read the byte slices written
+by Posting and PostingVector. We read the bytes in
+each slice until we hit the end of that slice at which
+point we read the forwarding address of the next slice
+and then jump to it.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.CheckAbort.html">CheckAbort</a></h4>
+      <section><p>Class for recording units of work when merging segments.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.CheckIndex.html">CheckIndex</a></h4>
+      <section><p>Basic tool and API to check the health of an index and
+write a new segments file that removes reference to
+problematic segments.</p>
+<p><p>As this tool checks every byte in the index, on a large
+index it can take quite a long time to run.</p>
+<p><p>
+Please make a complete backup of your
+index before using this to fix your index!
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.CheckIndex.Status.html">CheckIndex.Status</a></h4>
+      <section><p>Returned from <a class="xref" href="Lucene.Net.Index.CheckIndex.html#Lucene_Net_Index_CheckIndex_DoCheckIndex">DoCheckIndex()</a> detailing the health and status of the index.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.CheckIndex.Status.DocValuesStatus.html">CheckIndex.Status.DocValuesStatus</a></h4>
+      <section><p>Status from testing <a class="xref" href="Lucene.Net.Index.DocValues.html">DocValues</a></p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.CheckIndex.Status.FieldNormStatus.html">CheckIndex.Status.FieldNormStatus</a></h4>
+      <section><p>Status from testing field norms.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.CheckIndex.Status.SegmentInfoStatus.html">CheckIndex.Status.SegmentInfoStatus</a></h4>
+      <section><p>Holds the status of each segment in the index.
+See <a class="xref" href="Lucene.Net.Index.CheckIndex.Status.html#Lucene_Net_Index_CheckIndex_Status_SegmentInfos">SegmentInfos</a>.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.CheckIndex.Status.StoredFieldStatus.html">CheckIndex.Status.StoredFieldStatus</a></h4>
+      <section><p>Status from testing stored fields.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.CheckIndex.Status.TermIndexStatus.html">CheckIndex.Status.TermIndexStatus</a></h4>
+      <section><p>Status from testing term index.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.CheckIndex.Status.TermVectorStatus.html">CheckIndex.Status.TermVectorStatus</a></h4>
+      <section><p>Status from testing stored fields.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.CompositeReader.html">CompositeReader</a></h4>
+      <section><p>Instances of this reader type can only
+be used to get stored fields from the underlying <a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a>s,
+but it is not possible to directly retrieve postings. To do that, get
+the <a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a> for all sub-readers via <a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html#Lucene_Net_Index_AtomicReaderContext_Leaves">Leaves</a>.
+Alternatively, you can mimic an <a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a> (with a serious slowdown),
+by wrapping composite readers with <a class="xref" href="Lucene.Net.Index.SlowCompositeReaderWrapper.html">SlowCompositeReaderWrapper</a>.</p>
+<p><p><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instances for indexes on disk are usually constructed
+with a call to one of the static <code>DirectoryReader.Open()</code> methods,
+e.g. <a class="xref" href="Lucene.Net.Index.DirectoryReader.html#Lucene_Net_Index_DirectoryReader_Open_Lucene_Net_Store_Directory_">Open(Directory)</a>. <a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a> implements
+the <a class="xref" href="Lucene.Net.Index.CompositeReader.html">CompositeReader</a> interface, it is not possible to directly get postings.
+<p> Concrete subclasses of <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> are usually constructed with a call to
+one of the static <code>Open()</code> methods, e.g. <a class="xref" href="Lucene.Net.Index.DirectoryReader.html#Lucene_Net_Index_DirectoryReader_Open_Lucene_Net_Store_Directory_">Open(Directory)</a>.</p>
+<p><p> For efficiency, in this API documents are often referred to via
+<em>document numbers</em>, non-negative integers which each name a unique
+document in the index.  These document numbers are ephemeral -- they may change
+as documents are added to and deleted from an index.  Clients should thus not
+rely on a given document having the same number between sessions.</p>
+<p><p>
+<strong>NOTE</strong>: 
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instances are completely thread
+safe, meaning multiple threads can call any of its methods,
+concurrently.  If your application requires external
+synchronization, you should <strong>not</strong> synchronize on the
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instance; use your own
+(non-Lucene) objects instead.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.CompositeReaderContext.html">CompositeReaderContext</a></h4>
+      <section><p><a class="xref" href="Lucene.Net.Index.IndexReaderContext.html">IndexReaderContext</a> for <a class="xref" href="Lucene.Net.Index.CompositeReader.html">CompositeReader</a> instance.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.CompositeReaderContext.Builder.html">CompositeReaderContext.Builder</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html">ConcurrentMergeScheduler</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Index.MergeScheduler.html">MergeScheduler</a> that runs each merge using a
+separate thread.</p>
+<p>Specify the max number of threads that may run at
+once, and the maximum number of simultaneous merges
+with <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html#Lucene_Net_Index_ConcurrentMergeScheduler_SetMaxMergesAndThreads_System_Int32_System_Int32_">SetMaxMergesAndThreads(Int32, Int32)</a>.</p>
+
+<p>If the number of merges exceeds the max number of threads
+then the largest merges are paused until one of the smaller
+merges completes.</p>
+
+<p>If more than <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html#Lucene_Net_Index_ConcurrentMergeScheduler_MaxMergeCount">MaxMergeCount</a> merges are
+requested then this class will forcefully throttle the
+incoming threads by pausing until one more more merges
+complete.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.MergeThread.html">ConcurrentMergeScheduler.MergeThread</a></h4>
+      <section><p>Runs a merge thread, which may run one or more merges
+in sequence.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.CorruptIndexException.html">CorruptIndexException</a></h4>
+      <section><p>This exception is thrown when Lucene detects
+an inconsistency in the index.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a></h4>
+      <section><p><a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a> is an implementation of <a class="xref" href="Lucene.Net.Index.CompositeReader.html">CompositeReader</a>
+that can read indexes in a <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a>.</p>
+<p><p><a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a> instances are usually constructed with a call to
+one of the static <code>Open()</code> methods, e.g. <a class="xref" href="Lucene.Net.Index.DirectoryReader.html#Lucene_Net_Index_DirectoryReader_Open_Lucene_Net_Store_Directory_">Open(Directory)</a>.</p>
+<p><p> For efficiency, in this API documents are often referred to via
+<em>document numbers</em>, non-negative integers which each name a unique
+document in the index.  These document numbers are ephemeral -- they may change
+as documents are added to and deleted from an index.  Clients should thus not
+rely on a given document having the same number between sessions.</p>
+<p><p><strong>NOTE</strong>:
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instances are completely thread
+safe, meaning multiple threads can call any of its methods,
+concurrently.  If your application requires external
+synchronization, you should <strong>not</strong> synchronize on the
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instance; use your own
+(non-Lucene) objects instead.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html">DocsAndPositionsEnum</a></h4>
+      <section><p>Also iterates through positions. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a></h4>
+      <section><p>Iterates through the documents and term freqs.
+NOTE: you must first call <a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html#Lucene_Net_Search_DocIdSetIterator_NextDoc">NextDoc()</a> before using
+any of the per-doc methods.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.DocTermOrds.html">DocTermOrds</a></h4>
+      <section><p>This class enables fast access to multiple term ords for
+a specified field across all docIDs.
+<p>
+Like <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>, it uninverts the index and holds a
+packed data structure in RAM to enable fast access.
+Unlike <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>, it can handle multi-valued fields,
+and, it does not hold the term bytes in RAM.  Rather, you
+must obtain a <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> from the <a class="xref" href="Lucene.Net.Index.DocTermOrds.html#Lucene_Net_Index_DocTermOrds_GetOrdTermsEnum_Lucene_Net_Index_AtomicReader_">GetOrdTermsEnum(AtomicReader)</a>
+method, and then seek-by-ord to get the term&apos;s bytes.
+<p>
+While normally term ords are type <span class="xref">System.Int64</span>, in this API they are
+<span class="xref">System.Int32</span> as the internal representation here cannot address
+more than <a class="xref" href="Lucene.Net.Index.BufferedUpdates.html#Lucene_Net_Index_BufferedUpdates_MAX_INT32">MAX_INT32</a> unique terms.  Also, typically this
+class is used on fields with relatively few unique terms
+vs the number of documents.  In addition, there is an
+internal limit (16 MB) on how many bytes each chunk of
+documents may consume.  If you trip this limit you&apos;ll hit
+an <span class="xref">System.InvalidOperationException</span>.
+<p>
+Deleted documents are skipped during uninversion, and if
+you look them up you&apos;ll get 0 ords.
+<p>
+The returned per-document ords do not retain their
+original order in the document.  Instead they are returned
+in sorted (by ord, ie term&apos;s <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> comparer) order.  They
+are also de-dup&apos;d (ie if doc has same term more than once
+in this field, you&apos;ll only get that ord back once).
+<p>
+This class tests whether the provided reader is able to
+retrieve terms by ord (ie, it&apos;s single segment, and it
+uses an ord-capable terms index).  If not, this class
+will create its own term index internally, allowing to
+create a wrapped <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> that can handle ord.  The
+<a class="xref" href="Lucene.Net.Index.DocTermOrds.html#Lucene_Net_Index_DocTermOrds_GetOrdTermsEnum_Lucene_Net_Index_AtomicReader_">GetOrdTermsEnum(AtomicReader)</a> method then provides this
+wrapped enum, if necessary.
+<p>
+The RAM consumption of this class can be high!
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.DocValues.html">DocValues</a></h4>
+      <section><p>This class contains utility methods and constants for <a class="xref" href="Lucene.Net.Index.DocValues.html">DocValues</a></p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.DocValuesUpdate.html">DocValuesUpdate</a></h4>
+      <section><p>An in-place update to a <a class="xref" href="Lucene.Net.Index.DocValues.html">DocValues</a> field. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.DocValuesUpdate.BinaryDocValuesUpdate.html">DocValuesUpdate.BinaryDocValuesUpdate</a></h4>
+      <section><p>An in-place update to a binary <a class="xref" href="Lucene.Net.Index.DocValues.html">DocValues</a> field </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.DocValuesUpdate.NumericDocValuesUpdate.html">DocValuesUpdate.NumericDocValuesUpdate</a></h4>
+      <section><p>An in-place update to a numeric <a class="xref" href="Lucene.Net.Index.DocValues.html">DocValues</a> field </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.FieldInfo.html">FieldInfo</a></h4>
+      <section><p>Access to the Field Info file that describes document fields and whether or
+not they are indexed. Each segment has a separate Field Info file. Objects
+of this class are thread-safe for multiple readers, but only one thread can
+be adding documents at a time, with no other reader or writer threads
+accessing this object.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.FieldInfos.html">FieldInfos</a></h4>
+      <section><p>Collection of <a class="xref" href="Lucene.Net.Index.FieldInfo.html">FieldInfo</a>s (accessible by number or by name).
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.FieldInvertState.html">FieldInvertState</a></h4>
+      <section><p>This class tracks the number and position / offset parameters of terms
+being added to the index. The information collected in this class is
+also used to calculate the normalization factor for a field.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.Fields.html">Fields</a></h4>
+      <section><p>Flex API for access to fields and terms
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.FilterAtomicReader.html">FilterAtomicReader</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Index.FilterAtomicReader.html">FilterAtomicReader</a> contains another <a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a>, which it
+uses as its basic source of data, possibly transforming the data along the
+way or providing additional functionality. The class
+<a class="xref" href="Lucene.Net.Index.FilterAtomicReader.html">FilterAtomicReader</a> itself simply implements all abstract methods
+of <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> with versions that pass all requests to the
+contained index reader. Subclasses of <a class="xref" href="Lucene.Net.Index.FilterAtomicReader.html">FilterAtomicReader</a> may
+further override some of these methods and may also provide additional
+methods and fields.
+<p><strong>NOTE</strong>: If you override <a class="xref" href="Lucene.Net.Index.FilterAtomicReader.html#Lucene_Net_Index_FilterAtomicReader_LiveDocs">LiveDocs</a>, you will likely need
+to override <a class="xref" href="Lucene.Net.Index.FilterAtomicReader.html#Lucene_Net_Index_FilterAtomicReader_NumDocs">NumDocs</a> as well and vice-versa.
+<p><strong>NOTE</strong>: If this <a class="xref" href="Lucene.Net.Index.FilterAtomicReader.html">FilterAtomicReader</a> does not change the
+content the contained reader, you could consider overriding
+<a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_CoreCacheKey">CoreCacheKey</a> so that <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a> and
+<a class="xref" href="Lucene.Net.Search.CachingWrapperFilter.html">CachingWrapperFilter</a> share the same entries for this atomic reader
+and the wrapped one. <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_CombinedCoreAndDeletesKey">CombinedCoreAndDeletesKey</a> could be
+overridden as well if the <a class="xref" href="Lucene.Net.Index.FilterAtomicReader.html#Lucene_Net_Index_FilterAtomicReader_LiveDocs">LiveDocs</a> are not changed
+either.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.FilterAtomicReader.FilterDocsAndPositionsEnum.html">FilterAtomicReader.FilterDocsAndPositionsEnum</a></h4>
+      <section><p>Base class for filtering <a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html">DocsAndPositionsEnum</a> implementations. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.FilterAtomicReader.FilterDocsEnum.html">FilterAtomicReader.FilterDocsEnum</a></h4>
+      <section><p>Base class for filtering <a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a> implementations. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.FilterAtomicReader.FilterFields.html">FilterAtomicReader.FilterFields</a></h4>
+      <section><p>Base class for filtering <a class="xref" href="Lucene.Net.Index.Fields.html">Fields</a>
+implementations.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.FilterAtomicReader.FilterTerms.html">FilterAtomicReader.FilterTerms</a></h4>
+      <section><p>Base class for filtering <a class="xref" href="Lucene.Net.Index.Terms.html">Terms</a> implementations.
+<p><strong>NOTE</strong>: If the order of terms and documents is not changed, and if
+these terms are going to be intersected with automata, you could consider
+overriding <a class="xref" href="Lucene.Net.Index.Terms.html#Lucene_Net_Index_Terms_Intersect_Lucene_Net_Util_Automaton_CompiledAutomaton_Lucene_Net_Util_BytesRef_">Intersect(CompiledAutomaton, BytesRef)</a> for better performance.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.FilterAtomicReader.FilterTermsEnum.html">FilterAtomicReader.FilterTermsEnum</a></h4>
+      <section><p>Base class for filtering <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> implementations. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.FilterDirectoryReader.html">FilterDirectoryReader</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Index.FilterDirectoryReader.html">FilterDirectoryReader</a> wraps another <a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a>, allowing implementations
+to transform or extend it.
+<p>
+Subclasses should implement <a class="xref" href="Lucene.Net.Index.FilterDirectoryReader.html#Lucene_Net_Index_FilterDirectoryReader_DoWrapDirectoryReader_Lucene_Net_Index_DirectoryReader_">DoWrapDirectoryReader(DirectoryReader)</a> to return an instance of the
+subclass.
+<p>
+If the subclass wants to wrap the <a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a>&apos;s subreaders, it should also
+implement a <a class="xref" href="Lucene.Net.Index.FilterDirectoryReader.SubReaderWrapper.html">FilterDirectoryReader.SubReaderWrapper</a> subclass, and pass an instance to its base
+constructor.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.FilterDirectoryReader.StandardReaderWrapper.html">FilterDirectoryReader.StandardReaderWrapper</a></h4>
+      <section><p>A no-op <a class="xref" href="Lucene.Net.Index.FilterDirectoryReader.SubReaderWrapper.html">FilterDirectoryReader.SubReaderWrapper</a> that simply returns the parent
+<a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a>&apos;s original subreaders.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.FilterDirectoryReader.SubReaderWrapper.html">FilterDirectoryReader.SubReaderWrapper</a></h4>
+      <section><p>Factory class passed to <a class="xref" href="Lucene.Net.Index.FilterDirectoryReader.html">FilterDirectoryReader</a> constructor that allows
+subclasses to wrap the filtered <a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a>&apos;s subreaders.  You
+can use this to, e.g., wrap the subreaders with specialized
+<a class="xref" href="Lucene.Net.Index.FilterAtomicReader.html">FilterAtomicReader</a> implementations.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.FilteredTermsEnum.html">FilteredTermsEnum</a></h4>
+      <section><p>Abstract class for enumerating a subset of all terms.
+<p>
+Term enumerations are always ordered by
+<a class="xref" href="Lucene.Net.Index.FilteredTermsEnum.html#Lucene_Net_Index_FilteredTermsEnum_Comparer">Comparer</a>.  Each term in the enumeration is
+greater than all that precede it.
+<p><code>Please note:</code> Consumers of this enumeration cannot
+call <code>Seek()</code>, it is forward only; it throws
+<span class="xref">System.NotSupportedException</span> when a seeking method
+is called.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.IndexCommit.html">IndexCommit</a></h4>
+      <section><p>Expert: represents a single commit into an index as seen by the
+<a class="xref" href="Lucene.Net.Index.IndexDeletionPolicy.html">IndexDeletionPolicy</a> or <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a>.</p>
+
+<p> Changes to the content of an index are made visible
+only after the writer who made that change commits by
+writing a new segments file
+(<code>segments_N</code>). This point in time, when the
+action of writing of a new segments file to the directory
+is completed, is an index commit.</p>
+
+<p>Each index commit point has a unique segments file
+associated with it. The segments file associated with a
+later index commit point would have a larger N.</p>
+
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.IndexDeletionPolicy.html">IndexDeletionPolicy</a></h4>
+      <section><p>Expert: policy for deletion of stale <a class="xref" href="Lucene.Net.Index.IndexCommit.html">IndexCommit</a>s.</p>
+
+<p>Implement this interface, and pass it to one
+of the <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> or <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a>
+constructors, to customize when older
+point-in-time commits (<a class="xref" href="Lucene.Net.Index.IndexCommit.html">IndexCommit</a>)
+are deleted from the index directory.  The default deletion policy
+is <a class="xref" href="Lucene.Net.Index.KeepOnlyLastCommitDeletionPolicy.html">KeepOnlyLastCommitDeletionPolicy</a>, which always
+removes old commits as soon as a new commit is done (this
+matches the behavior before 2.2).</p>
+
+<p>One expected use case for this (and the reason why it
+was first created) is to work around problems with an
+index directory accessed via filesystems like NFS because
+NFS does not provide the &quot;delete on last close&quot; semantics
+that Lucene&apos;s &quot;point in time&quot; search normally relies on.
+By implementing a custom deletion policy, such as &quot;a
+commit is only removed once it has been stale for more
+than X minutes&quot;, you can give your readers time to
+refresh to the new commit before <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>
+removes the old commits.  Note that doing so will
+increase the storage requirements of the index.  See <a target="top" href="http://issues.apache.org/jira/browse/LUCENE-710">LUCENE-710</a>
+for details.</p>
+
+<p>Implementers of sub-classes should make sure that <a class="xref" href="Lucene.Net.Index.IndexDeletionPolicy.html#Lucene_Net_Index_IndexDeletionPolicy_Clone">Clone()</a>
+returns an independent instance able to work with any other <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>
+or <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a> instance.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.IndexFileNames.html">IndexFileNames</a></h4>
+      <section><p>This class contains useful constants representing filenames and extensions
+used by lucene, as well as convenience methods for querying whether a file
+name matches an extension (<a class="xref" href="Lucene.Net.Index.IndexFileNames.html#Lucene_Net_Index_IndexFileNames_MatchesExtension_System_String_System_String_">MatchesExtension(String, String)</a>), 
+as well as generating file names from a segment name,
+generation and extension 
+(<a class="xref" href="Lucene.Net.Index.IndexFileNames.html#Lucene_Net_Index_IndexFileNames_FileNameFromGeneration_System_String_System_String_System_Int64_">FileNameFromGeneration(String, String, Int64)</a>,
+<a class="xref" href="Lucene.Net.Index.IndexFileNames.html#Lucene_Net_Index_IndexFileNames_SegmentFileName_System_String_System_String_System_String_">SegmentFileName(String, String, String)</a>).</p>
+<p><p><strong>NOTE</strong>: extensions used by codecs are not
+listed here.  You must interact with the <a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a>
+directly.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.IndexFormatTooNewException.html">IndexFormatTooNewException</a></h4>
+      <section><p>This exception is thrown when Lucene detects
+an index that is newer than this Lucene version.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.IndexFormatTooOldException.html">IndexFormatTooOldException</a></h4>
+      <section><p>This exception is thrown when Lucene detects
+an index that is too old for this Lucene version</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.IndexNotFoundException.html">IndexNotFoundException</a></h4>
+      <section><p>Signals that no index was found in the <span class="xref">System.IO.Directory</span>. Possibly because the
+directory is empty, however can also indicate an index corruption.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a></h4>
+      <section><p><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> is an abstract class, providing an interface for accessing an
+index.  Search of an index is done entirely through this abstract interface,
+so that any subclass which implements it is searchable.</p>
+<p><p>There are two different types of <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a>s:
+<ul><li><a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a>: These indexes do not consist of several sub-readers,
+        they are atomic. They support retrieval of stored fields, doc values, terms,
+        and postings.</li><li><a class="xref" href="Lucene.Net.Index.CompositeReader.html">CompositeReader</a>: Instances (like <a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a>)
+        of this reader can only
+        be used to get stored fields from the underlying <a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a>s,
+        but it is not possible to directly retrieve postings. To do that, get
+        the sub-readers via <a class="xref" href="Lucene.Net.Index.CompositeReader.html#Lucene_Net_Index_CompositeReader_GetSequentialSubReaders">GetSequentialSubReaders()</a>.
+        Alternatively, you can mimic an <a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a> (with a serious slowdown),
+        by wrapping composite readers with <a class="xref" href="Lucene.Net.Index.SlowCompositeReaderWrapper.html">SlowCompositeReaderWrapper</a>.</li></ul></p>
+<p><p><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instances for indexes on disk are usually constructed
+with a call to one of the static <code>DirectoryReader.Open()</code> methods,
+e.g. <a class="xref" href="Lucene.Net.Index.DirectoryReader.html#Lucene_Net_Index_DirectoryReader_Open_Lucene_Net_Store_Directory_">Open(Directory)</a>. <a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a> inherits
+the <a class="xref" href="Lucene.Net.Index.CompositeReader.html">CompositeReader</a> abstract class, it is not possible to directly get postings.</p>
+<p><p> For efficiency, in this API documents are often referred to via
+<em>document numbers</em>, non-negative integers which each name a unique
+document in the index.  These document numbers are ephemeral -- they may change
+as documents are added to and deleted from an index.  Clients should thus not
+rely on a given document having the same number between sessions.</p>
+<p><p>
+<strong>NOTE</strong>: <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instances are completely thread
+safe, meaning multiple threads can call any of its methods,
+concurrently.  If your application requires external
+synchronization, you should <strong>not</strong> synchronize on the
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instance; use your own
+(non-Lucene) objects instead.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.IndexReaderContext.html">IndexReaderContext</a></h4>
+      <section><p>A struct like class that represents a hierarchical relationship between
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instances.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.IndexUpgrader.html">IndexUpgrader</a></h4>
+      <section><p>This is an easy-to-use tool that upgrades all segments of an index from previous Lucene versions
+to the current segment file format. It can be used from command line:</p>
+<pre><code> java -cp lucene-core.jar Lucene.Net.Index.IndexUpgrader [-delete-prior-commits] [-verbose] indexDir</code></pre>
+<p>Alternatively this class can be instantiated and <a class="xref" href="Lucene.Net.Index.IndexUpgrader.html#Lucene_Net_Index_IndexUpgrader_Upgrade">Upgrade()</a> invoked. It uses <a class="xref" href="Lucene.Net.Index.UpgradeIndexMergePolicy.html">UpgradeIndexMergePolicy</a>
+and triggers the upgrade via an <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_">ForceMerge(Int32)</a> request to <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>.
+<p>
+This tool keeps only the last commit in an index; for this
+reason, if the incoming index has more than one commit, the tool
+refuses to run by default. Specify <code>-delete-prior-commits</code>
+to override this, allowing the tool to delete all but the last commit.
+From .NET code this can be enabled by passing <code>true</code> to
+<a class="xref" href="Lucene.Net.Index.IndexUpgrader.html#Lucene_Net_Index_IndexUpgrader__ctor_Lucene_Net_Store_Directory_Lucene_Net_Util_LuceneVersion_System_IO_TextWriter_System_Boolean_">IndexUpgrader(Directory, LuceneVersion, TextWriter, Boolean)</a>.
+<p>
+<strong>Warning:</strong> this tool may reorder documents if the index was partially
+upgraded before execution (e.g., documents were added). If your application relies
+on &quot;monotonicity&quot; of doc IDs (which means that the order in which the documents
+were added to the index is preserved), do a full ForceMerge instead.
+The <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> set by <a class="xref" href="Lucene.Net.Index.IndexWriterConfig.html">IndexWriterConfig</a> may also reorder
+documents.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a></h4>
+      <section><p>An <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> creates and maintains an index.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.IndexWriter.IndexReaderWarmer.html">IndexWriter.IndexReaderWarmer</a></h4>
+      <section><p>If <a class="xref" href="Lucene.Net.Index.DirectoryReader.html#Lucene_Net_Index_DirectoryReader_Open_Lucene_Net_Index_IndexWriter_System_Boolean_">Open(IndexWriter, Boolean)</a> has
+been called (ie, this writer is in near real-time
+mode), then after a merge completes, this class can be
+invoked to warm the reader on the newly merged
+segment, before the merge commits.  This is not
+required for near real-time search, but will reduce
+search latency on opening a new near real-time reader
+after a merge completes.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div><p><p><strong>NOTE</strong>: <a class="xref" href="Lucene.Net.Index.IndexWriter.IndexReaderWarmer.html#Lucene_Net_Index_IndexWriter_IndexReaderWarmer_Warm_Lucene_Net_Index_AtomicReader_">Warm(AtomicReader)</a> is called before any deletes have
+been carried over to the merged segment.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.IndexWriterConfig.html">IndexWriterConfig</a></h4>
+      <section><p>Holds all the configuration that is used to create an <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>.
+Once <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> has been created with this object, changes to this
+object will not affect the <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> instance. For that, use
+<a class="xref" href="Lucene.Net.Index.LiveIndexWriterConfig.html">LiveIndexWriterConfig</a> that is returned from <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Config">Config</a>.</p>
+<p><p>
+LUCENENET NOTE: Unlike Lucene, we use property setters instead of setter methods.
+In C#, this allows you to initialize the <a class="xref" href="Lucene.Net.Index.IndexWriterConfig.html">IndexWriterConfig</a>
+using the language features of C#, for example:</p>
+<pre><code>    IndexWriterConfig conf = new IndexWriterConfig(analyzer)
+    {
+        Codec = Lucene46Codec(),
+        OpenMode = OpenMode.CREATE
+    };</code></pre>
+
+<p>However, if you prefer to match the syntax of Lucene using chained setter methods, 
+there are extension methods in the Lucene.Net.Support namespace. Example usage:</p>
+<pre><code>    using Lucene.Net.Support;
+
+    ..
+
+    IndexWriterConfig conf = new IndexWriterConfig(analyzer)
+        .SetCodec(new Lucene46Codec())
+        .SetOpenMode(OpenMode.CREATE);</code></pre>
+
+<p>@since 3.1</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.KeepOnlyLastCommitDeletionPolicy.html">KeepOnlyLastCommitDeletionPolicy</a></h4>
+      <section><p>This <a class="xref" href="Lucene.Net.Index.IndexDeletionPolicy.html">IndexDeletionPolicy</a> implementation that
+keeps only the most recent commit and immediately removes
+all prior commits after a new commit is done.  This is
+the default deletion policy.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.LiveIndexWriterConfig.html">LiveIndexWriterConfig</a></h4>
+      <section><p>Holds all the configuration used by <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> with few setters for
+settings that can be changed on an <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> instance &quot;live&quot;.</p>
+<p>@since 4.0</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.LogByteSizeMergePolicy.html">LogByteSizeMergePolicy</a></h4>
+      <section><p>This is a <a class="xref" href="Lucene.Net.Index.LogMergePolicy.html">LogMergePolicy</a> that measures size of a
+segment as the total byte size of the segment&apos;s files.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.LogDocMergePolicy.html">LogDocMergePolicy</a></h4>
+      <section><p>This is a <a class="xref" href="Lucene.Net.Index.LogMergePolicy.html">LogMergePolicy</a> that measures size of a
+segment as the number of documents (not taking deletions
+into account).</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.LogMergePolicy.html">LogMergePolicy</a></h4>
+      <section><p>This class implements a <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> that tries
+to merge segments into levels of exponentially
+increasing size, where each level has fewer segments than
+the value of the merge factor. Whenever extra segments
+(beyond the merge factor upper bound) are encountered,
+all segments within the level are merged. You can get or
+set the merge factor using <a class="xref" href="Lucene.Net.Index.LogMergePolicy.html#Lucene_Net_Index_LogMergePolicy_MergeFactor">MergeFactor</a>.</p>
+
+<p>This class is abstract and requires a subclass to
+define the <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_Size_Lucene_Net_Index_SegmentCommitInfo_">Size(SegmentCommitInfo)</a> method which specifies how a
+segment&apos;s size is determined.  <a class="xref" href="Lucene.Net.Index.LogDocMergePolicy.html">LogDocMergePolicy</a>
+is one subclass that measures size by document count in
+the segment.  <a class="xref" href="Lucene.Net.Index.LogByteSizeMergePolicy.html">LogByteSizeMergePolicy</a> is another
+subclass that measures size as the total byte size of the
+file(s) for the segment.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a></h4>
+      <section><p>Expert: a <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> determines the sequence of
+primitive merge operations.</p>
+
+<p>Whenever the segments in an index have been altered by
+<a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>, either the addition of a newly
+flushed segment, addition of many segments from
+AddIndexes* calls, or a previous merge that may now need
+to cascade, <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> invokes <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_FindMerges_Lucene_Net_Index_MergeTrigger_Lucene_Net_Index_SegmentInfos_">FindMerges(MergeTrigger, SegmentInfos)</a>
+to give the <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> a chance to pick
+merges that are now required.  This method returns a
+<a class="xref" href="Lucene.Net.Index.MergePolicy.MergeSpecification.html">MergePolicy.MergeSpecification</a> instance describing the set of
+merges that should be done, or null if no merges are
+necessary.  When <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_">ForceMerge(Int32)</a> is called, it calls
+<a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_FindForcedMerges_Lucene_Net_Index_SegmentInfos_System_Int32_System_Collections_Generic_IDictionary_Lucene_Net_Index_SegmentCommitInfo_System_Nullable_System_Boolean___">FindForcedMerges(SegmentInfos, Int32, IDictionary&lt;SegmentCommitInfo, Nullable&lt;Boolean&gt;&gt;)</a> and the <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> should
+then return the necessary merges.</p>
+
+<p>Note that the policy can return more than one merge at
+a time.  In this case, if the writer is using 
+<a class="xref" href="Lucene.Net.Index.SerialMergeScheduler.html">SerialMergeScheduler</a>, the merges will be run
+sequentially but if it is using
+<a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html">ConcurrentMergeScheduler</a> they will be run concurrently.</p>
+
+<p>The default MergePolicy is
+<a class="xref" href="Lucene.Net.Index.TieredMergePolicy.html">TieredMergePolicy</a>.</p>
+
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.MergePolicy.DocMap.html">MergePolicy.DocMap</a></h4>
+      <section><p>A map of doc IDs. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.MergePolicy.MergeAbortedException.html">MergePolicy.MergeAbortedException</a></h4>
+      <section><p>Thrown when a merge was explicity aborted because
+<a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Dispose_System_Boolean_">Dispose(Boolean)</a> was called with
+<code>false</code>.  Normally this exception is
+privately caught and suppresed by <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.MergePolicy.MergeException.html">MergePolicy.MergeException</a></h4>
+      <section><p>Exception thrown if there are any problems while
+executing a merge.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.MergePolicy.MergeSpecification.html">MergePolicy.MergeSpecification</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Index.MergePolicy.MergeSpecification.html">MergePolicy.MergeSpecification</a> instance provides the information
+necessary to perform multiple merges.  It simply
+contains a list of <a class="xref" href="Lucene.Net.Index.MergePolicy.OneMerge.html">MergePolicy.OneMerge</a> instances.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.MergePolicy.OneMerge.html">MergePolicy.OneMerge</a></h4>
+      <section><p>OneMerge provides the information necessary to perform
+an individual primitive merge operation, resulting in
+a single new segment.  The merge spec includes the
+subset of segments to be merged as well as whether the
+new segment should use the compound file format.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.MergeScheduler.html">MergeScheduler</a></h4>
+      <section><p><p>Expert: <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> uses an instance
+implementing this interface to execute the merges
+selected by a <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a>.  The default
+MergeScheduler is <a class="xref" href="Lucene.Net.Index.ConcurrentMergeScheduler.html">ConcurrentMergeScheduler</a>.</p>
+<p>Implementers of sub-classes should make sure that <a class="xref" href="Lucene.Net.Index.MergeScheduler.html#Lucene_Net_Index_MergeScheduler_Clone">Clone()</a>
+returns an independent instance able to work with any <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>
+instance.</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.MergeState.html">MergeState</a></h4>
+      <section><p>Holds common state used during segment merging.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.MergeState.DocMap.html">MergeState.DocMap</a></h4>
+      <section><p>Remaps docids around deletes during merge</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.MultiDocsAndPositionsEnum.html">MultiDocsAndPositionsEnum</a></h4>
+      <section><p>Exposes flex API, merged from flex API of sub-segments.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.MultiDocsAndPositionsEnum.EnumWithSlice.html">MultiDocsAndPositionsEnum.EnumWithSlice</a></h4>
+      <section><p>Holds a <a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html">DocsAndPositionsEnum</a> along with the
+corresponding <a class="xref" href="Lucene.Net.Index.ReaderSlice.html">ReaderSlice</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.MultiDocsEnum.html">MultiDocsEnum</a></h4>
+      <section><p>Exposes <a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a>, merged from <a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a>
+API of sub-segments.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.MultiDocsEnum.EnumWithSlice.html">MultiDocsEnum.EnumWithSlice</a></h4>
+      <section><p>Holds a <a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a> along with the
+corresponding <a class="xref" href="Lucene.Net.Index.ReaderSlice.html">ReaderSlice</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.MultiDocValues.html">MultiDocValues</a></h4>
+      <section><p>A wrapper for <a class="xref" href="Lucene.Net.Index.CompositeReader.html">CompositeReader</a> providing access to <a class="xref" href="Lucene.Net.Index.DocValues.html">DocValues</a>.</p>
+<p><p><strong>NOTE</strong>: for multi readers, you&apos;ll get better
+performance by gathering the sub readers using
+<a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Context">Context</a> to get the
+atomic leaves and then operate per-AtomicReader,
+instead of using this class.</p>
+<p><p><strong>NOTE</strong>: this is very costly.</p>
+<p><p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div><div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.MultiDocValues.MultiSortedDocValues.html">MultiDocValues.MultiSortedDocValues</a></h4>
+      <section><p>Implements <a class="xref" href="Lucene.Net.Index.SortedDocValues.html">SortedDocValues</a> over n subs, using an <a class="xref" href="Lucene.Net.Index.MultiDocValues.OrdinalMap.html">MultiDocValues.OrdinalMap</a>
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.MultiDocValues.MultiSortedSetDocValues.html">MultiDocValues.MultiSortedSetDocValues</a></h4>
+      <section><p>Implements <a class="xref" href="Lucene.Net.Index.MultiDocValues.MultiSortedSetDocValues.html">MultiDocValues.MultiSortedSetDocValues</a> over n subs, using an <a class="xref" href="Lucene.Net.Index.MultiDocValues.OrdinalMap.html">MultiDocValues.OrdinalMap</a>
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.MultiDocValues.OrdinalMap.html">MultiDocValues.OrdinalMap</a></h4>
+      <section><p>maps per-segment ordinals to/from global ordinal space </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.MultiFields.html">MultiFields</a></h4>
+      <section><p>Exposes flex API, merged from flex API of sub-segments.
+This is useful when you&apos;re interacting with an 
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> implementation that consists of sequential
+sub-readers (eg <a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a> or 
+<a class="xref" href="Lucene.Net.Index.MultiReader.html">MultiReader</a>).</p>
+<p><p><strong>NOTE</strong>: for composite readers, you&apos;ll get better
+performance by gathering the sub readers using
+<a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Context">Context</a> to get the
+atomic leaves and then operate per-AtomicReader,
+instead of using this class.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.MultiReader.html">MultiReader</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Index.CompositeReader.html">CompositeReader</a> which reads multiple indexes, appending
+their content. It can be used to create a view on several
+sub-readers (like <a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a>) and execute searches on it.</p>
+<p><p> For efficiency, in this API documents are often referred to via
+<em>document numbers</em>, non-negative integers which each name a unique
+document in the index.  These document numbers are ephemeral -- they may change
+as documents are added to and deleted from an index.  Clients should thus not
+rely on a given document having the same number between sessions.</p>
+<p><p><a name="thread-safety"></a><strong>NOTE</strong>: 
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instances are completely thread
+safe, meaning multiple threads can call any of its methods,
+concurrently.  If your application requires external
+synchronization, you should <strong>not</strong> synchronize on the
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instance; use your own
+(non-Lucene) objects instead.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.MultiTerms.html">MultiTerms</a></h4>
+      <section><p>Exposes flex API, merged from flex API of
+sub-segments.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.MultiTermsEnum.html">MultiTermsEnum</a></h4>
+      <section><p>Exposes <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> API, merged from <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> API of sub-segments.
+This does a merge sort, by term text, of the sub-readers.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.MultiTermsEnum.TermsEnumIndex.html">MultiTermsEnum.TermsEnumIndex</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Index.MultiTermsEnum.TermsEnumWithSlice.html">MultiTermsEnum.TermsEnumWithSlice</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Index.NoDeletionPolicy.html">NoDeletionPolicy</a></h4>
+      <section><p>An <a class="xref" href="Lucene.Net.Index.IndexDeletionPolicy.html">IndexDeletionPolicy</a> which keeps all index commits around, never
+deleting them. This class is a singleton and can be accessed by referencing
+<a class="xref" href="Lucene.Net.Index.NoDeletionPolicy.html#Lucene_Net_Index_NoDeletionPolicy_INSTANCE">INSTANCE</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.NoMergePolicy.html">NoMergePolicy</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> which never returns merges to execute (hence it&apos;s
+name). It is also a singleton and can be accessed through
+<a class="xref" href="Lucene.Net.Index.NoMergePolicy.html#Lucene_Net_Index_NoMergePolicy_NO_COMPOUND_FILES">NO_COMPOUND_FILES</a> if you want to indicate the index
+does not use compound files, or through <a class="xref" href="Lucene.Net.Index.NoMergePolicy.html#Lucene_Net_Index_NoMergePolicy_COMPOUND_FILES">COMPOUND_FILES</a>
+otherwise. Use it if you want to prevent an <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> from ever
+executing merges, without going through the hassle of tweaking a merge
+policy&apos;s settings to achieve that, such as changing its merge factor.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.NoMergeScheduler.html">NoMergeScheduler</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Index.MergeScheduler.html">MergeScheduler</a> which never executes any merges. It is also a
+singleton and can be accessed through <a class="xref" href="Lucene.Net.Index.NoMergeScheduler.html#Lucene_Net_Index_NoMergeScheduler_INSTANCE">INSTANCE</a>. Use
+it if you want to prevent an <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> from ever executing merges,
+regardless of the <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> used. Note that you can achieve the
+same thing by using <a class="xref" href="Lucene.Net.Index.NoMergePolicy.html">NoMergePolicy</a>, however with
+<a class="xref" href="Lucene.Net.Index.NoMergeScheduler.html">NoMergeScheduler</a> you also ensure that no unnecessary code of any
+<a class="xref" href="Lucene.Net.Index.MergeScheduler.html">MergeScheduler</a> implementation is ever executed. Hence it is
+recommended to use both if you want to disable merges from ever happening.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.NumericDocValues.html">NumericDocValues</a></h4>
+      <section><p>A per-document numeric value.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.OrdTermState.html">OrdTermState</a></h4>
+      <section><p>An ordinal based <a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a>
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.ParallelAtomicReader.html">ParallelAtomicReader</a></h4>
+      <section><p>An <a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a> which reads multiple, parallel indexes.  Each index
+added must have the same number of documents, but typically each contains
+different fields. Deletions are taken from the first reader.
+Each document contains the union of the fields of all documents
+with the same document number.  When searching, matches for a
+query term are from the first index added that has the field.</p>
+<p><p>This is useful, e.g., with collections that have large fields which
+change rarely and small fields that change more frequently.  The smaller
+fields may be re-indexed in a new index and both indexes may be searched
+together.</p>
+<p><p><strong>Warning:</strong> It is up to you to make sure all indexes
+are created and modified the same way. For example, if you add
+documents to one index, you need to add the same documents in the
+same order to the other indexes. <em>Failure to do so will result in
+undefined behavior</em>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.ParallelCompositeReader.html">ParallelCompositeReader</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Index.CompositeReader.html">CompositeReader</a> which reads multiple, parallel indexes.  Each index added
+must have the same number of documents, and exactly the same hierarchical subreader structure,
+but typically each contains different fields. Deletions are taken from the first reader.
+Each document contains the union of the fields of all
+documents with the same document number.  When searching, matches for a
+query term are from the first index added that has the field.</p>
+<p><p>This is useful, e.g., with collections that have large fields which
+change rarely and small fields that change more frequently.  The smaller
+fields may be re-indexed in a new index and both indexes may be searched
+together.</p>
+<p><p><strong>Warning:</strong> It is up to you to make sure all indexes
+are created and modified the same way. For example, if you add
+documents to one index, you need to add the same documents in the
+same order to the other indexes. <em>Failure to do so will result in
+undefined behavior</em>.
+A good strategy to create suitable indexes with <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> is to use
+<a class="xref" href="Lucene.Net.Index.LogDocMergePolicy.html">LogDocMergePolicy</a>, as this one does not reorder documents
+during merging (like <a class="xref" href="Lucene.Net.Index.TieredMergePolicy.html">TieredMergePolicy</a>) and triggers merges
+by number of documents per segment. If you use different <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a>s
+it might happen that the segment structure of your index is no longer predictable.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.PersistentSnapshotDeletionPolicy.html">PersistentSnapshotDeletionPolicy</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Index.SnapshotDeletionPolicy.html">SnapshotDeletionPolicy</a> which adds a persistence layer so that
+snapshots can be maintained across the life of an application. The snapshots
+are persisted in a <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a> and are committed as soon as
+<a class="xref" href="Lucene.Net.Index.PersistentSnapshotDeletionPolicy.html#Lucene_Net_Index_PersistentSnapshotDeletionPolicy_Snapshot">Snapshot()</a> or <a class="xref" href="Lucene.Net.Index.PersistentSnapshotDeletionPolicy.html#Lucene_Net_Index_PersistentSnapshotDeletionPolicy_Release_Lucene_Net_Index_IndexCommit_">Release(IndexCommit)</a> is called.
+<p>
+<strong>NOTE:</strong> Sharing <a class="xref" href="Lucene.Net.Index.PersistentSnapshotDeletionPolicy.html">PersistentSnapshotDeletionPolicy</a>s that write to
+the same directory across <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>s will corrupt snapshots. You
+should make sure every <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> has its own
+<a class="xref" href="Lucene.Net.Index.PersistentSnapshotDeletionPolicy.html">PersistentSnapshotDeletionPolicy</a> and that they all write to a
+different <a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a>.  It is OK to use the same
+<a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a> that holds the index.</p>
+<p><p> This class adds a <a class="xref" href="Lucene.Net.Index.PersistentSnapshotDeletionPolicy.html#Lucene_Net_Index_PersistentSnapshotDeletionPolicy_Release_System_Int64_">Release(Int64)</a> method to
+release commits from a previous snapshot&apos;s <a class="xref" href="Lucene.Net.Index.IndexCommit.html#Lucene_Net_Index_IndexCommit_Generation">Generation</a>.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.RandomAccessOrds.html">RandomAccessOrds</a></h4>
+      <section><p>Extension of <a class="xref" href="Lucene.Net.Index.SortedSetDocValues.html">SortedSetDocValues</a> that supports random access
+to the ordinals of a document.
+<p>
+Operations via this API are independent of the iterator api (<a class="xref" href="Lucene.Net.Index.SortedSetDocValues.html#Lucene_Net_Index_SortedSetDocValues_NextOrd">NextOrd()</a>)
+and do not impact its state.
+<p>
+Codecs can optionally extend this API if they support constant-time access
+to ordinals for the document.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.ReaderManager.html">ReaderManager</a></h4>
+      <section><p>Utility class to safely share <a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a> instances across
+multiple threads, while periodically reopening. This class ensures each
+reader is disposed only once all threads have finished using it.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.ReaderSlice.html">ReaderSlice</a></h4>
+      <section><p>Subreader slice from a parent composite reader.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.ReaderUtil.html">ReaderUtil</a></h4>
+      <section><p>Common util methods for dealing with <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a>s and <a class="xref" href="Lucene.Net.Index.IndexReaderContext.html">IndexReaderContext</a>s.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a></h4>
+      <section><p>Embeds a [read-only] <a class="xref" href="Lucene.Net.Index.SegmentInfo.html">SegmentInfo</a> and adds per-commit
+fields.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.SegmentInfo.html">SegmentInfo</a></h4>
+      <section><p>Information about a segment such as it&apos;s name, directory, and files related
+to the segment.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.SegmentInfos.html">SegmentInfos</a></h4>
+      <section><p>A collection of segmentInfo objects with methods for operating on
+those segments in relation to the file system.
+<p>
+The active segments in the index are stored in the segment info file,
+<code>segments_N</code>. There may be one or more <code>segments_N</code> files in the
+index; however, the one with the largest generation is the active one (when
+older segments_N files are present it&apos;s because they temporarily cannot be
+deleted, or, a writer is in the process of committing, or a custom
+<a class="xref" href="Lucene.Net.Index.IndexDeletionPolicy.html">IndexDeletionPolicy</a>
+is in use). This file lists each segment by name and has details about the
+codec and generation of deletes.
+</p>
+<p>There is also a file <code>segments.gen</code>. this file contains
+the current generation (the <code>_N</code> in <code>segments_N</code>) of the index.
+This is used only as a fallback in case the current generation cannot be
+accurately determined by directory listing alone (as is the case for some NFS
+clients with time-based directory cache expiration). This file simply contains
+an <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a> version header
+(<a class="xref" href="Lucene.Net.Index.SegmentInfos.html#Lucene_Net_Index_SegmentInfos_FORMAT_SEGMENTS_GEN_CURRENT">FORMAT_SEGMENTS_GEN_CURRENT</a>), followed by the
+generation recorded as <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a>, written twice.</p>
+<p>
+Files:
+<ul><li><code>segments.gen</code>: GenHeader, Generation, Generation, Footer</li><li><code>segments_N</code>: Header, Version, NameCounter, SegCount,
+   &lt;SegName, SegCodec, DelGen, DeletionCount, FieldInfosGen, UpdatesFiles&gt;<sup>SegCount</sup>,
+   CommitUserData, Footer</li></ul>
+</p>
+Data types:
+<p>
+<ul><li>Header --&gt; <a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a></li><li>GenHeader, NameCounter, SegCount, DeletionCount --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a></li><li>Generation, Version, DelGen, Checksum, FieldInfosGen --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a></li><li>SegName, SegCodec --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteString_System_String_">WriteString(String)</a></li><li>CommitUserData --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteStringStringMap_System_Collections_Generic_IDictionary_System_String_System_String__">WriteStringStringMap(IDictionary&lt;String, String&gt;)</a></li><li>UpdatesFiles --&gt; <a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteStringSet_System_Collections_Generic_ISet_System_String__">WriteStringSet(ISet&lt;String&gt;)</a></li><li>Footer --&gt; <a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteFooter_Lucene_Net_Store_IndexOutput_">WriteFooter(IndexOutput)</a></li></ul>
+</p>
+Field Descriptions:
+<p>
+<ul><li>Version counts how often the index has been changed by adding or deleting
+      documents.</li><li>NameCounter is used to generate names for new segment files.</li><li>SegName is the name of the segment, and is used as the file name prefix for
+      all of the files that compose the segment&apos;s index.</li><li>DelGen is the generation count of the deletes file. If this is -1,
+      there are no deletes. Anything above zero means there are deletes
+      stored by <a class="xref" href="Lucene.Net.Codecs.LiveDocsFormat.html">LiveDocsFormat</a>.</li><li>DeletionCount records the number of deleted documents in this segment.</li><li>SegCodec is the <a class="xref" href="Lucene.Net.Codecs.Codec.html#Lucene_Net_Codecs_Codec_Name">Name</a> of the <a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a> that encoded
+      this segment.</li><li>CommitUserData stores an optional user-supplied opaque
+<see cref="T:IDictionary{string, string}"></see> that was passed to
+<a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_SetCommitData_System_Collections_Generic_IDictionary_System_String_System_String__">SetCommitData(IDictionary&lt;String, String&gt;)</a>.</li><li>FieldInfosGen is the generation count of the fieldInfos file. If this is -1,
+there are no updates to the fieldInfos in that segment. Anything above zero
+means there are updates to fieldInfos stored by <a class="xref" href="Lucene.Net.Codecs.FieldInfosFormat.html">FieldInfosFormat</a>.</li><li>UpdatesFiles stores the list of files that were updated in that segment.</li></ul>
+</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.SegmentInfos.FindSegmentsFile.html">SegmentInfos.FindSegmentsFile</a></h4>
+      <section><p>Utility class for executing code that needs to do
+something with the current segments file.  This is
+necessary with lock-less commits because from the time
+you locate the current segments file name, until you
+actually open it, read its contents, or check modified
+time, etc., it could have been deleted due to a writer
+commit finishing.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.SegmentReader.html">SegmentReader</a></h4>
+      <section><p><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> implementation over a single segment.
+<p>
+Instances pointing to the same segment (but with different deletes, etc)
+may share the same core data.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.SegmentReadState.html">SegmentReadState</a></h4>
+      <section><p>Holder class for common parameters used during read.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.SegmentWriteState.html">SegmentWriteState</a></h4>
+      <section><p>Holder class for common parameters used during write.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.SerialMergeScheduler.html">SerialMergeScheduler</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Index.MergeScheduler.html">MergeScheduler</a> that simply does each merge
+sequentially, using the current thread.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.SimpleMergedSegmentWarmer.html">SimpleMergedSegmentWarmer</a></h4>
+      <section><p>A very simple merged segment warmer that just ensures
+data structures are initialized.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.SingleTermsEnum.html">SingleTermsEnum</a></h4>
+      <section><p>Subclass of <a class="xref" href="Lucene.Net.Index.FilteredTermsEnum.html">FilteredTermsEnum</a> for enumerating a single term.
+<p>
+For example, this can be used by <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html">MultiTermQuery</a>s
+that need only visit one term, but want to preserve
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.html">MultiTermQuery</a> semantics such as <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_MultiTermRewriteMethod">MultiTermRewriteMethod</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.SlowCompositeReaderWrapper.html">SlowCompositeReaderWrapper</a></h4>
+      <section><p>This class forces a composite reader (eg a 
+<a class="xref" href="Lucene.Net.Index.MultiReader.html">MultiReader</a> or <a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a>) to emulate an
+atomic reader.  This requires implementing the postings
+APIs on-the-fly, using the static methods in 
+<a class="xref" href="Lucene.Net.Index.MultiFields.html">MultiFields</a>, <a class="xref" href="Lucene.Net.Index.MultiDocValues.html">MultiDocValues</a>, by stepping through
+the sub-readers to merge fields/terms, appending docs, etc.</p>
+<p><p><strong>NOTE</strong>: This class almost always results in a
+performance hit.  If this is important to your use case,
+you&apos;ll get better performance by gathering the sub readers using
+<a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Context">Context</a> to get the
+atomic leaves and then operate per-AtomicReader,
+instead of using this class.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.SnapshotDeletionPolicy.html">SnapshotDeletionPolicy</a></h4>
+      <section><p>An <a class="xref" href="Lucene.Net.Index.IndexDeletionPolicy.html">IndexDeletionPolicy</a> that wraps any other
+<a class="xref" href="Lucene.Net.Index.IndexDeletionPolicy.html">IndexDeletionPolicy</a> and adds the ability to hold and later release
+snapshots of an index. While a snapshot is held, the <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> will
+not remove any files associated with it even if the index is otherwise being
+actively, arbitrarily changed. Because we wrap another arbitrary
+<a class="xref" href="Lucene.Net.Index.IndexDeletionPolicy.html">IndexDeletionPolicy</a>, this gives you the freedom to continue using
+whatever <a class="xref" href="Lucene.Net.Index.IndexDeletionPolicy.html">IndexDeletionPolicy</a> you would normally want to use with your
+index.</p>
+<p><p>
+This class maintains all snapshots in-memory, and so the information is not
+persisted and not protected against system failures. If persistence is
+important, you can use <a class="xref" href="Lucene.Net.Index.PersistentSnapshotDeletionPolicy.html">PersistentSnapshotDeletionPolicy</a>.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.SortedDocValues.html">SortedDocValues</a></h4>
+      <section><p>A per-document <span class="xref">byte[]</span> with presorted values.
+<p>
+Per-Document values in a <a class="xref" href="Lucene.Net.Index.SortedDocValues.html">SortedDocValues</a> are deduplicated, dereferenced,
+and sorted into a dictionary of unique values. A pointer to the
+dictionary value (ordinal) can be retrieved for each document. Ordinals
+are dense and in increasing sorted order.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.SortedSetDocValues.html">SortedSetDocValues</a></h4>
+      <section><p>A per-document set of presorted <span class="xref">byte[]</span> values.
+<p>
+Per-Document values in a <a class="xref" href="Lucene.Net.Index.SortedDocValues.html">SortedDocValues</a> are deduplicated, dereferenced,
+and sorted into a dictionary of unique values. A pointer to the
+dictionary value (ordinal) can be retrieved for each document. Ordinals
+are dense and in increasing sorted order.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.StoredFieldVisitor.html">StoredFieldVisitor</a></h4>
+      <section><p>Expert: Provides a low-level means of accessing the stored field
+values in an index.  See <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Document_System_Int32_Lucene_Net_Index_StoredFieldVisitor_">Document(Int32, StoredFieldVisitor)</a>.</p>
+<p><p><strong>NOTE</strong>: a <a class="xref" href="Lucene.Net.Index.StoredFieldVisitor.html">StoredFieldVisitor</a> implementation
+should not try to load or visit other stored documents in
+the same reader because the implementation of stored
+fields for most codecs is not reeentrant and you will see
+strange exceptions as a result.</p>
+<p><p>See <a class="xref" href="Lucene.Net.Documents.DocumentStoredFieldVisitor.html">DocumentStoredFieldVisitor</a>, which is a
+<a class="xref" href="Lucene.Net.Index.StoredFieldVisitor.html">StoredFieldVisitor</a> that builds the
+<a class="xref" href="Lucene.Net.Documents.Document.html">Document</a> containing all stored fields.  This is
+used by <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Document_System_Int32_">Document(Int32)</a>.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.TaskMergeScheduler.html">TaskMergeScheduler</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Index.MergeScheduler.html">MergeScheduler</a> that runs each merge using
+<span class="xref">System.Threading.Tasks.Task</span>s on the default <span class="xref">System.Threading.Tasks.TaskScheduler</span>.</p>
+<p>If more than <a class="xref" href="Lucene.Net.Index.TaskMergeScheduler.html#Lucene_Net_Index_TaskMergeScheduler_MaxMergeCount">MaxMergeCount</a> merges are
+requested then this class will forcefully throttle the
+incoming threads by pausing until one more more merges
+complete.</p>
+
+<p>LUCENENET specific</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.Term.html">Term</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Index.Term.html">Term</a> represents a word from text.  This is the unit of search.  It is
+composed of two elements, the text of the word, as a string, and the name of
+the field that the text occurred in.
+<p>
+Note that terms may represent more than words from text fields, but also
+things like dates, email addresses, urls, etc.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.TermContext.html">TermContext</a></h4>
+      <section><p>Maintains a <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> <a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a> view over
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instances containing a single term. The
+<a class="xref" href="Lucene.Net.Index.TermContext.html">TermContext</a> doesn&apos;t track if the given <a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a>
+objects are valid, neither if the <a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a> instances refer to the
+same terms in the associated readers.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.Terms.html">Terms</a></h4>
+      <section><p>Access to the terms in a specific field.  See <a class="xref" href="Lucene.Net.Index.Fields.html">Fields</a>.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a></h4>
+      <section><p>Iterator to seek (<a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_SeekCeil_Lucene_Net_Util_BytesRef_">SeekCeil(BytesRef)</a>, 
+<a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_SeekExact_Lucene_Net_Util_BytesRef_">SeekExact(BytesRef)</a>) or step through 
+(<a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Next">Next()</a> terms to obtain frequency information 
+(<a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_DocFreq">DocFreq</a>), <a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a> or 
+<a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html">DocsAndPositionsEnum</a> for the current term 
+(<a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Docs_Lucene_Net_Util_IBits_Lucene_Net_Index_DocsEnum_">Docs(IBits, DocsEnum)</a>).</p>
+<p><p>Term enumerations are always ordered by
+<a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Comparer">Comparer</a>.  Each term in the enumeration is
+greater than the one before it.</p>
+<p><p>The <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> is unpositioned when you first obtain it
+and you must first successfully call <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Next">Next()</a> or one
+of the <code>Seek</code> methods.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.TermState.html">TermState</a></h4>
+      <section><p>Encapsulates all required internal state to position the associated
+<a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> without re-seeking.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.TieredMergePolicy.html">TieredMergePolicy</a></h4>
+      <section><p>Merges segments of approximately equal size, subject to
+an allowed number of segments per tier.  This is similar
+to <a class="xref" href="Lucene.Net.Index.LogByteSizeMergePolicy.html">LogByteSizeMergePolicy</a>, except this merge
+policy is able to merge non-adjacent segment, and
+separates how many segments are merged at once (<a class="xref" href="Lucene.Net.Index.TieredMergePolicy.html#Lucene_Net_Index_TieredMergePolicy_MaxMergeAtOnce">MaxMergeAtOnce</a>) 
+from how many segments are allowed
+per tier (<a class="xref" href="Lucene.Net.Index.TieredMergePolicy.html#Lucene_Net_Index_TieredMergePolicy_SegmentsPerTier">SegmentsPerTier</a>).  This merge
+policy also does not over-merge (i.e. cascade merges).</p>
+<p><p>For normal merging, this policy first computes a
+&quot;budget&quot; of how many segments are allowed to be in the
+index.  If the index is over-budget, then the policy
+sorts segments by decreasing size (pro-rating by percent
+deletes), and then finds the least-cost merge.  Merge
+cost is measured by a combination of the &quot;skew&quot; of the
+merge (size of largest segment divided by smallest segment),
+total merge size and percent deletes reclaimed,
+so that merges with lower skew, smaller size
+and those reclaiming more deletes, are
+favored.</p>
+<p><p>If a merge will produce a segment that&apos;s larger than
+<a class="xref" href="Lucene.Net.Index.TieredMergePolicy.html#Lucene_Net_Index_TieredMergePolicy_MaxMergedSegmentMB">MaxMergedSegmentMB</a>, then the policy will
+merge fewer segments (down to 1 at once, if that one has
+deletions) to keep the segment size under budget.</p>
+<p><p><strong>NOTE</strong>: This policy freely merges non-adjacent
+segments; if this is a problem, use <a class="xref" href="Lucene.Net.Index.LogMergePolicy.html">LogMergePolicy</a>.</p>
+<p><p><strong>NOTE</strong>: This policy always merges by byte size
+of the segments, always pro-rates by percent deletes,
+and does not apply any maximum segment size during
+forceMerge (unlike <a class="xref" href="Lucene.Net.Index.LogByteSizeMergePolicy.html">LogByteSizeMergePolicy</a>).
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.TieredMergePolicy.MergeScore.html">TieredMergePolicy.MergeScore</a></h4>
+      <section><p>Holds score and explanation for a single candidate
+merge.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.TrackingIndexWriter.html">TrackingIndexWriter</a></h4>
+      <section><p>Class that tracks changes to a delegated
+<a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>, used by 
+<a class="xref" href="Lucene.Net.Search.ControlledRealTimeReopenThread-1.html">ControlledRealTimeReopenThread&lt;T&gt;</a> to ensure specific
+changes are visible.   Create this class (passing your
+<a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>), and then pass this class to
+<a class="xref" href="Lucene.Net.Search.ControlledRealTimeReopenThread-1.html">ControlledRealTimeReopenThread&lt;T&gt;</a>.
+Be sure to make all changes via the
+<a class="xref" href="Lucene.Net.Index.TrackingIndexWriter.html">TrackingIndexWriter</a>, otherwise
+<a class="xref" href="Lucene.Net.Search.ControlledRealTimeReopenThread-1.html">ControlledRealTimeReopenThread&lt;T&gt;</a> won&apos;t know about the changes.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.TwoPhaseCommitTool.html">TwoPhaseCommitTool</a></h4>
+      <section><p>A utility for executing 2-phase commit on several objects.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.TwoPhaseCommitTool.CommitFailException.html">TwoPhaseCommitTool.CommitFailException</a></h4>
+      <section><p>Thrown by <a class="xref" href="Lucene.Net.Index.TwoPhaseCommitTool.html#Lucene_Net_Index_TwoPhaseCommitTool_Execute_Lucene_Net_Index_ITwoPhaseCommit___">Execute(ITwoPhaseCommit[])</a> when an
+object fails to <a class="xref" href="Lucene.Net.Index.ITwoPhaseCommit.html#Lucene_Net_Index_ITwoPhaseCommit_Commit">Commit()</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.TwoPhaseCommitTool.PrepareCommitFailException.html">TwoPhaseCommitTool.PrepareCommitFailException</a></h4>
+      <section><p>Thrown by <a class="xref" href="Lucene.Net.Index.TwoPhaseCommitTool.html#Lucene_Net_Index_TwoPhaseCommitTool_Execute_Lucene_Net_Index_ITwoPhaseCommit___">Execute(ITwoPhaseCommit[])</a> when an
+object fails to <a class="xref" href="Lucene.Net.Index.ITwoPhaseCommit.html#Lucene_Net_Index_ITwoPhaseCommit_PrepareCommit">PrepareCommit()</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.UpgradeIndexMergePolicy.html">UpgradeIndexMergePolicy</a></h4>
+      <section><p>This <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> is used for upgrading all existing segments of
+an index when calling <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_">ForceMerge(Int32)</a>.
+All other methods delegate to the base <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> given to the constructor.
+This allows for an as-cheap-as possible upgrade of an older index by only upgrading segments that
+are created by previous Lucene versions. ForceMerge does no longer really merge;
+it is just used to &quot;ForceMerge&quot; older segment versions away.
+<p>In general one would use <a class="xref" href="Lucene.Net.Index.IndexUpgrader.html">IndexUpgrader</a>, but for a fully customizeable upgrade,
+you can use this like any other <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> and call <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_">ForceMerge(Int32)</a>:</p>
+<pre><code>    IndexWriterConfig iwc = new IndexWriterConfig(LuceneVersion.LUCENE_XX, new KeywordAnalyzer());
+    iwc.MergePolicy = new UpgradeIndexMergePolicy(iwc.MergePolicy);
+    using (IndexWriter w = new IndexWriter(dir, iwc))
+    {
+        w.ForceMerge(1);
+    }</code></pre>
+<p><p><strong>Warning:</strong> this merge policy may reorder documents if the index was partially
+upgraded before calling <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_">ForceMerge(Int32)</a> (e.g., documents were added). If your application relies
+on &quot;monotonicity&quot; of doc IDs (which means that the order in which the documents
+were added to the index is preserved), do a <code>ForceMerge(1)</code> instead. Please note, the
+delegate <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> may also reorder documents.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Index.IConcurrentMergeScheduler.html">IConcurrentMergeScheduler</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a></h4>
+      <section><p>Represents a single field for indexing. <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>
+consumes IEnumerable&lt;IndexableField&gt; as a document.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.IIndexableFieldType.html">IIndexableFieldType</a></h4>
+      <section><p>Describes the properties of a field.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.IMergeScheduler.html">IMergeScheduler</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Index.IndexReader.IReaderClosedListener.html">IndexReader.IReaderClosedListener</a></h4>
+      <section><p>A custom listener that&apos;s invoked when the <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a>
+is closed.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.IndexWriter.IEvent.html">IndexWriter.IEvent</a></h4>
+      <section><p>Interface for internal atomic events. See <span class="xref">Lucene.Net.Index.DocumentsWriter</span> for details. Events are executed concurrently and no order is guaranteed.
+Each event should only rely on the serializeability within it&apos;s process method. All actions that must happen before or after a certain action must be
+encoded inside the <a class="xref" href="Lucene.Net.Index.IndexWriter.IEvent.html#Lucene_Net_Index_IndexWriter_IEvent_Process_Lucene_Net_Index_IndexWriter_System_Boolean_System_Boolean_">Process(IndexWriter, Boolean, Boolean)</a> method.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.ITwoPhaseCommit.html">ITwoPhaseCommit</a></h4>
+      <section><p>An interface for implementations that support 2-phase commit. You can use
+<a class="xref" href="Lucene.Net.Index.TwoPhaseCommitTool.html">TwoPhaseCommitTool</a> to execute a 2-phase commit algorithm over several
+<a class="xref" href="Lucene.Net.Index.ITwoPhaseCommit.html">ITwoPhaseCommit</a>s.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.SegmentReader.ICoreDisposedListener.html">SegmentReader.ICoreDisposedListener</a></h4>
+      <section><p>Called when the shared core for this <a class="xref" href="Lucene.Net.Index.SegmentReader.html">SegmentReader</a>
+is disposed.
+<p>
+This listener is called only once all <a class="xref" href="Lucene.Net.Index.SegmentReader.html">SegmentReader</a>s
+sharing the same core are disposed.  At this point it
+is safe for apps to evict this reader from any caches
+keyed on <a class="xref" href="Lucene.Net.Index.SegmentReader.html#Lucene_Net_Index_SegmentReader_CoreCacheKey">CoreCacheKey</a>.  This is the same
+interface that <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a> uses, internally,
+to evict entries.
+<p>
+NOTE: This was CoreClosedListener in Lucene.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+    <h3 id="enums">Enums
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Index.DocsAndPositionsFlags.html">DocsAndPositionsFlags</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Index.DocsFlags.html">DocsFlags</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Index.DocValuesFieldUpdatesType.html">DocValuesFieldUpdatesType</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Index.DocValuesType.html">DocValuesType</a></h4>
+      <section><p>DocValues types.
+Note that DocValues is strongly typed, so a field cannot have different types
+across different documents.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.FilteredTermsEnum.AcceptStatus.html">FilteredTermsEnum.AcceptStatus</a></h4>
+      <section><p>Return value, if term should be accepted or the iteration should
+<a class="xref" href="Lucene.Net.Index.FilteredTermsEnum.AcceptStatus.html#Lucene_Net_Index_FilteredTermsEnum_AcceptStatus_END">END</a>. The <code>*_SEEK</code> values denote, that after handling the current term
+the enum should call <a class="xref" href="Lucene.Net.Index.FilteredTermsEnum.html#Lucene_Net_Index_FilteredTermsEnum_NextSeekTerm_Lucene_Net_Util_BytesRef_">NextSeekTerm(BytesRef)</a> and step forward. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.IndexOptions.html">IndexOptions</a></h4>
+      <section><p>Controls how much information is stored in the postings lists.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Index.MergeTrigger.html">MergeTrigger</a></h4>
+      <section><p><a class="xref" href="Lucene.Net.Index.MergeTrigger.html">MergeTrigger</a> is passed to
+<a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_FindMerges_Lucene_Net_Index_MergeTrigger_Lucene_Net_Index_SegmentInfos_">FindMerges(MergeTrigger, SegmentInfos)</a> to indicate the
+event that triggered the merge.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.OpenMode.html">OpenMode</a></h4>
+      <section><p>Specifies the open mode for <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.StoredFieldVisitor.Status.html">StoredFieldVisitor.Status</a></h4>
+      <section><p>Enumeration of possible return values for <a class="xref" href="Lucene.Net.Index.StoredFieldVisitor.html#Lucene_Net_Index_StoredFieldVisitor_NeedsField_Lucene_Net_Index_FieldInfo_">NeedsField(FieldInfo)</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Index.TermsEnum.SeekStatus.html">TermsEnum.SeekStatus</a></h4>
+      <section><p>Represents returned result from <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_SeekCeil_Lucene_Net_Util_BytesRef_">SeekCeil(BytesRef)</a>. </p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00009/src/Lucene.Net/Index/package.md/#L2" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

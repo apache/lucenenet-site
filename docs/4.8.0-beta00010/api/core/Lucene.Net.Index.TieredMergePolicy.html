@@ -1,0 +1,833 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class TieredMergePolicy
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class TieredMergePolicy
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Index.TieredMergePolicy">
+  
+  
+  <h1 id="Lucene_Net_Index_TieredMergePolicy" data-uid="Lucene.Net.Index.TieredMergePolicy" class="text-break">Class TieredMergePolicy
+  </h1>
+  <div class="markdown level0 summary"><p>Merges segments of approximately equal size, subject to
+an allowed number of segments per tier.  This is similar
+to <a class="xref" href="Lucene.Net.Index.LogByteSizeMergePolicy.html">LogByteSizeMergePolicy</a>, except this merge
+policy is able to merge non-adjacent segment, and
+separates how many segments are merged at once (<a class="xref" href="Lucene.Net.Index.TieredMergePolicy.html#Lucene_Net_Index_TieredMergePolicy_MaxMergeAtOnce">MaxMergeAtOnce</a>) 
+from how many segments are allowed
+per tier (<a class="xref" href="Lucene.Net.Index.TieredMergePolicy.html#Lucene_Net_Index_TieredMergePolicy_SegmentsPerTier">SegmentsPerTier</a>).  This merge
+policy also does not over-merge (i.e. cascade merges).</p>
+<p><p>For normal merging, this policy first computes a
+&quot;budget&quot; of how many segments are allowed to be in the
+index.  If the index is over-budget, then the policy
+sorts segments by decreasing size (pro-rating by percent
+deletes), and then finds the least-cost merge.  Merge
+cost is measured by a combination of the &quot;skew&quot; of the
+merge (size of largest segment divided by smallest segment),
+total merge size and percent deletes reclaimed,
+so that merges with lower skew, smaller size
+and those reclaiming more deletes, are
+favored.</p>
+<p><p>If a merge will produce a segment that&apos;s larger than
+<a class="xref" href="Lucene.Net.Index.TieredMergePolicy.html#Lucene_Net_Index_TieredMergePolicy_MaxMergedSegmentMB">MaxMergedSegmentMB</a>, then the policy will
+merge fewer segments (down to 1 at once, if that one has
+deletions) to keep the segment size under budget.</p>
+<p><p><strong>NOTE</strong>: This policy freely merges non-adjacent
+segments; if this is a problem, use <a class="xref" href="Lucene.Net.Index.LogMergePolicy.html">LogMergePolicy</a>.</p>
+<p><p><strong>NOTE</strong>: This policy always merges by byte size
+of the segments, always pro-rates by percent deletes,
+and does not apply any maximum segment size during
+forceMerge (unlike <a class="xref" href="Lucene.Net.Index.LogByteSizeMergePolicy.html">LogByteSizeMergePolicy</a>).
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a></div>
+    <div class="level2"><span class="xref">TieredMergePolicy</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_DEFAULT_MAX_CFS_SEGMENT_SIZE">MergePolicy.DEFAULT_MAX_CFS_SEGMENT_SIZE</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_m_writer">MergePolicy.m_writer</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_m_noCFSRatio">MergePolicy.m_noCFSRatio</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_m_maxCFSSegmentSize">MergePolicy.m_maxCFSSegmentSize</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_Clone">MergePolicy.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_SetIndexWriter_Lucene_Net_Index_IndexWriter_">MergePolicy.SetIndexWriter(IndexWriter)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_Dispose">MergePolicy.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_UseCompoundFile_Lucene_Net_Index_SegmentInfos_Lucene_Net_Index_SegmentCommitInfo_">MergePolicy.UseCompoundFile(SegmentInfos, SegmentCommitInfo)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_Size_Lucene_Net_Index_SegmentCommitInfo_">MergePolicy.Size(SegmentCommitInfo)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_IsMerged_Lucene_Net_Index_SegmentInfos_Lucene_Net_Index_SegmentCommitInfo_">MergePolicy.IsMerged(SegmentInfos, SegmentCommitInfo)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_NoCFSRatio">MergePolicy.NoCFSRatio</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_MaxCFSSegmentSizeMB">MergePolicy.MaxCFSSegmentSizeMB</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Index.html">Lucene.Net.Index</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Index_TieredMergePolicy_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class TieredMergePolicy : MergePolicy, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L95">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TieredMergePolicy__ctor_" data-uid="Lucene.Net.Index.TieredMergePolicy.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_TieredMergePolicy__ctor" data-uid="Lucene.Net.Index.TieredMergePolicy.#ctor">TieredMergePolicy()</h4>
+  <div class="markdown level1 summary"><p>Sole constructor, setting all settings to their
+defaults.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TieredMergePolicy()</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy_DEFAULT_NO_CFS_RATIO.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy.DEFAULT_NO_CFS_RATIO%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L80">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_TieredMergePolicy_DEFAULT_NO_CFS_RATIO" data-uid="Lucene.Net.Index.TieredMergePolicy.DEFAULT_NO_CFS_RATIO">DEFAULT_NO_CFS_RATIO</h4>
+  <div class="markdown level1 summary"><p>Default noCFSRatio.  If a merge&apos;s size is &gt;= 10% of
+the index, then we disable compound file for it.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly double DEFAULT_NO_CFS_RATIO</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Index_TieredMergePolicy_DEFAULT_NO_CFS_RATIO_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_NoCFSRatio">NoCFSRatio</a></div>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy_FloorSegmentMB.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy.FloorSegmentMB%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L191">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TieredMergePolicy_FloorSegmentMB_" data-uid="Lucene.Net.Index.TieredMergePolicy.FloorSegmentMB*"></a>
+  <h4 id="Lucene_Net_Index_TieredMergePolicy_FloorSegmentMB" data-uid="Lucene.Net.Index.TieredMergePolicy.FloorSegmentMB">FloorSegmentMB</h4>
+  <div class="markdown level1 summary"><p>Segments smaller than this are &quot;rounded up&quot; to this
+size, ie treated as equal (floor) size for merge
+selection.  this is to prevent frequent flushing of
+tiny segments from allowing a long tail in the index.
+Default is 2 MB.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual double FloorSegmentMB { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy_ForceMergeDeletesPctAllowed.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy.ForceMergeDeletesPctAllowed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L210">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TieredMergePolicy_ForceMergeDeletesPctAllowed_" data-uid="Lucene.Net.Index.TieredMergePolicy.ForceMergeDeletesPctAllowed*"></a>
+  <h4 id="Lucene_Net_Index_TieredMergePolicy_ForceMergeDeletesPctAllowed" data-uid="Lucene.Net.Index.TieredMergePolicy.ForceMergeDeletesPctAllowed">ForceMergeDeletesPctAllowed</h4>
+  <div class="markdown level1 summary"><p>When forceMergeDeletes is called, we only merge away a
+segment if its delete percentage is over this
+threshold.  Default is 10%.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual double ForceMergeDeletesPctAllowed { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy_MaxMergeAtOnce.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy.MaxMergeAtOnce%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L107">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TieredMergePolicy_MaxMergeAtOnce_" data-uid="Lucene.Net.Index.TieredMergePolicy.MaxMergeAtOnce*"></a>
+  <h4 id="Lucene_Net_Index_TieredMergePolicy_MaxMergeAtOnce" data-uid="Lucene.Net.Index.TieredMergePolicy.MaxMergeAtOnce">MaxMergeAtOnce</h4>
+  <div class="markdown level1 summary"><p>Gets or sets maximum number of segments to be merged at a time
+during &quot;normal&quot; merging.  For explicit merging (eg,
+<a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_">ForceMerge(Int32)</a> or 
+<a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMergeDeletes">ForceMergeDeletes()</a> was called), see 
+<a class="xref" href="Lucene.Net.Index.TieredMergePolicy.html#Lucene_Net_Index_TieredMergePolicy_MaxMergeAtOnceExplicit">MaxMergeAtOnceExplicit</a>.  Default is 10.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int MaxMergeAtOnce { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy_MaxMergeAtOnceExplicit.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy.MaxMergeAtOnceExplicit%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L128">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TieredMergePolicy_MaxMergeAtOnceExplicit_" data-uid="Lucene.Net.Index.TieredMergePolicy.MaxMergeAtOnceExplicit*"></a>
+  <h4 id="Lucene_Net_Index_TieredMergePolicy_MaxMergeAtOnceExplicit" data-uid="Lucene.Net.Index.TieredMergePolicy.MaxMergeAtOnceExplicit">MaxMergeAtOnceExplicit</h4>
+  <div class="markdown level1 summary"><p>Gets or sets maximum number of segments to be merged at a time,
+during <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_">ForceMerge(Int32)</a> or 
+<a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMergeDeletes">ForceMergeDeletes()</a>. Default is 30.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int MaxMergeAtOnceExplicit { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy_MaxMergedSegmentMB.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy.MaxMergedSegmentMB%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L148">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TieredMergePolicy_MaxMergedSegmentMB_" data-uid="Lucene.Net.Index.TieredMergePolicy.MaxMergedSegmentMB*"></a>
+  <h4 id="Lucene_Net_Index_TieredMergePolicy_MaxMergedSegmentMB" data-uid="Lucene.Net.Index.TieredMergePolicy.MaxMergedSegmentMB">MaxMergedSegmentMB</h4>
+  <div class="markdown level1 summary"><p>Gets or sets maximum sized segment to produce during
+normal merging.  This setting is approximate: the
+estimate of the merged segment size is made by summing
+sizes of to-be-merged segments (compensating for
+percent deleted docs).  Default is 5 GB.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual double MaxMergedSegmentMB { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy_ReclaimDeletesWeight.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy.ReclaimDeletesWeight%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L171">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TieredMergePolicy_ReclaimDeletesWeight_" data-uid="Lucene.Net.Index.TieredMergePolicy.ReclaimDeletesWeight*"></a>
+  <h4 id="Lucene_Net_Index_TieredMergePolicy_ReclaimDeletesWeight" data-uid="Lucene.Net.Index.TieredMergePolicy.ReclaimDeletesWeight">ReclaimDeletesWeight</h4>
+  <div class="markdown level1 summary"><p>Controls how aggressively merges that reclaim more
+deletions are favored.  Higher values will more
+aggressively target merges that reclaim deletions, but
+be careful not to go so high that way too much merging
+takes place; a value of 3.0 is probably nearly too
+high.  A value of 0.0 means deletions don&apos;t impact
+merge selection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual double ReclaimDeletesWeight { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy_SegmentsPerTier.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy.SegmentsPerTier%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L233">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TieredMergePolicy_SegmentsPerTier_" data-uid="Lucene.Net.Index.TieredMergePolicy.SegmentsPerTier*"></a>
+  <h4 id="Lucene_Net_Index_TieredMergePolicy_SegmentsPerTier" data-uid="Lucene.Net.Index.TieredMergePolicy.SegmentsPerTier">SegmentsPerTier</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the allowed number of segments per tier.  Smaller
+values mean more merging but fewer segments.</p>
+<p><p><strong>NOTE</strong>: this value should be &gt;= the 
+<a class="xref" href="Lucene.Net.Index.TieredMergePolicy.html#Lucene_Net_Index_TieredMergePolicy_MaxMergeAtOnce">MaxMergeAtOnce</a> otherwise you&apos;ll force too much
+merging to occur.</p>
+<p><p>Default is 10.0.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual double SegmentsPerTier { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L715">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TieredMergePolicy_Dispose_" data-uid="Lucene.Net.Index.TieredMergePolicy.Dispose*"></a>
+  <h4 id="Lucene_Net_Index_TieredMergePolicy_Dispose_System_Boolean_" data-uid="Lucene.Net.Index.TieredMergePolicy.Dispose(System.Boolean)">Dispose(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">disposing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_Dispose_System_Boolean_">MergePolicy.Dispose(Boolean)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy_FindForcedDeletesMerges_Lucene_Net_Index_SegmentInfos_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy.FindForcedDeletesMerges(Lucene.Net.Index.SegmentInfos)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L660">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TieredMergePolicy_FindForcedDeletesMerges_" data-uid="Lucene.Net.Index.TieredMergePolicy.FindForcedDeletesMerges*"></a>
+  <h4 id="Lucene_Net_Index_TieredMergePolicy_FindForcedDeletesMerges_Lucene_Net_Index_SegmentInfos_" data-uid="Lucene.Net.Index.TieredMergePolicy.FindForcedDeletesMerges(Lucene.Net.Index.SegmentInfos)">FindForcedDeletesMerges(SegmentInfos)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override MergePolicy.MergeSpecification FindForcedDeletesMerges(SegmentInfos infos)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentInfos.html">SegmentInfos</a></td>
+        <td><span class="parametername">infos</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.MergePolicy.MergeSpecification.html">MergePolicy.MergeSpecification</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_FindForcedDeletesMerges_Lucene_Net_Index_SegmentInfos_">MergePolicy.FindForcedDeletesMerges(SegmentInfos)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy_FindForcedMerges_Lucene_Net_Index_SegmentInfos_System_Int32_System_Collections_Generic_IDictionary_Lucene_Net_Index_SegmentCommitInfo_System_Nullable_System_Boolean___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy.FindForcedMerges(Lucene.Net.Index.SegmentInfos%2CSystem.Int32%2CSystem.Collections.Generic.IDictionary%7BLucene.Net.Index.SegmentCommitInfo%2CSystem.Nullable%7BSystem.Boolean%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L572">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TieredMergePolicy_FindForcedMerges_" data-uid="Lucene.Net.Index.TieredMergePolicy.FindForcedMerges*"></a>
+  <h4 id="Lucene_Net_Index_TieredMergePolicy_FindForcedMerges_Lucene_Net_Index_SegmentInfos_System_Int32_System_Collections_Generic_IDictionary_Lucene_Net_Index_SegmentCommitInfo_System_Nullable_System_Boolean___" data-uid="Lucene.Net.Index.TieredMergePolicy.FindForcedMerges(Lucene.Net.Index.SegmentInfos,System.Int32,System.Collections.Generic.IDictionary{Lucene.Net.Index.SegmentCommitInfo,System.Nullable{System.Boolean}})">FindForcedMerges(SegmentInfos, Int32, IDictionary&lt;SegmentCommitInfo, Nullable&lt;Boolean&gt;&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override MergePolicy.MergeSpecification FindForcedMerges(SegmentInfos infos, int maxSegmentCount, IDictionary&lt;SegmentCommitInfo, bool?&gt; segmentsToMerge)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentInfos.html">SegmentInfos</a></td>
+        <td><span class="parametername">infos</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxSegmentCount</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>, <span class="xref">System.Nullable</span>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td><span class="parametername">segmentsToMerge</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.MergePolicy.MergeSpecification.html">MergePolicy.MergeSpecification</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_FindForcedMerges_Lucene_Net_Index_SegmentInfos_System_Int32_System_Collections_Generic_IDictionary_Lucene_Net_Index_SegmentCommitInfo_System_Nullable_System_Boolean___">MergePolicy.FindForcedMerges(SegmentInfos, Int32, IDictionary&lt;SegmentCommitInfo, Nullable&lt;Boolean&gt;&gt;)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy_FindMerges_Lucene_Net_Index_MergeTrigger_Lucene_Net_Index_SegmentInfos_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy.FindMerges(Lucene.Net.Index.MergeTrigger%2CLucene.Net.Index.SegmentInfos)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L308">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TieredMergePolicy_FindMerges_" data-uid="Lucene.Net.Index.TieredMergePolicy.FindMerges*"></a>
+  <h4 id="Lucene_Net_Index_TieredMergePolicy_FindMerges_Lucene_Net_Index_MergeTrigger_Lucene_Net_Index_SegmentInfos_" data-uid="Lucene.Net.Index.TieredMergePolicy.FindMerges(Lucene.Net.Index.MergeTrigger,Lucene.Net.Index.SegmentInfos)">FindMerges(MergeTrigger, SegmentInfos)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override MergePolicy.MergeSpecification FindMerges(MergeTrigger mergeTrigger, SegmentInfos infos)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.MergeTrigger.html">MergeTrigger</a></td>
+        <td><span class="parametername">mergeTrigger</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentInfos.html">SegmentInfos</a></td>
+        <td><span class="parametername">infos</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.MergePolicy.MergeSpecification.html">MergePolicy.MergeSpecification</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_FindMerges_Lucene_Net_Index_MergeTrigger_Lucene_Net_Index_SegmentInfos_">MergePolicy.FindMerges(MergeTrigger, SegmentInfos)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy_Score_System_Collections_Generic_IList_Lucene_Net_Index_SegmentCommitInfo__System_Boolean_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy.Score(System.Collections.Generic.IList%7BLucene.Net.Index.SegmentCommitInfo%7D%2CSystem.Boolean%2CSystem.Int64)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L499">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TieredMergePolicy_Score_" data-uid="Lucene.Net.Index.TieredMergePolicy.Score*"></a>
+  <h4 id="Lucene_Net_Index_TieredMergePolicy_Score_System_Collections_Generic_IList_Lucene_Net_Index_SegmentCommitInfo__System_Boolean_System_Int64_" data-uid="Lucene.Net.Index.TieredMergePolicy.Score(System.Collections.Generic.IList{Lucene.Net.Index.SegmentCommitInfo},System.Boolean,System.Int64)">Score(IList&lt;SegmentCommitInfo&gt;, Boolean, Int64)</h4>
+  <div class="markdown level1 summary"><p>Expert: scores one merge; subclasses can override. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual TieredMergePolicy.MergeScore Score(IList&lt;SegmentCommitInfo&gt; candidate, bool hitTooLarge, long mergingBytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>&gt;</td>
+        <td><span class="parametername">candidate</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">hitTooLarge</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">mergingBytes</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TieredMergePolicy.MergeScore.html">TieredMergePolicy.MergeScore</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L735">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_TieredMergePolicy_ToString_" data-uid="Lucene.Net.Index.TieredMergePolicy.ToString*"></a>
+  <h4 id="Lucene_Net_Index_TieredMergePolicy_ToString" data-uid="Lucene.Net.Index.TieredMergePolicy.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_TieredMergePolicy.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.TieredMergePolicy%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net/Index/TieredMergePolicy.cs/#L73" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

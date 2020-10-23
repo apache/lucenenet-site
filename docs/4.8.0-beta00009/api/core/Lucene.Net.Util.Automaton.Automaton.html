@@ -1,0 +1,1686 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Automaton
+   | Apache Lucene.NET 4.8.0-beta00009 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Automaton
+   | Apache Lucene.NET 4.8.0-beta00009 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Util.Automaton.Automaton">
+  
+  
+  <h1 id="Lucene_Net_Util_Automaton_Automaton" data-uid="Lucene.Net.Util.Automaton.Automaton" class="text-break">Class Automaton
+  </h1>
+  <div class="markdown level0 summary"><p>Finite-state automaton with regular expression operations.
+<p>
+Class invariants:
+<ul><li>An automaton is either represented explicitly (with <a class="xref" href="Lucene.Net.Util.Automaton.State.html">State</a> and
+<a class="xref" href="Lucene.Net.Util.Automaton.Transition.html">Transition</a> objects) or with a singleton string (see
+<a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html#Lucene_Net_Util_Automaton_Automaton_Singleton">Singleton</a> and <a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html#Lucene_Net_Util_Automaton_Automaton_ExpandSingleton">ExpandSingleton()</a>) in case the automaton
+is known to accept exactly one string. (Implicitly, all states and
+transitions of an automaton are reachable from its initial state.)</li><li>Automata are always reduced (see <a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html#Lucene_Net_Util_Automaton_Automaton_Reduce">Reduce()</a>) and have no
+transitions to dead states (see <a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html#Lucene_Net_Util_Automaton_Automaton_RemoveDeadTransitions">RemoveDeadTransitions()</a>).</li><li>If an automaton is nondeterministic, then <a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html#Lucene_Net_Util_Automaton_Automaton_IsDeterministic">IsDeterministic</a>
+returns <code>false</code> (but the converse is not required).</li><li>Automata provided as input to operations are generally assumed to be
+disjoint.</li></ul>
+<p>
+If the states or transitions are manipulated manually, the
+<a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html#Lucene_Net_Util_Automaton_Automaton_RestoreInvariant">RestoreInvariant()</a> method and <a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html#Lucene_Net_Util_Automaton_Automaton_IsDeterministic">IsDeterministic</a> setter
+should be used afterwards to restore representation invariants that are
+assumed by the built-in automata operations.</p>
+<p><p>
+<p>
+Note: this class has internal mutable state and is not thread safe. It is
+the caller&apos;s responsibility to ensure any necessary synchronization if you
+wish to use the same Automaton from multiple threads. In general it is instead
+recommended to use a <a class="xref" href="Lucene.Net.Util.Automaton.RunAutomaton.html">RunAutomaton</a> for multithreaded matching: it is immutable,
+thread safe, and much faster.
+</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Automaton</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Util.Automaton.html">Lucene.Net.Util.Automaton</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Util_Automaton_Automaton_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Automaton</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L137">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton__ctor_" data-uid="Lucene.Net.Util.Automaton.Automaton.#ctor*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton__ctor" data-uid="Lucene.Net.Util.Automaton.Automaton.#ctor">Automaton()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Automaton()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton__ctor_Lucene_Net_Util_Automaton_State_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.%23ctor(Lucene.Net.Util.Automaton.State)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L130">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton__ctor_" data-uid="Lucene.Net.Util.Automaton.Automaton.#ctor*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton__ctor_Lucene_Net_Util_Automaton_State_" data-uid="Lucene.Net.Util.Automaton.Automaton.#ctor(Lucene.Net.Util.Automaton.State)">Automaton(State)</h4>
+  <div class="markdown level1 summary"><p>Constructs a new automaton that accepts the empty language. Using this
+constructor, automata can be constructed manually from <a class="xref" href="Lucene.Net.Util.Automaton.State.html">State</a> and
+<a class="xref" href="Lucene.Net.Util.Automaton.Transition.html">Transition</a> objects.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Automaton(State initial)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.State.html">State</a></td>
+        <td><span class="parametername">initial</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Util_Automaton_Automaton__ctor_Lucene_Net_Util_Automaton_State__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Util.Automaton.State.html">State</a></div>
+      <div><a class="xref" href="Lucene.Net.Util.Automaton.Transition.html">Transition</a></div>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_MINIMIZE_HOPCROFT.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.MINIMIZE_HOPCROFT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L84">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_MINIMIZE_HOPCROFT" data-uid="Lucene.Net.Util.Automaton.Automaton.MINIMIZE_HOPCROFT">MINIMIZE_HOPCROFT</h4>
+  <div class="markdown level1 summary"><p>Minimize using Hopcroft&apos;s O(n log n) algorithm. this is regarded as one of
+the most generally efficient algorithms that exist.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int MINIMIZE_HOPCROFT = 2</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Util_Automaton_Automaton_MINIMIZE_HOPCROFT_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html#Lucene_Net_Util_Automaton_Automaton_SetMinimization_System_Int32_">SetMinimization(Int32)</a></div>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Info.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Info%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L247">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Info_" data-uid="Lucene.Net.Util.Automaton.Automaton.Info*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Info" data-uid="Lucene.Net.Util.Automaton.Automaton.Info">Info</h4>
+  <div class="markdown level1 summary"><p>Associates extra information with this automaton.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual object Info { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_IsDeterministic.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.IsDeterministic%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L237">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_IsDeterministic_" data-uid="Lucene.Net.Util.Automaton.Automaton.IsDeterministic*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_IsDeterministic" data-uid="Lucene.Net.Util.Automaton.Automaton.IsDeterministic">IsDeterministic</h4>
+  <div class="markdown level1 summary"><p>Returns deterministic flag for this automaton.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsDeterministic { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the automaton is definitely deterministic, <code>false</code> if the
+           automaton may be nondeterministic </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_IsEmptyString.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.IsEmptyString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L933">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_IsEmptyString_" data-uid="Lucene.Net.Util.Automaton.Automaton.IsEmptyString*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_IsEmptyString" data-uid="Lucene.Net.Util.Automaton.Automaton.IsEmptyString">IsEmptyString</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Util.Automaton.BasicOperations.html#Lucene_Net_Util_Automaton_BasicOperations_IsEmptyString_Lucene_Net_Util_Automaton_Automaton_">IsEmptyString(Automaton)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsEmptyString { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Singleton.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Singleton%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L209">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Singleton_" data-uid="Lucene.Net.Util.Automaton.Automaton.Singleton*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Singleton" data-uid="Lucene.Net.Util.Automaton.Automaton.Singleton">Singleton</h4>
+  <div class="markdown level1 summary"><p>Returns the singleton string for this automaton. An automaton that accepts
+exactly one string <em>may</em> be represented in singleton mode. In that
+case, this method may be used to obtain the string.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual string Singleton { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>String, <code>null</code> if this automaton is not in singleton mode. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_ClearNumberedStates.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.ClearNumberedStates%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L326">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_ClearNumberedStates_" data-uid="Lucene.Net.Util.Automaton.Automaton.ClearNumberedStates*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_ClearNumberedStates" data-uid="Lucene.Net.Util.Automaton.Automaton.ClearNumberedStates">ClearNumberedStates()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void ClearNumberedStates()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Clone.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L781">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Clone_" data-uid="Lucene.Net.Util.Automaton.Automaton.Clone*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Clone" data-uid="Lucene.Net.Util.Automaton.Automaton.Clone">Clone()</h4>
+  <div class="markdown level1 summary"><p>Returns a clone of this automaton.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual object Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Complement.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Complement%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L877">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Complement_" data-uid="Lucene.Net.Util.Automaton.Automaton.Complement*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Complement" data-uid="Lucene.Net.Util.Automaton.Automaton.Complement">Complement()</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Util.Automaton.BasicOperations.html#Lucene_Net_Util_Automaton_BasicOperations_Complement_Lucene_Net_Util_Automaton_Automaton_">Complement(Automaton)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Automaton Complement()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Concatenate_Lucene_Net_Util_Automaton_Automaton_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Concatenate(Lucene.Net.Util.Automaton.Automaton)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L829">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Concatenate_" data-uid="Lucene.Net.Util.Automaton.Automaton.Concatenate*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Concatenate_Lucene_Net_Util_Automaton_Automaton_" data-uid="Lucene.Net.Util.Automaton.Automaton.Concatenate(Lucene.Net.Util.Automaton.Automaton)">Concatenate(Automaton)</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Util.Automaton.BasicOperations.html#Lucene_Net_Util_Automaton_BasicOperations_Concatenate_Lucene_Net_Util_Automaton_Automaton_Lucene_Net_Util_Automaton_Automaton_">Concatenate(Automaton, Automaton)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Automaton Concatenate(Automaton a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Concatenate_System_Collections_Generic_IList_Lucene_Net_Util_Automaton_Automaton__.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Concatenate(System.Collections.Generic.IList%7BLucene.Net.Util.Automaton.Automaton%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L837">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Concatenate_" data-uid="Lucene.Net.Util.Automaton.Automaton.Concatenate*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Concatenate_System_Collections_Generic_IList_Lucene_Net_Util_Automaton_Automaton__" data-uid="Lucene.Net.Util.Automaton.Automaton.Concatenate(System.Collections.Generic.IList{Lucene.Net.Util.Automaton.Automaton})">Concatenate(IList&lt;Automaton&gt;)</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Util.Automaton.BasicOperations.html#Lucene_Net_Util_Automaton_BasicOperations_Concatenate_System_Collections_Generic_IList_Lucene_Net_Util_Automaton_Automaton__">Concatenate(IList&lt;Automaton&gt;)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Automaton Concatenate(IList&lt;Automaton&gt; l)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a>&gt;</td>
+        <td><span class="parametername">l</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Determinize.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Determinize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L925">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Determinize_" data-uid="Lucene.Net.Util.Automaton.Automaton.Determinize*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Determinize" data-uid="Lucene.Net.Util.Automaton.Automaton.Determinize">Determinize()</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Util.Automaton.BasicOperations.html#Lucene_Net_Util_Automaton_BasicOperations_Determinize_Lucene_Net_Util_Automaton_Automaton_">Determinize(Automaton)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Determinize()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L619">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Equals_" data-uid="Lucene.Net.Util.Automaton.Automaton.Equals*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Equals_System_Object_" data-uid="Lucene.Net.Util.Automaton.Automaton.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">obj</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.Equals(System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_ExpandSingleton.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.ExpandSingleton%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L571">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_ExpandSingleton_" data-uid="Lucene.Net.Util.Automaton.Automaton.ExpandSingleton*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_ExpandSingleton" data-uid="Lucene.Net.Util.Automaton.Automaton.ExpandSingleton">ExpandSingleton()</h4>
+  <div class="markdown level1 summary"><p>Expands singleton representation to normal representation. Does nothing if
+not in singleton representation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void ExpandSingleton()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_GetAcceptStates.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.GetAcceptStates%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L335">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_GetAcceptStates_" data-uid="Lucene.Net.Util.Automaton.Automaton.GetAcceptStates*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_GetAcceptStates" data-uid="Lucene.Net.Util.Automaton.Automaton.GetAcceptStates">GetAcceptStates()</h4>
+  <div class="markdown level1 summary"><p>Returns the set of reachable accept states.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual ISet&lt;State&gt; GetAcceptStates()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ISet</span>&lt;<a class="xref" href="Lucene.Net.Util.Automaton.State.html">State</a>&gt;</td>
+        <td><p>Set of <a class="xref" href="Lucene.Net.Util.Automaton.State.html">State</a> objects. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_GetHashCode.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L629">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_GetHashCode_" data-uid="Lucene.Net.Util.Automaton.Automaton.GetHashCode*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_GetHashCode" data-uid="Lucene.Net.Util.Automaton.Automaton.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.GetHashCode()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_GetInitialState.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.GetInitialState%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L226">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_GetInitialState_" data-uid="Lucene.Net.Util.Automaton.Automaton.GetInitialState*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_GetInitialState" data-uid="Lucene.Net.Util.Automaton.Automaton.GetInitialState">GetInitialState()</h4>
+  <div class="markdown level1 summary"><p>Gets initial state.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual State GetInitialState()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.State.html">State</a></td>
+        <td><p>state </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_GetNumberedStates.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.GetNumberedStates%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L256">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_GetNumberedStates_" data-uid="Lucene.Net.Util.Automaton.Automaton.GetNumberedStates*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_GetNumberedStates" data-uid="Lucene.Net.Util.Automaton.Automaton.GetNumberedStates">GetNumberedStates()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual State[] GetNumberedStates()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.State.html">State</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_GetNumberOfStates.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.GetNumberOfStates%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L592">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_GetNumberOfStates_" data-uid="Lucene.Net.Util.Automaton.Automaton.GetNumberOfStates*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_GetNumberOfStates" data-uid="Lucene.Net.Util.Automaton.Automaton.GetNumberOfStates">GetNumberOfStates()</h4>
+  <div class="markdown level1 summary"><p>Returns the number of states in this automaton.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int GetNumberOfStates()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_GetNumberOfTransitions.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.GetNumberOfTransitions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L605">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_GetNumberOfTransitions_" data-uid="Lucene.Net.Util.Automaton.Automaton.GetNumberOfTransitions*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_GetNumberOfTransitions" data-uid="Lucene.Net.Util.Automaton.Automaton.GetNumberOfTransitions">GetNumberOfTransitions()</h4>
+  <div class="markdown level1 summary"><p>Returns the number of transitions in this automaton. This number is counted
+as the total number of edges, where one edge may be a character interval.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int GetNumberOfTransitions()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_GetSortedTransitions.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.GetSortedTransitions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L553">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_GetSortedTransitions_" data-uid="Lucene.Net.Util.Automaton.Automaton.GetSortedTransitions*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_GetSortedTransitions" data-uid="Lucene.Net.Util.Automaton.Automaton.GetSortedTransitions">GetSortedTransitions()</h4>
+  <div class="markdown level1 summary"><p>Returns a sorted array of transitions for each state (and sets state
+numbers).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Transition[][] GetSortedTransitions()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Transition.html">Transition</a>[][]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_GetStartPoints.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.GetStartPoints%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L425">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_GetStartPoints_" data-uid="Lucene.Net.Util.Automaton.Automaton.GetStartPoints*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_GetStartPoints" data-uid="Lucene.Net.Util.Automaton.Automaton.GetStartPoints">GetStartPoints()</h4>
+  <div class="markdown level1 summary"><p>Returns sorted array of all interval start points.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int[] GetStartPoints()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Intersection_Lucene_Net_Util_Automaton_Automaton_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Intersection(Lucene.Net.Util.Automaton.Automaton)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L893">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Intersection_" data-uid="Lucene.Net.Util.Automaton.Automaton.Intersection*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Intersection_Lucene_Net_Util_Automaton_Automaton_" data-uid="Lucene.Net.Util.Automaton.Automaton.Intersection(Lucene.Net.Util.Automaton.Automaton)">Intersection(Automaton)</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Util.Automaton.BasicOperations.html#Lucene_Net_Util_Automaton_BasicOperations_Intersection_Lucene_Net_Util_Automaton_Automaton_Lucene_Net_Util_Automaton_Automaton_">Intersection(Automaton, Automaton)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Automaton Intersection(Automaton a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Minimize_Lucene_Net_Util_Automaton_Automaton_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Minimize(Lucene.Net.Util.Automaton.Automaton)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L945">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Minimize_" data-uid="Lucene.Net.Util.Automaton.Automaton.Minimize*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Minimize_Lucene_Net_Util_Automaton_Automaton_" data-uid="Lucene.Net.Util.Automaton.Automaton.Minimize(Lucene.Net.Util.Automaton.Automaton)">Minimize(Automaton)</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Util.Automaton.MinimizationOperations.html#Lucene_Net_Util_Automaton_MinimizationOperations_Minimize_Lucene_Net_Util_Automaton_Automaton_">Minimize(Automaton)</a>. Returns the
+automaton being given as argument.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Automaton Minimize(Automaton a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Minus_Lucene_Net_Util_Automaton_Automaton_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Minus(Lucene.Net.Util.Automaton.Automaton)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L885">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Minus_" data-uid="Lucene.Net.Util.Automaton.Automaton.Minus*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Minus_Lucene_Net_Util_Automaton_Automaton_" data-uid="Lucene.Net.Util.Automaton.Automaton.Minus(Lucene.Net.Util.Automaton.Automaton)">Minus(Automaton)</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Util.Automaton.BasicOperations.html#Lucene_Net_Util_Automaton_BasicOperations_Minus_Lucene_Net_Util_Automaton_Automaton_Lucene_Net_Util_Automaton_Automaton_">Minus(Automaton, Automaton)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Automaton Minus(Automaton a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Optional.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Optional%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L845">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Optional_" data-uid="Lucene.Net.Util.Automaton.Automaton.Optional*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Optional" data-uid="Lucene.Net.Util.Automaton.Automaton.Optional">Optional()</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Util.Automaton.BasicOperations.html#Lucene_Net_Util_Automaton_BasicOperations_Optional_Lucene_Net_Util_Automaton_Automaton_">Optional(Automaton)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Automaton Optional()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Reduce.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Reduce%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L409">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Reduce_" data-uid="Lucene.Net.Util.Automaton.Automaton.Reduce*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Reduce" data-uid="Lucene.Net.Util.Automaton.Automaton.Reduce">Reduce()</h4>
+  <div class="markdown level1 summary"><p>Reduces this automaton. An automaton is &quot;reduced&quot; by combining overlapping
+and adjacent edge intervals with same destination.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Reduce()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_RemoveDeadTransitions.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.RemoveDeadTransitions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L503">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_RemoveDeadTransitions_" data-uid="Lucene.Net.Util.Automaton.Automaton.RemoveDeadTransitions*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_RemoveDeadTransitions" data-uid="Lucene.Net.Util.Automaton.Automaton.RemoveDeadTransitions">RemoveDeadTransitions()</h4>
+  <div class="markdown level1 summary"><p>Removes transitions to dead states and calls <a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html#Lucene_Net_Util_Automaton_Automaton_Reduce">Reduce()</a>.
+(A state is &quot;dead&quot; if no accept state is
+reachable from it.)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void RemoveDeadTransitions()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Repeat.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Repeat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L853">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Repeat_" data-uid="Lucene.Net.Util.Automaton.Automaton.Repeat*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Repeat" data-uid="Lucene.Net.Util.Automaton.Automaton.Repeat">Repeat()</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Util.Automaton.BasicOperations.html#Lucene_Net_Util_Automaton_BasicOperations_Repeat_Lucene_Net_Util_Automaton_Automaton_">Repeat(Automaton)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Automaton Repeat()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Repeat_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Repeat(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L861">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Repeat_" data-uid="Lucene.Net.Util.Automaton.Automaton.Repeat*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Repeat_System_Int32_" data-uid="Lucene.Net.Util.Automaton.Automaton.Repeat(System.Int32)">Repeat(Int32)</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Util.Automaton.BasicOperations.html#Lucene_Net_Util_Automaton_BasicOperations_Repeat_Lucene_Net_Util_Automaton_Automaton_System_Int32_">Repeat(Automaton, Int32)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Automaton Repeat(int min)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">min</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Repeat_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Repeat(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L869">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Repeat_" data-uid="Lucene.Net.Util.Automaton.Automaton.Repeat*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Repeat_System_Int32_System_Int32_" data-uid="Lucene.Net.Util.Automaton.Automaton.Repeat(System.Int32,System.Int32)">Repeat(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Util.Automaton.BasicOperations.html#Lucene_Net_Util_Automaton_BasicOperations_Repeat_Lucene_Net_Util_Automaton_Automaton_System_Int32_System_Int32_">Repeat(Automaton, Int32, Int32)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Automaton Repeat(int min, int max)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">min</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">max</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_RestoreInvariant.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.RestoreInvariant%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L400">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_RestoreInvariant_" data-uid="Lucene.Net.Util.Automaton.Automaton.RestoreInvariant*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_RestoreInvariant" data-uid="Lucene.Net.Util.Automaton.Automaton.RestoreInvariant">RestoreInvariant()</h4>
+  <div class="markdown level1 summary"><p>Restores representation invariant. This method must be invoked before any
+built-in automata operation is performed if automaton states or transitions
+are manipulated manually.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void RestoreInvariant()</code></pre>
+  </div>
+  <h5 id="Lucene_Net_Util_Automaton_Automaton_RestoreInvariant_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html#Lucene_Net_Util_Automaton_Automaton_IsDeterministic">IsDeterministic</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_SetAllowMutate_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.SetAllowMutate(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L171">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_SetAllowMutate_" data-uid="Lucene.Net.Util.Automaton.Automaton.SetAllowMutate*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_SetAllowMutate_System_Boolean_" data-uid="Lucene.Net.Util.Automaton.Automaton.SetAllowMutate(System.Boolean)">SetAllowMutate(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Sets or resets allow mutate flag. If this flag is set, then all automata
+operations may modify automata given as input; otherwise, operations will
+always leave input automata languages unmodified. By default, the flag is
+not set.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool SetAllowMutate(bool flag)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">flag</span></td>
+        <td><p>if <code>true</code>, the flag is set </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>previous value of the flag </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_SetMinimization_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.SetMinimization(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L146">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_SetMinimization_" data-uid="Lucene.Net.Util.Automaton.Automaton.SetMinimization*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_SetMinimization_System_Int32_" data-uid="Lucene.Net.Util.Automaton.Automaton.SetMinimization(System.Int32)">SetMinimization(Int32)</h4>
+  <div class="markdown level1 summary"><p>Selects minimization algorithm (default: <code>MINIMIZE_HOPCROFT</code>).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetMinimization(int algorithm)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">algorithm</span></td>
+        <td><p>minimization algorithm </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_SetMinimizeAlways_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.SetMinimizeAlways(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L158">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_SetMinimizeAlways_" data-uid="Lucene.Net.Util.Automaton.Automaton.SetMinimizeAlways*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_SetMinimizeAlways_System_Boolean_" data-uid="Lucene.Net.Util.Automaton.Automaton.SetMinimizeAlways(System.Boolean)">SetMinimizeAlways(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Sets or resets minimize always flag. If this flag is set, then
+<a class="xref" href="Lucene.Net.Util.Automaton.MinimizationOperations.html#Lucene_Net_Util_Automaton_MinimizationOperations_Minimize_Lucene_Net_Util_Automaton_Automaton_">Minimize(Automaton)</a> will automatically be
+invoked after all operations that otherwise may produce non-minimal
+automata. By default, the flag is not set.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void SetMinimizeAlways(bool flag)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">flag</span></td>
+        <td><p>if <code>true</code>, the flag is set </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_SetNumberedStates_Lucene_Net_Util_Automaton_State___.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.SetNumberedStates(Lucene.Net.Util.Automaton.State%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L305">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_SetNumberedStates_" data-uid="Lucene.Net.Util.Automaton.Automaton.SetNumberedStates*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_SetNumberedStates_Lucene_Net_Util_Automaton_State___" data-uid="Lucene.Net.Util.Automaton.Automaton.SetNumberedStates(Lucene.Net.Util.Automaton.State[])">SetNumberedStates(State[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetNumberedStates(State[] states)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.State.html">State</a>[]</td>
+        <td><span class="parametername">states</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_SetNumberedStates_Lucene_Net_Util_Automaton_State___System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.SetNumberedStates(Lucene.Net.Util.Automaton.State%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L310">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_SetNumberedStates_" data-uid="Lucene.Net.Util.Automaton.Automaton.SetNumberedStates*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_SetNumberedStates_Lucene_Net_Util_Automaton_State___System_Int32_" data-uid="Lucene.Net.Util.Automaton.Automaton.SetNumberedStates(Lucene.Net.Util.Automaton.State[],System.Int32)">SetNumberedStates(State[], Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetNumberedStates(State[] states, int count)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.State.html">State</a>[]</td>
+        <td><span class="parametername">states</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">count</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_SubsetOf_Lucene_Net_Util_Automaton_Automaton_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.SubsetOf(Lucene.Net.Util.Automaton.Automaton)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L901">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_SubsetOf_" data-uid="Lucene.Net.Util.Automaton.Automaton.SubsetOf*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_SubsetOf_Lucene_Net_Util_Automaton_Automaton_" data-uid="Lucene.Net.Util.Automaton.Automaton.SubsetOf(Lucene.Net.Util.Automaton.Automaton)">SubsetOf(Automaton)</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Util.Automaton.BasicOperations.html#Lucene_Net_Util_Automaton_BasicOperations_SubsetOf_Lucene_Net_Util_Automaton_Automaton_Lucene_Net_Util_Automaton_Automaton_">SubsetOf(Automaton, Automaton)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool SubsetOf(Automaton a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_ToDot.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.ToDot%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L721">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_ToDot_" data-uid="Lucene.Net.Util.Automaton.Automaton.ToDot*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_ToDot" data-uid="Lucene.Net.Util.Automaton.Automaton.ToDot">ToDot()</h4>
+  <div class="markdown level1 summary"><p>Returns <a href="http://www.research.att.com/sw/tools/graphviz/" target="_top">Graphviz Dot</a> representation of this automaton.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual string ToDot()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L687">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_ToString_" data-uid="Lucene.Net.Util.Automaton.Automaton.ToString*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_ToString" data-uid="Lucene.Net.Util.Automaton.Automaton.ToString">ToString()</h4>
+  <div class="markdown level1 summary"><p>Returns a string representation of this automaton.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Union_Lucene_Net_Util_Automaton_Automaton_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Union(Lucene.Net.Util.Automaton.Automaton)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L909">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Union_" data-uid="Lucene.Net.Util.Automaton.Automaton.Union*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Union_Lucene_Net_Util_Automaton_Automaton_" data-uid="Lucene.Net.Util.Automaton.Automaton.Union(Lucene.Net.Util.Automaton.Automaton)">Union(Automaton)</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Util.Automaton.BasicOperations.html#Lucene_Net_Util_Automaton_BasicOperations_Union_Lucene_Net_Util_Automaton_Automaton_Lucene_Net_Util_Automaton_Automaton_">Union(Automaton, Automaton)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Automaton Union(Automaton a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton_Union_System_Collections_Generic_ICollection_Lucene_Net_Util_Automaton_Automaton__.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton.Union(System.Collections.Generic.ICollection%7BLucene.Net.Util.Automaton.Automaton%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L917">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_Automaton_Automaton_Union_" data-uid="Lucene.Net.Util.Automaton.Automaton.Union*"></a>
+  <h4 id="Lucene_Net_Util_Automaton_Automaton_Union_System_Collections_Generic_ICollection_Lucene_Net_Util_Automaton_Automaton__" data-uid="Lucene.Net.Util.Automaton.Automaton.Union(System.Collections.Generic.ICollection{Lucene.Net.Util.Automaton.Automaton})">Union(ICollection&lt;Automaton&gt;)</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Util.Automaton.BasicOperations.html#Lucene_Net_Util_Automaton_BasicOperations_Union_System_Collections_Generic_ICollection_Lucene_Net_Util_Automaton_Automaton__">Union(ICollection&lt;Automaton&gt;)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Automaton Union(ICollection&lt;Automaton&gt; l)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a>&gt;</td>
+        <td><span class="parametername">l</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_Automaton_Automaton.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.Automaton.Automaton%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs-poc/src/Lucene.Net/Util/Automaton/Automaton.cs/#L74" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

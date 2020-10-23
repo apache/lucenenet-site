@@ -1,0 +1,698 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class DistanceFacetsExample
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class DistanceFacetsExample
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample">
+  
+  
+  <h1 id="Lucene_Net_Demo_Facet_DistanceFacetsExample" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample" class="text-break">Class DistanceFacetsExample
+  </h1>
+  <div class="markdown level0 summary"><p>Shows simple usage of dynamic range faceting, using the
+expressions module to calculate distance.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">DistanceFacetsExample</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Demo.Facet.html">Lucene.Net.Demo.Facet</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Demo.dll</h6>
+  <h5 id="Lucene_Net_Demo_Facet_DistanceFacetsExample_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class DistanceFacetsExample : IDisposable</code></pre>
+  </div>
+  <h5 id="Lucene_Net_Demo_Facet_DistanceFacetsExample_examples"><strong>Examples</strong></h5>
+  <pre><code>using J2N;
+using Lucene.Net.Analysis.Core;
+using Lucene.Net.Documents;
+using Lucene.Net.Expressions;
+using Lucene.Net.Expressions.JS;
+using Lucene.Net.Facet;
+using Lucene.Net.Facet.Range;
+using Lucene.Net.Facet.Taxonomy;
+using Lucene.Net.Index;
+using Lucene.Net.Queries;
+using Lucene.Net.Queries.Function;
+using Lucene.Net.Search;
+using Lucene.Net.Store;
+using Lucene.Net.Util;
+using System;
+using System.Diagnostics;
+using System.Globalization;
+
+namespace Lucene.Net.Demo.Facet
+{
+    /// &lt;summary&gt;
+    /// Shows simple usage of dynamic range faceting, using the
+    /// expressions module to calculate distance.
+    /// &lt;/summary&gt;
+    public class DistanceFacetsExample : IDisposable
+    {
+        /// &lt;summary&gt;
+        /// Using a constant for all functionality related to a specific index
+        /// is the best strategy. This allows you to upgrade Lucene.Net first
+        /// and plan the upgrade of the index binary format for a later time. 
+        /// Once the index is upgraded, you simply need to update the constant 
+        /// version and redeploy your application.
+        /// &lt;/summary&gt;
+        private const LuceneVersion EXAMPLE_VERSION = LuceneVersion.LUCENE_48;
+
+        internal static readonly DoubleRange ONE_KM = new DoubleRange(&quot;&lt; 1 km&quot;, 0.0, true, 1.0, false);
+        internal static readonly DoubleRange TWO_KM = new DoubleRange(&quot;&lt; 2 km&quot;, 0.0, true, 2.0, false);
+        internal static readonly DoubleRange FIVE_KM = new DoubleRange(&quot;&lt; 5 km&quot;, 0.0, true, 5.0, false);
+        internal static readonly DoubleRange TEN_KM = new DoubleRange(&quot;&lt; 10 km&quot;, 0.0, true, 10.0, false);
+
+        private readonly Directory indexDir = new RAMDirectory();
+        private IndexSearcher searcher;
+        private readonly FacetsConfig config = new FacetsConfig();
+
+        /// &lt;summary&gt;The &quot;home&quot; latitude.&lt;/summary&gt;
+        public readonly static double ORIGIN_LATITUDE = 40.7143528;
+
+        /// &lt;summary&gt;The &quot;home&quot; longitude.&lt;/summary&gt;
+        public readonly static double ORIGIN_LONGITUDE = -74.0059731;
+
+        /// &lt;summary&gt;
+        /// Radius of the Earth in KM
+        /// &lt;para/&gt;
+        /// NOTE: this is approximate, because the earth is a bit
+        /// wider at the equator than the poles.  See
+        /// http://en.wikipedia.org/wiki/Earth_radius
+        /// &lt;/summary&gt;
+        public readonly static double EARTH_RADIUS_KM = 6371.01;
+
+        /// &lt;summary&gt;Build the example index.&lt;/summary&gt;
+        public void Index()
+        {
+            using (IndexWriter writer = new IndexWriter(indexDir, new IndexWriterConfig(EXAMPLE_VERSION,
+                new WhitespaceAnalyzer(EXAMPLE_VERSION))))
+            {
+                // TODO: we could index in radians instead ... saves all the conversions in GetBoundingBoxFilter
+
+                // Add documents with latitude/longitude location:
+                Document doc = new Document();
+                doc.Add(new DoubleField(&quot;latitude&quot;, 40.759011, Field.Store.NO));
+                doc.Add(new DoubleField(&quot;longitude&quot;, -73.9844722, Field.Store.NO));
+                writer.AddDocument(doc);
+
+                doc = new Document();
+                doc.Add(new DoubleField(&quot;latitude&quot;, 40.718266, Field.Store.NO));
+                doc.Add(new DoubleField(&quot;longitude&quot;, -74.007819, Field.Store.NO));
+                writer.AddDocument(doc);
+
+                doc = new Document();
+                doc.Add(new DoubleField(&quot;latitude&quot;, 40.7051157, Field.Store.NO));
+                doc.Add(new DoubleField(&quot;longitude&quot;, -74.0088305, Field.Store.NO));
+                writer.AddDocument(doc);
+
+                // Open near-real-time searcher
+                searcher = new IndexSearcher(DirectoryReader.Open(writer, true));
+
+            } // Disposes writer
+        }
+
+        private ValueSource GetDistanceValueSource()
+        {
+            Expression distance = JavascriptCompiler.Compile(
+                string.Format(CultureInfo.InvariantCulture, &quot;haversin({0:R},{1:R},latitude,longitude)&quot;, ORIGIN_LATITUDE, ORIGIN_LONGITUDE));
+
+            SimpleBindings bindings = new SimpleBindings();
+            bindings.Add(new SortField(&quot;latitude&quot;, SortFieldType.DOUBLE));
+            bindings.Add(new SortField(&quot;longitude&quot;, SortFieldType.DOUBLE));
+
+            return distance.GetValueSource(bindings);
+        }
+
+        /// &lt;summary&gt;
+        /// Given a latitude and longitude (in degrees) and the
+        /// maximum great circle (surface of the earth) distance,
+        /// returns a simple Filter bounding box to &quot;fast match&quot;
+        /// candidates.
+        /// &lt;/summary&gt;
+        public static Filter GetBoundingBoxFilter(double originLat, double originLng, double maxDistanceKM)
+        {
+            // Basic bounding box geo math from
+            // http://JanMatuschek.de/LatitudeLongitudeBoundingCoordinates,
+            // licensed under creative commons 3.0:
+            // http://creativecommons.org/licenses/by/3.0
+
+            // TODO: maybe switch to recursive prefix tree instead
+            // (in lucene/spatial)?  It should be more efficient
+            // since it&#39;s a 2D trie...
+
+            // Degrees -&gt; Radians:
+            double originLatRadians = originLat.ToRadians();
+            double originLngRadians = originLng.ToRadians();
+
+            double angle = maxDistanceKM / (SloppyMath.EarthDiameter(originLat) / 2.0);
+
+            double minLat = originLatRadians - angle;
+            double maxLat = originLatRadians + angle;
+
+            double minLng;
+            double maxLng;
+            if (minLat &gt; -90.ToRadians() &amp;&amp; maxLat &lt; 90.ToRadians())
+            {
+                double delta = Math.Asin(Math.Sin(angle) / Math.Cos(originLatRadians));
+                minLng = originLngRadians - delta;
+                if (minLng &lt; -180.ToRadians())
+                {
+                    minLng += 2 * Math.PI;
+                }
+                maxLng = originLngRadians + delta;
+                if (maxLng &gt; 180.ToRadians())
+                {
+                    maxLng -= 2 * Math.PI;
+                }
+            }
+            else
+            {
+                // The query includes a pole!
+                minLat = Math.Max(minLat, -90.ToRadians());
+                maxLat = Math.Min(maxLat, 90.ToRadians());
+                minLng = -180.ToRadians();
+                maxLng = 180.ToRadians();
+            }
+
+            BooleanFilter f = new BooleanFilter();
+
+            // Add latitude range filter:
+            f.Add(NumericRangeFilter.NewDoubleRange(&quot;latitude&quot;, minLat.ToDegrees(), maxLat.ToDegrees(), true, true),
+                  Occur.MUST);
+
+            // Add longitude range filter:
+            if (minLng &gt; maxLng)
+            {
+                // The bounding box crosses the international date
+                // line:
+                BooleanFilter lonF = new BooleanFilter();
+                lonF.Add(NumericRangeFilter.NewDoubleRange(&quot;longitude&quot;, minLng.ToDegrees(), null, true, true),
+                         Occur.SHOULD);
+                lonF.Add(NumericRangeFilter.NewDoubleRange(&quot;longitude&quot;, null, maxLng.ToDegrees(), true, true),
+                         Occur.SHOULD);
+                f.Add(lonF, Occur.MUST);
+            }
+            else
+            {
+                f.Add(NumericRangeFilter.NewDoubleRange(&quot;longitude&quot;, minLng.ToDegrees(), maxLng.ToDegrees(), true, true),
+                      Occur.MUST);
+            }
+
+            return f;
+        }
+
+        /// &lt;summary&gt;User runs a query and counts facets.&lt;/summary&gt;
+        public FacetResult Search()
+        {
+            FacetsCollector fc = new FacetsCollector();
+
+            searcher.Search(new MatchAllDocsQuery(), fc);
+
+            Facets facets = new DoubleRangeFacetCounts(&quot;field&quot;, GetDistanceValueSource(), fc,
+                                                       GetBoundingBoxFilter(ORIGIN_LATITUDE, ORIGIN_LONGITUDE, 10.0),
+                                                       ONE_KM,
+                                                       TWO_KM,
+                                                       FIVE_KM,
+                                                       TEN_KM);
+
+            return facets.GetTopChildren(10, &quot;field&quot;);
+        }
+
+        /// &lt;summary&gt;User drills down on the specified range.&lt;/summary&gt;
+        public TopDocs DrillDown(DoubleRange range)
+        {
+            // Passing no baseQuery means we drill down on all
+            // documents (&quot;browse only&quot;):
+            DrillDownQuery q = new DrillDownQuery(null);
+            ValueSource vs = GetDistanceValueSource();
+            q.Add(&quot;field&quot;, range.GetFilter(GetBoundingBoxFilter(ORIGIN_LATITUDE, ORIGIN_LONGITUDE, range.Max), vs));
+            DrillSideways ds = new SearchDrillSideways(searcher, config, vs);
+            return ds.Search(q, 10).Hits;
+        }
+
+        private class SearchDrillSideways : DrillSideways
+        {
+            private readonly ValueSource vs;
+
+            public SearchDrillSideways(IndexSearcher indexSearcher, FacetsConfig facetsConfig, ValueSource valueSource)
+                : base(indexSearcher, facetsConfig, (TaxonomyReader)null)
+            {
+                this.vs = valueSource;
+            }
+
+            protected override Facets BuildFacetsResult(FacetsCollector drillDowns, FacetsCollector[] drillSideways, string[] drillSidewaysDims)
+            {
+                Debug.Assert(drillSideways.Length == 1);
+                return new DoubleRangeFacetCounts(&quot;field&quot;, vs, drillSideways[0], ONE_KM, TWO_KM, FIVE_KM, TEN_KM);
+            }
+        }
+
+        public void Dispose()
+        {
+            searcher?.IndexReader?.Dispose();
+            indexDir?.Dispose();
+        }
+
+        /// &lt;summary&gt;Runs the search and drill-down examples and prints the results.&lt;/summary&gt;
+        public static void Main(string[] args)
+        {
+            using (DistanceFacetsExample example = new DistanceFacetsExample())
+            {
+                example.Index();
+
+                Console.WriteLine(&quot;Distance facet counting example:&quot;);
+                Console.WriteLine(&quot;-----------------------&quot;);
+                Console.WriteLine(example.Search());
+
+                Console.WriteLine(&quot;\n&quot;);
+                Console.WriteLine(&quot;Distance facet drill-down example (field/&lt; 2 km):&quot;);
+                Console.WriteLine(&quot;---------------------------------------------&quot;);
+                TopDocs hits = example.DrillDown(TWO_KM);
+                Console.WriteLine(hits.TotalHits + &quot; totalHits&quot;);
+
+            } // Disposes example
+        }
+    }
+}
+</code></pre>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Demo_Facet_DistanceFacetsExample_EARTH_RADIUS_KM.md&amp;value=---%0Auid%3A%20Lucene.Net.Demo.Facet.DistanceFacetsExample.EARTH_RADIUS_KM%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Demo/Facet/DistanceFacetsExample.cs/#L81">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Demo_Facet_DistanceFacetsExample_EARTH_RADIUS_KM" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample.EARTH_RADIUS_KM">EARTH_RADIUS_KM</h4>
+  <div class="markdown level1 summary"><p>Radius of the Earth in KM
+<p>
+NOTE: this is approximate, because the earth is a bit
+wider at the equator than the poles.  See
+<a href="http://en.wikipedia.org/wiki/Earth_radius">http://en.wikipedia.org/wiki/Earth_radius</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly double EARTH_RADIUS_KM</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Demo_Facet_DistanceFacetsExample_ORIGIN_LATITUDE.md&amp;value=---%0Auid%3A%20Lucene.Net.Demo.Facet.DistanceFacetsExample.ORIGIN_LATITUDE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Demo/Facet/DistanceFacetsExample.cs/#L69">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Demo_Facet_DistanceFacetsExample_ORIGIN_LATITUDE" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample.ORIGIN_LATITUDE">ORIGIN_LATITUDE</h4>
+  <div class="markdown level1 summary"><p>The &quot;home&quot; latitude.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly double ORIGIN_LATITUDE</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Demo_Facet_DistanceFacetsExample_ORIGIN_LONGITUDE.md&amp;value=---%0Auid%3A%20Lucene.Net.Demo.Facet.DistanceFacetsExample.ORIGIN_LONGITUDE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Demo/Facet/DistanceFacetsExample.cs/#L72">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Demo_Facet_DistanceFacetsExample_ORIGIN_LONGITUDE" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample.ORIGIN_LONGITUDE">ORIGIN_LONGITUDE</h4>
+  <div class="markdown level1 summary"><p>The &quot;home&quot; longitude.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly double ORIGIN_LONGITUDE</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Demo_Facet_DistanceFacetsExample_Dispose.md&amp;value=---%0Auid%3A%20Lucene.Net.Demo.Facet.DistanceFacetsExample.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Demo/Facet/DistanceFacetsExample.cs/#L249">View Source</a>
+  </span>
+  <a id="Lucene_Net_Demo_Facet_DistanceFacetsExample_Dispose_" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample.Dispose*"></a>
+  <h4 id="Lucene_Net_Demo_Facet_DistanceFacetsExample_Dispose" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Demo_Facet_DistanceFacetsExample_DrillDown_Lucene_Net_Facet_Range_DoubleRange_.md&amp;value=---%0Auid%3A%20Lucene.Net.Demo.Facet.DistanceFacetsExample.DrillDown(Lucene.Net.Facet.Range.DoubleRange)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Demo/Facet/DistanceFacetsExample.cs/#L221">View Source</a>
+  </span>
+  <a id="Lucene_Net_Demo_Facet_DistanceFacetsExample_DrillDown_" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample.DrillDown*"></a>
+  <h4 id="Lucene_Net_Demo_Facet_DistanceFacetsExample_DrillDown_Lucene_Net_Facet_Range_DoubleRange_" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample.DrillDown(Lucene.Net.Facet.Range.DoubleRange)">DrillDown(DoubleRange)</h4>
+  <div class="markdown level1 summary"><p>User drills down on the specified range.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TopDocs DrillDown(DoubleRange range)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net.Facet/Lucene.Net.Facet.Range.DoubleRange.html">DoubleRange</a></td>
+        <td><span class="parametername">range</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Search.TopDocs.html">TopDocs</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Demo_Facet_DistanceFacetsExample_GetBoundingBoxFilter_System_Double_System_Double_System_Double_.md&amp;value=---%0Auid%3A%20Lucene.Net.Demo.Facet.DistanceFacetsExample.GetBoundingBoxFilter(System.Double%2CSystem.Double%2CSystem.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Demo/Facet/DistanceFacetsExample.cs/#L131">View Source</a>
+  </span>
+  <a id="Lucene_Net_Demo_Facet_DistanceFacetsExample_GetBoundingBoxFilter_" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample.GetBoundingBoxFilter*"></a>
+  <h4 id="Lucene_Net_Demo_Facet_DistanceFacetsExample_GetBoundingBoxFilter_System_Double_System_Double_System_Double_" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample.GetBoundingBoxFilter(System.Double,System.Double,System.Double)">GetBoundingBoxFilter(Double, Double, Double)</h4>
+  <div class="markdown level1 summary"><p>Given a latitude and longitude (in degrees) and the
+maximum great circle (surface of the earth) distance,
+returns a simple Filter bounding box to &quot;fast match&quot;
+candidates.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static Filter GetBoundingBoxFilter(double originLat, double originLng, double maxDistanceKM)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">originLat</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">originLng</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">maxDistanceKM</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Search.Filter.html">Filter</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Demo_Facet_DistanceFacetsExample_Index.md&amp;value=---%0Auid%3A%20Lucene.Net.Demo.Facet.DistanceFacetsExample.Index%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Demo/Facet/DistanceFacetsExample.cs/#L84">View Source</a>
+  </span>
+  <a id="Lucene_Net_Demo_Facet_DistanceFacetsExample_Index_" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample.Index*"></a>
+  <h4 id="Lucene_Net_Demo_Facet_DistanceFacetsExample_Index" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample.Index">Index()</h4>
+  <div class="markdown level1 summary"><p>Build the example index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Index()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Demo_Facet_DistanceFacetsExample_Main_System_String___.md&amp;value=---%0Auid%3A%20Lucene.Net.Demo.Facet.DistanceFacetsExample.Main(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Demo/Facet/DistanceFacetsExample.cs/#L256">View Source</a>
+  </span>
+  <a id="Lucene_Net_Demo_Facet_DistanceFacetsExample_Main_" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample.Main*"></a>
+  <h4 id="Lucene_Net_Demo_Facet_DistanceFacetsExample_Main_System_String___" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample.Main(System.String[])">Main(String[])</h4>
+  <div class="markdown level1 summary"><p>Runs the search and drill-down examples and prints the results.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Main(string[] args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">args</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Demo_Facet_DistanceFacetsExample_Search.md&amp;value=---%0Auid%3A%20Lucene.Net.Demo.Facet.DistanceFacetsExample.Search%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Demo/Facet/DistanceFacetsExample.cs/#L204">View Source</a>
+  </span>
+  <a id="Lucene_Net_Demo_Facet_DistanceFacetsExample_Search_" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample.Search*"></a>
+  <h4 id="Lucene_Net_Demo_Facet_DistanceFacetsExample_Search" data-uid="Lucene.Net.Demo.Facet.DistanceFacetsExample.Search">Search()</h4>
+  <div class="markdown level1 summary"><p>User runs a query and counts facets.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FacetResult Search()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net.Facet/Lucene.Net.Facet.FacetResult.html">FacetResult</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00007/websites/apidocs/apiSpec/Lucene_Net_Demo_Facet_DistanceFacetsExample.md/#L2" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Demo/Facet/DistanceFacetsExample.cs/#L48" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

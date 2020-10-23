@@ -1,0 +1,686 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class FuzzySuggester
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class FuzzySuggester
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="suggest/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester">
+  
+  
+  <h1 id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester" class="text-break">Class FuzzySuggester
+  </h1>
+  <div class="markdown level0 summary"><p>Implements a fuzzy <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html">AnalyzingSuggester</a>. The similarity measurement is
+based on the Damerau-Levenshtein (optimal string alignment) algorithm, though
+you can explicitly choose classic Levenshtein by passing <code>false</code>
+for the <span class="xref">Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.transpositions</span> parameter.
+<p>
+At most, this query will match terms up to <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.Automaton.LevenshteinAutomata.html#Lucene_Net_Util_Automaton_LevenshteinAutomata_MAXIMUM_SUPPORTED_DISTANCE">MAXIMUM_SUPPORTED_DISTANCE</a>
+edits. Higher distances are not supported.  Note that the
+fuzzy distance is measured in &quot;byte space&quot; on the bytes
+returned by the <span class="xref">Lucene.Net.Analysis.TokenStream</span>&apos;s <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Analysis.TokenAttributes.ITermToBytesRefAttribute.html">ITermToBytesRefAttribute</a>, 
+usually UTF8.  By default
+the analyzed bytes must be at least 3 <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.html#Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_MIN_FUZZY_LENGTH">DEFAULT_MIN_FUZZY_LENGTH</a>
+bytes before any edits are
+considered.  Furthermore, the first 1 <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.html#Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_NON_FUZZY_PREFIX">DEFAULT_NON_FUZZY_PREFIX</a>
+byte is not allowed to be
+edited.  We allow up to 1 <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.html#Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_MAX_EDITS">DEFAULT_MAX_EDITS</a>
+edit.
+If <span class="xref">Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.unicodeAware</span> parameter in the constructor is set to true, maxEdits,
+minFuzzyLength, transpositions and nonFuzzyPrefix are measured in Unicode code 
+points (actual letters) instead of bytes. </p>
+<p>
+<p>
+NOTE: This suggester does not boost suggestions that
+required no edits over suggestions that did require
+edits.  This is a known limitation.</p>
+<p>
+<p>
+Note: complex query analyzers can have a significant impact on the lookup
+performance. It&apos;s recommended to not use analyzers that drop or inject terms
+like synonyms to keep the complexity of the prefix intersection low for good
+lookup performance. At index time, complex analyzers can safely be used.
+</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html">Lookup</a></div>
+    <div class="level2"><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html">AnalyzingSuggester</a></div>
+    <div class="level3"><span class="xref">FuzzySuggester</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html#Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_GetSizeInBytes">AnalyzingSuggester.GetSizeInBytes()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html#Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Build_Lucene_Net_Search_Suggest_IInputIterator_">AnalyzingSuggester.Build(IInputIterator)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html#Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Store_Lucene_Net_Store_DataOutput_">AnalyzingSuggester.Store(DataOutput)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html#Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Load_Lucene_Net_Store_DataInput_">AnalyzingSuggester.Load(DataInput)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html#Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_DoLookup_System_String_System_Collections_Generic_IEnumerable_Lucene_Net_Util_BytesRef__System_Boolean_System_Int32_">AnalyzingSuggester.DoLookup(String, IEnumerable&lt;BytesRef&gt;, Boolean, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html#Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Count">AnalyzingSuggester.Count</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html#Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Get_System_String_">AnalyzingSuggester.Get(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_CHARSEQUENCE_COMPARER">Lookup.CHARSEQUENCE_COMPARER</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_Build_Lucene_Net_Search_Spell_IDictionary_">Lookup.Build(IDictionary)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_Load_System_IO_Stream_">Lookup.Load(Stream)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_Store_System_IO_Stream_">Lookup.Store(Stream)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_DoLookup_System_String_System_Boolean_System_Int32_">Lookup.DoLookup(String, Boolean, Int32)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.html">Lucene.Net.Search.Suggest.Analyzing</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Suggest.dll</h6>
+  <h5 id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class FuzzySuggester : AnalyzingSuggester</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester__ctor_Lucene_Net_Analysis_Analyzer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.%23ctor(Lucene.Net.Analysis.Analyzer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Suggest/Analyzing/FuzzySuggester.cs/#L107">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester__ctor_" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester__ctor_Lucene_Net_Analysis_Analyzer_" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.#ctor(Lucene.Net.Analysis.Analyzer)">FuzzySuggester(Analyzer)</h4>
+  <div class="markdown level1 summary"><p>Creates a <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.html">FuzzySuggester</a> instance initialized with default values.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FuzzySuggester(Analyzer analyzer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Analysis.Analyzer</span></td>
+        <td><span class="parametername">analyzer</span></td>
+        <td><p>The <span class="xref">Lucene.Net.Analysis.Analyzer</span> used for this suggester. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester__ctor_Lucene_Net_Analysis_Analyzer_Lucene_Net_Analysis_Analyzer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.%23ctor(Lucene.Net.Analysis.Analyzer%2CLucene.Net.Analysis.Analyzer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Suggest/Analyzing/FuzzySuggester.cs/#L119">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester__ctor_" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester__ctor_Lucene_Net_Analysis_Analyzer_Lucene_Net_Analysis_Analyzer_" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.#ctor(Lucene.Net.Analysis.Analyzer,Lucene.Net.Analysis.Analyzer)">FuzzySuggester(Analyzer, Analyzer)</h4>
+  <div class="markdown level1 summary"><p>Creates a <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.html">FuzzySuggester</a> instance with an index &amp; a query analyzer initialized with default values.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FuzzySuggester(Analyzer indexAnalyzer, Analyzer queryAnalyzer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Analysis.Analyzer</span></td>
+        <td><span class="parametername">indexAnalyzer</span></td>
+        <td><p><span class="xref">Lucene.Net.Analysis.Analyzer</span> that will be used for analyzing suggestions while building the index. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Analysis.Analyzer</span></td>
+        <td><span class="parametername">queryAnalyzer</span></td>
+        <td><p><span class="xref">Lucene.Net.Analysis.Analyzer</span> that will be used for analyzing query text during lookup </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester__ctor_Lucene_Net_Analysis_Analyzer_Lucene_Net_Analysis_Analyzer_Lucene_Net_Search_Suggest_Analyzing_SuggesterOptions_System_Int32_System_Int32_System_Boolean_System_Int32_System_Boolean_System_Int32_System_Int32_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.%23ctor(Lucene.Net.Analysis.Analyzer%2CLucene.Net.Analysis.Analyzer%2CLucene.Net.Search.Suggest.Analyzing.SuggesterOptions%2CSystem.Int32%2CSystem.Int32%2CSystem.Boolean%2CSystem.Int32%2CSystem.Boolean%2CSystem.Int32%2CSystem.Int32%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Suggest/Analyzing/FuzzySuggester.cs/#L149">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester__ctor_" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester__ctor_Lucene_Net_Analysis_Analyzer_Lucene_Net_Analysis_Analyzer_Lucene_Net_Search_Suggest_Analyzing_SuggesterOptions_System_Int32_System_Int32_System_Boolean_System_Int32_System_Boolean_System_Int32_System_Int32_System_Boolean_" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.#ctor(Lucene.Net.Analysis.Analyzer,Lucene.Net.Analysis.Analyzer,Lucene.Net.Search.Suggest.Analyzing.SuggesterOptions,System.Int32,System.Int32,System.Boolean,System.Int32,System.Boolean,System.Int32,System.Int32,System.Boolean)">FuzzySuggester(Analyzer, Analyzer, SuggesterOptions, Int32, Int32, Boolean, Int32, Boolean, Int32, Int32, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.html">FuzzySuggester</a> instance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FuzzySuggester(Analyzer indexAnalyzer, Analyzer queryAnalyzer, SuggesterOptions options, int maxSurfaceFormsPerAnalyzedForm, int maxGraphExpansions, bool preservePositionIncrements, int maxEdits, bool transpositions, int nonFuzzyPrefix, int minFuzzyLength, bool unicodeAware)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Analysis.Analyzer</span></td>
+        <td><span class="parametername">indexAnalyzer</span></td>
+        <td><p>The <span class="xref">Lucene.Net.Analysis.Analyzer</span> that will be used for
+      analyzing suggestions while building the index. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Analysis.Analyzer</span></td>
+        <td><span class="parametername">queryAnalyzer</span></td>
+        <td><p>The <span class="xref">Lucene.Net.Analysis.Analyzer</span> that will be used for
+      analyzing query text during lookup </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.SuggesterOptions.html">SuggesterOptions</a></td>
+        <td><span class="parametername">options</span></td>
+        <td><p>see <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.SuggesterOptions.html#Lucene_Net_Search_Suggest_Analyzing_SuggesterOptions_EXACT_FIRST">EXACT_FIRST</a>, <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.SuggesterOptions.html#Lucene_Net_Search_Suggest_Analyzing_SuggesterOptions_PRESERVE_SEP">PRESERVE_SEP</a> </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxSurfaceFormsPerAnalyzedForm</span></td>
+        <td><p>Maximum number of
+      surface forms to keep for a single analyzed form.
+      When there are too many surface forms we discard the
+      lowest weighted ones. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxGraphExpansions</span></td>
+        <td><p>Maximum number of graph paths
+      to expand from the analyzed form.  Set this to -1 for
+      no limit. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">preservePositionIncrements</span></td>
+        <td><p>Whether position holes should appear in the automaton </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxEdits</span></td>
+        <td><p>must be &gt;= 0 and &lt;= <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.Automaton.LevenshteinAutomata.html#Lucene_Net_Util_Automaton_LevenshteinAutomata_MAXIMUM_SUPPORTED_DISTANCE">MAXIMUM_SUPPORTED_DISTANCE</a>. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">transpositions</span></td>
+        <td><p><code>true</code> if transpositions should be treated as a primitive 
+          edit operation. If this is false, comparisons will implement the classic
+          Levenshtein algorithm. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">nonFuzzyPrefix</span></td>
+        <td><p>length of common (non-fuzzy) prefix (see default <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.html#Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_NON_FUZZY_PREFIX">DEFAULT_NON_FUZZY_PREFIX</a> </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">minFuzzyLength</span></td>
+        <td><p>minimum length of lookup key before any edits are allowed (see default <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.html#Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_MIN_FUZZY_LENGTH">DEFAULT_MIN_FUZZY_LENGTH</a>) </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">unicodeAware</span></td>
+        <td><p>operate Unicode code points instead of bytes. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_MAX_EDITS.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.DEFAULT_MAX_EDITS%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Suggest/Analyzing/FuzzySuggester.cs/#L96">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_MAX_EDITS" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.DEFAULT_MAX_EDITS">DEFAULT_MAX_EDITS</h4>
+  <div class="markdown level1 summary"><p>The default maximum number of edits for fuzzy
+suggestions.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int DEFAULT_MAX_EDITS = 1</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_MIN_FUZZY_LENGTH.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.DEFAULT_MIN_FUZZY_LENGTH%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Suggest/Analyzing/FuzzySuggester.cs/#L85">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_MIN_FUZZY_LENGTH" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.DEFAULT_MIN_FUZZY_LENGTH">DEFAULT_MIN_FUZZY_LENGTH</h4>
+  <div class="markdown level1 summary"><p>The default minimum length of the key passed to <a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html">Lookup</a>
+before any edits are allowed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int DEFAULT_MIN_FUZZY_LENGTH = 3</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_NON_FUZZY_PREFIX.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.DEFAULT_NON_FUZZY_PREFIX%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Suggest/Analyzing/FuzzySuggester.cs/#L90">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_NON_FUZZY_PREFIX" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.DEFAULT_NON_FUZZY_PREFIX">DEFAULT_NON_FUZZY_PREFIX</h4>
+  <div class="markdown level1 summary"><p>The default prefix length where edits are not allowed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int DEFAULT_NON_FUZZY_PREFIX = 1</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_TRANSPOSITIONS.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.DEFAULT_TRANSPOSITIONS%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Suggest/Analyzing/FuzzySuggester.cs/#L101">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_TRANSPOSITIONS" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.DEFAULT_TRANSPOSITIONS">DEFAULT_TRANSPOSITIONS</h4>
+  <div class="markdown level1 summary"><p>The default transposition value passed to <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.Automaton.LevenshteinAutomata.html">LevenshteinAutomata</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const bool DEFAULT_TRANSPOSITIONS = true</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_UNICODE_AWARE.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.DEFAULT_UNICODE_AWARE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Suggest/Analyzing/FuzzySuggester.cs/#L79">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_UNICODE_AWARE" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.DEFAULT_UNICODE_AWARE">DEFAULT_UNICODE_AWARE</h4>
+  <div class="markdown level1 summary"><p>Measure <span class="xref">Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.maxEdits</span>, <span class="xref">Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.minFuzzyLength</span>, 
+<span class="xref">Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.transpositions</span>, and <span class="xref">Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.nonFuzzyPrefix</span> 
+parameters in Unicode code points (actual letters)
+instead of bytes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const bool DEFAULT_UNICODE_AWARE = false</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_ConvertAutomaton_Lucene_Net_Util_Automaton_Automaton_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.ConvertAutomaton(Lucene.Net.Util.Automaton.Automaton)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Suggest/Analyzing/FuzzySuggester.cs/#L200">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_ConvertAutomaton_" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.ConvertAutomaton*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_ConvertAutomaton_Lucene_Net_Util_Automaton_Automaton_" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.ConvertAutomaton(Lucene.Net.Util.Automaton.Automaton)">ConvertAutomaton(Automaton)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override Automaton ConvertAutomaton(Automaton a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Util.Automaton.Automaton</span></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Util.Automaton.Automaton</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html#Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_ConvertAutomaton_Lucene_Net_Util_Automaton_Automaton_">AnalyzingSuggester.ConvertAutomaton(Automaton)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_GetFullPrefixPaths_System_Collections_Generic_IList_Lucene_Net_Search_Suggest_Analyzing_FSTUtil_Path_Lucene_Net_Util_Fst_PairOutputs_System_Nullable_System_Int64__Lucene_Net_Util_BytesRef__Pair___Lucene_Net_Util_Automaton_Automaton_Lucene_Net_Util_Fst_FST_Lucene_Net_Util_Fst_PairOutputs_System_Nullable_System_Int64__Lucene_Net_Util_BytesRef__Pair__.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.GetFullPrefixPaths(System.Collections.Generic.IList%7BLucene.Net.Search.Suggest.Analyzing.FSTUtil.Path%7BLucene.Net.Util.Fst.PairOutputs%7BSystem.Nullable%7BSystem.Int64%7D%2CLucene.Net.Util.BytesRef%7D.Pair%7D%7D%2CLucene.Net.Util.Automaton.Automaton%2CLucene.Net.Util.Fst.FST%7BLucene.Net.Util.Fst.PairOutputs%7BSystem.Nullable%7BSystem.Int64%7D%2CLucene.Net.Util.BytesRef%7D.Pair%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Suggest/Analyzing/FuzzySuggester.cs/#L174">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_GetFullPrefixPaths_" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.GetFullPrefixPaths*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_GetFullPrefixPaths_System_Collections_Generic_IList_Lucene_Net_Search_Suggest_Analyzing_FSTUtil_Path_Lucene_Net_Util_Fst_PairOutputs_System_Nullable_System_Int64__Lucene_Net_Util_BytesRef__Pair___Lucene_Net_Util_Automaton_Automaton_Lucene_Net_Util_Fst_FST_Lucene_Net_Util_Fst_PairOutputs_System_Nullable_System_Int64__Lucene_Net_Util_BytesRef__Pair__" data-uid="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.GetFullPrefixPaths(System.Collections.Generic.IList{Lucene.Net.Search.Suggest.Analyzing.FSTUtil.Path{Lucene.Net.Util.Fst.PairOutputs{System.Nullable{System.Int64},Lucene.Net.Util.BytesRef}.Pair}},Lucene.Net.Util.Automaton.Automaton,Lucene.Net.Util.Fst.FST{Lucene.Net.Util.Fst.PairOutputs{System.Nullable{System.Int64},Lucene.Net.Util.BytesRef}.Pair})">GetFullPrefixPaths(IList&lt;FSTUtil.Path&lt;PairOutputs&lt;Nullable&lt;Int64&gt;, BytesRef&gt;.Pair&gt;&gt;, Automaton, FST&lt;PairOutputs&lt;Nullable&lt;Int64&gt;, BytesRef&gt;.Pair&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override IList&lt;FSTUtil.Path&lt;PairOutputs&lt;long?, BytesRef&gt;.Pair&gt;&gt; GetFullPrefixPaths(IList&lt;FSTUtil.Path&lt;PairOutputs&lt;long?, BytesRef&gt;.Pair&gt;&gt; prefixPaths, Automaton lookupAutomaton, FST&lt;PairOutputs&lt;long?, BytesRef&gt;.Pair&gt; fst)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FSTUtil.Path-1.html">FSTUtil.Path</a>&lt;<a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.Fst.PairOutputs-2.Pair.html">PairOutputs.Pair</a>&lt;&gt;&gt;&gt;</td>
+        <td><span class="parametername">prefixPaths</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Util.Automaton.Automaton</span></td>
+        <td><span class="parametername">lookupAutomaton</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Util.Fst.FST</span>&lt;<a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.Fst.PairOutputs-2.Pair.html">PairOutputs.Pair</a>&lt;&gt;&gt;</td>
+        <td><span class="parametername">fst</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FSTUtil.Path-1.html">FSTUtil.Path</a>&lt;<a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.Fst.PairOutputs-2.Pair.html">PairOutputs.Pair</a>&lt;&gt;&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html#Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_GetFullPrefixPaths_System_Collections_Generic_IList_Lucene_Net_Search_Suggest_Analyzing_FSTUtil_Path_Lucene_Net_Util_Fst_PairOutputs_System_Nullable_System_Int64__Lucene_Net_Util_BytesRef__Pair___Lucene_Net_Util_Automaton_Automaton_Lucene_Net_Util_Fst_FST_Lucene_Net_Util_Fst_PairOutputs_System_Nullable_System_Int64__Lucene_Net_Util_BytesRef__Pair__">AnalyzingSuggester.GetFullPrefixPaths(IList&lt;FSTUtil.Path&lt;PairOutputs&lt;Nullable&lt;Int64&gt;, BytesRef&gt;.Pair&gt;&gt;, Automaton, FST&lt;PairOutputs&lt;Nullable&lt;Int64&gt;, BytesRef&gt;.Pair&gt;)</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Suggest/Analyzing/FuzzySuggester.cs/#L65" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

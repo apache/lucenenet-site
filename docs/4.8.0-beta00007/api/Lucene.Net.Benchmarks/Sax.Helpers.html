@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Sax.Helpers
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Sax.Helpers
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Sax.Helpers">
+  
+  <h1 id="Sax_Helpers" data-uid="Sax.Helpers" class="text-break">Namespace Sax.Helpers
+  </h1>
+  <div class="markdown level0 summary"></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Sax.Helpers.Attributes.html">Attributes</a></h4>
+      <section><p>Default implementation of the <a class="xref" href="Sax.Helpers.Attributes.html">Attributes</a> interface.</p>
+</section>
+      <h4><a class="xref" href="Sax.Helpers.DefaultHandler.html">DefaultHandler</a></h4>
+      <section><p>Default base class for SAX2 event handlers.</p>
+</section>
+      <h4><a class="xref" href="Sax.Helpers.Locator.html">Locator</a></h4>
+      <section><p>Provide an optional convenience implementation of <a class="xref" href="Sax.ILocator.html">ILocator</a>.</p>
+</section>
+      <h4><a class="xref" href="Sax.Helpers.NamespaceSupport.html">NamespaceSupport</a></h4>
+      <section><p>Encapsulate Namespace logic for use by applications using SAX,
+or internally by SAX drivers.
+<p>
+<em>This module, both source code and documentation, is in the
+Public Domain, and comes with <strong>NO WARRANTY</strong>.</em>
+See <a href="http://www.saxproject.org">http://www.saxproject.org</a>
+for further information.
+<p>
+This class encapsulates the logic of Namespace processing: it
+tracks the declarations currently in force for each context and
+automatically processes qualified XML names into their Namespace
+parts; it can also be used in reverse for generating XML qnames
+from Namespaces.
+<p>
+Namespace support objects are reusable, but the reset method
+must be invoked between each session.
+<p>Here is a simple session:</p>
+<pre><code>    string parts[] = new string[3];
+    NamespaceSupport support = new NamespaceSupport();
+    support.PushContext();
+    support.DeclarePrefix(&quot;&quot;, &quot;http://www.w3.org/1999/xhtml&quot;);
+    support.DeclarePrefix(&quot;dc&quot;, &quot;http://www.purl.org/dc#&quot;);
+    parts = support.ProcessName(&quot;p&quot;, parts, false);
+    Console.WriteLine(&quot;Namespace URI: &quot; + parts[0]);
+    Console.WriteLine(&quot;Local name: &quot; + parts[1]);
+    Console.WriteLine(&quot;Raw name: &quot; + parts[2]);
+    parts = support.ProcessName(&quot;dc:title&quot;, parts, false);
+    Console.WriteLine(&quot;Namespace URI: &quot; + parts[0]);
+    Console.WriteLine(&quot;Local name: &quot; + parts[1]);
+    Console.WriteLine(&quot;Raw name: &quot; + parts[2]);
+    support.PopContext();</code></pre>
+<p><p>
+Note that this class is optimized for the use case where most
+elements do not contain Namespace declarations: if the same
+prefix/URI mapping is repeated for each context (for example), this
+class will be somewhat less efficient.
+<p>
+Although SAX drivers (parsers) may choose to use this class to
+implement namespace handling, they are not required to do so.
+Applications must track namespace information themselves if they
+want to use namespace information.</p>
+</section>
+      <h4><a class="xref" href="Sax.Helpers.XMLFilter.html">XMLFilter</a></h4>
+      <section><p>Base class for deriving an XML filter.
+<p>
+<em>This module, both source code and documentation, is in the
+Public Domain, and comes with <strong>NO WARRANTY</strong>.</em>
+See <a href="http://www.saxproject.org">http://www.saxproject.org</a>
+for further information.
+<p>
+This class is designed to sit between an <a class="xref" href="Sax.IXMLReader.html">IXMLReader</a>
+and the client application&apos;s event handlers.  By default, it
+does nothing but pass requests up to the reader and events
+on to the handlers unmodified, but subclasses can override
+specific methods to modify the event stream or the configuration
+requests as they pass through.</p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

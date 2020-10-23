@@ -1,0 +1,1188 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class FieldCacheRangeFilter
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class FieldCacheRangeFilter
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.FieldCacheRangeFilter">
+  
+  
+  <h1 id="Lucene_Net_Search_FieldCacheRangeFilter" data-uid="Lucene.Net.Search.FieldCacheRangeFilter" class="text-break">Class FieldCacheRangeFilter
+  </h1>
+  <div class="markdown level0 summary"><p>A range filter built on top of a cached single term field (in <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>).</p>
+<p><p><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter.html">FieldCacheRangeFilter</a> builds a single cache for the field the first time it is used.
+Each subsequent <a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter.html">FieldCacheRangeFilter</a> on the same field then reuses this cache,
+even if the range itself changes.</p>
+<p><p>this means that <a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter.html">FieldCacheRangeFilter</a> is much faster (sometimes more than 100x as fast)
+as building a <a class="xref" href="Lucene.Net.Search.TermRangeFilter.html">TermRangeFilter</a>, if using a <a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter.html#Lucene_Net_Search_FieldCacheRangeFilter_NewStringRange_System_String_System_String_System_String_System_Boolean_System_Boolean_">NewStringRange(String, String, String, Boolean, Boolean)</a>.
+However, if the range never changes it is slower (around 2x as slow) than building
+a <a class="xref" href="Lucene.Net.Search.CachingWrapperFilter.html">CachingWrapperFilter</a> on top of a single <a class="xref" href="Lucene.Net.Search.TermRangeFilter.html">TermRangeFilter</a>.</p>
+<p><p>For numeric data types, this filter may be significantly faster than <a class="xref" href="Lucene.Net.Search.NumericRangeFilter.html">NumericRangeFilter</a>.
+Furthermore, it does not need the numeric values encoded
+by <a class="xref" href="Lucene.Net.Documents.Int32Field.html">Int32Field</a>, <a class="xref" href="Lucene.Net.Documents.SingleField.html">SingleField</a>,
+<a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a> or <a class="xref" href="Lucene.Net.Documents.DoubleField.html">DoubleField</a>. But
+it has the problem that it only works with exact one value/document (see below).</p>
+<p><p>As with all <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a> based functionality, <a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter.html">FieldCacheRangeFilter</a> is only valid for
+fields which exact one term for each document (except for <a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter.html#Lucene_Net_Search_FieldCacheRangeFilter_NewStringRange_System_String_System_String_System_String_System_Boolean_System_Boolean_">NewStringRange(String, String, String, Boolean, Boolean)</a>
+where 0 terms are also allowed). Due to a restriction of <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>, for numeric ranges
+all terms that do not have a numeric value, 0 is assumed.</p>
+<p><p>Thus it works on dates, prices and other single value fields but will not work on
+regular text fields. It is preferable to use a <a class="xref" href="Lucene.Net.Documents.Field.Index.html#Lucene_Net_Documents_Field_Index_NOT_ANALYZED">NOT_ANALYZED</a> field to ensure that
+there is only a single term.</p>
+<p><p>This class does not have an constructor, use one of the static factory methods available,
+that create a correct instance for different data types supported by <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">FieldCacheRangeFilter</span></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="../Lucene.Net.TestFramework/Lucene.Net.Search.html">Lucene.Net.Search</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Search_FieldCacheRangeFilter_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class FieldCacheRangeFilter : object</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheRangeFilter_NewByteRange_System_String_Lucene_Net_Search_FieldCache_IByteParser_System_Nullable_System_SByte__System_Nullable_System_SByte__System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheRangeFilter.NewByteRange(System.String%2CLucene.Net.Search.FieldCache.IByteParser%2CSystem.Nullable%7BSystem.SByte%7D%2CSystem.Nullable%7BSystem.SByte%7D%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FieldCacheRangeFilter.cs/#L694">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheRangeFilter_NewByteRange_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewByteRange*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheRangeFilter_NewByteRange_System_String_Lucene_Net_Search_FieldCache_IByteParser_System_Nullable_System_SByte__System_Nullable_System_SByte__System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewByteRange(System.String,Lucene.Net.Search.FieldCache.IByteParser,System.Nullable{System.SByte},System.Nullable{System.SByte},System.Boolean,System.Boolean)">NewByteRange(String, FieldCache.IByteParser, Nullable&lt;SByte&gt;, Nullable&lt;SByte&gt;, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a numeric range filter using <a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetBytes_Lucene_Net_Index_AtomicReader_System_String_Lucene_Net_Search_FieldCache_IByteParser_System_Boolean_">GetBytes(AtomicReader, String, FieldCache.IByteParser, Boolean)</a>. This works with all
+<see cref="!:System.Byte"></see> fields containing exactly one numeric term in the field. The range can be half-open by setting one
+of the values to <code>null</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheRangeFilter&lt;sbyte?&gt; NewByteRange(string field, FieldCache.IByteParser parser, sbyte? lowerVal, sbyte? upperVal, bool includeLower, bool includeUpper)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCache.IByteParser.html">FieldCache.IByteParser</a></td>
+        <td><span class="parametername">parser</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.SByte</span>&gt;</td>
+        <td><span class="parametername">lowerVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.SByte</span>&gt;</td>
+        <td><span class="parametername">upperVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeLower</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUpper</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter-1.html">FieldCacheRangeFilter</a>&lt;<span class="xref">System.Nullable</span>&lt;<span class="xref">System.SByte</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheRangeFilter_NewByteRange_System_String_System_Nullable_System_SByte__System_Nullable_System_SByte__System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheRangeFilter.NewByteRange(System.String%2CSystem.Nullable%7BSystem.SByte%7D%2CSystem.Nullable%7BSystem.SByte%7D%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FieldCacheRangeFilter.cs/#L683">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheRangeFilter_NewByteRange_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewByteRange*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheRangeFilter_NewByteRange_System_String_System_Nullable_System_SByte__System_Nullable_System_SByte__System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewByteRange(System.String,System.Nullable{System.SByte},System.Nullable{System.SByte},System.Boolean,System.Boolean)">NewByteRange(String, Nullable&lt;SByte&gt;, Nullable&lt;SByte&gt;, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a numeric range filter using <a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetBytes_Lucene_Net_Index_AtomicReader_System_String_System_Boolean_">GetBytes(AtomicReader, String, Boolean)</a>. This works with all
+<see cref="!:System.Byte"></see> fields containing exactly one numeric term in the field. The range can be half-open by setting one
+of the values to <code>null</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheRangeFilter&lt;sbyte?&gt; NewByteRange(string field, sbyte? lowerVal, sbyte? upperVal, bool includeLower, bool includeUpper)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.SByte</span>&gt;</td>
+        <td><span class="parametername">lowerVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.SByte</span>&gt;</td>
+        <td><span class="parametername">upperVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeLower</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUpper</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter-1.html">FieldCacheRangeFilter</a>&lt;<span class="xref">System.Nullable</span>&lt;<span class="xref">System.SByte</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheRangeFilter_NewBytesRefRange_System_String_Lucene_Net_Util_BytesRef_Lucene_Net_Util_BytesRef_System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheRangeFilter.NewBytesRefRange(System.String%2CLucene.Net.Util.BytesRef%2CLucene.Net.Util.BytesRef%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FieldCacheRangeFilter.cs/#L673">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheRangeFilter_NewBytesRefRange_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewBytesRefRange*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheRangeFilter_NewBytesRefRange_System_String_Lucene_Net_Util_BytesRef_Lucene_Net_Util_BytesRef_System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewBytesRefRange(System.String,Lucene.Net.Util.BytesRef,Lucene.Net.Util.BytesRef,System.Boolean,System.Boolean)">NewBytesRefRange(String, BytesRef, BytesRef, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> range filter using <a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetTermsIndex_Lucene_Net_Index_AtomicReader_System_String_System_Single_">GetTermsIndex(AtomicReader, String, Single)</a>. This works with all
+fields containing zero or one term in the field. The range can be half-open by setting one
+of the values to <code>null</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheRangeFilter&lt;BytesRef&gt; NewBytesRefRange(string field, BytesRef lowerVal, BytesRef upperVal, bool includeLower, bool includeUpper)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">lowerVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">upperVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeLower</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUpper</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter-1.html">FieldCacheRangeFilter</a>&lt;<a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheRangeFilter_NewDoubleRange_System_String_Lucene_Net_Search_FieldCache_IDoubleParser_System_Nullable_System_Double__System_Nullable_System_Double__System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheRangeFilter.NewDoubleRange(System.String%2CLucene.Net.Search.FieldCache.IDoubleParser%2CSystem.Nullable%7BSystem.Double%7D%2CSystem.Nullable%7BSystem.Double%7D%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FieldCacheRangeFilter.cs/#L811">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheRangeFilter_NewDoubleRange_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewDoubleRange*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheRangeFilter_NewDoubleRange_System_String_Lucene_Net_Search_FieldCache_IDoubleParser_System_Nullable_System_Double__System_Nullable_System_Double__System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewDoubleRange(System.String,Lucene.Net.Search.FieldCache.IDoubleParser,System.Nullable{System.Double},System.Nullable{System.Double},System.Boolean,System.Boolean)">NewDoubleRange(String, FieldCache.IDoubleParser, Nullable&lt;Double&gt;, Nullable&lt;Double&gt;, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a numeric range filter using <a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetDoubles_Lucene_Net_Index_AtomicReader_System_String_Lucene_Net_Search_FieldCache_IDoubleParser_System_Boolean_">GetDoubles(AtomicReader, String, FieldCache.IDoubleParser, Boolean)</a>. This works with all
+<see cref="!:System.Double"></see> fields containing exactly one numeric term in the field. The range can be half-open by setting one
+of the values to <code>null</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheRangeFilter&lt;double?&gt; NewDoubleRange(string field, FieldCache.IDoubleParser parser, double? lowerVal, double? upperVal, bool includeLower, bool includeUpper)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCache.IDoubleParser.html">FieldCache.IDoubleParser</a></td>
+        <td><span class="parametername">parser</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">lowerVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">upperVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeLower</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUpper</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter-1.html">FieldCacheRangeFilter</a>&lt;<span class="xref">System.Nullable</span>&lt;<span class="xref">System.Double</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheRangeFilter_NewDoubleRange_System_String_System_Nullable_System_Double__System_Nullable_System_Double__System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheRangeFilter.NewDoubleRange(System.String%2CSystem.Nullable%7BSystem.Double%7D%2CSystem.Nullable%7BSystem.Double%7D%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FieldCacheRangeFilter.cs/#L801">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheRangeFilter_NewDoubleRange_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewDoubleRange*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheRangeFilter_NewDoubleRange_System_String_System_Nullable_System_Double__System_Nullable_System_Double__System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewDoubleRange(System.String,System.Nullable{System.Double},System.Nullable{System.Double},System.Boolean,System.Boolean)">NewDoubleRange(String, Nullable&lt;Double&gt;, Nullable&lt;Double&gt;, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a numeric range filter using <a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetDoubles_Lucene_Net_Index_AtomicReader_System_String_System_Boolean_">GetDoubles(AtomicReader, String, Boolean)</a>. This works with all
+<see cref="!:System.Double"></see> fields containing exactly one numeric term in the field. The range can be half-open by setting one
+of the values to <code>null</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheRangeFilter&lt;double?&gt; NewDoubleRange(string field, double? lowerVal, double? upperVal, bool includeLower, bool includeUpper)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">lowerVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Double</span>&gt;</td>
+        <td><span class="parametername">upperVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeLower</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUpper</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter-1.html">FieldCacheRangeFilter</a>&lt;<span class="xref">System.Nullable</span>&lt;<span class="xref">System.Double</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheRangeFilter_NewInt16Range_System_String_Lucene_Net_Search_FieldCache_IInt16Parser_System_Nullable_System_Int16__System_Nullable_System_Int16__System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheRangeFilter.NewInt16Range(System.String%2CLucene.Net.Search.FieldCache.IInt16Parser%2CSystem.Nullable%7BSystem.Int16%7D%2CSystem.Nullable%7BSystem.Int16%7D%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FieldCacheRangeFilter.cs/#L720">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheRangeFilter_NewInt16Range_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewInt16Range*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheRangeFilter_NewInt16Range_System_String_Lucene_Net_Search_FieldCache_IInt16Parser_System_Nullable_System_Int16__System_Nullable_System_Int16__System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewInt16Range(System.String,Lucene.Net.Search.FieldCache.IInt16Parser,System.Nullable{System.Int16},System.Nullable{System.Int16},System.Boolean,System.Boolean)">NewInt16Range(String, FieldCache.IInt16Parser, Nullable&lt;Int16&gt;, Nullable&lt;Int16&gt;, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a numeric range filter using <a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetInt16s_Lucene_Net_Index_AtomicReader_System_String_Lucene_Net_Search_FieldCache_IInt16Parser_System_Boolean_">GetInt16s(AtomicReader, String, FieldCache.IInt16Parser, Boolean)</a>. This works with all
+<see cref="!:System.Int16"></see> fields containing exactly one numeric term in the field. The range can be half-open by setting one
+of the values to <code>null</code>.
+<p>
+NOTE: this was newShortRange() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheRangeFilter&lt;short?&gt; NewInt16Range(string field, FieldCache.IInt16Parser parser, short? lowerVal, short? upperVal, bool includeLower, bool includeUpper)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCache.IInt16Parser.html">FieldCache.IInt16Parser</a></td>
+        <td><span class="parametername">parser</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int16</span>&gt;</td>
+        <td><span class="parametername">lowerVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int16</span>&gt;</td>
+        <td><span class="parametername">upperVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeLower</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUpper</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter-1.html">FieldCacheRangeFilter</a>&lt;<span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int16</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheRangeFilter_NewInt16Range_System_String_System_Nullable_System_Int16__System_Nullable_System_Int16__System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheRangeFilter.NewInt16Range(System.String%2CSystem.Nullable%7BSystem.Int16%7D%2CSystem.Nullable%7BSystem.Int16%7D%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FieldCacheRangeFilter.cs/#L707">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheRangeFilter_NewInt16Range_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewInt16Range*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheRangeFilter_NewInt16Range_System_String_System_Nullable_System_Int16__System_Nullable_System_Int16__System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewInt16Range(System.String,System.Nullable{System.Int16},System.Nullable{System.Int16},System.Boolean,System.Boolean)">NewInt16Range(String, Nullable&lt;Int16&gt;, Nullable&lt;Int16&gt;, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a numeric range filter using <a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetInt16s_Lucene_Net_Index_AtomicReader_System_String_System_Boolean_">GetInt16s(AtomicReader, String, Boolean)</a>. This works with all
+<see cref="!:System.Int16"></see> fields containing exactly one numeric term in the field. The range can be half-open by setting one
+of the values to <code>null</code>.
+<p>
+NOTE: this was newShortRange() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheRangeFilter&lt;short?&gt; NewInt16Range(string field, short? lowerVal, short? upperVal, bool includeLower, bool includeUpper)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int16</span>&gt;</td>
+        <td><span class="parametername">lowerVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int16</span>&gt;</td>
+        <td><span class="parametername">upperVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeLower</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUpper</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter-1.html">FieldCacheRangeFilter</a>&lt;<span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int16</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheRangeFilter_NewInt32Range_System_String_Lucene_Net_Search_FieldCache_IInt32Parser_System_Nullable_System_Int32__System_Nullable_System_Int32__System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheRangeFilter.NewInt32Range(System.String%2CLucene.Net.Search.FieldCache.IInt32Parser%2CSystem.Nullable%7BSystem.Int32%7D%2CSystem.Nullable%7BSystem.Int32%7D%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FieldCacheRangeFilter.cs/#L745">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheRangeFilter_NewInt32Range_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewInt32Range*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheRangeFilter_NewInt32Range_System_String_Lucene_Net_Search_FieldCache_IInt32Parser_System_Nullable_System_Int32__System_Nullable_System_Int32__System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewInt32Range(System.String,Lucene.Net.Search.FieldCache.IInt32Parser,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Boolean,System.Boolean)">NewInt32Range(String, FieldCache.IInt32Parser, Nullable&lt;Int32&gt;, Nullable&lt;Int32&gt;, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a numeric range filter using <a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetInt32s_Lucene_Net_Index_AtomicReader_System_String_Lucene_Net_Search_FieldCache_IInt32Parser_System_Boolean_">GetInt32s(AtomicReader, String, FieldCache.IInt32Parser, Boolean)</a>. This works with all
+<see cref="!:System.Int32"></see> fields containing exactly one numeric term in the field. The range can be half-open by setting one
+of the values to <code>null</code>.
+<p>
+NOTE: this was newIntRange() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheRangeFilter&lt;int?&gt; NewInt32Range(string field, FieldCache.IInt32Parser parser, int? lowerVal, int? upperVal, bool includeLower, bool includeUpper)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCache.IInt32Parser.html">FieldCache.IInt32Parser</a></td>
+        <td><span class="parametername">parser</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><span class="parametername">lowerVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><span class="parametername">upperVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeLower</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUpper</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter-1.html">FieldCacheRangeFilter</a>&lt;<span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int32</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheRangeFilter_NewInt32Range_System_String_System_Nullable_System_Int32__System_Nullable_System_Int32__System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheRangeFilter.NewInt32Range(System.String%2CSystem.Nullable%7BSystem.Int32%7D%2CSystem.Nullable%7BSystem.Int32%7D%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FieldCacheRangeFilter.cs/#L733">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheRangeFilter_NewInt32Range_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewInt32Range*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheRangeFilter_NewInt32Range_System_String_System_Nullable_System_Int32__System_Nullable_System_Int32__System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewInt32Range(System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Boolean,System.Boolean)">NewInt32Range(String, Nullable&lt;Int32&gt;, Nullable&lt;Int32&gt;, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a numeric range filter using <a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetInt32s_Lucene_Net_Index_AtomicReader_System_String_System_Boolean_">GetInt32s(AtomicReader, String, Boolean)</a>. This works with all
+<see cref="!:System.Int32"></see> fields containing exactly one numeric term in the field. The range can be half-open by setting one
+of the values to <code>null</code>.
+<p>
+NOTE: this was newIntRange() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheRangeFilter&lt;int?&gt; NewInt32Range(string field, int? lowerVal, int? upperVal, bool includeLower, bool includeUpper)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><span class="parametername">lowerVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int32</span>&gt;</td>
+        <td><span class="parametername">upperVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeLower</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUpper</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter-1.html">FieldCacheRangeFilter</a>&lt;<span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int32</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheRangeFilter_NewInt64Range_System_String_Lucene_Net_Search_FieldCache_IInt64Parser_System_Nullable_System_Int64__System_Nullable_System_Int64__System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheRangeFilter.NewInt64Range(System.String%2CLucene.Net.Search.FieldCache.IInt64Parser%2CSystem.Nullable%7BSystem.Int64%7D%2CSystem.Nullable%7BSystem.Int64%7D%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FieldCacheRangeFilter.cs/#L767">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheRangeFilter_NewInt64Range_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewInt64Range*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheRangeFilter_NewInt64Range_System_String_Lucene_Net_Search_FieldCache_IInt64Parser_System_Nullable_System_Int64__System_Nullable_System_Int64__System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewInt64Range(System.String,Lucene.Net.Search.FieldCache.IInt64Parser,System.Nullable{System.Int64},System.Nullable{System.Int64},System.Boolean,System.Boolean)">NewInt64Range(String, FieldCache.IInt64Parser, Nullable&lt;Int64&gt;, Nullable&lt;Int64&gt;, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a numeric range filter using <a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetInt64s_Lucene_Net_Index_AtomicReader_System_String_Lucene_Net_Search_FieldCache_IInt64Parser_System_Boolean_">GetInt64s(AtomicReader, String, FieldCache.IInt64Parser, Boolean)</a>. This works with all
+<see cref="!:System.Int64"></see> fields containing exactly one numeric term in the field. The range can be half-open by setting one
+of the values to <code>null</code>.
+<p>
+NOTE: this was newLongRange() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheRangeFilter&lt;long?&gt; NewInt64Range(string field, FieldCache.IInt64Parser parser, long? lowerVal, long? upperVal, bool includeLower, bool includeUpper)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCache.IInt64Parser.html">FieldCache.IInt64Parser</a></td>
+        <td><span class="parametername">parser</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int64</span>&gt;</td>
+        <td><span class="parametername">lowerVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int64</span>&gt;</td>
+        <td><span class="parametername">upperVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeLower</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUpper</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter-1.html">FieldCacheRangeFilter</a>&lt;<span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int64</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheRangeFilter_NewInt64Range_System_String_System_Nullable_System_Int64__System_Nullable_System_Int64__System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheRangeFilter.NewInt64Range(System.String%2CSystem.Nullable%7BSystem.Int64%7D%2CSystem.Nullable%7BSystem.Int64%7D%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FieldCacheRangeFilter.cs/#L755">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheRangeFilter_NewInt64Range_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewInt64Range*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheRangeFilter_NewInt64Range_System_String_System_Nullable_System_Int64__System_Nullable_System_Int64__System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewInt64Range(System.String,System.Nullable{System.Int64},System.Nullable{System.Int64},System.Boolean,System.Boolean)">NewInt64Range(String, Nullable&lt;Int64&gt;, Nullable&lt;Int64&gt;, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a numeric range filter using <a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetInt64s_Lucene_Net_Index_AtomicReader_System_String_System_Boolean_">GetInt64s(AtomicReader, String, Boolean)</a>. This works with all
+<see cref="!:System.Int64"></see> fields containing exactly one numeric term in the field. The range can be half-open by setting one
+of the values to <code>null</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheRangeFilter&lt;long?&gt; NewInt64Range(string field, long? lowerVal, long? upperVal, bool includeLower, bool includeUpper)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int64</span>&gt;</td>
+        <td><span class="parametername">lowerVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int64</span>&gt;</td>
+        <td><span class="parametername">upperVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeLower</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUpper</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter-1.html">FieldCacheRangeFilter</a>&lt;<span class="xref">System.Nullable</span>&lt;<span class="xref">System.Int64</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheRangeFilter_NewSingleRange_System_String_Lucene_Net_Search_FieldCache_ISingleParser_System_Nullable_System_Single__System_Nullable_System_Single__System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheRangeFilter.NewSingleRange(System.String%2CLucene.Net.Search.FieldCache.ISingleParser%2CSystem.Nullable%7BSystem.Single%7D%2CSystem.Nullable%7BSystem.Single%7D%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FieldCacheRangeFilter.cs/#L791">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheRangeFilter_NewSingleRange_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewSingleRange*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheRangeFilter_NewSingleRange_System_String_Lucene_Net_Search_FieldCache_ISingleParser_System_Nullable_System_Single__System_Nullable_System_Single__System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewSingleRange(System.String,Lucene.Net.Search.FieldCache.ISingleParser,System.Nullable{System.Single},System.Nullable{System.Single},System.Boolean,System.Boolean)">NewSingleRange(String, FieldCache.ISingleParser, Nullable&lt;Single&gt;, Nullable&lt;Single&gt;, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a numeric range filter using <a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetSingles_Lucene_Net_Index_AtomicReader_System_String_Lucene_Net_Search_FieldCache_ISingleParser_System_Boolean_">GetSingles(AtomicReader, String, FieldCache.ISingleParser, Boolean)</a>. This works with all
+<see cref="!:System.Single"></see> fields containing exactly one numeric term in the field. The range can be half-open by setting one
+of the values to <code>null</code>.
+<p>
+NOTE: this was newFloatRange() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheRangeFilter&lt;float?&gt; NewSingleRange(string field, FieldCache.ISingleParser parser, float? lowerVal, float? upperVal, bool includeLower, bool includeUpper)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCache.ISingleParser.html">FieldCache.ISingleParser</a></td>
+        <td><span class="parametername">parser</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Single</span>&gt;</td>
+        <td><span class="parametername">lowerVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Single</span>&gt;</td>
+        <td><span class="parametername">upperVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeLower</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUpper</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter-1.html">FieldCacheRangeFilter</a>&lt;<span class="xref">System.Nullable</span>&lt;<span class="xref">System.Single</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheRangeFilter_NewSingleRange_System_String_System_Nullable_System_Single__System_Nullable_System_Single__System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheRangeFilter.NewSingleRange(System.String%2CSystem.Nullable%7BSystem.Single%7D%2CSystem.Nullable%7BSystem.Single%7D%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FieldCacheRangeFilter.cs/#L779">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheRangeFilter_NewSingleRange_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewSingleRange*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheRangeFilter_NewSingleRange_System_String_System_Nullable_System_Single__System_Nullable_System_Single__System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewSingleRange(System.String,System.Nullable{System.Single},System.Nullable{System.Single},System.Boolean,System.Boolean)">NewSingleRange(String, Nullable&lt;Single&gt;, Nullable&lt;Single&gt;, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a numeric range filter using <a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetSingles_Lucene_Net_Index_AtomicReader_System_String_System_Boolean_">GetSingles(AtomicReader, String, Boolean)</a>. This works with all
+<see cref="!:System.Single"></see> fields containing exactly one numeric term in the field. The range can be half-open by setting one
+of the values to <code>null</code>.
+<p>
+NOTE: this was newFloatRange() in Lucene</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheRangeFilter&lt;float?&gt; NewSingleRange(string field, float? lowerVal, float? upperVal, bool includeLower, bool includeUpper)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Single</span>&gt;</td>
+        <td><span class="parametername">lowerVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;<span class="xref">System.Single</span>&gt;</td>
+        <td><span class="parametername">upperVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeLower</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUpper</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter-1.html">FieldCacheRangeFilter</a>&lt;<span class="xref">System.Nullable</span>&lt;<span class="xref">System.Single</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheRangeFilter_NewStringRange_System_String_System_String_System_String_System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheRangeFilter.NewStringRange(System.String%2CSystem.String%2CSystem.String%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FieldCacheRangeFilter.cs/#L662">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheRangeFilter_NewStringRange_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewStringRange*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheRangeFilter_NewStringRange_System_String_System_String_System_String_System_Boolean_System_Boolean_" data-uid="Lucene.Net.Search.FieldCacheRangeFilter.NewStringRange(System.String,System.String,System.String,System.Boolean,System.Boolean)">NewStringRange(String, String, String, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates a string range filter using <a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetTermsIndex_Lucene_Net_Index_AtomicReader_System_String_System_Single_">GetTermsIndex(AtomicReader, String, Single)</a>. This works with all
+fields containing zero or one term in the field. The range can be half-open by setting one
+of the values to <code>null</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static FieldCacheRangeFilter&lt;string&gt; NewStringRange(string field, string lowerVal, string upperVal, bool includeLower, bool includeUpper)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">lowerVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">upperVal</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeLower</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">includeUpper</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter-1.html">FieldCacheRangeFilter</a>&lt;<span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheRangeFilter.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheRangeFilter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net/Search/FieldCacheRangeFilter.cs/#L61" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

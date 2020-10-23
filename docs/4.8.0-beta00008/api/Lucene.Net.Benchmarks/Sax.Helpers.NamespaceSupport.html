@@ -1,0 +1,961 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class NamespaceSupport
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class NamespaceSupport
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Sax.Helpers.NamespaceSupport">
+  
+  
+  <h1 id="Sax_Helpers_NamespaceSupport" data-uid="Sax.Helpers.NamespaceSupport" class="text-break">Class NamespaceSupport
+  </h1>
+  <div class="markdown level0 summary"><p>Encapsulate Namespace logic for use by applications using SAX,
+or internally by SAX drivers.
+<p>
+<em>This module, both source code and documentation, is in the
+Public Domain, and comes with <strong>NO WARRANTY</strong>.</em>
+See <a href="http://www.saxproject.org">http://www.saxproject.org</a>
+for further information.
+<p>
+This class encapsulates the logic of Namespace processing: it
+tracks the declarations currently in force for each context and
+automatically processes qualified XML names into their Namespace
+parts; it can also be used in reverse for generating XML qnames
+from Namespaces.
+<p>
+Namespace support objects are reusable, but the reset method
+must be invoked between each session.
+<p>Here is a simple session:</p>
+<pre><code>    string parts[] = new string[3];
+    NamespaceSupport support = new NamespaceSupport();
+    support.PushContext();
+    support.DeclarePrefix(&quot;&quot;, &quot;http://www.w3.org/1999/xhtml&quot;);
+    support.DeclarePrefix(&quot;dc&quot;, &quot;http://www.purl.org/dc#&quot;);
+    parts = support.ProcessName(&quot;p&quot;, parts, false);
+    Console.WriteLine(&quot;Namespace URI: &quot; + parts[0]);
+    Console.WriteLine(&quot;Local name: &quot; + parts[1]);
+    Console.WriteLine(&quot;Raw name: &quot; + parts[2]);
+    parts = support.ProcessName(&quot;dc:title&quot;, parts, false);
+    Console.WriteLine(&quot;Namespace URI: &quot; + parts[0]);
+    Console.WriteLine(&quot;Local name: &quot; + parts[1]);
+    Console.WriteLine(&quot;Raw name: &quot; + parts[2]);
+    support.PopContext();</code></pre>
+<p><p>
+Note that this class is optimized for the use case where most
+elements do not contain Namespace declarations: if the same
+prefix/URI mapping is repeated for each context (for example), this
+class will be somewhat less efficient.
+<p>
+Although SAX drivers (parsers) may choose to use this class to
+implement namespace handling, they are not required to do so.
+Applications must track namespace information themselves if they
+want to use namespace information.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">NamespaceSupport</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Sax.Helpers.html">Sax.Helpers</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Benchmark.dll</h6>
+  <h5 id="Sax_Helpers_NamespaceSupport_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class NamespaceSupport</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport__ctor.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L94">View Source</a>
+  </span>
+  <a id="Sax_Helpers_NamespaceSupport__ctor_" data-uid="Sax.Helpers.NamespaceSupport.#ctor*"></a>
+  <h4 id="Sax_Helpers_NamespaceSupport__ctor" data-uid="Sax.Helpers.NamespaceSupport.#ctor">NamespaceSupport()</h4>
+  <div class="markdown level1 summary"><p>Create a new Namespace support object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public NamespaceSupport()</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport_NSDECL.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport.NSDECL%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L84">View Source</a>
+  </span>
+  <h4 id="Sax_Helpers_NamespaceSupport_NSDECL" data-uid="Sax.Helpers.NamespaceSupport.NSDECL">NSDECL</h4>
+  <div class="markdown level1 summary"><p>The namespace declaration URI as a constant.
+The value is <code><a href="http://www.w3.org/xmlns/2000/">http://www.w3.org/xmlns/2000/</a></code>, as defined
+in a backwards-incompatible erratum to the &quot;Namespaces in XML&quot;
+recommendation.  Because that erratum postdated SAX2, SAX2 defaults
+to the original recommendation, and does not normally use this URI.
+<p>
+This is the Namespace URI that is optionally applied to
+<em>xmlns</em> and <em>xmlns:*</em> attributes, which are used to
+declare namespaces.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string NSDECL = &quot;http://www.w3.org/xmlns/2000/&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Sax_Helpers_NamespaceSupport_NSDECL_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_SetNamespaceDeclUris_System_Boolean_">SetNamespaceDeclUris(Boolean)</a></div>
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_IsNamespaceDeclUris">IsNamespaceDeclUris</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport_XMLNS.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport.XMLNS%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L68">View Source</a>
+  </span>
+  <h4 id="Sax_Helpers_NamespaceSupport_XMLNS" data-uid="Sax.Helpers.NamespaceSupport.XMLNS">XMLNS</h4>
+  <div class="markdown level1 summary"><p>The XML Namespace URI as a constant.
+The value is <code><a href="http://www.w3.org/XML/1998/namespace">http://www.w3.org/XML/1998/namespace</a></code>
+as defined in the &quot;Namespaces in XML&quot; * recommendation.
+<p>This is the Namespace URI that is automatically mapped to the &quot;xml&quot; prefix.</p></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string XMLNS = &quot;http://www.w3.org/XML/1998/namespace&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport_IsNamespaceDeclUris.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport.IsNamespaceDeclUris%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L495">View Source</a>
+  </span>
+  <a id="Sax_Helpers_NamespaceSupport_IsNamespaceDeclUris_" data-uid="Sax.Helpers.NamespaceSupport.IsNamespaceDeclUris*"></a>
+  <h4 id="Sax_Helpers_NamespaceSupport_IsNamespaceDeclUris" data-uid="Sax.Helpers.NamespaceSupport.IsNamespaceDeclUris">IsNamespaceDeclUris</h4>
+  <div class="markdown level1 summary"><p>Returns true if namespace declaration attributes are placed into
+a namespace.  This behavior is not the default.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsNamespaceDeclUris { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport_DeclarePrefix_System_String_System_String_.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport.DeclarePrefix(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L252">View Source</a>
+  </span>
+  <a id="Sax_Helpers_NamespaceSupport_DeclarePrefix_" data-uid="Sax.Helpers.NamespaceSupport.DeclarePrefix*"></a>
+  <h4 id="Sax_Helpers_NamespaceSupport_DeclarePrefix_System_String_System_String_" data-uid="Sax.Helpers.NamespaceSupport.DeclarePrefix(System.String,System.String)">DeclarePrefix(String, String)</h4>
+  <div class="markdown level1 summary"><p>Declare a Namespace prefix.  All prefixes must be declared
+before they are referenced.  For example, a SAX driver (parser)
+would scan an element&apos;s attributes
+in two passes:  first for namespace declarations,
+then a second pass using <a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_ProcessName_System_String_System_String___System_Boolean_">ProcessName(String, String[], Boolean)</a> to
+interpret prefixes against (potentially redefined) prefixes.
+<p>
+This method declares a prefix in the current Namespace
+context; the prefix will remain in force until this context
+is popped, unless it is shadowed in a descendant context.
+<p>
+To declare the default element Namespace, use the empty string as
+the prefix.
+<p>
+Note that you must <em>not</em> declare a prefix after
+you&apos;ve pushed and popped another Namespace context, or
+treated the declarations phase as complete by processing
+a prefixed name.
+<p>
+Note that there is an asymmetry in this library: <a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetPrefix_System_String_">GetPrefix(String)</a> will not return the &quot;&quot; prefix,
+even if you have declared a default element namespace.
+To check for a default namespace,
+you have to look it up explicitly using <a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetUri_System_String_">GetUri(String)</a>.
+This asymmetry exists to make it easier to look up prefixes
+for attribute names, where the default prefix is not allowed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool DeclarePrefix(string prefix, string uri)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">prefix</span></td>
+        <td><p>The prefix to declare, or the empty string to
+indicate the default element namespace.  This may never have
+the value &quot;xml&quot; or &quot;xmlns&quot;.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">uri</span></td>
+        <td><p>The Namespace URI to associate with the prefix.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p><code>true</code> if the prefix was legal, <code>false</code> otherwise</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Sax_Helpers_NamespaceSupport_DeclarePrefix_System_String_System_String__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_ProcessName_System_String_System_String___System_Boolean_">ProcessName(String, String[], Boolean)</a></div>
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetUri_System_String_">GetUri(String)</a></div>
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetPrefix_System_String_">GetPrefix(String)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport_GetDeclaredPrefixes.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport.GetDeclaredPrefixes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L454">View Source</a>
+  </span>
+  <a id="Sax_Helpers_NamespaceSupport_GetDeclaredPrefixes_" data-uid="Sax.Helpers.NamespaceSupport.GetDeclaredPrefixes*"></a>
+  <h4 id="Sax_Helpers_NamespaceSupport_GetDeclaredPrefixes" data-uid="Sax.Helpers.NamespaceSupport.GetDeclaredPrefixes">GetDeclaredPrefixes()</h4>
+  <div class="markdown level1 summary"><p>Return an enumeration of all prefixes declared in this context.
+<p>
+The empty (default) prefix will be included in this
+enumeration; note that this behaviour differs from that of
+<a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetPrefix_System_String_">GetPrefix(String)</a> and <a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetPrefixes">GetPrefixes()</a>.
+</p></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable GetDeclaredPrefixes()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerable</span></td>
+        <td><p>An enumeration of all prefixes declared in this
+context.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Sax_Helpers_NamespaceSupport_GetDeclaredPrefixes_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetPrefixes">GetPrefixes()</a></div>
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetUri_System_String_">GetUri(String)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport_GetPrefix_System_String_.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport.GetPrefix(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L393">View Source</a>
+  </span>
+  <a id="Sax_Helpers_NamespaceSupport_GetPrefix_" data-uid="Sax.Helpers.NamespaceSupport.GetPrefix*"></a>
+  <h4 id="Sax_Helpers_NamespaceSupport_GetPrefix_System_String_" data-uid="Sax.Helpers.NamespaceSupport.GetPrefix(System.String)">GetPrefix(String)</h4>
+  <div class="markdown level1 summary"><p>Return one of the prefixes mapped to a Namespace URI.
+<p>
+If more than one prefix is currently mapped to the same
+URI, this method will make an arbitrary selection; if you
+want all of the prefixes, use the <a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetPrefixes">GetPrefixes()</a>
+method instead.
+</p>
+<p>
+<strong>Note:</strong> this will never return the empty (default) prefix;
+to check for a default prefix, use the <a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetUri_System_String_">GetUri(String)</a>
+method with an argument of &quot;&quot;.
+</p></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string GetPrefix(string uri)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">uri</span></td>
+        <td><p>the namespace URI</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>one of the prefixes currently mapped to the URI supplied,
+or null if none is mapped or if the URI is assigned to
+the default namespace</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Sax_Helpers_NamespaceSupport_GetPrefix_System_String__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetPrefixes_System_String_">GetPrefixes(String)</a></div>
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetUri_System_String_">GetUri(String)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport_GetPrefixes.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport.GetPrefixes%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L364">View Source</a>
+  </span>
+  <a id="Sax_Helpers_NamespaceSupport_GetPrefixes_" data-uid="Sax.Helpers.NamespaceSupport.GetPrefixes*"></a>
+  <h4 id="Sax_Helpers_NamespaceSupport_GetPrefixes" data-uid="Sax.Helpers.NamespaceSupport.GetPrefixes">GetPrefixes()</h4>
+  <div class="markdown level1 summary"><p>Return an enumeration of all prefixes whose declarations are
+active in the current context.
+This includes declarations from parent contexts that have
+not been overridden.
+<p>
+<strong>Note:</strong> if there is a default prefix, it will not be
+returned in this enumeration; check for the default prefix
+using the <a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetUri_System_String_">GetUri(String)</a> with an argument of &quot;&quot;.
+</p></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable GetPrefixes()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerable</span></td>
+        <td><p>An enumeration of prefixes (never empty).</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Sax_Helpers_NamespaceSupport_GetPrefixes_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetDeclaredPrefixes">GetDeclaredPrefixes()</a></div>
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetUri_System_String_">GetUri(String)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport_GetPrefixes_System_String_.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport.GetPrefixes(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L424">View Source</a>
+  </span>
+  <a id="Sax_Helpers_NamespaceSupport_GetPrefixes_" data-uid="Sax.Helpers.NamespaceSupport.GetPrefixes*"></a>
+  <h4 id="Sax_Helpers_NamespaceSupport_GetPrefixes_System_String_" data-uid="Sax.Helpers.NamespaceSupport.GetPrefixes(System.String)">GetPrefixes(String)</h4>
+  <div class="markdown level1 summary"><p>Return an enumeration of all prefixes for a given URI whose
+declarations are active in the current context.
+This includes declarations from parent contexts that have
+not been overridden.
+<p>
+This method returns prefixes mapped to a specific Namespace
+URI.  The xml: prefix will be included.  If you want only one
+prefix that&apos;s mapped to the Namespace URI, and you don&apos;t care
+which one you get, use the <a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetPrefix_System_String_">GetPrefix(String)</a>
+method instead.
+</p>
+<p>
+<strong>Note:</strong> the empty (default) prefix is <em>never</em> included
+in this enumeration; to check for the presence of a default
+Namespace, use the <a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetUri_System_String_">GetUri(String)</a> method with an
+argument of &quot;&quot;.
+</p></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerable GetPrefixes(string uri)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">uri</span></td>
+        <td><p>The Namespace URI.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerable</span></td>
+        <td><p>An enumeration of prefixes (never empty).</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Sax_Helpers_NamespaceSupport_GetPrefixes_System_String__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetPrefix_System_String_">GetPrefix(String)</a></div>
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetDeclaredPrefixes">GetDeclaredPrefixes()</a></div>
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetUri_System_String_">GetUri(String)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport_GetUri_System_String_.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport.GetUri(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L345">View Source</a>
+  </span>
+  <a id="Sax_Helpers_NamespaceSupport_GetUri_" data-uid="Sax.Helpers.NamespaceSupport.GetUri*"></a>
+  <h4 id="Sax_Helpers_NamespaceSupport_GetUri_System_String_" data-uid="Sax.Helpers.NamespaceSupport.GetUri(System.String)">GetUri(String)</h4>
+  <div class="markdown level1 summary"><p>Look up a prefix and get the currently-mapped Namespace URI.
+<p>
+This method looks up the prefix in the current context.
+Use the empty string (&quot;&quot;) for the default Namespace.
+</p></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string GetUri(string prefix)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">prefix</span></td>
+        <td><p>The prefix to look up.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><p>The associated Namespace URI, or null if the prefix
+is undeclared in this context.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Sax_Helpers_NamespaceSupport_GetUri_System_String__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetPrefix_System_String_">GetPrefix(String)</a></div>
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_GetPrefixes">GetPrefixes()</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport_PopContext.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport.PopContext%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L198">View Source</a>
+  </span>
+  <a id="Sax_Helpers_NamespaceSupport_PopContext_" data-uid="Sax.Helpers.NamespaceSupport.PopContext*"></a>
+  <h4 id="Sax_Helpers_NamespaceSupport_PopContext" data-uid="Sax.Helpers.NamespaceSupport.PopContext">PopContext()</h4>
+  <div class="markdown level1 summary"><p>Revert to the previous Namespace context.
+<p>
+Normally, you should pop the context at the end of each
+XML element.  After popping the context, all Namespace prefix
+mappings that were previously in force are restored.
+<p>
+You must not attempt to declare additional Namespace
+prefixes after popping a context, unless you push another
+context first.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void PopContext()</code></pre>
+  </div>
+  <h5 id="Sax_Helpers_NamespaceSupport_PopContext_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_PushContext">PushContext()</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport_ProcessName_System_String_System_String___System_Boolean_.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport.ProcessName(System.String%2CSystem.String%5B%5D%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L316">View Source</a>
+  </span>
+  <a id="Sax_Helpers_NamespaceSupport_ProcessName_" data-uid="Sax.Helpers.NamespaceSupport.ProcessName*"></a>
+  <h4 id="Sax_Helpers_NamespaceSupport_ProcessName_System_String_System_String___System_Boolean_" data-uid="Sax.Helpers.NamespaceSupport.ProcessName(System.String,System.String[],System.Boolean)">ProcessName(String, String[], Boolean)</h4>
+  <div class="markdown level1 summary"><p>Process a raw XML qualified name, after all declarations in the
+current context have been handled by <a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_DeclarePrefix_System_String_System_String_">DeclarePrefix(String, String)</a>.
+<p>
+This method processes a raw XML qualified name in the
+current context by removing the prefix and looking it up among
+the prefixes currently declared.  The return value will be the
+array supplied by the caller, filled in as follows:
+</p>
+<table><tbody><tr><td>parts[0]</td><td>The Namespace URI, or an empty string if none is in use.</td></tr><tr><td>parts[1]</td><td>The local name (without prefix).</td></tr><tr><td>parts[2]</td><td>The original raw name.</td></tr></tbody></table>
+<p>
+All of the strings in the array will be internalized.  If
+the raw name has a prefix that has not been declared, then
+the return value will be null.
+</p>
+<p>
+Note that attribute names are processed differently than
+element names: an unprefixed element name will receive the
+default Namespace (if any), while an unprefixed attribute name
+will not.
+</p></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string[] ProcessName(string qName, string[] parts, bool isAttribute)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">qName</span></td>
+        <td><p>The XML qualified name to be processed.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">parts</span></td>
+        <td><p>An array supplied by the caller, capable of
+holding at least three members.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">isAttribute</span></td>
+        <td><p>A flag indicating whether this is an
+attribute name (true) or an element name (false).</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><p>The supplied array holding three internalized strings
+representing the Namespace URI (or empty string), the
+local name, and the XML qualified name; or null if there
+is an undeclared prefix.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Sax_Helpers_NamespaceSupport_ProcessName_System_String_System_String___System_Boolean__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_DeclarePrefix_System_String_System_String_">DeclarePrefix(String, String)</a></div>
+      <div><span class="xref">J2N.Text.StringExtensions.Intern(System.String)</span></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport_PushContext.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport.PushContext%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L156">View Source</a>
+  </span>
+  <a id="Sax_Helpers_NamespaceSupport_PushContext_" data-uid="Sax.Helpers.NamespaceSupport.PushContext*"></a>
+  <h4 id="Sax_Helpers_NamespaceSupport_PushContext" data-uid="Sax.Helpers.NamespaceSupport.PushContext">PushContext()</h4>
+  <div class="markdown level1 summary"><p>Start a new Namespace context.
+The new context will automatically inherit
+the declarations of its parent context, but it will also keep
+track of which declarations were made within this context.
+<p>
+Event callback code should start a new context once per element.
+This means being ready to call this in either of two places.
+For elements that don&apos;t include namespace declarations, the
+<a class="xref" href="Sax.IContentHandler.html#Sax_IContentHandler_StartElement_System_String_System_String_System_String_Sax_IAttributes_">StartElement(String, String, String, IAttributes)</a> callback is the right place.
+For elements with such a declaration, it&apos;d done in the first
+<a class="xref" href="Sax.IContentHandler.html#Sax_IContentHandler_StartPrefixMapping_System_String_System_String_">StartPrefixMapping(String, String)</a> callback.
+A boolean flag can be used to
+track whether a context has been started yet.  When either of
+those methods is called, it checks the flag to see if a new context
+needs to be started.  If so, it starts the context and sets the
+flag.  After <a class="xref" href="Sax.IContentHandler.html#Sax_IContentHandler_StartElement_System_String_System_String_System_String_Sax_IAttributes_">StartElement(String, String, String, IAttributes)</a>
+does that, it always clears the flag.
+<p>
+Normally, SAX drivers would push a new context at the beginning
+of each XML element.  Then they perform a first pass over the
+attributes to process all namespace declarations, making
+<a class="xref" href="Sax.IContentHandler.html#Sax_IContentHandler_StartPrefixMapping_System_String_System_String_">StartPrefixMapping(String, String)</a> callbacks.
+Then a second pass is made, to determine the namespace-qualified
+names for all attributes and for the element name.
+Finally all the information for the
+<a class="xref" href="Sax.IContentHandler.html#Sax_IContentHandler_StartElement_System_String_System_String_System_String_Sax_IAttributes_">StartElement(String, String, String, IAttributes)</a> callback is available,
+so it can then be made.
+<p>
+The Namespace support object always starts with a base context
+already in force: in this context, only the &quot;xml&quot; prefix is
+declared.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void PushContext()</code></pre>
+  </div>
+  <h5 id="Sax_Helpers_NamespaceSupport_PushContext_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Sax.IContentHandler.html">IContentHandler</a></div>
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_PopContext">PopContext()</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport_Reset.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport.Reset%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L112">View Source</a>
+  </span>
+  <a id="Sax_Helpers_NamespaceSupport_Reset_" data-uid="Sax.Helpers.NamespaceSupport.Reset*"></a>
+  <h4 id="Sax_Helpers_NamespaceSupport_Reset" data-uid="Sax.Helpers.NamespaceSupport.Reset">Reset()</h4>
+  <div class="markdown level1 summary"><p>Reset this Namespace support object for reuse.
+<p>
+It is necessary to invoke this method before reusing the
+Namespace support object for a new session.  If namespace
+declaration URIs are to be supported, that flag must also
+be set to a non-default value.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Reset()</code></pre>
+  </div>
+  <h5 id="Sax_Helpers_NamespaceSupport_Reset_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_SetNamespaceDeclUris_System_Boolean_">SetNamespaceDeclUris(Boolean)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport_SetNamespaceDeclUris_System_Boolean_.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport.SetNamespaceDeclUris(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L469">View Source</a>
+  </span>
+  <a id="Sax_Helpers_NamespaceSupport_SetNamespaceDeclUris_" data-uid="Sax.Helpers.NamespaceSupport.SetNamespaceDeclUris*"></a>
+  <h4 id="Sax_Helpers_NamespaceSupport_SetNamespaceDeclUris_System_Boolean_" data-uid="Sax.Helpers.NamespaceSupport.SetNamespaceDeclUris(System.Boolean)">SetNamespaceDeclUris(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Controls whether namespace declaration attributes are placed
+into the <a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_NSDECL">NSDECL</a> namespace
+by <a class="xref" href="Sax.Helpers.NamespaceSupport.html#Sax_Helpers_NamespaceSupport_ProcessName_System_String_System_String___System_Boolean_">ProcessName(String, String[], Boolean)</a>.  This may only be
+changed before any contexts have been pushed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void SetNamespaceDeclUris(bool value)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">value</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.InvalidOperationException</span></td>
+        <td><p>when attempting to set this
+after any context has been pushed.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Sax_Helpers_NamespaceSupport.md&amp;value=---%0Auid%3A%20Sax.Helpers.NamespaceSupport%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net.Benchmark/Support/Sax/Helpers/NamespaceSupport.cs/#L60" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

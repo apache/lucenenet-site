@@ -1,0 +1,292 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class MultiPassIndexSplitter
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class MultiPassIndexSplitter
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="misc/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Index.MultiPassIndexSplitter">
+  
+  
+  <h1 id="Lucene_Net_Index_MultiPassIndexSplitter" data-uid="Lucene.Net.Index.MultiPassIndexSplitter" class="text-break">Class MultiPassIndexSplitter
+  </h1>
+  <div class="markdown level0 summary"><p>This tool splits input index into multiple equal parts. The method employed
+here uses <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddIndexes_Lucene_Net_Index_IndexReader___">AddIndexes(IndexReader[])</a> where the input data
+comes from the input index with artificially applied deletes to the document
+id-s that fall outside the selected partition.
+<p>Note 1: Deletes are only applied to a buffered list of deleted docs and
+don&apos;t affect the source index - this tool works also with read-only indexes.
+</p>
+<p>Note 2: the disadvantage of this tool is that source index needs to be
+read as many times as there are parts to be created, hence the name of this
+tool.</p>
+<p>
+<p><strong>NOTE</strong>: this tool is unaware of documents added
+atomically via <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocuments_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___Lucene_Net_Analysis_Analyzer_">AddDocuments(IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;, Analyzer)</a> or 
+<a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_UpdateDocuments_Lucene_Net_Index_Term_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___Lucene_Net_Analysis_Analyzer_">UpdateDocuments(Term, IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;, Analyzer)</a>, which means it can easily
+break up such document groups.
+</p></p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">MultiPassIndexSplitter</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Index.html">Lucene.Net.Index</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Misc.dll</h6>
+  <h5 id="Lucene_Net_Index_MultiPassIndexSplitter_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class MultiPassIndexSplitter</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_MultiPassIndexSplitter_Main_System_String___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.MultiPassIndexSplitter.Main(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Misc/Index/MultiPassIndexSplitter.cs/#L124">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_MultiPassIndexSplitter_Main_" data-uid="Lucene.Net.Index.MultiPassIndexSplitter.Main*"></a>
+  <h4 id="Lucene_Net_Index_MultiPassIndexSplitter_Main_System_String___" data-uid="Lucene.Net.Index.MultiPassIndexSplitter.Main(System.String[])">Main(String[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Main(string[] args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">args</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_MultiPassIndexSplitter_Split_Lucene_Net_Util_LuceneVersion_Lucene_Net_Index_IndexReader_Lucene_Net_Store_Directory___System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.MultiPassIndexSplitter.Split(Lucene.Net.Util.LuceneVersion%2CLucene.Net.Index.IndexReader%2CLucene.Net.Store.Directory%5B%5D%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Misc/Index/MultiPassIndexSplitter.cs/#L62">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_MultiPassIndexSplitter_Split_" data-uid="Lucene.Net.Index.MultiPassIndexSplitter.Split*"></a>
+  <h4 id="Lucene_Net_Index_MultiPassIndexSplitter_Split_Lucene_Net_Util_LuceneVersion_Lucene_Net_Index_IndexReader_Lucene_Net_Store_Directory___System_Boolean_" data-uid="Lucene.Net.Index.MultiPassIndexSplitter.Split(Lucene.Net.Util.LuceneVersion,Lucene.Net.Index.IndexReader,Lucene.Net.Store.Directory[],System.Boolean)">Split(LuceneVersion, IndexReader, Directory[], Boolean)</h4>
+  <div class="markdown level1 summary"><p>Split source index into multiple parts. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Split(LuceneVersion version, IndexReader in, Directory[] outputs, bool seq)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Util.LuceneVersion</span></td>
+        <td><span class="parametername">version</span></td>
+        <td><p>lucene compatibility version</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.IndexReader</span></td>
+        <td><span class="parametername">in</span></td>
+        <td><p>source index, can have deletions, can have
+multiple segments (or multiple readers). </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Store.Directory</span>[]</td>
+        <td><span class="parametername">outputs</span></td>
+        <td><p>list of directories where the output parts will be stored. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">seq</span></td>
+        <td><p>if true, then the source index will be split into equal
+increasing ranges of document id-s. If false, source document id-s will be
+assigned in a deterministic round-robin fashion to one of the output splits. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>If there is a low-level I/O error </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_MultiPassIndexSplitter.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.MultiPassIndexSplitter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Misc/Index/MultiPassIndexSplitter.cs/#L49" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

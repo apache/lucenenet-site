@@ -1,0 +1,541 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Lucene40PostingsFormat
+   | Apache Lucene.NET 4.8.0-beta00011 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Lucene40PostingsFormat
+   | Apache Lucene.NET 4.8.0-beta00011 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat">
+  
+  
+  <h1 id="Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat" class="text-break">Class Lucene40PostingsFormat
+  </h1>
+  <div class="markdown level0 summary"><p>Lucene 4.0 Postings format.
+<p>
+Files:
+<ul><li><tt>.tim</tt>: <a href="#Termdictionary">Term Dictionary</a></li><li><tt>.tip</tt>: <a href="#Termindex">Term Index</a></li><li><tt>.frq</tt>: <a href="#Frequencies">Frequencies</a></li><li><tt>.prx</tt>: <a href="#Positions">Positions</a></li></ul>
+</p>
+<p>
+<a name="Termdictionary" id="Termdictionary"></a>
+<h3>Term Dictionary</h3></p>
+<p>The .tim file contains the list of terms in each
+field along with per-term statistics (such as docfreq)
+and pointers to the frequencies, positions and
+skip data in the .frq and .prx files.
+See <a class="xref" href="Lucene.Net.Codecs.BlockTreeTermsWriter.html">BlockTreeTermsWriter</a> for more details on the format.
+</p>
+
+<p>NOTE: The term dictionary can plug into different postings implementations:
+the postings writer/reader are actually responsible for encoding
+and decoding the Postings Metadata and Term Metadata sections described here:</p>
+<ul><li>Postings Metadata --&gt; Header, SkipInterval, MaxSkipLevels, SkipMinimum</li><li>Term Metadata --&gt; FreqDelta, SkipDelta?, ProxDelta?</li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>SkipInterval,MaxSkipLevels,SkipMinimum --&gt; Uint32 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a>) </li><li>SkipDelta,FreqDelta,ProxDelta --&gt; VLong (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt64_System_Int64_">WriteVInt64(Int64)</a>) </li></ul>
+<p>Notes:</p>
+<ul><li>Header is a CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>)  storing the version information
+       for the postings.</li><li>SkipInterval is the fraction of TermDocs stored in skip tables. It is used to accelerate
+<a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html#Lucene_Net_Search_DocIdSetIterator_Advance_System_Int32_">Advance(Int32)</a>. Larger values result in smaller indexes, greater
+acceleration, but fewer accelerable cases, while smaller values result in bigger indexes,
+less acceleration (in case of a small value for MaxSkipLevels) and more accelerable cases.
+</li><li>MaxSkipLevels is the max. number of skip levels stored for each term in the .frq file. A
+low value results in smaller indexes but less acceleration, a larger value results in
+slightly larger indexes but greater acceleration. See format of .frq file for more
+information about skip levels.</li><li>SkipMinimum is the minimum document frequency a term must have in order to write any
+skip data at all.</li><li>FreqDelta determines the position of this term&apos;s TermFreqs within the .frq
+file. In particular, it is the difference between the position of this term&apos;s
+data in that file and the position of the previous term&apos;s data (or zero, for
+the first term in the block).</li><li>ProxDelta determines the position of this term&apos;s TermPositions within the
+.prx file. In particular, it is the difference between the position of this
+term&apos;s data in that file and the position of the previous term&apos;s data (or zero,
+for the first term in the block. For fields that omit position data, this will
+be 0 since prox information is not stored.</li><li>SkipDelta determines the position of this term&apos;s SkipData within the .frq
+file. In particular, it is the number of bytes after TermFreqs that the
+SkipData starts. In other words, it is the length of the TermFreq data.
+SkipDelta is only stored if DocFreq is not smaller than SkipMinimum.</li></ul>
+<a name="Termindex" id="Termindex"></a>
+<h3>Term Index</h3>
+<p>The .tip file contains an index into the term dictionary, so that it can be
+accessed randomly.  See <a class="xref" href="Lucene.Net.Codecs.BlockTreeTermsWriter.html">BlockTreeTermsWriter</a> for more details on the format.</p>
+<a name="Frequencies" id="Frequencies"></a>
+<h3>Frequencies</h3>
+<p>The .frq file contains the lists of documents which contain each term, along
+with the frequency of the term in that document (except when frequencies are
+omitted: <a class="xref" href="Lucene.Net.Index.IndexOptions.html#Lucene_Net_Index_IndexOptions_DOCS_ONLY">DOCS_ONLY</a>).</p>
+<ul><li>FreqFile (.frq) --&gt; Header, &lt;TermFreqs, SkipData?&gt; <sup>TermCount</sup></li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>TermFreqs --&gt; &lt;TermFreq&gt; <sup>DocFreq</sup></li><li>TermFreq --&gt; DocDelta[, Freq?]</li><li>SkipData --&gt; &lt;&lt;SkipLevelLength, SkipLevel&gt;
+<sup>NumSkipLevels-1</sup>, SkipLevel&gt; &lt;SkipDatum&gt;</li><li>SkipLevel --&gt; &lt;SkipDatum&gt; <sup>DocFreq/(SkipInterval^(Level +
+1))</sup></li><li>SkipDatum --&gt;
+DocSkip,PayloadLength?,OffsetLength?,FreqSkip,ProxSkip,SkipChildLevelPointer?</li><li>DocDelta,Freq,DocSkip,PayloadLength,OffsetLength,FreqSkip,ProxSkip --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>SkipChildLevelPointer --&gt; VLong (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt64_System_Int64_">WriteVInt64(Int64)</a>) </li></ul>
+<p>TermFreqs are ordered by term (the term is implicit, from the term dictionary).</p>
+<p>TermFreq entries are ordered by increasing document number.</p>
+<p>DocDelta: if frequencies are indexed, this determines both the document
+number and the frequency. In particular, DocDelta/2 is the difference between
+this document number and the previous document number (or zero when this is the
+first document in a TermFreqs). When DocDelta is odd, the frequency is one.
+When DocDelta is even, the frequency is read as another VInt. If frequencies
+are omitted, DocDelta contains the gap (not multiplied by 2) between document
+numbers and no frequency information is stored.</p>
+<p>For example, the TermFreqs for a term which occurs once in document seven
+and three times in document eleven, with frequencies indexed, would be the
+following sequence of VInts:</p>
+<p>15, 8, 3</p>
+<p>If frequencies were omitted (<a class="xref" href="Lucene.Net.Index.IndexOptions.html#Lucene_Net_Index_IndexOptions_DOCS_ONLY">DOCS_ONLY</a>) it would be this
+sequence of VInts instead:</p>
+<p>7,4</p>
+<p>DocSkip records the document number before every SkipInterval <sup>th</sup>
+document in TermFreqs. If payloads and offsets are disabled for the term&apos;s field, then
+DocSkip represents the difference from the previous value in the sequence. If
+payloads and/or offsets are enabled for the term&apos;s field, then DocSkip/2 represents the
+difference from the previous value in the sequence. In this case when
+DocSkip is odd, then PayloadLength and/or OffsetLength are stored indicating the length of
+the last payload/offset before the SkipInterval<sup>th</sup> document in TermPositions.</p>
+<p>PayloadLength indicates the length of the last payload.</p>
+<p>OffsetLength indicates the length of the last offset (endOffset-startOffset).</p>
+<p>
+FreqSkip and ProxSkip record the position of every SkipInterval <sup>th</sup>
+entry in FreqFile and ProxFile, respectively. File positions are relative to
+the start of TermFreqs and Positions, to the previous SkipDatum in the
+sequence.</p>
+<p>For example, if DocFreq=35 and SkipInterval=16, then there are two SkipData
+entries, containing the 15 <sup>th</sup> and 31 <sup>st</sup> document numbers
+in TermFreqs. The first FreqSkip names the number of bytes after the beginning
+of TermFreqs that the 16 <sup>th</sup> SkipDatum starts, and the second the
+number of bytes after that that the 32 <sup>nd</sup> starts. The first ProxSkip
+names the number of bytes after the beginning of Positions that the 16
+<sup>th</sup> SkipDatum starts, and the second the number of bytes after that
+that the 32 <sup>nd</sup> starts.</p>
+<p>Each term can have multiple skip levels. The amount of skip levels for a
+term is NumSkipLevels = Min(MaxSkipLevels,
+floor(log(DocFreq/log(SkipInterval)))). The number of SkipData entries for a
+skip level is DocFreq/(SkipInterval^(Level + 1)), whereas the lowest skip level
+is Level=0.
+<p>
+Example: SkipInterval = 4, MaxSkipLevels = 2, DocFreq = 35. Then skip level 0
+has 8 SkipData entries, containing the 3<sup>rd</sup>, 7<sup>th</sup>,
+11<sup>th</sup>, 15<sup>th</sup>, 19<sup>th</sup>, 23<sup>rd</sup>,
+27<sup>th</sup>, and 31<sup>st</sup> document numbers in TermFreqs. Skip level
+1 has 2 SkipData entries, containing the 15<sup>th</sup> and 31<sup>st</sup>
+document numbers in TermFreqs.
+<p>
+The SkipData entries on all upper levels &gt; 0 contain a SkipChildLevelPointer
+referencing the corresponding SkipData entry in level-1. In the example has
+entry 15 on level 1 a pointer to entry 15 on level 0 and entry 31 on level 1 a
+pointer to entry 31 on level 0.
+</p>
+<a name="Positions" id="Positions"></a>
+<h3>Positions</h3>
+<p>The .prx file contains the lists of positions that each term occurs at
+within documents. Note that fields omitting positional data do not store
+anything into this file, and if all fields in the index omit positional data
+then the .prx file will not exist.</p>
+<ul><li>ProxFile (.prx) --&gt; Header, &lt;TermPositions&gt; <sup>TermCount</sup></li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>TermPositions --&gt; &lt;Positions&gt; <sup>DocFreq</sup></li><li>Positions --&gt; &lt;PositionDelta,PayloadLength?,OffsetDelta?,OffsetLength?,PayloadData?&gt; <sup>Freq</sup></li><li>PositionDelta,OffsetDelta,OffsetLength,PayloadLength --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>PayloadData --&gt; byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) <sup>PayloadLength</sup></li></ul>
+<p>TermPositions are ordered by term (the term is implicit, from the term dictionary).</p>
+<p>Positions entries are ordered by increasing document number (the document
+number is implicit from the .frq file).</p>
+<p>PositionDelta is, if payloads are disabled for the term&apos;s field, the
+difference between the position of the current occurrence in the document and
+the previous occurrence (or zero, if this is the first occurrence in this
+document). If payloads are enabled for the term&apos;s field, then PositionDelta/2
+is the difference between the current and the previous position. If payloads
+are enabled and PositionDelta is odd, then PayloadLength is stored, indicating
+the length of the payload at the current term position.</p>
+<p>For example, the TermPositions for a term which occurs as the fourth term in
+one document, and as the fifth and ninth term in a subsequent document, would
+be the following sequence of VInts (payloads disabled):</p>
+<p>4, 5, 4</p>
+<p>PayloadData is metadata associated with the current term position. If
+PayloadLength is stored at the current position, then it indicates the length
+of this payload. If PayloadLength is not stored, then this payload has the same
+length as the payload at the previous position.</p>
+<p>OffsetDelta/2 is the difference between this position&apos;s startOffset from the
+previous occurrence (or zero, if this is the first occurrence in this document).
+If OffsetDelta is odd, then the length (endOffset-startOffset) differs from the
+previous occurrence and an OffsetLength follows. Offset data is only written for
+<a class="xref" href="Lucene.Net.Index.IndexOptions.html#Lucene_Net_Index_IndexOptions_DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS">DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS</a>.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html">PostingsFormat</a></div>
+    <div class="level2"><span class="xref">Lucene40PostingsFormat</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_EMPTY">PostingsFormat.EMPTY</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_SetPostingsFormatFactory_Lucene_Net_Codecs_IPostingsFormatFactory_">PostingsFormat.SetPostingsFormatFactory(IPostingsFormatFactory)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_GetPostingsFormatFactory">PostingsFormat.GetPostingsFormatFactory()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_Name">PostingsFormat.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_ForName_System_String_">PostingsFormat.ForName(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_AvailablePostingsFormats">PostingsFormat.AvailablePostingsFormats</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Codecs.Lucene40.html">Lucene.Net.Codecs.Lucene40</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Only for reading old 4.0 segments&quot;)]
+[PostingsFormatName(&quot;Lucene40&quot;)]
+public class Lucene40PostingsFormat : PostingsFormat</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Codecs/Lucene40/Lucene40PostingsFormat.cs/#L223">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat__ctor_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat__ctor" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.#ctor">Lucene40PostingsFormat()</h4>
+  <div class="markdown level1 summary"><p>Creates <a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.html">Lucene40PostingsFormat</a> with default
+settings.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Lucene40PostingsFormat()</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat_m_maxBlockSize.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.m_maxBlockSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Codecs/Lucene40/Lucene40PostingsFormat.cs/#L217">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat_m_maxBlockSize" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.m_maxBlockSize">m_maxBlockSize</h4>
+  <div class="markdown level1 summary"><p>Maximum items (terms or sub-blocks) per block for BlockTree. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly int m_maxBlockSize</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat_m_minBlockSize.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.m_minBlockSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Codecs/Lucene40/Lucene40PostingsFormat.cs/#L213">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat_m_minBlockSize" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.m_minBlockSize">m_minBlockSize</h4>
+  <div class="markdown level1 summary"><p>Minimum items (terms or sub-blocks) per block for BlockTree. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly int m_minBlockSize</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat_FieldsConsumer_Lucene_Net_Index_SegmentWriteState_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.FieldsConsumer(Lucene.Net.Index.SegmentWriteState)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Codecs/Lucene40/Lucene40PostingsFormat.cs/#L241">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat_FieldsConsumer_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.FieldsConsumer*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat_FieldsConsumer_Lucene_Net_Index_SegmentWriteState_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.FieldsConsumer(Lucene.Net.Index.SegmentWriteState)">FieldsConsumer(SegmentWriteState)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override FieldsConsumer FieldsConsumer(SegmentWriteState state)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentWriteState.html">SegmentWriteState</a></td>
+        <td><span class="parametername">state</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.FieldsConsumer.html">FieldsConsumer</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_FieldsConsumer_Lucene_Net_Index_SegmentWriteState_">PostingsFormat.FieldsConsumer(SegmentWriteState)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat_FieldsProducer_Lucene_Net_Index_SegmentReadState_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.FieldsProducer(Lucene.Net.Index.SegmentReadState)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Codecs/Lucene40/Lucene40PostingsFormat.cs/#L246">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat_FieldsProducer_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.FieldsProducer*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat_FieldsProducer_Lucene_Net_Index_SegmentReadState_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.FieldsProducer(Lucene.Net.Index.SegmentReadState)">FieldsProducer(SegmentReadState)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override FieldsProducer FieldsProducer(SegmentReadState state)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentReadState.html">SegmentReadState</a></td>
+        <td><span class="parametername">state</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.FieldsProducer.html">FieldsProducer</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_FieldsProducer_Lucene_Net_Index_SegmentReadState_">PostingsFormat.FieldsProducer(SegmentReadState)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Codecs/Lucene40/Lucene40PostingsFormat.cs/#L274">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat_ToString_" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.ToString*"></a>
+  <h4 id="Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat_ToString" data-uid="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_ToString">PostingsFormat.ToString()</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00011/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Lucene40_Lucene40PostingsFormat.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/release/Lucene.Net_4_8_0_beta00011/src/Lucene.Net/Codecs/Lucene40/Lucene40PostingsFormat.cs/#L207" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

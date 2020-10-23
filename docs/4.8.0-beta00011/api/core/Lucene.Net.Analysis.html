@@ -1,0 +1,1099 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Lucene.Net.Analysis
+   | Apache Lucene.NET 4.8.0-beta00011 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Lucene.Net.Analysis
+   | Apache Lucene.NET 4.8.0-beta00011 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Analysis">
+  
+  <h1 id="Lucene_Net_Analysis" data-uid="Lucene.Net.Analysis" class="text-break">Namespace Lucene.Net.Analysis
+  </h1>
+  <div class="markdown level0 summary"><!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<p>API and code to convert text into indexable/searchable tokens. Covers <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a> and related classes.</p>
+<h2 id="parsing-tokenization-analysis">Parsing? Tokenization? Analysis!</h2>
+<p>Lucene, an indexing and search library, accepts only plain text input.</p>
+<h2 id="parsing">Parsing</h2>
+<p>Applications that build their search capabilities upon Lucene may support documents in various formats – HTML, XML, PDF, Word – just to name a few.
+Lucene does not care about the <em>Parsing</em> of these and other document formats, and it is the responsibility of the 
+application using Lucene to use an appropriate <em>Parser</em> to convert the original format into plain text before passing that plain text to Lucene.</p>
+<h2 id="tokenization">Tokenization</h2>
+<p>Plain text passed to Lucene for indexing goes through a process generally called tokenization. Tokenization is the process
+of breaking input text into small indexing elements – tokens.
+The way input text is broken into tokens heavily influences how people will then be able to search for that text. 
+For instance, sentences beginnings and endings can be identified to provide for more accurate phrase 
+and proximity searches (though sentence identification is not provided by Lucene).</p>
+<p> In some cases simply breaking the input text into tokens is not enough – a deeper <em>Analysis</em> may be needed. Lucene includes both pre- and post-tokenization analysis facilities. </p>
+<p> Pre-tokenization analysis can include (but is not limited to) stripping HTML markup, and transforming or removing text matching arbitrary patterns or sets of fixed strings. </p>
+<p> There are many post-tokenization steps that can be done, including (but not limited to): </p>
+<ul>
+<li><p><a href="http://en.wikipedia.org/wiki/Stemming">Stemming</a> – 
+  Replacing words with their stems. 
+  For instance with English stemming &quot;bikes&quot; is replaced with &quot;bike&quot;; 
+  now query &quot;bike&quot; can find both documents containing &quot;bike&quot; and those containing &quot;bikes&quot;.</p>
+</li>
+<li><p><a href="http://en.wikipedia.org/wiki/Stop_words">Stop Words Filtering</a> – 
+  Common words like &quot;the&quot;, &quot;and&quot; and &quot;a&quot; rarely add any value to a search.
+  Removing them shrinks the index size and increases performance.
+  It may also reduce some &quot;noise&quot; and actually improve search quality.</p>
+</li>
+<li><p><a href="http://en.wikipedia.org/wiki/Text_normalization">Text Normalization</a> – 
+  Stripping accents and other character markings can make for better searching.</p>
+</li>
+<li><p><a href="http://en.wikipedia.org/wiki/Synonym">Synonym Expansion</a> – 
+  Adding in synonyms at the same token position as the current word can mean better 
+  matching when users search with words in the synonym set.</p>
+</li>
+</ul>
+<h2 id="core-analysis">Core Analysis</h2>
+<p> The analysis package provides the mechanism to convert Strings and Readers into tokens that can be indexed by Lucene. There are four main classes in the package from which all analysis processes are derived. These are: </p>
+<ul>
+<li><p><a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a> – An Analyzer is 
+responsible for building a 
+<a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> which can be consumed
+by the indexing and searching processes.  See below for more information
+on implementing your own Analyzer.</p>
+</li>
+<li><p>CharFilter – CharFilter extends
+{@link java.io.Reader} to perform pre-tokenization substitutions, 
+deletions, and/or insertions on an input Reader&#39;s text, while providing
+corrected character offsets to account for these modifications.  This
+capability allows highlighting to function over the original text when 
+indexed tokens are created from CharFilter-modified text with offsets
+that are not the same as those in the original text. Tokenizers&#39;
+constructors and reset() methods accept a CharFilter.  CharFilters may
+be chained to perform multiple pre-tokenization modifications.</p>
+</li>
+<li><p><a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a> – A Tokenizer is a 
+<a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> and is responsible for
+breaking up incoming text into tokens. In most cases, an Analyzer will
+use a Tokenizer as the first step in the analysis process.  However,
+to modify text prior to tokenization, use a CharStream subclass (see
+above).</p>
+</li>
+<li><p><a class="xref" href="Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a> – A TokenFilter is
+also a <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> and is responsible
+for modifying tokens that have been created by the Tokenizer.  Common 
+modifications performed by a TokenFilter are: deletion, stemming, synonym 
+injection, and down casing.  Not all Analyzers require TokenFilters.</p>
+</li>
+</ul>
+<h2 id="hints-tips-and-traps">Hints, Tips and Traps</h2>
+<p> The synergy between <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a> and <a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a> is sometimes confusing. To ease this confusion, some clarifications: </p>
+<ul>
+<li><p>The <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a> is responsible for the entire task of 
+<u>creating</u> tokens out of the input text, while the <a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a>
+is only responsible for <u>breaking</u> the input text into tokens. Very likely, tokens created 
+by the <a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a> would be modified or even omitted 
+by the <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a> (via one or more
+<a class="xref" href="Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a>s) before being returned.</p>
+</li>
+<li><p><a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a> is a <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>, 
+but <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a> is not.</p>
+</li>
+<li><p><a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a> is &quot;field aware&quot;, but 
+<a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a> is not.</p>
+<p>Lucene Java provides a number of analysis capabilities, the most commonly used one being the StandardAnalyzer. Many applications will have a long and industrious life with nothing more than the StandardAnalyzer. However, there are a few other classes/packages that are worth mentioning: </p>
+</li>
+</ul>
+<ol>
+<li><p>PerFieldAnalyzerWrapper – Most Analyzers perform the same operation on all
+<a class="xref" href="Lucene.Net.Documents.Field.html">Field</a>s.  The PerFieldAnalyzerWrapper can be used to associate a different Analyzer with different
+<a class="xref" href="Lucene.Net.Documents.Field.html">Field</a>s.</p>
+</li>
+<li><p>The analysis library located at the root of the Lucene distribution has a number of different Analyzer implementations to solve a variety
+of different problems related to searching.  Many of the Analyzers are designed to analyze non-English languages.</p>
+</li>
+<li><p>There are a variety of Tokenizer and TokenFilter implementations in this package.  Take a look around, chances are someone has implemented what you need.</p>
+<p>Analysis is one of the main causes of performance degradation during indexing. Simply put, the more you analyze the slower the indexing (in most cases). Perhaps your application would be just fine using the simple WhitespaceTokenizer combined with a StopFilter. The benchmark/ library can be useful for testing out the speed of the analysis process. </p>
+</li>
+</ol>
+<h2 id="invoking-the-analyzer">Invoking the Analyzer</h2>
+<p> Applications usually do not invoke analysis – Lucene does it for them: </p>
+<ul>
+<li><p>At indexing, as a consequence of 
+<a class="xref" href="Lucene.Net.Index.IndexWriter.html#methods">AddDocument</a>,
+the Analyzer in effect for indexing is invoked for each indexed field of the added document.</p>
+</li>
+<li><p>At search, a QueryParser may invoke the Analyzer during parsing.  Note that for some queries, analysis does not
+take place, e.g. wildcard queries.</p>
+<p>However an application might invoke Analysis of any text for testing or for any other purpose, something like: </p>
+<pre><code>Version matchVersion = Version.LUCENE_XY; // Substitute desired Lucene version for XY
+Analyzer analyzer = new StandardAnalyzer(matchVersion); // or any other analyzer
+TokenStream ts = analyzer.tokenStream(&quot;myfield&quot;, new StringReader(&quot;some text goes here&quot;));
+OffsetAttribute offsetAtt = ts.addAttribute(OffsetAttribute.class);
+
+try {
+  ts.reset(); // Resets this stream to the beginning. (Required)
+  while (ts.incrementToken()) {
+    // Use [#reflectAsString(boolean)](xref:Lucene.Net.Util.AttributeSource)
+    // for token stream debugging.
+    System.out.println(&quot;token: &quot; + ts.reflectAsString(true));
+
+System.out.println(&quot;token start offset: &quot; + offsetAtt.startOffset());
+    System.out.println(&quot;  token end offset: &quot; + offsetAtt.endOffset());
+  }
+  ts.end();   // Perform end-of-stream operations, e.g. set the final offset.
+} finally {
+  ts.close(); // Release resources associated with this stream.
+}
+</code></pre></li>
+</ul>
+<h2 id="indexing-analysis-vs-search-analysis">Indexing Analysis vs. Search Analysis</h2>
+<p> Selecting the &quot;correct&quot; analyzer is crucial for search quality, and can also affect indexing and search performance. The &quot;correct&quot; analyzer differs between applications. Lucene java&#39;s wiki page <a href="http://wiki.apache.org/lucene-java/AnalysisParalysis">AnalysisParalysis</a> provides some data on &quot;analyzing your analyzer&quot;. Here are some rules of thumb: 1. Test test test... (did we say test?) 2. Beware of over analysis – might hurt indexing performance. 3. Start with same analyzer for indexing and search, otherwise searches would not find what they are supposed to... 4. In some cases a different analyzer is required for indexing and search, for instance: * Certain searches require more stop words to be filtered. (I.e. more than those that were filtered at indexing.) * Query expansion by synonyms, acronyms, auto spell correction, etc. This might sometimes require a modified analyzer – see the next section on how to do that. </p>
+<h2 id="implementing-your-own-analyzer">Implementing your own Analyzer</h2>
+<p> Creating your own Analyzer is straightforward. Your Analyzer can wrap existing analysis components — CharFilter(s) <em>(optional)</em>, a Tokenizer, and TokenFilter(s) <em>(optional)</em> — or components you create, or a combination of existing and newly created components. Before pursuing this approach, you may find it worthwhile to explore the <a href="{@docRoot}/../analyzers-common/overview-summary.html">analyzers-common</a> library and/or ask on the <a href="http://lucene.apache.org/core/discussion.html">java-user@lucene.apache.org mailing list</a> first to see if what you need already exists. If you are still committed to creating your own Analyzer, have a look at the source code of any one of the many samples located in this package. </p>
+<p> The following sections discuss some aspects of implementing your own analyzer. </p>
+<h3 id="field-section-boundaries">Field Section Boundaries</h3>
+<p> When <a class="xref" href="Lucene.Net.Documents.Document.html#methods">Document.add</a> is called multiple times for the same field name, we could say that each such call creates a new section for that field in that document. In fact, a separate call to <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#methods">TokenStream</a> would take place for each of these so called &quot;sections&quot;. However, the default Analyzer behavior is to treat all these sections as one large section. This allows phrase search and proximity search to seamlessly cross boundaries between these &quot;sections&quot;. In other words, if a certain field &quot;f&quot; is added like this: </p>
+<pre><code>    document.add(new Field(&quot;f&quot;,&quot;first ends&quot;,...);
+    document.add(new Field(&quot;f&quot;,&quot;starts two&quot;,...);
+    indexWriter.addDocument(document);
+</code></pre><p> Then, a phrase search for &quot;ends starts&quot; would find that document. Where desired, this behavior can be modified by introducing a &quot;position gap&quot; between consecutive field &quot;sections&quot;, simply by overriding <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#methods">Analyzer.getPositionIncrementGap</a>: </p>
+<pre><code>  Version matchVersion = Version.LUCENE_XY; // Substitute desired Lucene version for XY
+  Analyzer myAnalyzer = new StandardAnalyzer(matchVersion) {
+    public int getPositionIncrementGap(String fieldName) {
+      return 10;
+    }
+  };
+</code></pre><h3 id="token-position-increments">Token Position Increments</h3>
+<p> By default, all tokens created by Analyzers and Tokenizers have a <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.PositionIncrementAttribute.html#methods">Increment</a> of one. This means that the position stored for that token in the index would be one more than that of the previous token. Recall that phrase and proximity searches rely on position info. </p>
+<p> If the selected analyzer filters the stop words &quot;is&quot; and &quot;the&quot;, then for a document containing the string &quot;blue is the sky&quot;, only the tokens &quot;blue&quot;, &quot;sky&quot; are indexed, with position(&quot;sky&quot;) = 3 + position(&quot;blue&quot;). Now, a phrase query &quot;blue is the sky&quot; would find that document, because the same analyzer filters the same stop words from that query. But the phrase query &quot;blue sky&quot; would not find that document because the position increment between &quot;blue&quot; and &quot;sky&quot; is only 1. </p>
+<p> If this behavior does not fit the application needs, the query parser needs to be configured to not take position increments into account when generating phrase queries. </p>
+<p> Note that a StopFilter MUST increment the position increment in order not to generate corrupt tokenstream graphs. Here is the logic used by StopFilter to increment positions when filtering out tokens: </p>
+<pre><code>  public TokenStream tokenStream(final String fieldName, Reader reader) {
+    final TokenStream ts = someAnalyzer.tokenStream(fieldName, reader);
+    TokenStream res = new TokenStream() {
+      CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
+      PositionIncrementAttribute posIncrAtt = addAttribute(PositionIncrementAttribute.class);
+
+  public boolean incrementToken() throws IOException {
+        int extraIncrement = 0;
+        while (true) {
+          boolean hasNext = ts.incrementToken();
+          if (hasNext) {
+            if (stopWords.contains(termAtt.toString())) {
+              extraIncrement += posIncrAtt.getPositionIncrement(); // filter this word
+              continue;
+            } 
+            if (extraIncrement&gt;0) {
+              posIncrAtt.setPositionIncrement(posIncrAtt.getPositionIncrement()+extraIncrement);
+            }
+          }
+          return hasNext;
+        }
+      }
+    };
+    return res;
+  }
+</code></pre><p> A few more use cases for modifying position increments are: </p>
+<ol>
+<li><p>Inhibiting phrase and proximity matches in sentence boundaries – for this, a tokenizer that 
+identifies a new sentence can add 1 to the position increment of the first token of the new sentence.</p>
+</li>
+<li><p>Injecting synonyms – here, synonyms of a token should be added after that token, 
+and their position increment should be set to 0.
+As result, all synonyms of a token would be considered to appear in exactly the 
+same position as that token, and so would they be seen by phrase and proximity searches.</p>
+</li>
+</ol>
+<h3 id="token-position-length">Token Position Length</h3>
+<p> By default, all tokens created by Analyzers and Tokenizers have a <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.PositionLengthAttribute.html#methods">Length</a> of one. This means that the token occupies a single position. This attribute is not indexed and thus not taken into account for positional queries, but is used by eg. suggesters. </p>
+<p> The main use case for positions lengths is multi-word synonyms. With single-word synonyms, setting the position increment to 0 is enough to denote the fact that two words are synonyms, for example: </p>
+<table>
+<tr><td>Term</td><td>red</td><td>magenta</td></tr>
+<tr><td>Position increment</td><td>1</td><td>0</td></tr>
+</table>
+
+<p> Given that position(magenta) = 0 + position(red), they are at the same position, so anything working with analyzers will return the exact same result if you replace &quot;magenta&quot; with &quot;red&quot; in the input. However, multi-word synonyms are more tricky. Let&#39;s say that you want to build a TokenStream where &quot;IBM&quot; is a synonym of &quot;Internal Business Machines&quot;. Position increments are not enough anymore: </p>
+<table>
+<tr><td>Term</td><td>IBM</td><td>International</td><td>Business</td><td>Machines</td></tr>
+<tr><td>Position increment</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+</table>
+
+<p> The problem with this token stream is that &quot;IBM&quot; is at the same position as &quot;International&quot; although it is a synonym with &quot;International Business Machines&quot; as a whole. Setting the position increment of &quot;Business&quot; and &quot;Machines&quot; to 0 wouldn&#39;t help as it would mean than &quot;International&quot; is a synonym of &quot;Business&quot;. The only way to solve this issue is to make &quot;IBM&quot; span across 3 positions, this is where position lengths come to rescue. </p>
+<table>
+<tr><td>Term</td><td>IBM</td><td>International</td><td>Business</td><td>Machines</td></tr>
+<tr><td>Position increment</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+<tr><td>Position length</td><td>3</td><td>1</td><td>1</td><td>1</td></tr>
+</table>
+
+<p> This new attribute makes clear that &quot;IBM&quot; and &quot;International Business Machines&quot; start and end at the same positions. </p>
+<h3 id="how-to-not-write-corrupt-token-streams">How to not write corrupt token streams</h3>
+<p> There are a few rules to observe when writing custom Tokenizers and TokenFilters: </p>
+<ul>
+<li><p>The first position increment must be &gt; 0.</p>
+</li>
+<li><p>Positions must not go backward.</p>
+</li>
+<li><p>Tokens that have the same start position must have the same start offset.</p>
+</li>
+<li><p>Tokens that have the same end position (taking into account the
+position length) must have the same end offset.</p>
+</li>
+<li><p>Tokenizers must call <a class="xref" href="Lucene.Net.Util.AttributeSource.html">#clearAttributes()</a> in
+incrementToken().</p>
+</li>
+<li><p>Tokenizers must override <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">#end()</a>, and pass the final
+offset (the total number of input characters processed) to both
+parameters of <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.OffsetAttribute.html#methods">Int)</a>.</p>
+<p>Although these rules might seem easy to follow, problems can quickly happen when chaining badly implemented filters that play with positions and offsets, such as synonym or n-grams filters. Here are good practices for writing correct filters: </p>
+</li>
+<li><p>Token filters should not modify offsets. If you feel that your filter would need to modify offsets, then it should probably be implemented as a tokenizer.</p>
+</li>
+<li><p>Token filters should not insert positions. If a filter needs to add tokens, then they should all have a position increment of 0.</p>
+</li>
+<li><p>When they add tokens, token filters should call <a class="xref" href="Lucene.Net.Util.AttributeSource.html">#clearAttributes()</a> first.</p>
+</li>
+<li><p>When they remove tokens, token filters should increment the position increment of the following token.</p>
+</li>
+<li><p>Token filters should preserve position lengths.</p>
+</li>
+</ul>
+<h2 id="tokenstream-api">TokenStream API</h2>
+<p> &quot;Flexible Indexing&quot; summarizes the effort of making the Lucene indexer pluggable and extensible for custom index formats. A fully customizable indexer means that users will be able to store custom data structures on disk. Therefore an API is necessary that can transport custom types of data from the documents to the indexer. </p>
+<h3 id="attribute-and-attributesource">Attribute and AttributeSource</h3>
+<p> Classes <a class="xref" href="Lucene.Net.Util.Attribute.html">Attribute</a> and <a class="xref" href="Lucene.Net.Util.AttributeSource.html">AttributeSource</a> serve as the basis upon which the analysis elements of &quot;Flexible Indexing&quot; are implemented. An Attribute holds a particular piece of information about a text token. For example, <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html">CharTermAttribute</a> contains the term text of a token, and <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.OffsetAttribute.html">OffsetAttribute</a> contains the start and end character offsets of a token. An AttributeSource is a collection of Attributes with a restriction: there may be only one instance of each attribute type. TokenStream now extends AttributeSource, which means that one can add Attributes to a TokenStream. Since TokenFilter extends TokenStream, all filters are also AttributeSources. </p>
+<p> Lucene provides seven Attributes out of the box: </p>
+<table rules="all" frame="box" cellpadding="3">
+  <tr>
+    <td><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html">CharTermAttribute</a></td>
+    <td>
+      The term text of a token.  Implements {@link java.lang.CharSequence} 
+      (providing methods length() and charAt(), and allowing e.g. for direct
+      use with regular expression {@link java.util.regex.Matcher}s) and 
+      {@link java.lang.Appendable} (allowing the term text to be appended to.)
+    </td>
+  </tr>
+  <tr>
+    <td><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.OffsetAttribute.html">OffsetAttribute</a></td>
+    <td>The start and end offset of a token in characters.</td>
+  </tr>
+  <tr>
+    <td><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.PositionIncrementAttribute.html">PositionIncrementAttribute</a></td>
+    <td>See above for detailed information about position increment.</td>
+  </tr>
+  <tr>
+    <td><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.PositionLengthAttribute.html">PositionLengthAttribute</a></td>
+    <td>The number of positions occupied by a token.</td>
+  </tr>
+  <tr>
+    <td><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.PayloadAttribute.html">PayloadAttribute</a></td>
+    <td>The payload that a Token can optionally have.</td>
+  </tr>
+  <tr>
+    <td><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.TypeAttribute.html">TypeAttribute</a></td>
+    <td>The type of the token. Default is &#39;word&#39;.</td>
+  </tr>
+  <tr>
+    <td><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.FlagsAttribute.html">FlagsAttribute</a></td>
+    <td>Optional flags a token can have.</td>
+  </tr>
+  <tr>
+    <td><a class="xref" href="Lucene.Net.Analysis.TokenAttributes.KeywordAttribute.html">KeywordAttribute</a></td>
+    <td>
+      Keyword-aware TokenStreams/-Filters skip modification of tokens that
+      return true from this attribute&#39;s isKeyword() method. 
+    </td>
+  </tr>
+</table>
+
+<h3 id="more-requirements-for-analysis-component-classes">More Requirements for Analysis Component Classes</h3>
+<p>Due to the historical development of the API, there are some perhaps
+less than obvious requirements to implement analysis components
+classes.</p>
+<h4 id="token-stream-lifetime">Token Stream Lifetime</h4>
+<p>The code fragment of the <a href="#analysis-workflow">analysis workflow
+protocol</a> above shows a token stream being obtained, used, and then
+left for garbage. However, that does not mean that the components of
+that token stream will, in fact, be discarded. The default is just the
+opposite. <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a> applies a reuse
+strategy to the tokenizer and the token filters. It will reuse
+them. For each new input, it calls <a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">#setReader(java.io.Reader)</a> 
+to set the input. Your components must be prepared for this scenario,
+as described below.</p>
+<h4 id="tokenizer">Tokenizer</h4>
+<ul>
+<li><p>You should create your tokenizer class by extending <a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a>.</p>
+</li>
+<li><p>Your tokenizer must <strong>never</strong> make direct use of the
+{@link java.io.Reader} supplied to its constructor(s). (A future
+release of Apache Lucene may remove the reader parameters from the
+Tokenizer constructors.)
+<a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a> wraps the reader in an
+object that helps enforce that applications comply with the <a href="#analysis-workflow">analysis workflow</a>. Thus, your class
+should only reference the input via the protected &#39;input&#39; field
+of Tokenizer.</p>
+</li>
+<li><p>Your tokenizer <strong>must</strong> override <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">#end()</a>.
+Your implementation <strong>must</strong> call
+<code>super.end()</code>. It must set a correct final offset into
+the offset attribute, and finish up and other attributes to reflect
+the end of the stream.</p>
+</li>
+<li><p>If your tokenizer overrides <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">#reset()</a>
+or <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">#close()</a>, it
+<strong>must</strong> call the corresponding superclass method.</p>
+</li>
+</ul>
+<h4 id="token-filter">Token Filter</h4>
+<p>  You should create your token filter class by extending <a class="xref" href="Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a>.
+  If your token filter overrides <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">#reset()</a>,
+  <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">#end()</a>
+  or <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">#close()</a>, it
+  <strong>must</strong> call the corresponding superclass method.</p>
+<h4 id="creating-delegates">Creating delegates</h4>
+<p>  Forwarding classes (those which extend <a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a> but delegate
+  selected logic to another tokenizer) must also set the reader to the delegate in the overridden
+  <a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">#reset()</a> method, e.g.:</p>
+<pre><code>    public class ForwardingTokenizer extends Tokenizer {
+       private Tokenizer delegate;
+       ...
+       {@literal @Override}
+       public void reset() {
+          super.reset();
+          delegate.setReader(this.input);
+          delegate.reset();
+       }
+    }
+</code></pre><h3 id="testing-your-analysis-component">Testing Your Analysis Component</h3>
+<p> The lucene-test-framework component defines <a href="{@docRoot}/../test-framework/org/apache/lucene/analysis/BaseTokenStreamTestCase.html">BaseTokenStreamTestCase</a>. By extending this class, you can create JUnit tests that validate that your Analyzer and/or analysis components correctly implement the protocol. The checkRandomData methods of that class are particularly effective in flushing out errors. </p>
+<h3 id="using-the-tokenstream-api">Using the TokenStream API</h3>
+<p>There are a few important things to know in order to use the new API efficiently which are summarized here. You may want
+to walk through the example below first and come back to this section afterwards.</p>
+<ol>
+<li><p>Please keep in mind that an AttributeSource can only have one instance of a particular Attribute. Furthermore, if 
+a chain of a TokenStream and multiple TokenFilters is used, then all TokenFilters in that chain share the Attributes
+with the TokenStream.</p>
+</li>
+<li><p>Attribute instances are reused for all tokens of a document. Thus, a TokenStream/-Filter needs to update
+the appropriate Attribute(s) in incrementToken(). The consumer, commonly the Lucene indexer, consumes the data in the
+Attributes and then calls incrementToken() again until it returns false, which indicates that the end of the stream
+was reached. This means that in each call of incrementToken() a TokenStream/-Filter can safely overwrite the data in
+the Attribute instances.</p>
+</li>
+<li><p>For performance reasons a TokenStream/-Filter should add/get Attributes during instantiation; i.e., create an attribute in the
+constructor and store references to it in an instance variable.  Using an instance variable instead of calling addAttribute()/getAttribute() 
+in incrementToken() will avoid attribute lookups for every token in the document.</p>
+</li>
+<li><p>All methods in AttributeSource are idempotent, which means calling them multiple times always yields the same
+result. This is especially important to know for addAttribute(). The method takes the <strong>type</strong> (<code>Class</code>)
+of an Attribute as an argument and returns an <strong>instance</strong>. If an Attribute of the same type was previously added, then
+the already existing instance is returned, otherwise a new instance is created and returned. Therefore TokenStreams/-Filters
+can safely call addAttribute() with the same Attribute type multiple times. Even consumers of TokenStreams should
+normally call addAttribute() instead of getAttribute(), because it would not fail if the TokenStream does not have this
+Attribute (getAttribute() would throw an IllegalArgumentException, if the Attribute is missing). More advanced code
+could simply check with hasAttribute(), if a TokenStream has it, and may conditionally leave out processing for
+extra performance.</p>
+</li>
+</ol>
+<h3 id="example">Example</h3>
+<p> In this example we will create a WhiteSpaceTokenizer and use a LengthFilter to suppress all words that have only two or fewer characters. The LengthFilter is part of the Lucene core and its implementation will be explained here to illustrate the usage of the TokenStream API. </p>
+<p> Then we will develop a custom Attribute, a PartOfSpeechAttribute, and add another filter to the chain which utilizes the new custom attribute, and call it PartOfSpeechTaggingFilter. </p>
+<h4 id="whitespace-tokenization">Whitespace tokenization</h4>
+<pre><code>public class MyAnalyzer extends Analyzer {
+</code></pre><p>  private Version matchVersion;</p>
+<pre><code>  public MyAnalyzer(Version matchVersion) {
+    this.matchVersion = matchVersion;
+  }
+</code></pre><p>  {@literal @Override}
+      protected TokenStreamComponents createComponents(String fieldName, Reader reader) {
+        return new TokenStreamComponents(new WhitespaceTokenizer(matchVersion, reader));
+      }</p>
+<pre><code>  public static void main(String[] args) throws IOException {
+    // text to tokenize
+    final String text = &quot;This is a demo of the TokenStream API&quot;;
+
+    Version matchVersion = Version.LUCENE_XY; // Substitute desired Lucene version for XY
+    MyAnalyzer analyzer = new MyAnalyzer(matchVersion);
+    TokenStream stream = analyzer.tokenStream(&quot;field&quot;, new StringReader(text));
+
+    // get the CharTermAttribute from the TokenStream
+    CharTermAttribute termAtt = stream.addAttribute(CharTermAttribute.class);
+
+try {
+      stream.reset();
+
+      // print all tokens until stream is exhausted
+      while (stream.incrementToken()) {
+        System.out.println(termAtt.toString());
+      }
+
+      stream.end();
+    } finally {
+      stream.close();
+    }
+  }
+}
+</code></pre><p>In this easy example a simple white space tokenization is performed. In main() a loop consumes the stream and
+prints the term text of the tokens by accessing the CharTermAttribute that the WhitespaceTokenizer provides. 
+Here is the output:</p>
+<pre><code>This
+is
+a
+demo
+of
+the
+new
+TokenStream
+API
+</code></pre><h4 id="adding-a-lengthfilter">Adding a LengthFilter</h4>
+<p>We want to suppress all tokens that have 2 or less characters. We can do that
+easily by adding a LengthFilter to the chain. Only the
+<code>createComponents()</code> method in our analyzer needs to be changed:</p>
+<pre><code>  {@literal @Override}
+  protected TokenStreamComponents createComponents(String fieldName, Reader reader) {
+    final Tokenizer source = new WhitespaceTokenizer(matchVersion, reader);
+    TokenStream result = new LengthFilter(true, source, 3, Integer.MAX_VALUE);
+    return new TokenStreamComponents(source, result);
+  }
+</code></pre><p>Note how now only words with 3 or more characters are contained in the output:</p>
+<pre><code>This
+demo
+the
+new
+TokenStream
+API
+</code></pre><p>Now let&#39;s take a look how the LengthFilter is implemented:</p>
+<pre><code>public final class LengthFilter extends FilteringTokenFilter {
+</code></pre><p>  private final int min;
+      private final int max;</p>
+<pre><code>  private final CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
+</code></pre><p>  /**</p>
+<ul>
+<li>Create a new LengthFilter. This will filter out tokens whose</li>
+<li>CharTermAttribute is either too short</li>
+<li>(&lt; min) or too long (&gt; max).</li>
+<li>@param version the Lucene match version</li>
+<li>@param in      the TokenStream to consume</li>
+<li>@param min     the minimum length</li>
+<li><p>@param max     the maximum length
+*/
+public LengthFilter(Version version, TokenStream in, int min, int max) {
+super(version, in);
+this.min = min;
+this.max = max;
+}</p>
+<p>{@literal @Override}
+public boolean accept() {
+final int len = termAtt.length();
+return (len &gt;= min &amp;&amp; len &lt;= max);=&quot;&quot; }=&quot;&quot; }=&quot;&quot;&gt;&lt;/=&gt;</p>
+<p>In LengthFilter, the CharTermAttribute is added and stored in the instance variable <code>termAtt</code>. Remember that there can only be a single instance of CharTermAttribute in the chain, so in our example the <code>addAttribute()</code> call in LengthFilter returns the CharTermAttribute that the WhitespaceTokenizer already added. </p>
+<p>The tokens are retrieved from the input stream in FilteringTokenFilter&#39;s <code>incrementToken()</code> method (see below), which calls LengthFilter&#39;s <code>accept()</code> method. By looking at the term text in the CharTermAttribute, the length of the term can be determined and tokens that are either too short or too long are skipped. Note how <code>accept()</code> can efficiently access the instance variable; no attribute lookup is necessary. The same is true for the consumer, which can simply use local references to the Attributes. </p>
+<p>LengthFilter extends FilteringTokenFilter: </p>
+<p>public abstract class FilteringTokenFilter extends TokenFilter {</p>
+<p>private final PositionIncrementAttribute posIncrAtt = addAttribute(PositionIncrementAttribute.class);</p>
+<p>/**</p>
+</li>
+<li>Create a new FilteringTokenFilter.</li>
+<li><p>@param in      the TokenStream to consume
+*/
+public FilteringTokenFilter(Version version, TokenStream in) {
+super(in);
+}</p>
+<p>/** Override this method and return if the current input token should be returned by incrementToken. */
+protected abstract boolean accept() throws IOException;</p>
+<p>{@literal @Override}
+public final boolean incrementToken() throws IOException {
+int skippedPositions = 0;
+while (input.incrementToken()) {
+ if (accept()) {
+   if (skippedPositions != 0) {
+     posIncrAtt.setPositionIncrement(posIncrAtt.getPositionIncrement() + skippedPositions);
+   }
+   return true;
+ }
+ skippedPositions += posIncrAtt.getPositionIncrement();
+}
+// reached EOS -- return false
+return false;
+}</p>
+<p>{@literal @Override}
+public void reset() throws IOException {
+super.reset();
+}</p>
+</li>
+</ul>
+<p>}</p>
+<h4 id="adding-a-custom-attribute">Adding a custom Attribute</h4>
+<p>Now we&#39;re going to implement our own custom Attribute for part-of-speech tagging and call it consequently 
+<code>PartOfSpeechAttribute</code>. First we need to define the interface of the new Attribute:</p>
+<pre><code>  public interface PartOfSpeechAttribute extends Attribute {
+    public static enum PartOfSpeech {
+      Noun, Verb, Adjective, Adverb, Pronoun, Preposition, Conjunction, Article, Unknown
+    }
+
+    public void setPartOfSpeech(PartOfSpeech pos);
+
+    public PartOfSpeech getPartOfSpeech();
+  }
+</code></pre><p> Now we also need to write the implementing class. The name of that class is important here: By default, Lucene checks if there is a class with the name of the Attribute with the suffix &#39;Impl&#39;. In this example, we would consequently call the implementing class <code>PartOfSpeechAttributeImpl</code>. </p>
+<p> This should be the usual behavior. However, there is also an expert-API that allows changing these naming conventions: <a class="xref" href="Lucene.Net.Util.AttributeSource.AttributeFactory.html">AttributeSource.AttributeFactory</a>. The factory accepts an Attribute interface as argument and returns an actual instance. You can implement your own factory if you need to change the default behavior. </p>
+<p> Now here is the actual class that implements our new Attribute. Notice that the class has to extend &lt;xref:Lucene.Net.Util.AttributeImpl&gt;: </p>
+<pre><code>public final class PartOfSpeechAttributeImpl extends AttributeImpl 
+                                  implements PartOfSpeechAttribute {
+
+  private PartOfSpeech pos = PartOfSpeech.Unknown;
+
+  public void setPartOfSpeech(PartOfSpeech pos) {
+    this.pos = pos;
+  }
+
+  public PartOfSpeech getPartOfSpeech() {
+    return pos;
+  }
+</code></pre><p>  {@literal @Override}
+      public void clear() {
+        pos = PartOfSpeech.Unknown;
+      }</p>
+<p>  {@literal @Override}
+      public void copyTo(AttributeImpl target) {
+        ((PartOfSpeechAttribute) target).setPartOfSpeech(pos);
+      }
+    }</p>
+<p> This is a simple Attribute implementation has only a single variable that stores the part-of-speech of a token. It extends the <code>AttributeImpl</code> class and therefore implements its abstract methods <code>clear()</code> and <code>copyTo()</code>. Now we need a TokenFilter that can set this new PartOfSpeechAttribute for each token. In this example we show a very naive filter that tags every word with a leading upper-case letter as a &#39;Noun&#39; and all other words as &#39;Unknown&#39;. </p>
+<pre><code>  public static class PartOfSpeechTaggingFilter extends TokenFilter {
+    PartOfSpeechAttribute posAtt = addAttribute(PartOfSpeechAttribute.class);
+    CharTermAttribute termAtt = addAttribute(CharTermAttribute.class);
+
+    protected PartOfSpeechTaggingFilter(TokenStream input) {
+      super(input);
+    }
+
+    public boolean incrementToken() throws IOException {
+      if (!input.incrementToken()) {return false;}
+      posAtt.setPartOfSpeech(determinePOS(termAtt.buffer(), 0, termAtt.length()));
+      return true;
+    }
+
+    // determine the part of speech for the given term
+    protected PartOfSpeech determinePOS(char[] term, int offset, int length) {
+      // naive implementation that tags every uppercased word as noun
+      if (length &gt; 0 &amp;&amp; Character.isUpperCase(term[0])) {
+        return PartOfSpeech.Noun;
+      }
+      return PartOfSpeech.Unknown;
+    }
+  }
+</code></pre><p> Just like the LengthFilter, this new filter stores references to the attributes it needs in instance variables. Notice how you only need to pass in the interface of the new Attribute and instantiating the correct class is automatically taken care of. </p>
+<p>Now we need to add the filter to the chain in MyAnalyzer:</p>
+<pre><code>  {@literal @Override}
+  protected TokenStreamComponents createComponents(String fieldName, Reader reader) {
+    final Tokenizer source = new WhitespaceTokenizer(matchVersion, reader);
+    TokenStream result = new LengthFilter(true, source, 3, Integer.MAX_VALUE);
+    result = new PartOfSpeechTaggingFilter(result);
+    return new TokenStreamComponents(source, result);
+  }
+</code></pre><p>Now let&#39;s look at the output:</p>
+<pre><code>This
+demo
+the
+new
+TokenStream
+API
+</code></pre><p>Apparently it hasn&#39;t changed, which shows that adding a custom attribute to a TokenStream/Filter chain does not
+affect any existing consumers, simply because they don&#39;t know the new Attribute. Now let&#39;s change the consumer
+to make use of the new PartOfSpeechAttribute and print it out:</p>
+<pre><code>  public static void main(String[] args) throws IOException {
+    // text to tokenize
+    final String text = &quot;This is a demo of the TokenStream API&quot;;
+
+    MyAnalyzer analyzer = new MyAnalyzer();
+    TokenStream stream = analyzer.tokenStream(&quot;field&quot;, new StringReader(text));
+
+    // get the CharTermAttribute from the TokenStream
+    CharTermAttribute termAtt = stream.addAttribute(CharTermAttribute.class);
+
+    // get the PartOfSpeechAttribute from the TokenStream
+    PartOfSpeechAttribute posAtt = stream.addAttribute(PartOfSpeechAttribute.class);
+
+try {
+      stream.reset();
+
+  // print all tokens until stream is exhausted
+      while (stream.incrementToken()) {
+        System.out.println(termAtt.toString() + &quot;: &quot; + posAtt.getPartOfSpeech());
+      }
+
+      stream.end();
+    } finally {
+      stream.close();
+    }
+  }
+</code></pre><p>The change that was made is to get the PartOfSpeechAttribute from the TokenStream and print out its contents in
+the while loop that consumes the stream. Here is the new output:</p>
+<pre><code>This: Noun
+demo: Unknown
+the: Unknown
+new: Unknown
+TokenStream: Noun
+API: Noun
+</code></pre><p>Each word is now followed by its assigned PartOfSpeech tag. Of course this is a naive 
+part-of-speech tagging. The word &#39;This&#39; should not even be tagged as noun; it is only spelled capitalized because it
+is the first word of a sentence. Actually this is a good opportunity for an exercise. To practice the usage of the new
+API the reader could now write an Attribute and TokenFilter that can specify for each word if it was the first token
+of a sentence or not. Then the PartOfSpeechTaggingFilter can make use of this knowledge and only tag capitalized words
+as nouns if not the first word of a sentence (we know, this is still not a correct behavior, but hey, it&#39;s a good exercise). 
+As a small hint, this is how the new Attribute class could begin:</p>
+<pre><code>  public class FirstTokenOfSentenceAttributeImpl extends AttributeImpl
+                              implements FirstTokenOfSentenceAttribute {
+
+    private boolean firstToken;
+
+    public void setFirstToken(boolean firstToken) {
+      this.firstToken = firstToken;
+    }
+
+    public boolean getFirstToken() {
+      return firstToken;
+    }
+
+{@literal @Override}
+    public void clear() {
+      firstToken = false;
+    }
+</code></pre><p>  ...</p>
+<h4 id="adding-a-charfilter-chain">Adding a CharFilter chain</h4>
+<p>Analyzers take Java {@link java.io.Reader}s as input. Of course you can wrap your Readers with {@link java.io.FilterReader}s
+to manipulate content, but this would have the big disadvantage that character offsets might be inconsistent with your original
+text.</p>
+<p><a class="xref" href="Lucene.Net.Analysis.CharFilter.html">CharFilter</a> is designed to allow you to pre-process input like a FilterReader would, but also
+preserve the original offsets associated with those characters. This way mechanisms like highlighting still work correctly.
+CharFilters can be chained.</p>
+<p>Example:</p>
+<pre><code>public class MyAnalyzer extends Analyzer {
+</code></pre><p>  {@literal @Override}
+      protected TokenStreamComponents createComponents(String fieldName, Reader reader) {
+        return new TokenStreamComponents(new MyTokenizer(reader));
+      }</p>
+<pre><code>  {@literal @Override}
+  protected Reader initReader(String fieldName, Reader reader) {
+    // wrap the Reader in a CharFilter chain.
+    return new SecondCharFilter(new FirstCharFilter(reader));
+  }
+}
+</code></pre></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a></h4>
+      <section><p>An <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a> builds <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>s, which analyze text.  It thus represents a
+policy for extracting index terms from text.
+<p>
+In order to define what analysis is done, subclasses must define their
+<a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a> in <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_CreateComponents_System_String_System_IO_TextReader_">CreateComponents(String, TextReader)</a>.
+The components are then reused in each call to <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_IO_TextReader_">GetTokenStream(String, TextReader)</a>.
+<p>
+Simple example:</p>
+<pre><code>Analyzer analyzer = Analyzer.NewAnonymous(createComponents: (fieldName, reader) => 
+{
+    Tokenizer source = new FooTokenizer(reader);
+    TokenStream filter = new FooFilter(source);
+    filter = new BarFilter(filter);
+    return new TokenStreamComponents(source, filter);
+});</code></pre>
+<p>For more examples, see the <a class="xref" href="Lucene.Net.Analysis.html">Lucene.Net.Analysis</a> namespace documentation.
+<p>
+For some concrete implementations bundled with Lucene, look in the analysis modules:
+<ul><li>Common:
+      Analyzers for indexing content in different languages and domains.</li><li>ICU:
+      Exposes functionality from ICU to Apache Lucene.</li><li>Kuromoji:
+      Morphological analyzer for Japanese text.</li><li>Morfologik:
+      Dictionary-driven lemmatization for the Polish language.</li><li>Phonetic:
+      Analysis for indexing phonetic signatures (for sounds-alike search).</li><li>Smart Chinese:
+      Analyzer for Simplified Chinese, which indexes words.</li><li>Stempel:
+      Algorithmic Stemmer for the Polish Language.</li><li>UIMA:
+      Analysis integration with Apache UIMA.</li></ul></p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Analyzer.GlobalReuseStrategy.html">Analyzer.GlobalReuseStrategy</a></h4>
+      <section><p>Implementation of <a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a> that reuses the same components for
+every field. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Analyzer.PerFieldReuseStrategy.html">Analyzer.PerFieldReuseStrategy</a></h4>
+      <section><p>Implementation of <a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a> that reuses components per-field by
+maintaining a Map of <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a> per field name.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.AnalyzerWrapper.html">AnalyzerWrapper</a></h4>
+      <section><p>Extension to <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a> suitable for <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a>s which wrap
+other <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a>s.
+<p>
+<a class="xref" href="Lucene.Net.Analysis.AnalyzerWrapper.html#Lucene_Net_Analysis_AnalyzerWrapper_GetWrappedAnalyzer_System_String_">GetWrappedAnalyzer(String)</a> allows the <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a>
+to wrap multiple <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a>s which are selected on a per field basis.
+<p>
+<a class="xref" href="Lucene.Net.Analysis.AnalyzerWrapper.html#Lucene_Net_Analysis_AnalyzerWrapper_WrapComponents_System_String_Lucene_Net_Analysis_TokenStreamComponents_">WrapComponents(String, TokenStreamComponents)</a> allows the
+<a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a> of the wrapped <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a> to then be wrapped
+(such as adding a new <a class="xref" href="Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a> to form new <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a>).</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.CachingTokenFilter.html">CachingTokenFilter</a></h4>
+      <section><p>This class can be used if the token attributes of a <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>
+are intended to be consumed more than once. It caches
+all token attribute states locally in a List.</p>
+<p><p><a class="xref" href="Lucene.Net.Analysis.CachingTokenFilter.html">CachingTokenFilter</a> implements the optional method
+<a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_Reset">Reset()</a>, which repositions the
+stream to the first <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.CharFilter.html">CharFilter</a></h4>
+      <section><p>Subclasses of <a class="xref" href="Lucene.Net.Analysis.CharFilter.html">CharFilter</a> can be chained to filter a <span class="xref">System.IO.TextReader</span>
+They can be used as <span class="xref">System.IO.TextReader</span> with additional offset
+correction. <a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a>s will automatically use <a class="xref" href="Lucene.Net.Analysis.CharFilter.html#Lucene_Net_Analysis_CharFilter_CorrectOffset_System_Int32_">CorrectOffset(Int32)</a>
+if a <a class="xref" href="Lucene.Net.Analysis.CharFilter.html">CharFilter</a> subclass is used.
+<p>
+This class is abstract: at a minimum you must implement <span class="xref">System.IO.TextReader.Read(System.Char[], System.Int32, System.Int32)</span>,
+transforming the input in some way from <a class="xref" href="Lucene.Net.Analysis.CharFilter.html#Lucene_Net_Analysis_CharFilter_m_input">m_input</a>, and <a class="xref" href="Lucene.Net.Analysis.CharFilter.html#Lucene_Net_Analysis_CharFilter_Correct_System_Int32_">Correct(Int32)</a>
+to adjust the offsets to match the originals.
+<p>
+You can optionally provide more efficient implementations of additional methods
+like <span class="xref">System.IO.TextReader.Read()</span>, but this is not required.
+<p>
+For examples and integration with <a class="xref" href="Lucene.Net.Analysis.Analyzer.html">Analyzer</a>, see the
+<a class="xref" href="Lucene.Net.Analysis.html">Lucene.Net.Analysis</a> namespace documentation.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a></h4>
+      <section><p><strong>Expert:</strong> this class provides a <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>
+for indexing numeric values that can be used by <a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a>
+or <a class="xref" href="Lucene.Net.Search.NumericRangeFilter.html">NumericRangeFilter</a>.</p>
+<p>Note that for simple usage, <a class="xref" href="Lucene.Net.Documents.Int32Field.html">Int32Field</a>, <a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a>, 
+<a class="xref" href="Lucene.Net.Documents.SingleField.html">SingleField</a> or <a class="xref" href="Lucene.Net.Documents.DoubleField.html">DoubleField</a> is
+recommended.  These fields disable norms and
+term freqs, as they are not usually needed during
+searching.  If you need to change these settings, you
+should use this class.
+
+<p>Here&apos;s an example usage, for an <span class="xref">System.Int32</span> field:
+
+<pre><code>    IndexableFieldType fieldType = new IndexableFieldType(TextField.TYPE_NOT_STORED)
+    {
+        OmitNorms = true,
+        IndexOptions = IndexOptions.DOCS_ONLY
+    };
+    Field field = new Field(name, new NumericTokenStream(precisionStep).SetInt32Value(value), fieldType);
+    document.Add(field);</code></pre>
+
+<p>For optimal performance, re-use the <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> and <a class="xref" href="Lucene.Net.Documents.Field.html">Field</a> instance
+for more than one document:
+
+<pre><code>    NumericTokenStream stream = new NumericTokenStream(precisionStep);
+    IndexableFieldType fieldType = new IndexableFieldType(TextField.TYPE_NOT_STORED)
+    {
+        OmitNorms = true,
+        IndexOptions = IndexOptions.DOCS_ONLY
+    };
+    Field field = new Field(name, stream, fieldType);
+    Document document = new Document();
+    document.Add(field);
+
+    for(all documents) 
+    {
+        stream.SetInt32Value(value)
+        writer.AddDocument(document);
+    }</code></pre>
+
+<p>this stream is not intended to be used in analyzers;
+it&apos;s more for iterating the different precisions during
+indexing a specific numeric value.</p>
+
+<p><strong>NOTE</strong>: as token streams are only consumed once
+the document is added to the index, if you index more
+than one numeric field, use a separate <a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a>
+instance for each.</p>
+
+<p>See <a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a> for more details on the
+<code>precisionStep</code> parameter as well as how numeric fields work under the hood.
+</p>
+
+<p>@since 2.9</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.NumericTermAttribute.html">NumericTokenStream.NumericTermAttribute</a></h4>
+      <section><p>Implementation of <a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.INumericTermAttribute.html">NumericTokenStream.INumericTermAttribute</a>.</p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div><p>@since 4.0</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.ReusableStringReader.html">ReusableStringReader</a></h4>
+      <section><p>Internal class to enable reuse of the string reader by <a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_String_">GetTokenStream(String, String)</a></p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.ReuseStrategy.html">ReuseStrategy</a></h4>
+      <section><p>Strategy defining how <a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a> are reused per call to
+<a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_IO_TextReader_">GetTokenStream(String, TextReader)</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> is an occurrence of a term from the text of a field.  It consists of
+a term&apos;s text, the start and end offset of the term in the text of the field,
+and a type string.
+<p>
+The start and end offsets permit applications to re-associate a token with
+its source text, e.g., to display highlighted query terms in a document
+browser, or to show matching text fragments in a KWIC (KeyWord In Context)
+display, etc.
+<p>
+The type is a string, assigned by a lexical analyzer
+(a.k.a. tokenizer), naming the lexical or syntactic class that the token
+belongs to.  For example an end of sentence marker token might be implemented
+with type &quot;eos&quot;.  The default token type is &quot;word&quot;.
+<p>
+A Token can optionally have metadata (a.k.a. payload) in the form of a variable
+length byte array. Use <a class="xref" href="Lucene.Net.Index.DocsAndPositionsEnum.html#Lucene_Net_Index_DocsAndPositionsEnum_GetPayload">GetPayload()</a> to retrieve the
+payloads from the index.</p>
+<p><p>
+
+<p><strong>NOTE:</strong> As of 2.9, Token implements all <a class="xref" href="Lucene.Net.Util.IAttribute.html">IAttribute</a> interfaces
+that are part of core Lucene and can be found in the <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.html">Lucene.Net.Analysis.TokenAttributes</a> namespace.
+Even though it is not necessary to use <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> anymore, with the new <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> API it can
+be used as convenience class that implements all <a class="xref" href="Lucene.Net.Util.IAttribute.html">IAttribute</a>s, which is especially useful
+to easily switch from the old to the new <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> API.
+
+<p><p>
+
+<p><a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a>s and <a class="xref" href="Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a>s should try to re-use a <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a>
+instance when possible for best performance, by
+implementing the <a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_IncrementToken">IncrementToken()</a> API.
+Failing that, to create a new <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> you should first use
+one of the constructors that starts with null text.  To load
+the token from a char[] use <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_CopyBuffer_System_Char___System_Int32_System_Int32_">CopyBuffer(Char[], Int32, Int32)</a>.
+To load from a <span class="xref">System.String</span> use <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_SetEmpty">SetEmpty()</a> followed by 
+<a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_Append_System_String_">Append(String)</a> or <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_Append_System_String_System_Int32_System_Int32_">Append(String, Int32, Int32)</a>.
+Alternatively you can get the <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a>&apos;s termBuffer by calling either <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_Buffer">Buffer</a>,
+if you know that your text is shorter than the capacity of the termBuffer
+or <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_ResizeBuffer_System_Int32_">ResizeBuffer(Int32)</a>, if there is any possibility
+that you may need to grow the buffer. Fill in the characters of your term into this
+buffer, with <span class="xref">System.String.ToCharArray(System.Int32,System.Int32)</span> if loading from a string,
+or with <span class="xref">System.Array.Copy(System.Array,System.Int32,System.Array,System.Int32,System.Int32)</span>, 
+and finally call <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_ICharTermAttribute_SetLength_System_Int32_">SetLength(Int32)</a> to
+set the length of the term text.  See <a target="_top" href="https://issues.apache.org/jira/browse/LUCENE-969">LUCENE-969</a>
+for details.</p>
+<p>Typical Token reuse patterns:
+<ul><li> Copying text from a string (type is reset to <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.TypeAttribute.html#Lucene_Net_Analysis_TokenAttributes_TypeAttribute_DEFAULT_TYPE">DEFAULT_TYPE</a> if not specified):
+<pre><code>    return reusableToken.Reinit(string, startOffset, endOffset[, type]);</code></pre>
+</li><li> Copying some text from a string (type is reset to <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.TypeAttribute.html#Lucene_Net_Analysis_TokenAttributes_TypeAttribute_DEFAULT_TYPE">DEFAULT_TYPE</a> if not specified):
+<pre><code>    return reusableToken.Reinit(string, 0, string.Length, startOffset, endOffset[, type]);</code></pre>
+</li><li> Copying text from char[] buffer (type is reset to <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.TypeAttribute.html#Lucene_Net_Analysis_TokenAttributes_TypeAttribute_DEFAULT_TYPE">DEFAULT_TYPE</a> if not specified):
+<pre><code>    return reusableToken.Reinit(buffer, 0, buffer.Length, startOffset, endOffset[, type]);</code></pre>
+</li><li> Copying some text from a char[] buffer (type is reset to <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.TypeAttribute.html#Lucene_Net_Analysis_TokenAttributes_TypeAttribute_DEFAULT_TYPE">DEFAULT_TYPE</a> if not specified):
+<pre><code>    return reusableToken.Reinit(buffer, start, end - start, startOffset, endOffset[, type]);</code></pre>
+</li><li> Copying from one one <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> to another (type is reset to <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.TypeAttribute.html#Lucene_Net_Analysis_TokenAttributes_TypeAttribute_DEFAULT_TYPE">DEFAULT_TYPE</a> if not specified):
+<pre><code>    return reusableToken.Reinit(source.Buffer, 0, source.Length, source.StartOffset, source.EndOffset[, source.Type]);</code></pre>
+</li></ul>
+A few things to note:
+<ul><li><a class="xref" href="Lucene.Net.Analysis.Token.html#Lucene_Net_Analysis_Token_Clear">Clear()</a> initializes all of the fields to default values. this was changed in contrast to Lucene 2.4, but should affect no one.</li><li>Because <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>s can be chained, one cannot assume that the <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a>&apos;s current type is correct.</li><li>The startOffset and endOffset represent the start and offset in the source text, so be careful in adjusting them.</li><li>When caching a reusable token, clone it. When injecting a cached token into a stream that can be reset, clone it again.</li></ul>
+</p>
+<p>
+<strong>Please note:</strong> With Lucene 3.1, the <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.CharTermAttribute.html#Lucene_Net_Analysis_TokenAttributes_CharTermAttribute_ToString">ToString()</a> method had to be changed to match the
+<span class="xref">J2N.Text.ICharSequence</span> interface introduced by the interface <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ICharTermAttribute.html">ICharTermAttribute</a>.
+this method now only prints the term text, no additional information anymore.
+</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Token.TokenAttributeFactory.html">Token.TokenAttributeFactory</a></h4>
+      <section><p><strong>Expert:</strong> Creates a <a class="xref" href="Lucene.Net.Analysis.Token.TokenAttributeFactory.html">Token.TokenAttributeFactory</a> returning <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> as instance for the basic attributes
+and for all other attributes calls the given delegate factory.
+@since 3.0</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a> is a <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> whose input is another <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>.
+<p>
+This is an abstract class; subclasses must override <a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_IncrementToken">IncrementToken()</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a> is a <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> whose input is a <span class="xref">System.IO.TextReader</span>.
+<p>
+This is an abstract class; subclasses must override <a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_IncrementToken">IncrementToken()</a>
+<p>
+NOTE: Subclasses overriding <a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_IncrementToken">IncrementToken()</a> must
+call <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_ClearAttributes">ClearAttributes()</a> before
+setting attributes.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> enumerates the sequence of tokens, either from
+<a class="xref" href="Lucene.Net.Documents.Field.html">Field</a>s of a <a class="xref" href="Lucene.Net.Documents.Document.html">Document</a> or from query text.
+<p>
+this is an abstract class; concrete subclasses are:
+<ul><li><a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a>, a <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> whose input is a <span class="xref">System.IO.TextReader</span>; and</li><li><a class="xref" href="Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a>, a <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> whose input is another
+<a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>.</li></ul>
+A new <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> API has been introduced with Lucene 2.9. this API
+has moved from being <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a>-based to <a class="xref" href="Lucene.Net.Util.IAttribute.html">IAttribute</a>-based. While
+<a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> still exists in 2.9 as a convenience class, the preferred way
+to store the information of a <a class="xref" href="Lucene.Net.Analysis.Token.html">Token</a> is to use <span class="xref">System.Attribute</span>s.
+<p>
+<a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> now extends <a class="xref" href="Lucene.Net.Util.AttributeSource.html">AttributeSource</a>, which provides
+access to all of the token <a class="xref" href="Lucene.Net.Util.IAttribute.html">IAttribute</a>s for the <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>.
+Note that only one instance per <span class="xref">System.Attribute</span> is created and reused
+for every token. This approach reduces object creation and allows local
+caching of references to the <span class="xref">System.Attribute</span>s. See
+<a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_IncrementToken">IncrementToken()</a> for further details.
+<p>
+<strong>The workflow of the new <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> API is as follows:</strong>
+<ol><li>Instantiation of <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>/<a class="xref" href="Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a>s which add/get
+        attributes to/from the <a class="xref" href="Lucene.Net.Util.AttributeSource.html">AttributeSource</a>.</li><li>The consumer calls <a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_Reset">Reset()</a>.</li><li>The consumer retrieves attributes from the stream and stores local
+        references to all attributes it wants to access.</li><li>The consumer calls <a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_IncrementToken">IncrementToken()</a> until it returns false
+        consuming the attributes after each call.</li><li>The consumer calls <a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_End">End()</a> so that any end-of-stream operations
+        can be performed.</li><li>The consumer calls <a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_Dispose">Dispose()</a> to release any resource when finished
+        using the <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>.</li></ol>
+To make sure that filters and consumers know which attributes are available,
+the attributes must be added during instantiation. Filters and consumers are
+not required to check for availability of attributes in
+<a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_IncrementToken">IncrementToken()</a>.
+<p>
+You can find some example code for the new API in the analysis 
+documentation.
+<p>
+Sometimes it is desirable to capture a current state of a <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>,
+e.g., for buffering purposes (see <a class="xref" href="Lucene.Net.Analysis.CachingTokenFilter.html">CachingTokenFilter</a>,
+TeeSinkTokenFilter). For this usecase
+<a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_CaptureState">CaptureState()</a> and <a class="xref" href="Lucene.Net.Util.AttributeSource.html#Lucene_Net_Util_AttributeSource_RestoreState_Lucene_Net_Util_AttributeSource_State_">RestoreState(AttributeSource.State)</a>
+can be used.
+<p>The <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a>-API in Lucene is based on the decorator pattern.
+Therefore all non-abstract subclasses must be sealed or have at least a sealed
+implementation of <a class="xref" href="Lucene.Net.Analysis.TokenStream.html#Lucene_Net_Analysis_TokenStream_IncrementToken">IncrementToken()</a>! This is checked when assertions are enabled.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a></h4>
+      <section><p>This class encapsulates the outer components of a token stream. It provides
+access to the source (<a class="xref" href="Lucene.Net.Analysis.Tokenizer.html">Tokenizer</a>) and the outer end (sink), an
+instance of <a class="xref" href="Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a> which also serves as the
+<a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> returned by
+<a class="xref" href="Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_IO_TextReader_">GetTokenStream(String, TextReader)</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Analysis.TokenStreamToAutomaton.html">TokenStreamToAutomaton</a></h4>
+      <section><p>Consumes a <a class="xref" href="Lucene.Net.Analysis.TokenStream.html">TokenStream</a> and creates an <a class="xref" href="Lucene.Net.Util.Automaton.Automaton.html">Automaton</a>
+where the transition labels are UTF8 bytes (or Unicode
+code points if unicodeArcs is true) from the <a class="xref" href="Lucene.Net.Analysis.TokenAttributes.ITermToBytesRefAttribute.html">ITermToBytesRefAttribute</a>.
+Between tokens we insert
+<a class="xref" href="Lucene.Net.Analysis.TokenStreamToAutomaton.html#Lucene_Net_Analysis_TokenStreamToAutomaton_POS_SEP">POS_SEP</a> and for holes we insert <a class="xref" href="Lucene.Net.Analysis.TokenStreamToAutomaton.html#Lucene_Net_Analysis_TokenStreamToAutomaton_HOLE">HOLE</a>.</p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.INumericTermAttribute.html">NumericTokenStream.INumericTermAttribute</a></h4>
+      <section><p><strong>Expert:</strong> Use this attribute to get the details of the currently generated token.</p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div><p>@since 4.0</p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00011/src/Lucene.Net/Analysis/package.md/#L2" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

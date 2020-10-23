@@ -1,0 +1,605 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class PatternAnalyzer
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class PatternAnalyzer
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer">
+  
+  
+  <h1 id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer" class="text-break">Class PatternAnalyzer
+  </h1>
+  <div class="markdown level0 summary"><p>Efficient Lucene analyzer/tokenizer that preferably operates on a <see cref="!:System.String"></see> rather than a
+<see cref="!:TextReader"></see>, that can flexibly separate text into terms via a regular expression <see cref="!:Regex"></see>
+(with behaviour similar to <see cref="!:Regex.Split(string)"></see>),
+and that combines the functionality of
+<a class="xref" href="Lucene.Net.Analysis.Core.LetterTokenizer.html">LetterTokenizer</a>,
+<a class="xref" href="Lucene.Net.Analysis.Core.LowerCaseTokenizer.html">LowerCaseTokenizer</a>,
+<a class="xref" href="Lucene.Net.Analysis.Core.WhitespaceTokenizer.html">WhitespaceTokenizer</a>,
+<a class="xref" href="Lucene.Net.Analysis.Core.StopFilter.html">StopFilter</a> into a single efficient
+multi-purpose class.
+<p>
+If you are unsure how exactly a regular expression should look like, consider 
+prototyping by simply trying various expressions on some test texts via
+<see cref="!:Regex.Split(string)"></see>. Once you are satisfied, give that regex to 
+<a class="xref" href="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.html">PatternAnalyzer</a>. Also see <a target="_blank" href="http://www.regular-expressions.info/">Regular Expression Tutorial</a>.
+</p>
+<p>
+This class can be considerably faster than the &quot;normal&quot; Lucene tokenizers. 
+It can also serve as a building block in a compound Lucene
+<a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenFilter.html">TokenFilter</a> chain. For example as in this 
+stemming example:</p>
+<pre><code>PatternAnalyzer pat = ...
+TokenStream tokenStream = new SnowballFilter(
+    pat.GetTokenStream(&quot;content&quot;, &quot;James is running round in the woods&quot;), 
+    &quot;English&quot;));</code></pre>
+<p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Analyzer.html">Analyzer</a></div>
+    <div class="level2"><span class="xref">PatternAnalyzer</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">Lucene.Net.Analysis.Analyzer.NewAnonymous(Func&lt;, , &gt;)</span>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Analysis.Analyzer.NewAnonymous(Func&lt;, , &gt;, Lucene.Net.Analysis.ReuseStrategy)</span>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Analysis.Analyzer.NewAnonymous(Func&lt;, , &gt;, Func&lt;, , &gt;)</span>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Analysis.Analyzer.NewAnonymous(Func&lt;, , &gt;, Func&lt;, , &gt;, Lucene.Net.Analysis.ReuseStrategy)</span>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_TextReader_">Analyzer.GetTokenStream(String, TextReader)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GetTokenStream_System_String_System_String_">Analyzer.GetTokenStream(String, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_InitReader_System_String_TextReader_">Analyzer.InitReader(String, TextReader)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GetPositionIncrementGap_System_String_">Analyzer.GetPositionIncrementGap(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GetOffsetGap_System_String_">Analyzer.GetOffsetGap(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_Strategy">Analyzer.Strategy</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_Dispose">Analyzer.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_Dispose_System_Boolean_">Analyzer.Dispose(Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_GLOBAL_REUSE_STRATEGY">Analyzer.GLOBAL_REUSE_STRATEGY</a>
+    </div>
+    <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Analyzer.html#Lucene_Net_Analysis_Analyzer_PER_FIELD_REUSE_STRATEGY">Analyzer.PER_FIELD_REUSE_STRATEGY</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Analysis.Miscellaneous.html">Lucene.Net.Analysis.Miscellaneous</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Analysis.Common.dll</h6>
+  <h5 id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class PatternAnalyzer : Analyzer</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer__ctor_Lucene_Net_Util_LuceneVersion_Regex_System_Boolean_Lucene_Net_Analysis_Util_CharArraySet_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.%23ctor(Lucene.Net.Util.LuceneVersion%2CRegex%2CSystem.Boolean%2CLucene.Net.Analysis.Util.CharArraySet)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/PatternAnalyzer.cs/#L159">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer__ctor_" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer__ctor_Lucene_Net_Util_LuceneVersion_Regex_System_Boolean_Lucene_Net_Analysis_Util_CharArraySet_" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.#ctor(Lucene.Net.Util.LuceneVersion,Regex,System.Boolean,Lucene.Net.Analysis.Util.CharArraySet)">PatternAnalyzer(LuceneVersion, Regex, Boolean, CharArraySet)</h4>
+  <div class="markdown level1 summary"><p>Constructs a new instance with the given parameters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PatternAnalyzer(LuceneVersion matchVersion, Regex pattern, bool toLowerCase, CharArraySet stopWords)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a></td>
+        <td><span class="parametername">matchVersion</span></td>
+        <td><p>currently does nothing </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Regex</span></td>
+        <td><span class="parametername">pattern</span></td>
+        <td><p>a regular expression delimiting tokens </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">toLowerCase</span></td>
+        <td><p>if <pre><code>true</code></pre> returns tokens after applying
+String.toLowerCase() </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Util.CharArraySet.html">CharArraySet</a></td>
+        <td><span class="parametername">stopWords</span></td>
+        <td><p>if non-null, ignores all tokens that are contained in the
+given stop set (after previously having applied toLowerCase()
+if applicable). For example, created via
+<a class="xref" href="Lucene.Net.Analysis.Core.StopFilter.html#Lucene_Net_Analysis_Core_StopFilter_MakeStopSet_Lucene_Net_Util_LuceneVersion_System_String___">MakeStopSet(LuceneVersion, String[])</a>and/or
+<a class="xref" href="Lucene.Net.Analysis.Util.WordlistLoader.html">WordlistLoader</a>as in</p>
+<pre><code>WordlistLoader.getWordSet(new File(&quot;samples/fulltext/stopwords.txt&quot;)</code></pre>
+<p>or <a href="http://www.unine.ch/info/clef/">other stop words
+lists </a>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_DEFAULT_ANALYZER.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.DEFAULT_ANALYZER%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/PatternAnalyzer.cs/#L122">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_DEFAULT_ANALYZER" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.DEFAULT_ANALYZER">DEFAULT_ANALYZER</h4>
+  <div class="markdown level1 summary"><p>A lower-casing word analyzer with English stop words (can be shared
+freely across threads without harm); global per class loader.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly PatternAnalyzer DEFAULT_ANALYZER</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.html">PatternAnalyzer</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_EXTENDED_ANALYZER.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.EXTENDED_ANALYZER%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/PatternAnalyzer.cs/#L132">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_EXTENDED_ANALYZER" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.EXTENDED_ANALYZER">EXTENDED_ANALYZER</h4>
+  <div class="markdown level1 summary"><p>A lower-casing word analyzer with <strong>extended</strong> English stop words
+(can be shared freely across threads without harm); global per class
+loader. The stop words are borrowed from
+<a href="http://thomas.loc.gov/home/stopwords.html">http://thomas.loc.gov/home/stopwords.html</a>, see
+<a href="http://thomas.loc.gov/home/all.about.inquery.html">http://thomas.loc.gov/home/all.about.inquery.html</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly PatternAnalyzer EXTENDED_ANALYZER</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.html">PatternAnalyzer</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_NON_WORD_PATTERN.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.NON_WORD_PATTERN%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/PatternAnalyzer.cs/#L65">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_NON_WORD_PATTERN" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.NON_WORD_PATTERN">NON_WORD_PATTERN</h4>
+  <div class="markdown level1 summary"><p><code>&quot;\W+&quot;</code>; Divides text at non-letters (NOT Character.isLetter(c)) </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly Regex NON_WORD_PATTERN</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Regex</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_WHITESPACE_PATTERN.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.WHITESPACE_PATTERN%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/PatternAnalyzer.cs/#L69">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_WHITESPACE_PATTERN" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.WHITESPACE_PATTERN">WHITESPACE_PATTERN</h4>
+  <div class="markdown level1 summary"><p><code>&quot;\s+&quot;</code>; Divides text at whitespaces (Character.isWhitespace(c)) </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly Regex WHITESPACE_PATTERN</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Regex</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_CreateComponents_System_String_TextReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.CreateComponents(System.String%2CTextReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/PatternAnalyzer.cs/#L230">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_CreateComponents_" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.CreateComponents*"></a>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_CreateComponents_System_String_TextReader_" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.CreateComponents(System.String,TextReader)">CreateComponents(String, TextReader)</h4>
+  <div class="markdown level1 summary"><p>Creates a token stream that tokenizes all the text in the given SetReader;
+This implementation forwards to <see cref="!:Analyzer.GetTokenStream(string, TextReader)"></see> and is
+less efficient than <see cref="!:Analyzer.GetTokenStream(string, TextReader)"></see>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override TokenStreamComponents CreateComponents(string fieldName, TextReader reader)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>the name of the field to tokenize (currently ignored). </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TextReader</span></td>
+        <td><span class="parametername">reader</span></td>
+        <td><p>the reader delivering the text </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a></td>
+        <td><p>a new token stream </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_CreateComponents_System_String_TextReader_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.CreateComponents(System.String%2CTextReader%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/PatternAnalyzer.cs/#L197">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_CreateComponents_" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.CreateComponents*"></a>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_CreateComponents_System_String_TextReader_System_String_" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.CreateComponents(System.String,TextReader,System.String)">CreateComponents(String, TextReader, String)</h4>
+  <div class="markdown level1 summary"><p>Creates a token stream that tokenizes the given string into token terms
+(aka words).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public TokenStreamComponents CreateComponents(string fieldName, TextReader reader, string text)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">fieldName</span></td>
+        <td><p>the name of the field to tokenize (currently ignored). </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">TextReader</span></td>
+        <td><span class="parametername">reader</span></td>
+        <td><p>reader (e.g. charfilter) of the original text. can be null. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">text</span></td>
+        <td><p>the string to tokenize </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenStreamComponents.html">TokenStreamComponents</a></td>
+        <td><p>a new token stream </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/PatternAnalyzer.cs/#L241">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_Equals_" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.Equals*"></a>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_Equals_System_Object_" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"><p>Indicates whether some other object is &quot;equal to&quot; this one.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">other</span></td>
+        <td><p>the reference object with which to compare. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><p>true if equal, false otherwise </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_GetHashCode.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/PatternAnalyzer.cs/#L268">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_GetHashCode_" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.GetHashCode*"></a>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer_GetHashCode" data-uid="Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"><p>Returns a hash code value for the object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>the hash code. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_PatternAnalyzer.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.PatternAnalyzer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/PatternAnalyzer.cs/#L60" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

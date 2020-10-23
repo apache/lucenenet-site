@@ -1,0 +1,551 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class BlockGroupingCollector
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class BlockGroupingCollector
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector">
+  
+  
+  <h1 id="Lucene_Net_Search_Grouping_BlockGroupingCollector" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector" class="text-break">Class BlockGroupingCollector
+  </h1>
+  <div class="markdown level0 summary"><p>BlockGroupingCollector performs grouping with a
+single pass collector, as long as you are grouping by a
+doc block field, ie all documents sharing a given group
+value were indexed as a doc block using the atomic
+<see cref="!:IndexWriter.AddDocuments(IEnumerable&lt;IEnumerable&lt;IIndexableField>>, Analysis.Analyzer)"></see> or
+<see cref="!:IndexWriter.UpdateDocuments(Term, IEnumerable&lt;IEnumerable&lt;IIndexableField>>, Analysis.Analyzer)"></see>
+API.</p>
+<p><p>
+This results in faster performance (~25% faster QPS)
+than the two-pass grouping collectors, with the tradeoff
+being that the documents in each group must always be
+indexed as a block.  This collector also fills in
+TopGroups.totalGroupCount without requiring the separate
+<a class="xref" href="Lucene.Net.Search.Grouping.Terms.TermAllGroupsCollector.html">TermAllGroupsCollector</a>. However, this collector does
+not fill in the groupValue of each group; this field
+will always be null.
+</p>
+<p>
+<code>NOTE</code>: this collector makes no effort to verify
+the docs were in fact indexed as a block, so it&apos;s up to
+you to ensure this was the case.
+</p>
+<p>
+See <a href="https://github.com/apache/lucene-solr/blob/releases/lucene-solr/4.8.0/lucene/grouping/src/java/org/apache/lucene/search/grouping/package.html">org.apache.lucene.search.grouping</a> for more
+details including a full code example.
+</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">BlockGroupingCollector</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="../Lucene.Net/Lucene.Net.Search.ICollector.html">ICollector</a></div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Search.Grouping.html">Lucene.Net.Search.Grouping</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Grouping.dll</h6>
+  <h5 id="Lucene_Net_Search_Grouping_BlockGroupingCollector_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class BlockGroupingCollector : object, ICollector</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Grouping_BlockGroupingCollector__ctor_Lucene_Net_Search_Sort_System_Int32_System_Boolean_Lucene_Net_Search_Filter_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Grouping.BlockGroupingCollector.%23ctor(Lucene.Net.Search.Sort%2CSystem.Int32%2CSystem.Boolean%2CLucene.Net.Search.Filter)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Grouping/BlockGroupingCollector.cs/#L285">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Grouping_BlockGroupingCollector__ctor_" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_Grouping_BlockGroupingCollector__ctor_Lucene_Net_Search_Sort_System_Int32_System_Boolean_Lucene_Net_Search_Filter_" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector.#ctor(Lucene.Net.Search.Sort,System.Int32,System.Boolean,Lucene.Net.Search.Filter)">BlockGroupingCollector(Sort, Int32, Boolean, Filter)</h4>
+  <div class="markdown level1 summary"><p>Create the single pass collector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BlockGroupingCollector(Sort groupSort, int topNGroups, bool needsScores, Filter lastDocPerGroup)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Search.Sort.html">Sort</a></td>
+        <td><span class="parametername">groupSort</span></td>
+        <td><p>The <a class="xref" href="../Lucene.Net/Lucene.Net.Search.Sort.html">Sort</a> used to sort the
+groups.  The top sorted document within each group
+according to groupSort, determines how that group
+sorts against other groups.  This must be non-null,
+ie, if you want to groupSort by relevance use
+<a class="xref" href="../Lucene.Net/Lucene.Net.Search.Sort.html#Lucene_Net_Search_Sort_RELEVANCE">RELEVANCE</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">topNGroups</span></td>
+        <td><p>How many top groups to keep.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">needsScores</span></td>
+        <td><p>true if the collected documents
+require scores, either because relevance is included
+in the withinGroupSort or because you plan to pass true
+for either GetScores or GetMaxScores to <a class="xref" href="Lucene.Net.Search.Grouping.BlockGroupingCollector.html#Lucene_Net_Search_Grouping_BlockGroupingCollector_GetTopGroups_Lucene_Net_Search_Sort_System_Int32_System_Int32_System_Int32_System_Boolean_">GetTopGroups(Sort, Int32, Int32, Int32, Boolean)</a></p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Search.Filter.html">Filter</a></td>
+        <td><span class="parametername">lastDocPerGroup</span></td>
+        <td><p>a <a class="xref" href="../Lucene.Net/Lucene.Net.Search.Filter.html">Filter</a> that marks the
+last document in each group.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Grouping_BlockGroupingCollector_AcceptsDocsOutOfOrder.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Grouping.BlockGroupingCollector.AcceptsDocsOutOfOrder%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Grouping/BlockGroupingCollector.cs/#L624">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Grouping_BlockGroupingCollector_AcceptsDocsOutOfOrder_" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector.AcceptsDocsOutOfOrder*"></a>
+  <h4 id="Lucene_Net_Search_Grouping_BlockGroupingCollector_AcceptsDocsOutOfOrder" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector.AcceptsDocsOutOfOrder">AcceptsDocsOutOfOrder</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool AcceptsDocsOutOfOrder { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Grouping_BlockGroupingCollector_Collect_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Grouping.BlockGroupingCollector.Collect(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Grouping/BlockGroupingCollector.cs/#L495">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Grouping_BlockGroupingCollector_Collect_" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector.Collect*"></a>
+  <h4 id="Lucene_Net_Search_Grouping_BlockGroupingCollector_Collect_System_Int32_" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector.Collect(System.Int32)">Collect(Int32)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Collect(int doc)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">doc</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Grouping_BlockGroupingCollector_GetTopGroups_Lucene_Net_Search_Sort_System_Int32_System_Int32_System_Int32_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Grouping.BlockGroupingCollector.GetTopGroups(Lucene.Net.Search.Sort%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Grouping/BlockGroupingCollector.cs/#L353">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Grouping_BlockGroupingCollector_GetTopGroups_" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector.GetTopGroups*"></a>
+  <h4 id="Lucene_Net_Search_Grouping_BlockGroupingCollector_GetTopGroups_Lucene_Net_Search_Sort_System_Int32_System_Int32_System_Int32_System_Boolean_" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector.GetTopGroups(Lucene.Net.Search.Sort,System.Int32,System.Int32,System.Int32,System.Boolean)">GetTopGroups(Sort, Int32, Int32, Int32, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Returns the grouped results.  Returns null if the
+number of groups collected is &lt;= groupOffset.</p>
+<p>
+<strong>NOTE</strong>: This collector is unable to compute
+the groupValue per group so it will always be null.
+This is normally not a problem, as you can obtain the
+value just like you obtain other values for each
+matching document (eg, via stored fields, via
+FieldCache, etc.)
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual ITopGroups&lt;object&gt; GetTopGroups(Sort withinGroupSort, int groupOffset, int withinGroupOffset, int maxDocsPerGroup, bool fillSortFields)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Search.Sort.html">Sort</a></td>
+        <td><span class="parametername">withinGroupSort</span></td>
+        <td><p>The <a class="xref" href="../Lucene.Net/Lucene.Net.Search.Sort.html">Sort</a> used to sort
+documents within each group.  Passing null is
+allowed, to sort by relevance.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">groupOffset</span></td>
+        <td><p>Which group to start from</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">withinGroupOffset</span></td>
+        <td><p>Which document to start from within each group</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxDocsPerGroup</span></td>
+        <td><p>How many top documents to keep within each group.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">fillSortFields</span></td>
+        <td><p>If true then the Comparable values for the sort fields will be set</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Grouping.ITopGroups-1.html">ITopGroups</a>&lt;<span class="xref">System.Object</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Grouping_BlockGroupingCollector_GetTopGroups__1_Lucene_Net_Search_Sort_System_Int32_System_Int32_System_Int32_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Grouping.BlockGroupingCollector.GetTopGroups%60%601(Lucene.Net.Search.Sort%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Grouping/BlockGroupingCollector.cs/#L387">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Grouping_BlockGroupingCollector_GetTopGroups_" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector.GetTopGroups*"></a>
+  <h4 id="Lucene_Net_Search_Grouping_BlockGroupingCollector_GetTopGroups__1_Lucene_Net_Search_Sort_System_Int32_System_Int32_System_Int32_System_Boolean_" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector.GetTopGroups``1(Lucene.Net.Search.Sort,System.Int32,System.Int32,System.Int32,System.Boolean)">GetTopGroups&lt;TGroupValue&gt;(Sort, Int32, Int32, Int32, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Returns the grouped results.  Returns null if the
+number of groups collected is &lt;= groupOffset.</p>
+<p>
+<strong>NOTE</strong>: This collector is unable to compute
+the groupValue per group so it will always be null.
+This is normally not a problem, as you can obtain the
+value just like you obtain other values for each
+matching document (eg, via stored fields, via
+FieldCache, etc.)
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual ITopGroups&lt;TGroupValue&gt; GetTopGroups&lt;TGroupValue&gt;(Sort withinGroupSort, int groupOffset, int withinGroupOffset, int maxDocsPerGroup, bool fillSortFields)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Search.Sort.html">Sort</a></td>
+        <td><span class="parametername">withinGroupSort</span></td>
+        <td><p>The <a class="xref" href="../Lucene.Net/Lucene.Net.Search.Sort.html">Sort</a> used to sort
+documents within each group.  Passing null is
+allowed, to sort by relevance.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">groupOffset</span></td>
+        <td><p>Which group to start from</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">withinGroupOffset</span></td>
+        <td><p>Which document to start from within each group</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxDocsPerGroup</span></td>
+        <td><p>How many top documents to keep within each group.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">fillSortFields</span></td>
+        <td><p>If true then the Comparable values for the sort fields will be set</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Grouping.ITopGroups-1.html">ITopGroups</a>&lt;TGroupValue&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TGroupValue</span></td>
+        <td><p>The expected return type for group value</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Grouping_BlockGroupingCollector_SetNextReader_Lucene_Net_Index_AtomicReaderContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Grouping.BlockGroupingCollector.SetNextReader(Lucene.Net.Index.AtomicReaderContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Grouping/BlockGroupingCollector.cs/#L629">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Grouping_BlockGroupingCollector_SetNextReader_" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector.SetNextReader*"></a>
+  <h4 id="Lucene_Net_Search_Grouping_BlockGroupingCollector_SetNextReader_Lucene_Net_Index_AtomicReaderContext_" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector.SetNextReader(Lucene.Net.Index.AtomicReaderContext)">SetNextReader(AtomicReaderContext)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetNextReader(AtomicReaderContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Grouping_BlockGroupingCollector_SetScorer_Lucene_Net_Search_Scorer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Grouping.BlockGroupingCollector.SetScorer(Lucene.Net.Search.Scorer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Grouping/BlockGroupingCollector.cs/#L486">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Grouping_BlockGroupingCollector_SetScorer_" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector.SetScorer*"></a>
+  <h4 id="Lucene_Net_Search_Grouping_BlockGroupingCollector_SetScorer_Lucene_Net_Search_Scorer_" data-uid="Lucene.Net.Search.Grouping.BlockGroupingCollector.SetScorer(Lucene.Net.Search.Scorer)">SetScorer(Scorer)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetScorer(Scorer scorer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="../Lucene.Net/Lucene.Net.Search.Scorer.html">Scorer</a></td>
+        <td><span class="parametername">scorer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="../Lucene.Net/Lucene.Net.Search.ICollector.html">ICollector</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00007/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Grouping_BlockGroupingCollector.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Grouping.BlockGroupingCollector%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-update-jan2020/src/Lucene.Net.Grouping/BlockGroupingCollector.cs/#L57" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

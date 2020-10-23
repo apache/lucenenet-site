@@ -1,0 +1,428 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Lucene.Net.QueryParsers.Classic
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Lucene.Net.QueryParsers.Classic
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.47.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.QueryParsers.Classic">
+  
+  <h1 id="Lucene_Net_QueryParsers_Classic" data-uid="Lucene.Net.QueryParsers.Classic" class="text-break">Namespace Lucene.Net.QueryParsers.Classic
+  </h1>
+  <div class="markdown level0 summary"><!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<p>A simple query parser implemented with JavaCC.</p>
+<p>Note that JavaCC defines lots of public classes, methods and fields
+that do not need to be public.  These clutter the documentation. 
+Sorry.</p>
+<p>Note that because JavaCC defines a class named <tt>Token</tt>, <tt>org.apache.lucene.analysis.Token</tt>
+must always be fully qualified in source code in this package.</p>
+<p><strong>NOTE</strong>: <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.html">Lucene.Net.QueryParsers.Flexible.Standard</a> has an alternative queryparser that matches the syntax of this one, but is more modular,
+enabling substantial customization to how a query is created.</p>
+<h2 id="query-parser-syntax">Query Parser Syntax</h2>
+<ul>
+<li><p><a href="#overview">Overview</a></p>
+</li>
+<li><p><a href="#terms">Terms</a></p>
+</li>
+<li><p><a href="#fields">Fields</a></p>
+</li>
+<li><p><a href="#term-modifiers">Term Modifiers</a></p>
+<ul>
+<li><p><a href="#wildcard-searches">Wildcard Searches</a></p>
+</li>
+<li><p><a href="#regexp-searches">Regular expression Searches</a></p>
+</li>
+<li><p><a href="#fuzzy-searches">Fuzzy Searches</a></p>
+</li>
+<li><p><a href="#proximity-searches">Proximity Searches</a></p>
+</li>
+<li><p><a href="#range-searches">Range Searches</a></p>
+</li>
+<li><p><a href="#boosting-a-term">Boosting a Term</a></p>
+</li>
+</ul>
+</li>
+<li><p><a href="#boolean-operators">Boolean Operators</a></p>
+<ul>
+<li><p><a href="#or">OR</a></p>
+</li>
+<li><p><a href="#and">AND</a></p>
+</li>
+<li><p><a href="#+">+</a></p>
+</li>
+<li><p><a href="#not">NOT</a></p>
+</li>
+<li><p><a href="#-">-</a></p>
+</li>
+</ul>
+</li>
+<li><p><a href="#grouping">Grouping</a></p>
+</li>
+<li><p><a href="#field-grouping">Field Grouping</a></p>
+</li>
+<li><p><a href="#escaping-special-characters">Escaping Special Characters</a></p>
+</li>
+</ul>
+<h2 id="overview">Overview</h2>
+<p>Although Lucene provides the ability to create your own queries through its API, it also provides a rich query language through the Query Parser, a lexer which interprets a string into a Lucene Query using JavaCC. </p>
+<p>Generally, the query parser syntax may change from release to release. This page describes the syntax as of the current release. If you are using a different version of Lucene, please consult the copy of <span class="codefrag">docs/queryparsersyntax.html</span> that was distributed with the version you are using. </p>
+<p> Before choosing to use the provided Query Parser, please consider the following: 1. If you are programmatically generating a query string and then parsing it with the query parser then you should seriously consider building your queries directly with the query API. In other words, the query parser is designed for human-entered text, not for program-generated text. 2. Untokenized fields are best added directly to queries, and not through the query parser. If a field&#39;s values are generated programmatically by the application, then so should query clauses for this field. An analyzer, which the query parser uses, is designed to convert human-entered text to terms. Program-generated values, like dates, keywords, etc., should be consistently program-generated. 3. In a query form, fields which are general text should use the query parser. All others, such as date ranges, keywords, etc. are better added directly through the query API. A field with a limit set of values, that can be specified with a pull-down menu should not be added to a query string which is subsequently parsed, but rather added as a TermQuery clause. </p>
+<h2 id="terms">Terms</h2>
+<p>A query is broken up into terms and operators. There are two types of terms: Single Terms and Phrases.</p>
+<p>A Single Term is a single word such as &quot;test&quot; or &quot;hello&quot;.</p>
+<p>A Phrase is a group of words surrounded by double quotes such as &quot;hello dolly&quot;.</p>
+<p>Multiple terms can be combined together with Boolean operators to form a more complex query (see below).</p>
+<p>Note: The analyzer used to create the index will be used on the terms and phrases in the query string. So it is important to choose an analyzer that will not interfere with the terms used in the query string.</p>
+<h2 id="fields">Fields</h2>
+<p>Lucene supports fielded data. When performing a search you can either specify a field, or use the default field. The field names and default field is implementation specific.</p>
+<p>You can search any field by typing the field name followed by a colon &quot;:&quot; and then the term you are looking for. </p>
+<p>As an example, let&#39;s assume a Lucene index contains two fields, title and text and text is the default field. If you want to find the document entitled &quot;The Right Way&quot; which contains the text &quot;don&#39;t go this way&quot;, you can enter: </p>
+<p>title:&quot;The Right Way&quot; AND text:go</p>
+<p>or</p>
+<p>title:&quot;The Right Way&quot; AND go</p>
+<p>Since text is the default field, the field indicator is not required.</p>
+<p>Note: The field is only valid for the term that it directly precedes, so the query</p>
+<p>title:The Right Way</p>
+<p>Will only find &quot;The&quot; in the title field. It will find &quot;Right&quot; and &quot;Way&quot; in the default field (in this case the text field). </p>
+<h2 id="term-modifiers">Term Modifiers</h2>
+<p>Lucene supports modifying query terms to provide a wide range of searching options.</p>
+<h3 id="wildcard-searches">Wildcard Searches</h3>
+<p>Lucene supports single and multiple character wildcard searches within single terms (not within phrase queries).</p>
+<p>To perform a single character wildcard search use the &quot;?&quot; symbol.</p>
+<p>To perform a multiple character wildcard search use the &quot;*&quot; symbol.</p>
+<p>The single character wildcard search looks for terms that match that with the single character replaced. For example, to search for &quot;text&quot; or &quot;test&quot; you can use the search:</p>
+<p>te?t</p>
+<p>Multiple character wildcard searches looks for 0 or more characters. For example, to search for test, tests or tester, you can use the search: </p>
+<p>test*</p>
+<p>You can also use the wildcard searches in the middle of a term.</p>
+<p>te*t</p>
+<p>Note: You cannot use a * or ? symbol as the first character of a search.</p>
+<h3 id="regular-expression-searches">Regular Expression Searches</h3>
+<p>Lucene supports regular expression searches matching a pattern between forward slashes &quot;/&quot;. The syntax may change across releases, but the current supported syntax is documented in the <a class="xref" href="../Lucene.Net/Lucene.Net.Util.Automaton.RegExp.html">RegExp</a> class. For example to find documents containing &quot;moat&quot; or &quot;boat&quot;: </p>
+<p>/[mb]oat/</p>
+<h3 id="fuzzy-searches">Fuzzy Searches</h3>
+<p>Lucene supports fuzzy searches based on Damerau-Levenshtein Distance. To do a fuzzy search use the tilde, &quot;~&quot;, symbol at the end of a Single word Term. For example to search for a term similar in spelling to &quot;roam&quot; use the fuzzy search: </p>
+<p>roam~</p>
+<p>This search will find terms like foam and roams.</p>
+<p>An additional (optional) parameter can specify the maximum number of edits allowed. The value is between 0 and 2, For example:</p>
+<p>roam~1</p>
+<p>The default that is used if the parameter is not given is 2 edit distances.</p>
+<p>Previously, a floating point value was allowed here. This syntax is considered deprecated and will be removed in Lucene 5.0</p>
+<h3 id="proximity-searches">Proximity Searches</h3>
+<p>Lucene supports finding words are a within a specific distance away. To do a proximity search use the tilde, &quot;~&quot;, symbol at the end of a Phrase. For example to search for a &quot;apache&quot; and &quot;jakarta&quot; within 10 words of each other in a document use the search: </p>
+<p>&quot;jakarta apache&quot;~10</p>
+<h3 id="range-searches">Range Searches</h3>
+<p>Range Queries allow one to match documents whose field(s) values are between the lower and upper bound specified by the Range Query. Range Queries can be inclusive or exclusive of the upper and lower bounds. Sorting is done lexicographically.</p>
+<p>mod_date:[20020101 TO 20030101]</p>
+<p>This will find documents whose mod_date fields have values between 20020101 and 20030101, inclusive. Note that Range Queries are not reserved for date fields. You could also use range queries with non-date fields:</p>
+<p>title:{Aida TO Carmen}</p>
+<p>This will find all documents whose titles are between Aida and Carmen, but not including Aida and Carmen.</p>
+<p>Inclusive range queries are denoted by square brackets. Exclusive range queries are denoted by curly brackets.</p>
+<h3 id="boosting-a-term">Boosting a Term</h3>
+<p>Lucene provides the relevance level of matching documents based on the terms found. To boost a term use the caret, &quot;^&quot;, symbol with a boost factor (a number) at the end of the term you are searching. The higher the boost factor, the more relevant the term will be.</p>
+<p>Boosting allows you to control the relevance of a document by boosting its term. For example, if you are searching for</p>
+<p>jakarta apache</p>
+<p>and you want the term &quot;jakarta&quot; to be more relevant boost it using the ^ symbol along with the boost factor next to the term. You would type:</p>
+<p>jakarta^4 apache</p>
+<p>This will make documents with the term jakarta appear more relevant. You can also boost Phrase Terms as in the example: </p>
+<p>&quot;jakarta apache&quot;^4 &quot;Apache Lucene&quot;</p>
+<p>By default, the boost factor is 1. Although the boost factor must be positive, it can be less than 1 (e.g. 0.2)</p>
+<h2 id="boolean-operators">Boolean Operators</h2>
+<p>Boolean operators allow terms to be combined through logic operators. Lucene supports AND, &quot;+&quot;, OR, NOT and &quot;-&quot; as Boolean operators(Note: Boolean operators must be ALL CAPS).</p>
+<h3 id="or">OR</h3>
+<p>The OR operator is the default conjunction operator. This means that if there is no Boolean operator between two terms, the OR operator is used. The OR operator links two terms and finds a matching document if either of the terms exist in a document. This is equivalent to a union using sets. The symbol || can be used in place of the word OR.</p>
+<p>To search for documents that contain either &quot;jakarta apache&quot; or just &quot;jakarta&quot; use the query:</p>
+<p>&quot;jakarta apache&quot; jakarta</p>
+<p>or</p>
+<p>&quot;jakarta apache&quot; OR jakarta</p>
+<h3 id="and">AND</h3>
+<p>The AND operator matches documents where both terms exist anywhere in the text of a single document. This is equivalent to an intersection using sets. The symbol &amp;&amp; can be used in place of the word AND.</p>
+<p>To search for documents that contain &quot;jakarta apache&quot; and &quot;Apache Lucene&quot; use the query: </p>
+<p>&quot;jakarta apache&quot; AND &quot;Apache Lucene&quot;</p>
+<h3 id="">+</h3>
+<p>The &quot;+&quot; or required operator requires that the term after the &quot;+&quot; symbol exist somewhere in a the field of a single document.</p>
+<p>To search for documents that must contain &quot;jakarta&quot; and may contain &quot;lucene&quot; use the query:</p>
+<p>+jakarta lucene</p>
+<h3 id="not">NOT</h3>
+<p>The NOT operator excludes documents that contain the term after NOT. This is equivalent to a difference using sets. The symbol ! can be used in place of the word NOT.</p>
+<p>To search for documents that contain &quot;jakarta apache&quot; but not &quot;Apache Lucene&quot; use the query: </p>
+<p>&quot;jakarta apache&quot; NOT &quot;Apache Lucene&quot;</p>
+<p>Note: The NOT operator cannot be used with just one term. For example, the following search will return no results:</p>
+<p>NOT &quot;jakarta apache&quot;</p>
+<h3 id="-">-</h3>
+<p>The &quot;-&quot; or prohibit operator excludes documents that contain the term after the &quot;-&quot; symbol.</p>
+<p>To search for documents that contain &quot;jakarta apache&quot; but not &quot;Apache Lucene&quot; use the query: </p>
+<p>&quot;jakarta apache&quot; -&quot;Apache Lucene&quot;</p>
+<h2 id="grouping">Grouping</h2>
+<p>Lucene supports using parentheses to group clauses to form sub queries. This can be very useful if you want to control the boolean logic for a query.</p>
+<p>To search for either &quot;jakarta&quot; or &quot;apache&quot; and &quot;website&quot; use the query:</p>
+<p>(jakarta OR apache) AND website</p>
+<p>This eliminates any confusion and makes sure you that website must exist and either term jakarta or apache may exist.</p>
+<h2 id="field-grouping">Field Grouping</h2>
+<p>Lucene supports using parentheses to group multiple clauses to a single field.</p>
+<p>To search for a title that contains both the word &quot;return&quot; and the phrase &quot;pink panther&quot; use the query:</p>
+<p>title:(+return +&quot;pink panther&quot;)</p>
+<h2 id="escaping-special-characters">Escaping Special Characters</h2>
+<p>Lucene supports escaping special characters that are part of the query syntax. The current list special characters are</p>
+<ul>
+<li><ul>
+<li>&amp;&amp; || ! ( ) { } [ ] ^ &quot; ~ * ? : \ /</li>
+</ul>
+</li>
+</ul>
+<p>To escape these character use the \ before the character. For example to search for (1+1):2 use the query:</p>
+<p>(1+1):2</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Classic.FastCharStream.html">FastCharStream</a></h4>
+      <section><p>An efficient implementation of JavaCC&apos;s <a class="xref" href="Lucene.Net.QueryParsers.Classic.ICharStream.html">ICharStream</a> interface.<br><p>
+Note that
+this does not do line-number counting, but instead keeps track of the
+character position of the token in the input, as required by Lucene&apos;s <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.Token.html">Token</a>
+API.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Classic.LexicalToken.html">LexicalToken</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Classic.MultiFieldQueryParser.html">MultiFieldQueryParser</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html">QueryParser</a> which constructs queries to search multiple fields.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Classic.ParseException.html">ParseException</a></h4>
+      <section><p>This exception is thrown when parse errors are encountered.
+You can explicitly create objects of this exception type by
+calling the method GenerateParseException in the generated
+parser.</p>
+<p>You can modify this class to customize your error reporting
+mechanisms so long as you retain the public fields.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html">QueryParser</a></h4>
+      <section><p>This class is generated by JavaCC.  The most important method is
+<a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_Parse_System_String_">Parse(String)</a>.
+<p>
+The syntax for query strings is as follows:
+A Query is a series of clauses.
+A clause may be prefixed by:
+<ul><li> a plus (<code>+</code>) or a minus (<code>-</code>) sign, indicating
+that the clause is required or prohibited respectively; or</li><li> a term followed by a colon, indicating the field to be searched.
+This enables one to construct queries which search multiple fields.</li></ul></p>
+<p>
+A clause may be either:
+<ul><li> a term, indicating all the documents that contain this term; or</li><li> a nested query, enclosed in parentheses.  Note that this may be used
+with a <code>+</code>/<code>-</code> prefix to require any of a set of
+terms.</li></ul>
+
+<p>
+Thus, in BNF, the query grammar is:
+<pre><code>    Query  ::= ( Clause )*
+    Clause ::= [&quot;+&quot;, &quot;-&quot;] [&lt;TERM> &quot;:&quot;] ( &lt;TERM> | &quot;(&quot; Query &quot;)&quot; )</code></pre>
+
+<p>
+Examples of appropriately formatted queries can be found in the <a href="../../../../../../queryparsersyntax.html">query syntax
+documentation</a>.
+</p>
+
+<p>
+In <a class="xref" href="../Lucene.Net/Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a>s, QueryParser tries to detect date values, e.g.
+<tt>date:[6/1/2005 TO 6/4/2005]</tt> produces a range query that searches
+for &quot;date&quot; fields between 2005-06-01 and 2005-06-04. Note that the format
+of the accepted input depends on the <span class="xref">System.Globalization.CultureInfo</span>.
+A <a class="xref" href="../Lucene.Net/Lucene.Net.Documents.DateTools.Resolution.html">DateTools.Resolution</a> has to be set,
+if you want to use <a class="xref" href="../Lucene.Net/Lucene.Net.Documents.DateTools.html">DateTools</a> for date conversion.<p>
+</p>
+<p>
+The date resolution that shall be used for RangeQueries can be set
+using <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_SetDateResolution_Lucene_Net_Documents_DateTools_Resolution_">SetDateResolution(DateTools.Resolution)</a>
+or <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_SetDateResolution_System_String_Lucene_Net_Documents_DateTools_Resolution_">SetDateResolution(String, DateTools.Resolution)</a>. The former
+sets the default date resolution for all fields, whereas the latter can
+be used to set field specific date resolutions. Field specific date
+resolutions take, if set, precedence over the default date resolution.
+</p>
+<p>
+If you don&apos;t use <a class="xref" href="../Lucene.Net/Lucene.Net.Documents.DateTools.html">DateTools</a> in your index, you can create your own
+query parser that inherits <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html">QueryParser</a> and overwrites
+<a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_GetRangeQuery_System_String_System_String_System_String_System_Boolean_System_Boolean_">GetRangeQuery(String, String, String, Boolean, Boolean)</a> to
+use a different method for date conversion.
+</p>
+
+<p>Note that <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html">QueryParser</a> is <em>not</em> thread-safe.</p>
+
+<p><strong>NOTE</strong>: there is a new QueryParser in contrib, which matches
+the same syntax as this class, but is more modular,
+enabling substantial customization to how a query is created.
+</p>
+
+<p><strong>NOTE</strong>: You must specify the required <a class="xref" href="../Lucene.Net/Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a> compatibility when
+creating QueryParser:
+<ul><li>As of 3.1, <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_AutoGeneratePhraseQueries">AutoGeneratePhraseQueries</a> is false by default.</li></ul></p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html">QueryParserBase</a></h4>
+      <section><p>This class is overridden by <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html">QueryParser</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.MethodRemovedUseAnother.html">QueryParserBase.MethodRemovedUseAnother</a></h4>
+      <section><p>Do not catch this exception in your code, it means you are using methods that you should no longer use.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserConstants.html">QueryParserConstants</a></h4>
+      <section><p>Token literal values and constants.
+Generated by org.javacc.parser.OtherFilesGen#start()</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserTokenManager.html">QueryParserTokenManager</a></h4>
+      <section><p>Token Manager. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Classic.RegexpToken.html">RegexpToken</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Classic.Token.html">Token</a></h4>
+      <section><p>Describes the input token stream.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Classic.TokenMgrError.html">TokenMgrError</a></h4>
+      <section><p>Token Manager Error. </p>
+</section>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Classic.ICharStream.html">ICharStream</a></h4>
+      <section><p>This interface describes a character stream that maintains line and
+column number positions of the characters.  It also has the capability
+to backup the stream to some extent.  An implementation of this
+interface is used in the TokenManager implementation generated by
+JavaCCParser.</p>
+<p>All the methods except <a class="xref" href="Lucene.Net.QueryParsers.Classic.ICharStream.html#Lucene_Net_QueryParsers_Classic_ICharStream_BackUp_System_Int32_">BackUp(Int32)</a> can be implemented in any fashion. <a class="xref" href="Lucene.Net.QueryParsers.Classic.ICharStream.html#Lucene_Net_QueryParsers_Classic_ICharStream_BackUp_System_Int32_">BackUp(Int32)</a>
+needs to be implemented correctly for the correct operation of the lexer.
+Rest of the methods are all used to get information like line number,
+column number and the string that constitutes a token and are not used
+by the lexer. Hence their implementation won&apos;t affect the generated lexer&apos;s
+operation.</p>
+</section>
+    <h3 id="enums">Enums
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Classic.Operator.html">Operator</a></h4>
+      <section><p>The default operator for parsing queries. 
+Use <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_DefaultOperator">DefaultOperator</a> to change it.</p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/master/src/Lucene.Net.QueryParser/Classic/package.md/#L2" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2019 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

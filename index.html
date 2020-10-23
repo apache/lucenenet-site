@@ -8,7 +8,7 @@
     <title>Welcome to the Lucene.Net website! | Apache Lucene.NET 4.8.0 </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Welcome to the Lucene.Net website! | Apache Lucene.NET 4.8.0 ">
-    <meta name="generator" content="docfx 2.38.1.0">
+    <meta name="generator" content="docfx 2.50.0.0">
     
     <link rel="shortcut icon" href="logo/favicon.ico">
     <link rel="stylesheet" href="styles/docfx.vendor.css">
@@ -23,11 +23,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.0/css/academicons.min.css" integrity="sha512-GGGNUPDhnG8LEAEDsjqYIQns+Gu8RBs4j5XGlxl7UfRaZBhCCm5jenJkeJL8uPuOXGqgl8/H1gjlWQDRjd3cUQ==" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
     
+    <script data-ad-client="ca-pub-3370160606703795" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono">
     <link rel="stylesheet" href="/styles/site.css">
   
-  </head>
-  <body id="homepage" data-spy="scroll" data-target="#affix">
+  </head>  <body id="homepage" data-spy="scroll" data-target="#affix">
+  <span id="forkongithub"><a href="https://github.com/apache/lucenenet">Fork me on GitHub</a></span>
     <div id="wrapper">
       <header>
         
@@ -59,7 +60,7 @@
         <div class="container">
           <p class="text-center">Lucene.Net is a high performance search engine library for .NET</p>
           <div class="row">
-              <div class="nuget-well col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3">
+              <div class="nuget-well col-xs-8 col-xs-offset-2 col-lg-6 col-lg-offset-3">
                   Install-Package Lucene.Net -Pre
               </div>
           </div>
@@ -84,76 +85,92 @@
 <section id="quick-start" class="home-section">
 <div class="container">
 <div class="row">
-<div class="col-xs-12 col-md-6">
+<div class="col-xs-12 col-lg-6">
 <p class="text-center">Create an index and define a text analyzer</p>
 <pre class="clean">
-<code class="csharp">// Ensures index backwards compatibility
-var AppLuceneVersion = LuceneVersion.LUCENE_48;
+<code class="csharp">
+// Ensures index backwards compatibility
+const LuceneVersion AppLuceneVersion = LuceneVersion.LUCENE_48;
 
-var indexLocation = @"C:\Index";
-var dir = FSDirectory.Open(indexLocation);
+// Construct a machine-independent path for the index
+var personalFolder = Environment.SpecialFolder.Personal;
+var basePath = Environment.GetFolderPath(personalFolder);
+var indexPath = Path.Combine(basePath, "index");
 
-//create an analyzer to process the text
+using var dir = FSDirectory.Open(indexPath);
+
+// Create an analyzer to process the text
 var analyzer = new StandardAnalyzer(AppLuceneVersion);
 
-//create an index writer
+// Create an index writer
 var indexConfig = new IndexWriterConfig(AppLuceneVersion, analyzer);
-var writer = new IndexWriter(dir, indexConfig);
+using var writer = new IndexWriter(dir, indexConfig);
 </code>
 </pre>
 </div>
-<div class="col-xs-12 col-md-6">
+<div class="col-xs-12 col-lg-6">
 <p class="text-center">Add to the index</p>
 <pre class="clean">
 <code class="csharp">var source = new
 {
     Name = "Kermit the Frog",
-    FavouritePhrase = "The quick brown fox jumps over the lazy dog"
+    FavoritePhrase = "The quick brown fox jumps over the lazy dog"
 };
-var doc = new Document();
-// StringField indexes but doesn't tokenise
-doc.Add(new StringField("name", source.Name, Field.Store.YES));
-
-doc.Add(new TextField("favouritePhrase", source.FavouritePhrase, Field.Store.YES));
+var doc = new Document
+{
+    // StringField indexes but doesn't tokenize
+    new StringField("name", 
+        source.Name, 
+        Field.Store.YES),
+    new TextField("favoritePhrase", 
+        source.FavoritePhrase, 
+        Field.Store.YES)
+};
 
 writer.AddDocument(doc);
 writer.Flush(triggerMerge: false, applyAllDeletes: false);
 </code>
-</pre></div>
+</pre>
+</div>
 </div>
 <div class="row">
-<div class="col-xs-12 col-md-6">
+<div class="col-xs-12 col-lg-6">
 <p class="text-center">Construct a query</p>
 <pre class="clean">
-<code class="csharp">// search with a phrase
-var phrase = new MultiPhraseQuery();
-phrase.Add(new Term("favouritePhrase", "brown"));
-phrase.Add(new Term("favouritePhrase", "fox"));
+<code class="csharp">// Search with a phrase
+var phrase = new MultiPhraseQuery
+{
+    new Term("favoritePhrase", "brown"),
+    new Term("favoritePhrase", "fox")
+};
 </code>
 </pre>
 </div>                    
-<div class="col-xs-12 col-md-6">
+<div class="col-xs-12 col-lg-6">
 <p class="text-center">Fetch the results</p>
 <pre class="clean">
-<code class="csharp">// re-use the writer to get real-time updates
-var searcher = new IndexSearcher(writer.GetReader(applyAllDeletes: true));
+<code class="csharp">// Re-use the writer to get real-time updates
+using var reader = writer.GetReader(applyAllDeletes: true);
+var searcher = new IndexSearcher(reader);
 var hits = searcher.Search(phrase, 20 /* top 20 */).ScoreDocs;
 foreach (var hit in hits)
 {
 &nbsp;&nbsp;&nbsp;&nbsp;var foundDoc = searcher.Doc(hit.Doc);
 &nbsp;&nbsp;&nbsp;&nbsp;hit.Score.Dump("Score");
 &nbsp;&nbsp;&nbsp;&nbsp;foundDoc.Get("name").Dump("Name");
-&nbsp;&nbsp;&nbsp;&nbsp;foundDoc.Get("favouritePhrase").Dump("Favourite Phrase");
+&nbsp;&nbsp;&nbsp;&nbsp;foundDoc.Get("favoritePhrase").Dump("Favorite Phrase");
 }
 </code>
 </pre>
 </div>
 </div>
 </div>
-</section>      <section class="home-section">
+</section>
+      <section class="home-section">
         <div class="container">
           <div class="row">
-            
+            <div class="col-md-12">
+              
 <h2 id="about" class="text-center">About the project</h2>
 <p>Lucene.Net is a port of the Lucene search engine library, written in C# and targeted at .NET runtime users</p>
 <h3 id="our-goals">Our Goals</h3>
@@ -163,6 +180,26 @@ foreach (var hit in hits)
 <li>Maximize usability and power when used within the .NET runtime. To that end, it will present a highly idiomatic, carefully tailored API that takes advantage of many of the special features of the .NET runtime</li>
 </ul>
 
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="home-section books">
+        <div class="container">
+          <div class="row">
+            <h2 id="books" class="text-center">Popular Books</h2>
+
+            <div class="row">
+              <div class="col-xs-12 col-md-6">
+                <a href="https://www.amazon.com/Instant-Lucene-NET-Michael-Heydt-ebook/dp/B00E7NC9EG" target="_blank"><img src="https://images-na.ssl-images-amazon.com/images/I/51ovFeqMwBL.jpg"></a>
+              </div>
+              <div class="col-xs-12 col-md-6">
+                <a href="https://www.amazon.com/Lucene-4-Cookbook-Edwood-Ng-ebook/dp/B00ZPJWC9S" target="_blank"><img src="https://images-na.ssl-images-amazon.com/images/I/51uIsUPhaeL.jpg"></a>
+              </div>
+            </div>
+            
+            
+    
           </div>
         </div>
       </section>
@@ -179,7 +216,7 @@ foreach (var hit in hits)
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Copyright © 2019 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            Copyright © 2020 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
             
           </div>
         </div>

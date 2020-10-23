@@ -1,0 +1,429 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class CompositeReader
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class CompositeReader
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Index.CompositeReader">
+  
+  
+  <h1 id="Lucene_Net_Index_CompositeReader" data-uid="Lucene.Net.Index.CompositeReader" class="text-break">Class CompositeReader
+  </h1>
+  <div class="markdown level0 summary"><p>Instances of this reader type can only
+be used to get stored fields from the underlying <a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a>s,
+but it is not possible to directly retrieve postings. To do that, get
+the <a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a> for all sub-readers via <a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html#Lucene_Net_Index_AtomicReaderContext_Leaves">Leaves</a>.
+Alternatively, you can mimic an <a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a> (with a serious slowdown),
+by wrapping composite readers with <a class="xref" href="Lucene.Net.Index.SlowCompositeReaderWrapper.html">SlowCompositeReaderWrapper</a>.</p>
+<p><p><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instances for indexes on disk are usually constructed
+with a call to one of the static <code>DirectoryReader.Open()</code> methods,
+e.g. <a class="xref" href="Lucene.Net.Index.DirectoryReader.html#Lucene_Net_Index_DirectoryReader_Open_Lucene_Net_Store_Directory_">Open(Directory)</a>. <a class="xref" href="Lucene.Net.Index.DirectoryReader.html">DirectoryReader</a> implements
+the <a class="xref" href="Lucene.Net.Index.CompositeReader.html">CompositeReader</a> interface, it is not possible to directly get postings.
+<p> Concrete subclasses of <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> are usually constructed with a call to
+one of the static <code>Open()</code> methods, e.g. <a class="xref" href="Lucene.Net.Index.DirectoryReader.html#Lucene_Net_Index_DirectoryReader_Open_Lucene_Net_Store_Directory_">Open(Directory)</a>.</p>
+<p><p> For efficiency, in this API documents are often referred to via
+<em>document numbers</em>, non-negative integers which each name a unique
+document in the index.  These document numbers are ephemeral -- they may change
+as documents are added to and deleted from an index.  Clients should thus not
+rely on a given document having the same number between sessions.</p>
+<p><p>
+<strong>NOTE</strong>: 
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instances are completely thread
+safe, meaning multiple threads can call any of its methods,
+concurrently.  If your application requires external
+synchronization, you should <strong>not</strong> synchronize on the
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> instance; use your own
+(non-Lucene) objects instead.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a></div>
+    <div class="level2"><span class="xref">CompositeReader</span></div>
+      <div class="level3"><a class="xref" href="Lucene.Net.Index.BaseCompositeReader-1.html">BaseCompositeReader&lt;R&gt;</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_AddReaderClosedListener_Lucene_Net_Index_IndexReader_IReaderClosedListener_">IndexReader.AddReaderClosedListener(IndexReader.IReaderClosedListener)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_RemoveReaderClosedListener_Lucene_Net_Index_IndexReader_IReaderClosedListener_">IndexReader.RemoveReaderClosedListener(IndexReader.IReaderClosedListener)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_RegisterParentReader_Lucene_Net_Index_IndexReader_">IndexReader.RegisterParentReader(IndexReader)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_RefCount">IndexReader.RefCount</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_IncRef">IndexReader.IncRef()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_TryIncRef">IndexReader.TryIncRef()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_DecRef">IndexReader.DecRef()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_EnsureOpen">IndexReader.EnsureOpen()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Equals_System_Object_">IndexReader.Equals(Object)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_GetHashCode">IndexReader.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Open_Lucene_Net_Store_Directory_">IndexReader.Open(Directory)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Open_Lucene_Net_Store_Directory_System_Int32_">IndexReader.Open(Directory, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Open_Lucene_Net_Index_IndexWriter_System_Boolean_">IndexReader.Open(IndexWriter, Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Open_Lucene_Net_Index_IndexCommit_">IndexReader.Open(IndexCommit)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Open_Lucene_Net_Index_IndexCommit_System_Int32_">IndexReader.Open(IndexCommit, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_GetTermVectors_System_Int32_">IndexReader.GetTermVectors(Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_GetTermVector_System_Int32_System_String_">IndexReader.GetTermVector(Int32, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_NumDocs">IndexReader.NumDocs</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_MaxDoc">IndexReader.MaxDoc</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_NumDeletedDocs">IndexReader.NumDeletedDocs</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Document_System_Int32_Lucene_Net_Index_StoredFieldVisitor_">IndexReader.Document(Int32, StoredFieldVisitor)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Document_System_Int32_">IndexReader.Document(Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Document_System_Int32_System_Collections_Generic_ISet_System_String__">IndexReader.Document(Int32, ISet&lt;String&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_HasDeletions">IndexReader.HasDeletions</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Dispose">IndexReader.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Dispose_System_Boolean_">IndexReader.Dispose(Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_DoClose">IndexReader.DoClose()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Leaves">IndexReader.Leaves</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_CoreCacheKey">IndexReader.CoreCacheKey</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_CombinedCoreAndDeletesKey">IndexReader.CombinedCoreAndDeletesKey</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_DocFreq_Lucene_Net_Index_Term_">IndexReader.DocFreq(Term)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_TotalTermFreq_Lucene_Net_Index_Term_">IndexReader.TotalTermFreq(Term)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_GetSumDocFreq_System_String_">IndexReader.GetSumDocFreq(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_GetDocCount_System_String_">IndexReader.GetDocCount(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_GetSumTotalTermFreq_System_String_">IndexReader.GetSumTotalTermFreq(String)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Index.html">Lucene.Net.Index</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Index_CompositeReader_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class CompositeReader : IndexReader, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_CompositeReader__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.CompositeReader.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/CompositeReader.cs/#L67">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_CompositeReader__ctor_" data-uid="Lucene.Net.Index.CompositeReader.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_CompositeReader__ctor" data-uid="Lucene.Net.Index.CompositeReader.#ctor">CompositeReader()</h4>
+  <div class="markdown level1 summary"><p>Sole constructor. (For invocation by subclass
+constructors, typically implicit.)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected CompositeReader()</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_CompositeReader_Context.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.CompositeReader.Context%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/CompositeReader.cs/#L110">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_CompositeReader_Context_" data-uid="Lucene.Net.Index.CompositeReader.Context*"></a>
+  <h4 id="Lucene_Net_Index_CompositeReader_Context" data-uid="Lucene.Net.Index.CompositeReader.Context">Context</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override sealed IndexReaderContext Context { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexReaderContext.html">IndexReaderContext</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Context">IndexReader.Context</a></div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_CompositeReader_GetSequentialSubReaders.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.CompositeReader.GetSequentialSubReaders%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/CompositeReader.cs/#L108">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_CompositeReader_GetSequentialSubReaders_" data-uid="Lucene.Net.Index.CompositeReader.GetSequentialSubReaders*"></a>
+  <h4 id="Lucene_Net_Index_CompositeReader_GetSequentialSubReaders" data-uid="Lucene.Net.Index.CompositeReader.GetSequentialSubReaders">GetSequentialSubReaders()</h4>
+  <div class="markdown level1 summary"><p>Expert: returns the sequential sub readers that this
+reader is logically composed of. This method may not
+return <code>null</code>.</p>
+<p><p><strong>NOTE:</strong> In contrast to previous Lucene versions this method
+is no longer public, code that wants to get all <a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a>s
+this composite is composed of should use <a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Leaves">Leaves</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract IList&lt;IndexReader&gt; GetSequentialSubReaders()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Index_CompositeReader_GetSequentialSubReaders_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Leaves">Leaves</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_CompositeReader_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.CompositeReader.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/CompositeReader.cs/#L72">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_CompositeReader_ToString_" data-uid="Lucene.Net.Index.CompositeReader.ToString*"></a>
+  <h4 id="Lucene_Net_Index_CompositeReader_ToString" data-uid="Lucene.Net.Index.CompositeReader.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_CompositeReader.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.CompositeReader%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Index/CompositeReader.cs/#L59" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

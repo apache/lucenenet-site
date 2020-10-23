@@ -1,0 +1,561 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Similarity
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Similarity
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.Similarities.Similarity">
+  
+  
+  <h1 id="Lucene_Net_Search_Similarities_Similarity" data-uid="Lucene.Net.Search.Similarities.Similarity" class="text-break">Class Similarity
+  </h1>
+  <div class="markdown level0 summary"><p>Similarity defines the components of Lucene scoring.
+<p>
+Expert: Scoring API.
+<p>
+This is a low-level API, you should only extend this API if you want to implement
+an information retrieval <em>model</em>.  If you are instead looking for a convenient way
+to alter Lucene&apos;s scoring, consider extending a higher-level implementation
+such as <a class="xref" href="Lucene.Net.Search.Similarities.TFIDFSimilarity.html">TFIDFSimilarity</a>, which implements the vector space model with this API, or
+just tweaking the default implementation: <a class="xref" href="Lucene.Net.Search.Similarities.DefaultSimilarity.html">DefaultSimilarity</a>.
+<p>
+Similarity determines how Lucene weights terms, and Lucene interacts with
+this class at both <a href="#indextime">index-time</a> and
+<a href="#querytime">query-time</a>.
+<p>
+<a name="indextime"></a>
+At indexing time, the indexer calls <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html#Lucene_Net_Search_Similarities_Similarity_ComputeNorm_Lucene_Net_Index_FieldInvertState_">ComputeNorm(FieldInvertState)</a>, allowing
+the <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a> implementation to set a per-document value for the field that will
+be later accessible via <a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_GetNormValues_System_String_">GetNormValues(String)</a>.  Lucene makes no assumption
+about what is in this norm, but it is most useful for encoding length normalization
+information.
+<p>
+Implementations should carefully consider how the normalization is encoded: while
+Lucene&apos;s classical <a class="xref" href="Lucene.Net.Search.Similarities.TFIDFSimilarity.html">TFIDFSimilarity</a> encodes a combination of index-time boost
+and length normalization information with <a class="xref" href="Lucene.Net.Util.SmallSingle.html">SmallSingle</a> into a single byte, this
+might not be suitable for all purposes.
+<p>
+Many formulas require the use of average document length, which can be computed via a
+combination of <a class="xref" href="Lucene.Net.Search.CollectionStatistics.html#Lucene_Net_Search_CollectionStatistics_SumTotalTermFreq">SumTotalTermFreq</a> and
+<a class="xref" href="Lucene.Net.Search.CollectionStatistics.html#Lucene_Net_Search_CollectionStatistics_MaxDoc">MaxDoc</a> or <a class="xref" href="Lucene.Net.Search.CollectionStatistics.html#Lucene_Net_Search_CollectionStatistics_DocCount">DocCount</a>,
+depending upon whether the average should reflect field sparsity.
+<p>
+Additional scoring factors can be stored in named
+<a class="xref" href="Lucene.Net.Documents.NumericDocValuesField.html">NumericDocValuesField</a>s and accessed
+at query-time with <a class="xref" href="Lucene.Net.Index.AtomicReader.html#Lucene_Net_Index_AtomicReader_GetNumericDocValues_System_String_">GetNumericDocValues(String)</a>.
+<p>
+Finally, using index-time boosts (either via folding into the normalization byte or
+via <a class="xref" href="Lucene.Net.Index.DocValues.html">DocValues</a>), is an inefficient way to boost the scores of different fields if the
+boost will be the same for every document, instead the Similarity can simply take a constant
+boost parameter <em>C</em>, and <a class="xref" href="Lucene.Net.Search.Similarities.PerFieldSimilarityWrapper.html">PerFieldSimilarityWrapper</a> can return different
+instances with different boosts depending upon field name.
+<p>
+<a name="querytime"></a>
+At query-time, Queries interact with the Similarity via these steps:
+<ol><li>The <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html#Lucene_Net_Search_Similarities_Similarity_ComputeWeight_System_Single_Lucene_Net_Search_CollectionStatistics_Lucene_Net_Search_TermStatistics___">ComputeWeight(Single, CollectionStatistics, TermStatistics[])</a> method is called a single time,
+      allowing the implementation to compute any statistics (such as IDF, average document length, etc)
+      across <em>the entire collection</em>. The <a class="xref" href="Lucene.Net.Search.TermStatistics.html">TermStatistics</a> and <a class="xref" href="Lucene.Net.Search.CollectionStatistics.html">CollectionStatistics</a> passed in
+      already contain all of the raw statistics involved, so a <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a> can freely use any combination
+      of statistics without causing any additional I/O. Lucene makes no assumption about what is
+      stored in the returned <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.SimWeight.html">Similarity.SimWeight</a> object.</li><li>The query normalization process occurs a single time: <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.SimWeight.html#Lucene_Net_Search_Similarities_Similarity_SimWeight_GetValueForNormalization">GetValueForNormalization()</a>
+      is called for each query leaf node, <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html#Lucene_Net_Search_Similarities_Similarity_QueryNorm_System_Single_">QueryNorm(Single)</a> is called for the top-level
+      query, and finally <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.SimWeight.html#Lucene_Net_Search_Similarities_Similarity_SimWeight_Normalize_System_Single_System_Single_">Normalize(Single, Single)</a> passes down the normalization value
+      and any top-level boosts (e.g. from enclosing <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>s).</li><li>For each segment in the index, the <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> creates a <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html#Lucene_Net_Search_Similarities_Similarity_GetSimScorer_Lucene_Net_Search_Similarities_Similarity_SimWeight_Lucene_Net_Index_AtomicReaderContext_">GetSimScorer(Similarity.SimWeight, AtomicReaderContext)</a>
+      The GetScore() method is called for each matching document.</li></ol>
+<p>
+<a name="explaintime"></a>
+When <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Explain_Lucene_Net_Search_Query_System_Int32_">Explain(Query, Int32)</a> is called, queries consult the Similarity&apos;s DocScorer for an
+explanation of how it computed its score. The query passes in a the document id and an explanation of how the frequency
+was computed.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Similarity</span></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Search.Similarities.BM25Similarity.html">BM25Similarity</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Search.Similarities.MultiSimilarity.html">MultiSimilarity</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Search.Similarities.PerFieldSimilarityWrapper.html">PerFieldSimilarityWrapper</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Search.Similarities.SimilarityBase.html">SimilarityBase</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Search.Similarities.TFIDFSimilarity.html">TFIDFSimilarity</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Search.Similarities.html">Lucene.Net.Search.Similarities</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Search_Similarities_Similarity_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class Similarity</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_Similarity__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.Similarity.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/Similarities/Similarity.cs/#L103">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Similarities_Similarity__ctor_" data-uid="Lucene.Net.Search.Similarities.Similarity.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_Similarities_Similarity__ctor" data-uid="Lucene.Net.Search.Similarities.Similarity.#ctor">Similarity()</h4>
+  <div class="markdown level1 summary"><p>Sole constructor. (For invocation by subclass
+constructors, typically implicit.)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Similarity()</code></pre>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_Similarity_ComputeNorm_Lucene_Net_Index_FieldInvertState_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.Similarity.ComputeNorm(Lucene.Net.Index.FieldInvertState)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/Similarities/Similarity.cs/#L152">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Similarities_Similarity_ComputeNorm_" data-uid="Lucene.Net.Search.Similarities.Similarity.ComputeNorm*"></a>
+  <h4 id="Lucene_Net_Search_Similarities_Similarity_ComputeNorm_Lucene_Net_Index_FieldInvertState_" data-uid="Lucene.Net.Search.Similarities.Similarity.ComputeNorm(Lucene.Net.Index.FieldInvertState)">ComputeNorm(FieldInvertState)</h4>
+  <div class="markdown level1 summary"><p>Computes the normalization value for a field, given the accumulated
+state of term processing for this field (see <a class="xref" href="Lucene.Net.Index.FieldInvertState.html">FieldInvertState</a>).</p>
+<p><p>Matches in longer fields are less precise, so implementations of this
+method usually set smaller values when <code>state.Length</code> is large,
+and larger values when <pre><code>state.Length</code></pre> is small.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract long ComputeNorm(FieldInvertState state)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.FieldInvertState.html">FieldInvertState</a></td>
+        <td><span class="parametername">state</span></td>
+        <td><p>current processing state for this field </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><p>computed norm value </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_Similarity_ComputeWeight_System_Single_Lucene_Net_Search_CollectionStatistics_Lucene_Net_Search_TermStatistics___.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.Similarity.ComputeWeight(System.Single%2CLucene.Net.Search.CollectionStatistics%2CLucene.Net.Search.TermStatistics%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/Similarities/Similarity.cs/#L161">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Similarities_Similarity_ComputeWeight_" data-uid="Lucene.Net.Search.Similarities.Similarity.ComputeWeight*"></a>
+  <h4 id="Lucene_Net_Search_Similarities_Similarity_ComputeWeight_System_Single_Lucene_Net_Search_CollectionStatistics_Lucene_Net_Search_TermStatistics___" data-uid="Lucene.Net.Search.Similarities.Similarity.ComputeWeight(System.Single,Lucene.Net.Search.CollectionStatistics,Lucene.Net.Search.TermStatistics[])">ComputeWeight(Single, CollectionStatistics, TermStatistics[])</h4>
+  <div class="markdown level1 summary"><p>Compute any collection-level weight (e.g. IDF, average document length, etc) needed for scoring a query.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract Similarity.SimWeight ComputeWeight(float queryBoost, CollectionStatistics collectionStats, params TermStatistics[] termStats)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">queryBoost</span></td>
+        <td><p>the query-time boost. </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.CollectionStatistics.html">CollectionStatistics</a></td>
+        <td><span class="parametername">collectionStats</span></td>
+        <td><p>collection-level statistics, such as the number of tokens in the collection. </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.TermStatistics.html">TermStatistics</a>[]</td>
+        <td><span class="parametername">termStats</span></td>
+        <td><p>term-level statistics, such as the document frequency of a term across the collection. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.Similarity.SimWeight.html">Similarity.SimWeight</a></td>
+        <td><p><a class="xref" href="Lucene.Net.Search.Similarities.Similarity.SimWeight.html">Similarity.SimWeight</a> object with the information this <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a> needs to score a query. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_Similarity_Coord_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.Similarity.Coord(System.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/Similarities/Similarity.cs/#L117">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Similarities_Similarity_Coord_" data-uid="Lucene.Net.Search.Similarities.Similarity.Coord*"></a>
+  <h4 id="Lucene_Net_Search_Similarities_Similarity_Coord_System_Int32_System_Int32_" data-uid="Lucene.Net.Search.Similarities.Similarity.Coord(System.Int32,System.Int32)">Coord(Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Hook to integrate coordinate-level matching.
+<p>
+By default this is disabled (returns <code>1</code>), as with
+most modern models this will only skew performance, but some
+implementations such as <a class="xref" href="Lucene.Net.Search.Similarities.TFIDFSimilarity.html">TFIDFSimilarity</a> override this.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual float Coord(int overlap, int maxOverlap)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">overlap</span></td>
+        <td><p>the number of query terms matched in the document </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxOverlap</span></td>
+        <td><p>the total number of terms in the query </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><p>a score factor based on term overlap with the query </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_Similarity_GetSimScorer_Lucene_Net_Search_Similarities_Similarity_SimWeight_Lucene_Net_Index_AtomicReaderContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.Similarity.GetSimScorer(Lucene.Net.Search.Similarities.Similarity.SimWeight%2CLucene.Net.Index.AtomicReaderContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/Similarities/Similarity.cs/#L169">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Similarities_Similarity_GetSimScorer_" data-uid="Lucene.Net.Search.Similarities.Similarity.GetSimScorer*"></a>
+  <h4 id="Lucene_Net_Search_Similarities_Similarity_GetSimScorer_Lucene_Net_Search_Similarities_Similarity_SimWeight_Lucene_Net_Index_AtomicReaderContext_" data-uid="Lucene.Net.Search.Similarities.Similarity.GetSimScorer(Lucene.Net.Search.Similarities.Similarity.SimWeight,Lucene.Net.Index.AtomicReaderContext)">GetSimScorer(Similarity.SimWeight, AtomicReaderContext)</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.SimScorer.html">Similarity.SimScorer</a> to score matching documents from a segment of the inverted index. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract Similarity.SimScorer GetSimScorer(Similarity.SimWeight weight, AtomicReaderContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.Similarity.SimWeight.html">Similarity.SimWeight</a></td>
+        <td><span class="parametername">weight</span></td>
+        <td><p>collection information from <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html#Lucene_Net_Search_Similarities_Similarity_ComputeWeight_System_Single_Lucene_Net_Search_CollectionStatistics_Lucene_Net_Search_TermStatistics___">ComputeWeight(Single, CollectionStatistics, TermStatistics[])</a> </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td><p>segment of the inverted index to be scored. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.Similarity.SimScorer.html">Similarity.SimScorer</a></td>
+        <td><p>Sloppy <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.SimScorer.html">Similarity.SimScorer</a> for scoring documents across <code>context</code> </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>if there is a low-level I/O error </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_Similarity_QueryNorm_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.Similarity.QueryNorm(System.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/Similarities/Similarity.cs/#L135">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Similarities_Similarity_QueryNorm_" data-uid="Lucene.Net.Search.Similarities.Similarity.QueryNorm*"></a>
+  <h4 id="Lucene_Net_Search_Similarities_Similarity_QueryNorm_System_Single_" data-uid="Lucene.Net.Search.Similarities.Similarity.QueryNorm(System.Single)">QueryNorm(Single)</h4>
+  <div class="markdown level1 summary"><p>Computes the normalization value for a query given the sum of the
+normalized weights <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.SimWeight.html#Lucene_Net_Search_Similarities_Similarity_SimWeight_GetValueForNormalization">GetValueForNormalization()</a> of
+each of the query terms.  this value is passed back to the
+weight (<a class="xref" href="Lucene.Net.Search.Similarities.Similarity.SimWeight.html#Lucene_Net_Search_Similarities_Similarity_SimWeight_Normalize_System_Single_System_Single_">Normalize(Single, Single)</a> of each query
+term, to provide a hook to attempt to make scores from different
+queries comparable.
+<p>
+By default this is disabled (returns <code>1</code>), but some
+implementations such as <a class="xref" href="Lucene.Net.Search.Similarities.TFIDFSimilarity.html">TFIDFSimilarity</a> override this.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual float QueryNorm(float valueForNormalization)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">valueForNormalization</span></td>
+        <td><p>the sum of the term normalization values </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><p>a normalization factor for query weights </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.IndexWriterConfig.html#Lucene_Net_Index_IndexWriterConfig_Similarity">Similarity</a></div>
+      <div><a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Similarity">Similarity</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_Similarity.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.Similarity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/Similarities/Similarity.cs/#L97" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

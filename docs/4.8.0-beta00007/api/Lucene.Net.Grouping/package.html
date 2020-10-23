@@ -1,0 +1,248 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Lucene.Net.Grouping | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Lucene.Net.Grouping | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Grouping">
+
+    <h1 id="" data-uid="Lucene.Net.Grouping" class="text-break">Lucene.Net.Grouping</h1>
+
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<p>This module enables search result grouping with Lucene, where hits with the same value in the specified single-valued group field are grouped together. For example, if you group by the <code>author</code> field, then all documents with the same value in the <code>author</code> field fall into a single group.</p>
+<p>Grouping requires a number of inputs:</p>
+<ul>
+<li><p><code>groupField</code>: this is the field used for grouping.
+  For example, if you use the <code>author</code> field then each
+  group has all books by the same author.  Documents that don&#39;t
+  have this field are grouped under a single group with
+  a <code>null</code> group value.</p>
+</li>
+<li><p><code>groupSort</code>: how the groups are sorted.  For sorting
+  purposes, each group is &quot;represented&quot; by the highest-sorted
+  document according to the <code>groupSort</code> within it.  For
+  example, if you specify &quot;price&quot; (ascending) then the first group
+  is the one with the lowest price book within it.  Or if you
+  specify relevance group sort, then the first group is the one
+  containing the highest scoring book.</p>
+</li>
+<li><p><code>topNGroups</code>: how many top groups to keep.  For
+  example, 10 means the top 10 groups are computed.</p>
+</li>
+<li><p><code>groupOffset</code>: which &quot;slice&quot; of top groups you want to
+  retrieve.  For example, 3 means you&#39;ll get 7 groups back
+  (assuming <code>topNGroups</code> is 10).  This is useful for
+  paging, where you might show 5 groups per page.</p>
+</li>
+<li><p><code>withinGroupSort</code>: how the documents within each group
+  are sorted.  This can be different from the group sort.</p>
+</li>
+<li><p><code>maxDocsPerGroup</code>: how many top documents within each
+  group to keep.</p>
+</li>
+<li><p><code>withinGroupOffset</code>: which &quot;slice&quot; of top
+  documents you want to retrieve from each group.</p>
+</li>
+</ul>
+<p>The implementation is two-pass: the first pass (&lt;xref:Lucene.Net.Grouping.Term.TermFirstPassGroupingCollector&gt;) gathers the top groups, and the second pass (&lt;xref:Lucene.Net.Grouping.Term.TermSecondPassGroupingCollector&gt;) gathers documents within those groups. If the search is costly to run you may want to use the <a class="xref" href="../Lucene.Net/Lucene.Net.Search.CachingCollector.html">CachingCollector</a> class, which caches hits and can (quickly) replay them for the second pass. This way you only run the query once, but you pay a RAM cost to (briefly) hold all hits. Results are returned as a &lt;xref:Lucene.Net.Grouping.TopGroups&gt; instance.</p>
+<p> This module abstracts away what defines group and how it is collected. All grouping collectors are abstract and have currently term based implementations. One can implement collectors that for example group on multiple fields. </p>
+<p>Known limitations:</p>
+<ul>
+<li><p>For the two-pass grouping search, the group field must be a
+single-valued indexed field (or indexed as a <a class="xref" href="../Lucene.Net/Lucene.Net.Documents.SortedDocValuesField.html">SortedDocValuesField</a>).
+<a class="xref" href="../Lucene.Net/Lucene.Net.Search.FieldCache.html">FieldCache</a> is used to load the <a class="xref" href="../Lucene.Net/Lucene.Net.Index.SortedDocValues.html">SortedDocValues</a> for this field.</p>
+</li>
+<li><p>Although Solr support grouping by function and this module has abstraction of what a group is, there are currently only
+implementations for grouping based on terms.</p>
+</li>
+<li><p>Sharding is not directly supported, though is not too
+difficult, if you can merge the top groups and top documents per
+group yourself.</p>
+</li>
+</ul>
+<p>Typical usage for the generic two-pass grouping search looks like this using the grouping convenience utility (optionally using caching for the second pass search):</p>
+<pre><code>  GroupingSearch groupingSearch = new GroupingSearch(&quot;author&quot;);
+  groupingSearch.setGroupSort(groupSort);
+  groupingSearch.setFillSortFields(fillFields);
+</code></pre><p>  if (useCache) {
+        // Sets cache in MB
+        groupingSearch.setCachingInMB(4.0, true);
+      }</p>
+<p>  if (requiredTotalGroupCount) {
+        groupingSearch.setAllGroups(true);
+      }</p>
+<p>  TermQuery query = new TermQuery(new Term(&quot;content&quot;, searchTerm));
+      TopGroups<bytesref> result = groupingSearch.search(indexSearcher, query, groupOffset, groupLimit);<p>
+<p>  // Render groupsResult...
+      if (requiredTotalGroupCount) {
+        int totalGroupCount = result.totalGroupCount;
+      }</p>
+<p>To use the single-pass <code>BlockGroupingCollector</code>, first, at indexing time, you must ensure all docs in each group are added as a block, and you have some way to find the last document of each group. One simple way to do this is to add a marker binary field:</p>
+<pre><code>  // Create Documents from your source:
+  List&lt;Document&gt; oneGroup = ...;
+
+  Field groupEndField = new Field(&quot;groupEnd&quot;, &quot;x&quot;, Field.Store.NO, Field.Index.NOT_ANALYZED);
+  groupEndField.setIndexOptions(IndexOptions.DOCS_ONLY);
+  groupEndField.setOmitNorms(true);
+  oneGroup.get(oneGroup.size()-1).add(groupEndField);
+</code></pre><p>  // You can also use writer.updateDocuments(); just be sure you
+      // replace an entire previous doc block with this new one.  For
+      // example, each group could have a &quot;groupID&quot; field, with the same
+      // value for all docs in this group:
+      writer.addDocuments(oneGroup);</p>
+<p>Then, at search time, do this up front:</p>
+<pre><code>  // Set this once in your app &amp; save away for reusing across all queries:
+  Filter groupEndDocs = new CachingWrapperFilter(new QueryWrapperFilter(new TermQuery(new Term(&quot;groupEnd&quot;, &quot;x&quot;))));
+</code></pre><p>Finally, do this per search:</p>
+<pre><code>  // Per search:
+  BlockGroupingCollector c = new BlockGroupingCollector(groupSort, groupOffset+topNGroups, needsScores, groupEndDocs);
+  s.search(new TermQuery(new Term(&quot;content&quot;, searchTerm)), c);
+  TopGroups groupsResult = c.getTopGroups(withinGroupSort, groupOffset, docOffset, docOffset+docsPerGroup, fillFields);
+</code></pre><p>  // Render groupsResult...</p>
+<p>Or alternatively use the <code>GroupingSearch</code> convenience utility:</p>
+<pre><code>  // Per search:
+  GroupingSearch groupingSearch = new GroupingSearch(groupEndDocs);
+  groupingSearch.setGroupSort(groupSort);
+  groupingSearch.setIncludeScores(needsScores);
+  TermQuery query = new TermQuery(new Term(&quot;content&quot;, searchTerm));
+  TopGroups groupsResult = groupingSearch.search(indexSearcher, query, groupOffset, groupLimit);
+</code></pre><p>  // Render groupsResult...</p>
+<p>Note that the <code>groupValue</code> of each <code>GroupDocs</code>
+will be <code>null</code>, so if you need to present this value you&#39;ll
+have to separately retrieve it (for example using stored
+fields, <code>FieldCache</code>, etc.).</p>
+<p>Another collector is the <code>TermAllGroupHeadsCollector</code> that can be used to retrieve all most relevant documents per group. Also known as group heads. This can be useful in situations when one wants to compute group based facets / statistics on the complete query result. The collector can be executed during the first or second phase. This collector can also be used with the <code>GroupingSearch</code> convenience utility, but when if one only wants to compute the most relevant documents per group it is better to just use the collector as done here below.</p>
+<pre><code>  AbstractAllGroupHeadsCollector c = TermAllGroupHeadsCollector.create(groupField, sortWithinGroup);
+  s.search(new TermQuery(new Term(&quot;content&quot;, searchTerm)), c);
+  // Return all group heads as int array
+  int[] groupHeadsArray = c.retrieveGroupHeads()
+  // Return all group heads as FixedBitSet.
+  int maxDoc = s.maxDoc();
+  FixedBitSet groupHeadsBitSet = c.retrieveGroupHeads(maxDoc)
+</code></pre><p>For each of the above collector types there is also a variant that works with <code>ValueSource</code> instead of of fields. Concretely this means that these variants can work with functions. These variants are slower than there term based counter parts. These implementations are located in the <code>org.apache.lucene.search.grouping.function</code> package, but can also be used with the <code>GroupingSearch</code> convenience utility </p>
+</bytesref></article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00007/src/Lucene.Net.Grouping/package.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

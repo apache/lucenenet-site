@@ -1,0 +1,497 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class BloomFilteringPostingsFormat
+   | Apache Lucene.NET 4.8.0-beta00009 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class BloomFilteringPostingsFormat
+   | Apache Lucene.NET 4.8.0-beta00009 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="codecs/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat">
+  
+  
+  <h1 id="Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat" data-uid="Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat" class="text-break">Class BloomFilteringPostingsFormat
+  </h1>
+  <div class="markdown level0 summary"><p>A <span class="xref">Lucene.Net.Codecs.PostingsFormat</span> useful for low doc-frequency fields such as primary
+keys. Bloom filters are maintained in a &quot;.blm&quot; file which offers &quot;fast-fail&quot;
+for reads in segments known to have no record of the key. A choice of
+delegate <span class="xref">Lucene.Net.Codecs.PostingsFormat</span> is used to record all other Postings data.
+<p>
+A choice of <a class="xref" href="Lucene.Net.Codecs.Bloom.BloomFilterFactory.html">BloomFilterFactory</a> can be passed to tailor Bloom Filter
+settings on a per-field basis. The default configuration is
+<a class="xref" href="Lucene.Net.Codecs.Bloom.DefaultBloomFilterFactory.html">DefaultBloomFilterFactory</a> which allocates a ~8mb bitset and hashes
+values using <a class="xref" href="Lucene.Net.Codecs.Bloom.MurmurHash2.html">MurmurHash2</a>. This should be suitable for most purposes.
+<p>
+The format of the blm file is as follows:</p>
+<p><ul><li>BloomFilter (.blm) --&gt; Header, DelegatePostingsFormatName,
+        NumFilteredFields, Filter<sup>NumFilteredFields</sup>, Footer</li><li>Filter --&gt; FieldNumber, FuzzySet</li><li>FuzzySet --&gt;See <a class="xref" href="Lucene.Net.Codecs.Bloom.FuzzySet.html#Lucene_Net_Codecs_Bloom_FuzzySet_Serialize_Lucene_Net_Store_DataOutput_">Serialize(DataOutput)</a></li><li>Header --&gt; CodecHeader (<a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/api/core/Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>DelegatePostingsFormatName --&gt; String (<a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/api/core/Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteString_System_String_">WriteString(String)</a>)
+        The name of a ServiceProvider registered <span class="xref">Lucene.Net.Codecs.PostingsFormat</span></li><li>NumFilteredFields --&gt; Uint32 (<a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/api/core/Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a>) </li><li>FieldNumber --&gt; Uint32 (<a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/api/core/Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a>) The number of the
+        field in this segment</li><li>Footer --&gt; CodecFooter (<a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/api/core/Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteFooter_Lucene_Net_Store_IndexOutput_">WriteFooter(IndexOutput)</a>) </li></ul>
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Lucene.Net.Codecs.PostingsFormat</span></div>
+    <div class="level2"><span class="xref">BloomFilteringPostingsFormat</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">Lucene.Net.Codecs.PostingsFormat.EMPTY</span>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Codecs.PostingsFormat.SetPostingsFormatFactory(Lucene.Net.Codecs.IPostingsFormatFactory)</span>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Codecs.PostingsFormat.GetPostingsFormatFactory()</span>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Codecs.PostingsFormat.Name</span>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Codecs.PostingsFormat.ToString()</span>
+    </div>
+    <div>
+      <a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/api/core/Lucene.Net.Codecs.PostingsFormat.html#Lucene_Net_Codecs_PostingsFormat_ForName_System_String_">PostingsFormat.ForName(String)</a>
+    </div>
+    <div>
+      <span class="xref">Lucene.Net.Codecs.PostingsFormat.AvailablePostingsFormats</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Codecs.Bloom.html">Lucene.Net.Codecs.Bloom</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Codecs.dll</h6>
+  <h5 id="Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[PostingsFormatName(&quot;BloomFilter&quot;)]
+public sealed class BloomFilteringPostingsFormat : PostingsFormat</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net.Codecs/Bloom/BloomFilteringPostingsFormat.cs/#L108">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat__ctor_" data-uid="Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat__ctor" data-uid="Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.#ctor">BloomFilteringPostingsFormat()</h4>
+  <div class="markdown level1 summary"><p>Used only by core Lucene at read-time via Service Provider instantiation -
+do not use at Write-time in application code.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BloomFilteringPostingsFormat()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat__ctor_Lucene_Net_Codecs_PostingsFormat_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.%23ctor(Lucene.Net.Codecs.PostingsFormat)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net.Codecs/Bloom/BloomFilteringPostingsFormat.cs/#L99">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat__ctor_" data-uid="Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat__ctor_Lucene_Net_Codecs_PostingsFormat_" data-uid="Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.#ctor(Lucene.Net.Codecs.PostingsFormat)">BloomFilteringPostingsFormat(PostingsFormat)</h4>
+  <div class="markdown level1 summary"><p>Creates Bloom filters for a selection of fields created in the index. This
+is recorded as a set of Bitsets held as a segment summary in an additional
+&quot;blm&quot; file. This <span class="xref">Lucene.Net.Codecs.PostingsFormat</span> delegates to a choice of delegate
+<span class="xref">Lucene.Net.Codecs.PostingsFormat</span> for encoding all other postings data. This choice of
+constructor defaults to the <a class="xref" href="Lucene.Net.Codecs.Bloom.DefaultBloomFilterFactory.html">DefaultBloomFilterFactory</a> for
+configuring per-field BloomFilters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BloomFilteringPostingsFormat(PostingsFormat delegatePostingsFormat)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Codecs.PostingsFormat</span></td>
+        <td><span class="parametername">delegatePostingsFormat</span></td>
+        <td><p>The <span class="xref">Lucene.Net.Codecs.PostingsFormat</span> that records all the non-bloom filter data i.e. postings info.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat__ctor_Lucene_Net_Codecs_PostingsFormat_Lucene_Net_Codecs_Bloom_BloomFilterFactory_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.%23ctor(Lucene.Net.Codecs.PostingsFormat%2CLucene.Net.Codecs.Bloom.BloomFilterFactory)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net.Codecs/Bloom/BloomFilteringPostingsFormat.cs/#L83">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat__ctor_" data-uid="Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat__ctor_Lucene_Net_Codecs_PostingsFormat_Lucene_Net_Codecs_Bloom_BloomFilterFactory_" data-uid="Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.#ctor(Lucene.Net.Codecs.PostingsFormat,Lucene.Net.Codecs.Bloom.BloomFilterFactory)">BloomFilteringPostingsFormat(PostingsFormat, BloomFilterFactory)</h4>
+  <div class="markdown level1 summary"><p>Creates Bloom filters for a selection of fields created in the index. This
+is recorded as a set of Bitsets held as a segment summary in an additional
+&quot;blm&quot; file. This <span class="xref">Lucene.Net.Codecs.PostingsFormat</span> delegates to a choice of delegate
+<span class="xref">Lucene.Net.Codecs.PostingsFormat</span> for encoding all other postings data.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BloomFilteringPostingsFormat(PostingsFormat delegatePostingsFormat, BloomFilterFactory bloomFilterFactory)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Codecs.PostingsFormat</span></td>
+        <td><span class="parametername">delegatePostingsFormat</span></td>
+        <td><p>The <span class="xref">Lucene.Net.Codecs.PostingsFormat</span> that records all the non-bloom filter data i.e. postings info.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.Bloom.BloomFilterFactory.html">BloomFilterFactory</a></td>
+        <td><span class="parametername">bloomFilterFactory</span></td>
+        <td><p>The <a class="xref" href="Lucene.Net.Codecs.Bloom.BloomFilterFactory.html">BloomFilterFactory</a> responsible for sizing BloomFilters appropriately.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat_VERSION_CHECKSUM.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.VERSION_CHECKSUM%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net.Codecs/Bloom/BloomFilteringPostingsFormat.cs/#L66">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat_VERSION_CHECKSUM" data-uid="Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.VERSION_CHECKSUM">VERSION_CHECKSUM</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int VERSION_CHECKSUM</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat_VERSION_CURRENT.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.VERSION_CURRENT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net.Codecs/Bloom/BloomFilteringPostingsFormat.cs/#L67">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat_VERSION_CURRENT" data-uid="Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.VERSION_CURRENT">VERSION_CURRENT</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int VERSION_CURRENT</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat_VERSION_START.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.VERSION_START%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net.Codecs/Bloom/BloomFilteringPostingsFormat.cs/#L65">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat_VERSION_START" data-uid="Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.VERSION_START">VERSION_START</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly int VERSION_START</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat_FieldsConsumer_Lucene_Net_Index_SegmentWriteState_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.FieldsConsumer(Lucene.Net.Index.SegmentWriteState)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net.Codecs/Bloom/BloomFilteringPostingsFormat.cs/#L113">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat_FieldsConsumer_" data-uid="Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.FieldsConsumer*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat_FieldsConsumer_Lucene_Net_Index_SegmentWriteState_" data-uid="Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.FieldsConsumer(Lucene.Net.Index.SegmentWriteState)">FieldsConsumer(SegmentWriteState)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override FieldsConsumer FieldsConsumer(SegmentWriteState state)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.SegmentWriteState</span></td>
+        <td><span class="parametername">state</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Codecs.FieldsConsumer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Codecs.PostingsFormat.FieldsConsumer(Lucene.Net.Index.SegmentWriteState)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat_FieldsProducer_Lucene_Net_Index_SegmentReadState_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.FieldsProducer(Lucene.Net.Index.SegmentReadState)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-poc/src/Lucene.Net.Codecs/Bloom/BloomFilteringPostingsFormat.cs/#L122">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat_FieldsProducer_" data-uid="Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.FieldsProducer*"></a>
+  <h4 id="Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat_FieldsProducer_Lucene_Net_Index_SegmentReadState_" data-uid="Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat.FieldsProducer(Lucene.Net.Index.SegmentReadState)">FieldsProducer(SegmentReadState)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override FieldsProducer FieldsProducer(SegmentReadState state)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.SegmentReadState</span></td>
+        <td><span class="parametername">state</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Codecs.FieldsProducer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Codecs.PostingsFormat.FieldsProducer(Lucene.Net.Index.SegmentReadState)</span></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00009/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_Bloom_BloomFilteringPostingsFormat.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.Bloom.BloomFilteringPostingsFormat%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs-poc/src/Lucene.Net.Codecs/Bloom/BloomFilteringPostingsFormat.cs/#L60" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

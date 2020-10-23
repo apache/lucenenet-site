@@ -1,0 +1,178 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Lucene.Net.QueryParsers.Flexible.Messages
+   | Apache Lucene.NET 4.8.0 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Lucene.Net.QueryParsers.Flexible.Messages
+   | Apache Lucene.NET 4.8.0 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.QueryParsers.Flexible.Messages">
+  
+  <h1 id="Lucene_Net_QueryParsers_Flexible_Messages" data-uid="Lucene.Net.QueryParsers.Flexible.Messages" class="text-break">Namespace Lucene.Net.QueryParsers.Flexible.Messages
+  </h1>
+  <div class="markdown level0 summary"><!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<p>For Native Language Support (NLS), system of software internationalization.</p>
+<h2 id="nls-message-api">NLS message API</h2>
+<p> This utility API, adds support for NLS messages in the apache code. It is currently used by the lucene &quot;New Flexible Query PArser&quot;. </p>
+<p> Features: 1. Message reference in the code, using static Strings 2. Message resource validation at class load time, for easier debugging 3. Allows for message IDs to be re-factored using eclipse or other code re-factor tools 4. Allows for reference count on messages, just like code 5. Lazy loading of Message Strings 6. Normal loading Message Strings </p>
+<p> Lazy loading of Message Strings public class MessagesTestBundle extends NLS { private static final String BUNDLE_NAME = MessagesTestBundle.class.getName(); private MessagesTestBundle() { // should never be instantiated } static { // register all string ids with NLS class and initialize static string // values NLS.initializeMessages(BUNDLE_NAME, MessagesTestBundle.class); } // static string must match the strings in the property files. public static String Q0001E_INVALID_SYNTAX; public static String Q0004E_INVALID_SYNTAX_ESCAPE_UNICODE_TRUNCATION; // this message is missing from the properties file public static String Q0005E_MESSAGE_NOT_IN_BUNDLE; } // Create a message reference Message invalidSyntax = new MessageImpl(MessagesTestBundle.Q0001E_INVALID_SYNTAX, &quot;XXX&quot;); // Do other stuff in the code... // when is time to display the message to the user or log the message on a file // the message is loaded from the correct bundle String message1 = invalidSyntax.getLocalizedMessage(); String message2 = invalidSyntax.getLocalizedMessage(Locale.JAPANESE); </p>
+<p> Normal loading of Message Strings String message1 = NLS.getLocalizedMessage(MessagesTestBundle.Q0004E_INVALID_SYNTAX_ESCAPE_UNICODE_TRUNCATION); String message2 = NLS.getLocalizedMessage(MessagesTestBundle.Q0004E_INVALID_SYNTAX_ESCAPE_UNICODE_TRUNCATION, Locale.JAPANESE); </p>
+<p> The org.apache.lucene.messages.TestNLS junit contains several other examples. The TestNLS java code is available from the Apache Lucene code repository. </p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Messages.Message.html">Message</a></h4>
+      <section><p>Default implementation of Message interface.
+For Native Language Support (NLS), system of software internationalization.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Messages.NLS.html">NLS</a></h4>
+      <section><p>MessageBundles classes extend this class, to implement a bundle.</p>
+<p>For Native Language Support (NLS), system of software internationalization.</p>
+<p>This interface is similar to the NLS class in eclipse.osgi.util.NLS class -
+initializeMessages() method resets the values of all static strings, should
+only be called by classes that extend from NLS (see TestMessages.java for
+reference) - performs validation of all message in a bundle, at class load
+time - performs per message validation at runtime - see NLSTest.java for
+usage reference</p>
+<p>MessageBundle classes may subclass this type.</p>
+</section>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Messages.IMessage.html">IMessage</a></h4>
+      <section><p>Message Interface for a lazy loading.
+For Native Language Support (NLS), system of software internationalization.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Messages.INLSException.html">INLSException</a></h4>
+      <section><p>Interface that exceptions should implement to support lazy loading of messages.</p>
+<p>For Native Language Support (NLS), system of software internationalization.</p>
+<p>This Interface should be implemented by all exceptions that require
+translation</p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00007/src/Lucene.Net.QueryParser/Flexible/Messages/package.md/#L2" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

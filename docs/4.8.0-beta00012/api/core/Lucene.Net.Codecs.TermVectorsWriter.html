@@ -1,0 +1,734 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class TermVectorsWriter
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class TermVectorsWriter
+   | Apache Lucene.NET 4.8.0-beta00012 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.TermVectorsWriter">
+  
+  
+  <h1 id="Lucene_Net_Codecs_TermVectorsWriter" data-uid="Lucene.Net.Codecs.TermVectorsWriter" class="text-break">Class TermVectorsWriter
+  </h1>
+  <div class="markdown level0 summary"><p>Codec API for writing term vectors:
+<p>
+<ol><li>For every document, <a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_StartDocument_System_Int32_">StartDocument(Int32)</a> is called,
+      informing the <a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a> how many fields will be written.</li><li><a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_StartField_Lucene_Net_Index_FieldInfo_System_Int32_System_Boolean_System_Boolean_System_Boolean_">StartField(FieldInfo, Int32, Boolean, Boolean, Boolean)</a> is called for
+      each field in the document, informing the codec how many terms
+      will be written for that field, and whether or not positions,
+      offsets, or payloads are enabled.</li><li>Within each field, <a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_StartTerm_Lucene_Net_Util_BytesRef_System_Int32_">StartTerm(BytesRef, Int32)</a> is called
+      for each term.</li><li>If offsets and/or positions are enabled, then
+<a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_AddPosition_System_Int32_System_Int32_System_Int32_Lucene_Net_Util_BytesRef_">AddPosition(Int32, Int32, Int32, BytesRef)</a> will be called for each term
+occurrence.</li><li>After all documents have been written, <a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_Finish_Lucene_Net_Index_FieldInfos_System_Int32_">Finish(FieldInfos, Int32)</a>
+is called for verification/sanity-checks.</li><li>Finally the writer is disposed (<a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_Dispose_System_Boolean_">Dispose(Boolean)</a>)</li></ol>
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">TermVectorsWriter</span></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Codecs.Compressing.CompressingTermVectorsWriter.html">CompressingTermVectorsWriter</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40TermVectorsWriter.html">Lucene40TermVectorsWriter</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Codecs.html">Lucene.Net.Codecs</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Codecs_TermVectorsWriter_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class TermVectorsWriter : IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L68">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter__ctor_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter__ctor" data-uid="Lucene.Net.Codecs.TermVectorsWriter.#ctor">TermVectorsWriter()</h4>
+  <div class="markdown level1 summary"><p>Sole constructor. (For invocation by subclass
+constructors, typically implicit.)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected TermVectorsWriter()</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter_Comparer.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.Comparer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L365">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter_Comparer_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.Comparer*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter_Comparer" data-uid="Lucene.Net.Codecs.TermVectorsWriter.Comparer">Comparer</h4>
+  <div class="markdown level1 summary"><p>Return the <span class="xref">IComparer{BytesRef}</span> used to sort terms
+before feeding to this API.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract IComparer&lt;BytesRef&gt; Comparer { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IComparer</span>&lt;<a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter_Abort.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.Abort%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L123">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter_Abort_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.Abort*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter_Abort" data-uid="Lucene.Net.Codecs.TermVectorsWriter.Abort">Abort()</h4>
+  <div class="markdown level1 summary"><p>Aborts writing entirely, implementation should remove
+any partially-written files, etc.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void Abort()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter_AddAllDocVectors_Lucene_Net_Index_Fields_Lucene_Net_Index_MergeState_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.AddAllDocVectors(Lucene.Net.Index.Fields%2CLucene.Net.Index.MergeState)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L256">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter_AddAllDocVectors_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.AddAllDocVectors*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter_AddAllDocVectors_Lucene_Net_Index_Fields_Lucene_Net_Index_MergeState_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.AddAllDocVectors(Lucene.Net.Index.Fields,Lucene.Net.Index.MergeState)">AddAllDocVectors(Fields, MergeState)</h4>
+  <div class="markdown level1 summary"><p>Safe (but, slowish) default method to write every
+vector field in the document.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void AddAllDocVectors(Fields vectors, MergeState mergeState)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.Fields.html">Fields</a></td>
+        <td><span class="parametername">vectors</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.MergeState.html">MergeState</a></td>
+        <td><span class="parametername">mergeState</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter_AddPosition_System_Int32_System_Int32_System_Int32_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.AddPosition(System.Int32%2CSystem.Int32%2CSystem.Int32%2CLucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L117">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter_AddPosition_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.AddPosition*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter_AddPosition_System_Int32_System_Int32_System_Int32_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.AddPosition(System.Int32,System.Int32,System.Int32,Lucene.Net.Util.BytesRef)">AddPosition(Int32, Int32, Int32, BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Adds a term <code data-dev-comment-type="paramref" class="paramref">position</code> and offsets. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void AddPosition(int position, int startOffset, int endOffset, BytesRef payload)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">position</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">startOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">endOffset</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">payload</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter_AddProx_System_Int32_Lucene_Net_Store_DataInput_Lucene_Net_Store_DataInput_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.AddProx(System.Int32%2CLucene.Net.Store.DataInput%2CLucene.Net.Store.DataInput)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L152">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter_AddProx_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.AddProx*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter_AddProx_System_Int32_Lucene_Net_Store_DataInput_Lucene_Net_Store_DataInput_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.AddProx(System.Int32,Lucene.Net.Store.DataInput,Lucene.Net.Store.DataInput)">AddProx(Int32, DataInput, DataInput)</h4>
+  <div class="markdown level1 summary"><p>Called by <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> when writing new segments.
+<p>
+This is an expert API that allows the codec to consume
+positions and offsets directly from the indexer.
+<p>
+The default implementation calls <a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_AddPosition_System_Int32_System_Int32_System_Int32_Lucene_Net_Util_BytesRef_">AddPosition(Int32, Int32, Int32, BytesRef)</a>,
+but subclasses can override this if they want to efficiently write
+all the positions, then all the offsets, for example.
+<p>
+NOTE: this API is extremely expert and subject to change or removal!!!
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void AddProx(int numProx, DataInput positions, DataInput offsets)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numProx</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.DataInput.html">DataInput</a></td>
+        <td><span class="parametername">positions</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.DataInput.html">DataInput</a></td>
+        <td><span class="parametername">offsets</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter_Dispose.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L370">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter_Dispose_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.Dispose*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter_Dispose" data-uid="Lucene.Net.Codecs.TermVectorsWriter.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"><p>Disposes all resources used by this object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L379">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter_Dispose_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.Dispose*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter_Dispose_System_Boolean_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.Dispose(System.Boolean)">Dispose(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Implementations must override and should dispose all resources used by this instance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">disposing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter_Finish_Lucene_Net_Index_FieldInfos_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.Finish(Lucene.Net.Index.FieldInfos%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L134">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter_Finish_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.Finish*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter_Finish_Lucene_Net_Index_FieldInfos_System_Int32_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.Finish(Lucene.Net.Index.FieldInfos,System.Int32)">Finish(FieldInfos, Int32)</h4>
+  <div class="markdown level1 summary"><p>Called before <a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_Dispose_System_Boolean_">Dispose(Boolean)</a>, passing in the number
+of documents that were written. Note that this is
+intentionally redundant (equivalent to the number of
+calls to <a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_StartDocument_System_Int32_">StartDocument(Int32)</a>, but a <a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a> should
+check that this is the case to detect the bug described
+in LUCENE-1282.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void Finish(FieldInfos fis, int numDocs)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.FieldInfos.html">FieldInfos</a></td>
+        <td><span class="parametername">fis</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numDocs</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter_FinishDocument.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.FinishDocument%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L84">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter_FinishDocument_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.FinishDocument*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter_FinishDocument" data-uid="Lucene.Net.Codecs.TermVectorsWriter.FinishDocument">FinishDocument()</h4>
+  <div class="markdown level1 summary"><p>Called after a doc and all its fields have been added. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void FinishDocument()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter_FinishField.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.FinishField%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L97">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter_FinishField_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.FinishField*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter_FinishField" data-uid="Lucene.Net.Codecs.TermVectorsWriter.FinishField">FinishField()</h4>
+  <div class="markdown level1 summary"><p>Called after a field and all its terms have been added. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void FinishField()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter_FinishTerm.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.FinishTerm%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L111">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter_FinishTerm_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.FinishTerm*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter_FinishTerm" data-uid="Lucene.Net.Codecs.TermVectorsWriter.FinishTerm">FinishTerm()</h4>
+  <div class="markdown level1 summary"><p>Called after a term and all its positions have been added. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void FinishTerm()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter_Merge_Lucene_Net_Index_MergeState_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.Merge(Lucene.Net.Index.MergeState)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L223">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter_Merge_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.Merge*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter_Merge_Lucene_Net_Index_MergeState_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.Merge(Lucene.Net.Index.MergeState)">Merge(MergeState)</h4>
+  <div class="markdown level1 summary"><p>Merges in the term vectors from the readers in
+<code data-dev-comment-type="paramref" class="paramref">mergeState</code>. The default implementation skips
+over deleted documents, and uses <a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_StartDocument_System_Int32_">StartDocument(Int32)</a>,
+<a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_StartField_Lucene_Net_Index_FieldInfo_System_Int32_System_Boolean_System_Boolean_System_Boolean_">StartField(FieldInfo, Int32, Boolean, Boolean, Boolean)</a>,
+<a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_StartTerm_Lucene_Net_Util_BytesRef_System_Int32_">StartTerm(BytesRef, Int32)</a>, <a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_AddPosition_System_Int32_System_Int32_System_Int32_Lucene_Net_Util_BytesRef_">AddPosition(Int32, Int32, Int32, BytesRef)</a>,
+and <a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_Finish_Lucene_Net_Index_FieldInfos_System_Int32_">Finish(FieldInfos, Int32)</a>,
+returning the number of documents that were written.
+Implementations can override this method for more sophisticated
+merging (bulk-byte copying, etc).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int Merge(MergeState mergeState)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.MergeState.html">MergeState</a></td>
+        <td><span class="parametername">mergeState</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter_StartDocument_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.StartDocument(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L80">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter_StartDocument_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.StartDocument*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter_StartDocument_System_Int32_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.StartDocument(System.Int32)">StartDocument(Int32)</h4>
+  <div class="markdown level1 summary"><p>Called before writing the term vectors of the document.
+<a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_StartField_Lucene_Net_Index_FieldInfo_System_Int32_System_Boolean_System_Boolean_System_Boolean_">StartField(FieldInfo, Int32, Boolean, Boolean, Boolean)</a> will
+be called <code data-dev-comment-type="paramref" class="paramref">numVectorFields</code> times. Note that if term
+vectors are enabled, this is called even if the document
+has no vector fields, in this case <code data-dev-comment-type="paramref" class="paramref">numVectorFields</code>
+will be zero.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void StartDocument(int numVectorFields)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numVectorFields</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter_StartField_Lucene_Net_Index_FieldInfo_System_Int32_System_Boolean_System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.StartField(Lucene.Net.Index.FieldInfo%2CSystem.Int32%2CSystem.Boolean%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L93">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter_StartField_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.StartField*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter_StartField_Lucene_Net_Index_FieldInfo_System_Int32_System_Boolean_System_Boolean_System_Boolean_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.StartField(Lucene.Net.Index.FieldInfo,System.Int32,System.Boolean,System.Boolean,System.Boolean)">StartField(FieldInfo, Int32, Boolean, Boolean, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Called before writing the terms of the field.
+<a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_StartTerm_Lucene_Net_Util_BytesRef_System_Int32_">StartTerm(BytesRef, Int32)</a> will be called <code data-dev-comment-type="paramref" class="paramref">numTerms</code> times.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void StartField(FieldInfo info, int numTerms, bool positions, bool offsets, bool payloads)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.FieldInfo.html">FieldInfo</a></td>
+        <td><span class="parametername">info</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numTerms</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">positions</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">offsets</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">payloads</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter_StartTerm_Lucene_Net_Util_BytesRef_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter.StartTerm(Lucene.Net.Util.BytesRef%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L107">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_TermVectorsWriter_StartTerm_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.StartTerm*"></a>
+  <h4 id="Lucene_Net_Codecs_TermVectorsWriter_StartTerm_Lucene_Net_Util_BytesRef_System_Int32_" data-uid="Lucene.Net.Codecs.TermVectorsWriter.StartTerm(Lucene.Net.Util.BytesRef,System.Int32)">StartTerm(BytesRef, Int32)</h4>
+  <div class="markdown level1 summary"><p>Adds a <code data-dev-comment-type="paramref" class="paramref">term</code> and its term frequency <code data-dev-comment-type="paramref" class="paramref">freq</code>.
+If this field has positions and/or offsets enabled, then
+<a class="xref" href="Lucene.Net.Codecs.TermVectorsWriter.html#Lucene_Net_Codecs_TermVectorsWriter_AddPosition_System_Int32_System_Int32_System_Int32_Lucene_Net_Util_BytesRef_">AddPosition(Int32, Int32, Int32, BytesRef)</a> will be called
+<code data-dev-comment-type="paramref" class="paramref">freq</code> times respectively.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void StartTerm(BytesRef term, int freq)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">term</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">freq</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00012/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_TermVectorsWriter.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.TermVectorsWriter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/feature/beta00012-release-updates/src/Lucene.Net/Codecs/TermVectorsWriter.cs/#L62" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

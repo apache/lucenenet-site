@@ -1,0 +1,953 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class DirectSpellChecker
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class DirectSpellChecker
+   | Apache Lucene.NET 4.8.0-beta00010 Documentation ">
+    <meta name="generator" content="docfx 2.56.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="suggest/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker">
+  
+  
+  <h1 id="Lucene_Net_Search_Spell_DirectSpellChecker" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker" class="text-break">Class DirectSpellChecker
+  </h1>
+  <div class="markdown level0 summary"><p>Simple automaton-based spellchecker.
+<p>
+Candidates are presented directly from the term dictionary, based on
+Levenshtein distance. This is an alternative to <a class="xref" href="Lucene.Net.Search.Spell.SpellChecker.html">SpellChecker</a>
+if you are using an edit-distance-like metric such as Levenshtein
+or <a class="xref" href="Lucene.Net.Search.Spell.JaroWinklerDistance.html">JaroWinklerDistance</a>.
+</p>
+<p>
+A practical benefit of this spellchecker is that it requires no additional
+datastructures (neither in RAM nor on disk) to do its work.</p>
+<p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">DirectSpellChecker</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Search.Spell.html">Lucene.Net.Search.Spell</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Suggest.dll</h6>
+  <h5 id="Lucene_Net_Search_Spell_DirectSpellChecker_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class DirectSpellChecker</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L105">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker__ctor_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker__ctor" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.#ctor">DirectSpellChecker()</h4>
+  <div class="markdown level1 summary"><p>Creates a DirectSpellChecker with default configuration values </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public DirectSpellChecker()</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_INTERNAL_LEVENSHTEIN.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.INTERNAL_LEVENSHTEIN%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L59">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_INTERNAL_LEVENSHTEIN" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.INTERNAL_LEVENSHTEIN">INTERNAL_LEVENSHTEIN</h4>
+  <div class="markdown level1 summary"><p>The default StringDistance, Damerau-Levenshtein distance implemented internally
+via <a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.Automaton.LevenshteinAutomata.html">LevenshteinAutomata</a>.
+<p>
+Note: this is the fastest distance metric, because Damerau-Levenshtein is used
+to draw candidates from the term dictionary: this just re-uses the scoring.
+</p></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly IStringDistance INTERNAL_LEVENSHTEIN</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Spell.IStringDistance.html">IStringDistance</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_Accuracy.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.Accuracy%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L161">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker_Accuracy_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.Accuracy*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_Accuracy" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.Accuracy">Accuracy</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the minimal accuracy required (default: 0.5f) from a StringDistance 
+for a suggestion match.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual float Accuracy { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_Comparer.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.Comparer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L263">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker_Comparer_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.Comparer*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_Comparer" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.Comparer">Comparer</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the comparer for sorting suggestions.
+The default is <a class="xref" href="Lucene.Net.Search.Spell.SuggestWordQueue.html#Lucene_Net_Search_Spell_SuggestWordQueue_DEFAULT_COMPARER">DEFAULT_COMPARER</a> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IComparer&lt;SuggestWord&gt; Comparer { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IComparer</span>&lt;<a class="xref" href="Lucene.Net.Search.Spell.SuggestWord.html">SuggestWord</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_Distance.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.Distance%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L280">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker_Distance_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.Distance*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_Distance" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.Distance">Distance</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the string distance metric.
+The default is <a class="xref" href="Lucene.Net.Search.Spell.DirectSpellChecker.html#Lucene_Net_Search_Spell_DirectSpellChecker_INTERNAL_LEVENSHTEIN">INTERNAL_LEVENSHTEIN</a>.
+<p>
+Note: because this spellchecker draws its candidates from the term
+dictionary using Damerau-Levenshtein, it works best with an edit-distance-like
+string metric. If you use a different metric than the default,
+you might want to consider increasing <a class="xref" href="Lucene.Net.Search.Spell.DirectSpellChecker.html#Lucene_Net_Search_Spell_DirectSpellChecker_MaxInspections">MaxInspections</a>
+to draw more candidates for your metric to rank. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IStringDistance Distance { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Spell.IStringDistance.html">IStringDistance</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_LowerCaseTerms.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.LowerCaseTerms%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L243">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker_LowerCaseTerms_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.LowerCaseTerms*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_LowerCaseTerms" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.LowerCaseTerms">LowerCaseTerms</h4>
+  <div class="markdown level1 summary"><p>True if the spellchecker should lowercase terms (default: true)
+<p>
+This is a convenience method, if your index field has more complicated
+analysis (such as StandardTokenizer removing punctuation), its probably
+better to turn this off, and instead run your query terms through your
+Analyzer first.
+<p>
+If this option is not on, case differences count as an edit!</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool LowerCaseTerms { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_LowerCaseTermsCulture.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.LowerCaseTermsCulture%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L253">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker_LowerCaseTermsCulture_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.LowerCaseTermsCulture*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_LowerCaseTermsCulture" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.LowerCaseTermsCulture">LowerCaseTermsCulture</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the culture to use for lowercasing terms.
+Set to <code>null</code> (the default) to use <span class="xref">System.Globalization.CultureInfo.CurrentCulture</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual CultureInfo LowerCaseTermsCulture { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Globalization.CultureInfo</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_MaxEdits.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.MaxEdits%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L117">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker_MaxEdits_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.MaxEdits*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_MaxEdits" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.MaxEdits">MaxEdits</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the maximum number of Levenshtein edit-distances to draw
+candidate terms from.This value can be 1 or 2. The default is 2.</p>
+<p>Note: a large number of spelling errors occur with an edit distance
+of 1, by setting this value to 1 you can increase both performance
+and precision at the cost of recall.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int MaxEdits { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_MaxInspections.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.MaxInspections%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L150">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker_MaxInspections_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.MaxInspections*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_MaxInspections" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.MaxInspections">MaxInspections</h4>
+  <div class="markdown level1 summary"><p>Get the maximum number of top-N inspections per suggestion.</p>
+<p>Increasing this number can improve the accuracy of results, at the cost 
+of performance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int MaxInspections { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_MaxQueryFrequency.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.MaxQueryFrequency%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L219">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker_MaxQueryFrequency_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.MaxQueryFrequency*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_MaxQueryFrequency" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.MaxQueryFrequency">MaxQueryFrequency</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the maximum threshold (default: 0.01f) of documents a query term can 
+appear in order to provide suggestions.
+<p>
+Very high-frequency terms are typically spelled correctly. Additionally,
+this can increase performance as it will do no work for the common case
+of correctly-spelled input terms.
+<p>
+This can be specified as a relative percentage of documents such as 0.5f,
+or it can be specified as an absolute whole document frequency, such as 4f.
+Absolute document frequencies may not be fractional.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual float MaxQueryFrequency { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_MinPrefix.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.MinPrefix%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L137">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker_MinPrefix_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.MinPrefix*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_MinPrefix" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.MinPrefix">MinPrefix</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the minimal number of characters that must match exactly.</p>
+<p>This can improve both performance and accuracy of results, 
+as misspellings are commonly not the first character.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int MinPrefix { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_MinQueryLength.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.MinQueryLength%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L200">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker_MinQueryLength_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.MinQueryLength*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_MinQueryLength" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.MinQueryLength">MinQueryLength</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the minimum length of a query term (default: 4) needed to return suggestions.
+<p>
+Very short query terms will often cause only bad suggestions with any distance
+metric.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int MinQueryLength { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_ThresholdFrequency.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.ThresholdFrequency%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L180">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker_ThresholdFrequency_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.ThresholdFrequency*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_ThresholdFrequency" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.ThresholdFrequency">ThresholdFrequency</h4>
+  <div class="markdown level1 summary"><p>Gets or sets the minimal threshold of documents a term must appear for a match.
+<p>
+This can improve quality by only suggesting high-frequency terms. Note that
+very high values might decrease performance slightly, by forcing the spellchecker
+to draw more candidates from the term dictionary, but a practical value such
+as <code>1</code> can be very useful towards improving quality.
+<p>
+This can be specified as a relative percentage of documents such as 0.5f,
+or it can be specified as an absolute whole document frequency, such as 4f.
+Absolute document frequencies may not be fractional.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual float ThresholdFrequency { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_SuggestSimilar_Lucene_Net_Index_Term_System_Int32_Lucene_Net_Index_IndexReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.SuggestSimilar(Lucene.Net.Index.Term%2CSystem.Int32%2CLucene.Net.Index.IndexReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L291">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker_SuggestSimilar_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.SuggestSimilar*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_SuggestSimilar_Lucene_Net_Index_Term_System_Int32_Lucene_Net_Index_IndexReader_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.SuggestSimilar(Lucene.Net.Index.Term,System.Int32,Lucene.Net.Index.IndexReader)">SuggestSimilar(Term, Int32, IndexReader)</h4>
+  <div class="markdown level1 summary"><p>Calls <a class="xref" href="Lucene.Net.Search.Spell.DirectSpellChecker.html#Lucene_Net_Search_Spell_DirectSpellChecker_SuggestSimilar_Lucene_Net_Index_Term_System_Int32_Lucene_Net_Index_IndexReader_Lucene_Net_Search_Spell_SuggestMode_">SuggestSimilar(Term, Int32, IndexReader, SuggestMode)</a>
+  SuggestSimilar(term, numSug, ir, SuggestMode.SUGGEST_WHEN_NOT_IN_INDEX)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual SuggestWord[] SuggestSimilar(Term term, int numSug, IndexReader ir)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.Term</span></td>
+        <td><span class="parametername">term</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numSug</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.IndexReader</span></td>
+        <td><span class="parametername">ir</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Spell.SuggestWord.html">SuggestWord</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_SuggestSimilar_Lucene_Net_Index_Term_System_Int32_Lucene_Net_Index_IndexReader_Lucene_Net_Search_Spell_SuggestMode_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.SuggestSimilar(Lucene.Net.Index.Term%2CSystem.Int32%2CLucene.Net.Index.IndexReader%2CLucene.Net.Search.Spell.SuggestMode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L300">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker_SuggestSimilar_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.SuggestSimilar*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_SuggestSimilar_Lucene_Net_Index_Term_System_Int32_Lucene_Net_Index_IndexReader_Lucene_Net_Search_Spell_SuggestMode_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.SuggestSimilar(Lucene.Net.Index.Term,System.Int32,Lucene.Net.Index.IndexReader,Lucene.Net.Search.Spell.SuggestMode)">SuggestSimilar(Term, Int32, IndexReader, SuggestMode)</h4>
+  <div class="markdown level1 summary"><p>Calls <a class="xref" href="Lucene.Net.Search.Spell.DirectSpellChecker.html#Lucene_Net_Search_Spell_DirectSpellChecker_SuggestSimilar_Lucene_Net_Index_Term_System_Int32_Lucene_Net_Index_IndexReader_Lucene_Net_Search_Spell_SuggestMode_System_Single_">SuggestSimilar(Term, Int32, IndexReader, SuggestMode, Single)</a>
+  SuggestSimilar(term, numSug, ir, suggestMode, this.accuracy)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual SuggestWord[] SuggestSimilar(Term term, int numSug, IndexReader ir, SuggestMode suggestMode)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.Term</span></td>
+        <td><span class="parametername">term</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numSug</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.IndexReader</span></td>
+        <td><span class="parametername">ir</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Spell.SuggestMode.html">SuggestMode</a></td>
+        <td><span class="parametername">suggestMode</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Spell.SuggestWord.html">SuggestWord</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_SuggestSimilar_Lucene_Net_Index_Term_System_Int32_Lucene_Net_Index_IndexReader_Lucene_Net_Search_Spell_SuggestMode_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.SuggestSimilar(Lucene.Net.Index.Term%2CSystem.Int32%2CLucene.Net.Index.IndexReader%2CLucene.Net.Search.Spell.SuggestMode%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L321">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker_SuggestSimilar_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.SuggestSimilar*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_SuggestSimilar_Lucene_Net_Index_Term_System_Int32_Lucene_Net_Index_IndexReader_Lucene_Net_Search_Spell_SuggestMode_System_Single_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.SuggestSimilar(Lucene.Net.Index.Term,System.Int32,Lucene.Net.Index.IndexReader,Lucene.Net.Search.Spell.SuggestMode,System.Single)">SuggestSimilar(Term, Int32, IndexReader, SuggestMode, Single)</h4>
+  <div class="markdown level1 summary"><p>Suggest similar words.</p>
+<p>
+Unlike <a class="xref" href="Lucene.Net.Search.Spell.SpellChecker.html">SpellChecker</a>, the similarity used to fetch the most
+relevant terms is an edit distance, therefore typically a low value
+for numSug will work very well.
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual SuggestWord[] SuggestSimilar(Term term, int numSug, IndexReader ir, SuggestMode suggestMode, float accuracy)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.Term</span></td>
+        <td><span class="parametername">term</span></td>
+        <td><p>Term you want to spell check on </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numSug</span></td>
+        <td><p>the maximum number of suggested words </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.IndexReader</span></td>
+        <td><span class="parametername">ir</span></td>
+        <td><p>IndexReader to find terms from </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Spell.SuggestMode.html">SuggestMode</a></td>
+        <td><span class="parametername">suggestMode</span></td>
+        <td><p>specifies when to return suggested words </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">accuracy</span></td>
+        <td><p>return only suggested words that match with this similarity </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Spell.SuggestWord.html">SuggestWord</a>[]</td>
+        <td><p>sorted list of the suggested words according to the comparer </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>If there is a low-level I/O error. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker_SuggestSimilar_Lucene_Net_Index_Term_System_Int32_Lucene_Net_Index_IndexReader_System_Int32_System_Int32_System_Single_Lucene_Net_Util_CharsRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker.SuggestSimilar(Lucene.Net.Index.Term%2CSystem.Int32%2CLucene.Net.Index.IndexReader%2CSystem.Int32%2CSystem.Int32%2CSystem.Single%2CLucene.Net.Util.CharsRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L421">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Spell_DirectSpellChecker_SuggestSimilar_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.SuggestSimilar*"></a>
+  <h4 id="Lucene_Net_Search_Spell_DirectSpellChecker_SuggestSimilar_Lucene_Net_Index_Term_System_Int32_Lucene_Net_Index_IndexReader_System_Int32_System_Int32_System_Single_Lucene_Net_Util_CharsRef_" data-uid="Lucene.Net.Search.Spell.DirectSpellChecker.SuggestSimilar(Lucene.Net.Index.Term,System.Int32,Lucene.Net.Index.IndexReader,System.Int32,System.Int32,System.Single,Lucene.Net.Util.CharsRef)">SuggestSimilar(Term, Int32, IndexReader, Int32, Int32, Single, CharsRef)</h4>
+  <div class="markdown level1 summary"><p>Provide spelling corrections based on several parameters.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual ICollection&lt;DirectSpellChecker.ScoreTerm&gt; SuggestSimilar(Term term, int numSug, IndexReader ir, int docfreq, int editDistance, float accuracy, CharsRef spare)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.Term</span></td>
+        <td><span class="parametername">term</span></td>
+        <td><p>The term to suggest spelling corrections for </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">numSug</span></td>
+        <td><p>The maximum number of spelling corrections </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Index.IndexReader</span></td>
+        <td><span class="parametername">ir</span></td>
+        <td><p>The index reader to fetch the candidate spelling corrections from </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">docfreq</span></td>
+        <td><p>The minimum document frequency a potential suggestion need to have in order to be included </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">editDistance</span></td>
+        <td><p>The maximum edit distance candidates are allowed to have </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">accuracy</span></td>
+        <td><p>The minimum accuracy a suggested spelling correction needs to have in order to be included </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Lucene.Net.Util.CharsRef</span></td>
+        <td><span class="parametername">spare</span></td>
+        <td><p>a chars scratch </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ICollection</span>&lt;<a class="xref" href="Lucene.Net.Search.Spell.DirectSpellChecker.ScoreTerm.html">DirectSpellChecker.ScoreTerm</a>&gt;</td>
+        <td><p>a collection of spelling corrections sorted by <pre><code>ScoreTerm</code></pre>&apos;s natural order. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>If I/O related errors occur </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Util.Automaton.LevenshteinAutomata.html">LevenshteinAutomata</a></div>
+      <div><a class="xref" href="http://localhost:8080/api/core/Lucene.Net.Search.FuzzyTermsEnum.html">FuzzyTermsEnum</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00010/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Spell_DirectSpellChecker.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Spell.DirectSpellChecker%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/release/Lucene.Net_4_8_0_beta00010/src/Lucene.Net.Suggest/Spell/DirectSpellChecker.cs/#L49" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

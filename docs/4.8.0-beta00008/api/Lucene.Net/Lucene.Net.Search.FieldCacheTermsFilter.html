@@ -1,0 +1,392 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class FieldCacheTermsFilter
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class FieldCacheTermsFilter
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.FieldCacheTermsFilter">
+  
+  
+  <h1 id="Lucene_Net_Search_FieldCacheTermsFilter" data-uid="Lucene.Net.Search.FieldCacheTermsFilter" class="text-break">Class FieldCacheTermsFilter
+  </h1>
+  <div class="markdown level0 summary"><p>A <a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a> that only accepts documents whose single
+term value in the specified field is contained in the
+provided set of allowed terms.</p>
+<p>
+
+<p>This is the same functionality as TermsFilter (from
+queries/), except this filter requires that the
+field contains only a single term for all documents.
+Because of drastically different implementations, they
+also have different performance characteristics, as
+described below.</p>
+<p>
+
+<p>The first invocation of this filter on a given field will
+be slower, since a <a class="xref" href="Lucene.Net.Index.SortedDocValues.html">SortedDocValues</a> must be
+created.  Subsequent invocations using the same field
+will re-use this cache.  However, as with all
+functionality based on <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>, persistent RAM
+is consumed to hold the cache, and is not freed until the
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> is disposed.  In contrast, TermsFilter
+has no persistent RAM consumption.</p>
+<p>
+
+<p>With each search, this filter translates the specified
+set of <a class="xref" href="Lucene.Net.Index.Terms.html">Terms</a> into a private <a class="xref" href="Lucene.Net.Util.FixedBitSet.html">FixedBitSet</a> keyed by
+term number per unique <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> (normally one
+reader per segment).  Then, during matching, the term
+number for each docID is retrieved from the cache and
+then checked for inclusion using the <a class="xref" href="Lucene.Net.Util.FixedBitSet.html">FixedBitSet</a>.
+Since all testing is done using RAM resident data
+structures, performance should be very fast, most likely
+fast enough to not require further caching of the
+<a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a> for each possible combination of terms.
+However, because docIDs are simply scanned linearly, an
+index with a great many small documents may find this
+linear scan too costly.</p>
+<p>
+
+<p>In contrast, TermsFilter builds up a <a class="xref" href="Lucene.Net.Util.FixedBitSet.html">FixedBitSet</a>,
+keyed by docID, every time it&apos;s created, by enumerating
+through all matching docs using <a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a> to seek
+and scan through each term&apos;s docID list.  While there is
+no linear scan of all docIDs, besides the allocation of
+the underlying array in the <a class="xref" href="Lucene.Net.Util.FixedBitSet.html">FixedBitSet</a>, this
+approach requires a number of &quot;disk seeks&quot; in proportion
+to the number of terms, which can be exceptionally costly
+when there are cache misses in the OS&apos;s IO cache.</p>
+<p>
+
+<p>Generally, this filter will be slower on the first
+invocation for a given field, but subsequent invocations,
+even if you change the allowed set of <a class="xref" href="Lucene.Net.Index.Terms.html">Terms</a>, should be
+faster than TermsFilter, especially as the number of
+<a class="xref" href="Lucene.Net.Index.Terms.html">Terms</a> being matched increases.  If you are matching only
+a very small number of terms, and those terms in turn
+match a very small number of documents, TermsFilter may
+perform faster.</p>
+<p>
+
+<p>Which filter is best is very application dependent.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a></div>
+    <div class="level2"><span class="xref">FieldCacheTermsFilter</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Filter.html#Lucene_Net_Search_Filter_NewAnonymous_System_Func_Lucene_Net_Index_AtomicReaderContext_Lucene_Net_Util_IBits_Lucene_Net_Search_DocIdSet__">Filter.NewAnonymous(Func&lt;AtomicReaderContext, IBits, DocIdSet&gt;)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="../Lucene.Net.TestFramework/Lucene.Net.Search.html">Lucene.Net.Search</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Search_FieldCacheTermsFilter_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class FieldCacheTermsFilter : Filter</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheTermsFilter__ctor_System_String_Lucene_Net_Util_BytesRef___.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheTermsFilter.%23ctor(System.String%2CLucene.Net.Util.BytesRef%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/FieldCacheTermsFilter.cs/#L101">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheTermsFilter__ctor_" data-uid="Lucene.Net.Search.FieldCacheTermsFilter.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheTermsFilter__ctor_System_String_Lucene_Net_Util_BytesRef___" data-uid="Lucene.Net.Search.FieldCacheTermsFilter.#ctor(System.String,Lucene.Net.Util.BytesRef[])">FieldCacheTermsFilter(String, BytesRef[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FieldCacheTermsFilter(string field, params BytesRef[] terms)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a>[]</td>
+        <td><span class="parametername">terms</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheTermsFilter__ctor_System_String_System_String___.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheTermsFilter.%23ctor(System.String%2CSystem.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/FieldCacheTermsFilter.cs/#L107">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheTermsFilter__ctor_" data-uid="Lucene.Net.Search.FieldCacheTermsFilter.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheTermsFilter__ctor_System_String_System_String___" data-uid="Lucene.Net.Search.FieldCacheTermsFilter.#ctor(System.String,System.String[])">FieldCacheTermsFilter(String, String[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FieldCacheTermsFilter(string field, params string[] terms)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">terms</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheTermsFilter_FieldCache.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheTermsFilter.FieldCache%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/FieldCacheTermsFilter.cs/#L117">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheTermsFilter_FieldCache_" data-uid="Lucene.Net.Search.FieldCacheTermsFilter.FieldCache*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheTermsFilter_FieldCache" data-uid="Lucene.Net.Search.FieldCacheTermsFilter.FieldCache">FieldCache</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IFieldCache FieldCache { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheTermsFilter_GetDocIdSet_Lucene_Net_Index_AtomicReaderContext_Lucene_Net_Util_IBits_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheTermsFilter.GetDocIdSet(Lucene.Net.Index.AtomicReaderContext%2CLucene.Net.Util.IBits)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/FieldCacheTermsFilter.cs/#L125">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_FieldCacheTermsFilter_GetDocIdSet_" data-uid="Lucene.Net.Search.FieldCacheTermsFilter.GetDocIdSet*"></a>
+  <h4 id="Lucene_Net_Search_FieldCacheTermsFilter_GetDocIdSet_Lucene_Net_Index_AtomicReaderContext_Lucene_Net_Util_IBits_" data-uid="Lucene.Net.Search.FieldCacheTermsFilter.GetDocIdSet(Lucene.Net.Index.AtomicReaderContext,Lucene.Net.Util.IBits)">GetDocIdSet(AtomicReaderContext, IBits)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override DocIdSet GetDocIdSet(AtomicReaderContext context, IBits acceptDocs)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a></td>
+        <td><span class="parametername">acceptDocs</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Filter.html#Lucene_Net_Search_Filter_GetDocIdSet_Lucene_Net_Index_AtomicReaderContext_Lucene_Net_Util_IBits_">Filter.GetDocIdSet(AtomicReaderContext, IBits)</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00008/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_FieldCacheTermsFilter.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.FieldCacheTermsFilter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/Shazwazza/lucenenet/blob/docs-may/src/Lucene.Net/Search/FieldCacheTermsFilter.cs/#L96" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

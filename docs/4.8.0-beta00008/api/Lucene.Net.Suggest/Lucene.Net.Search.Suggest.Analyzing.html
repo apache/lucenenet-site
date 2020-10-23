@@ -1,0 +1,313 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Lucene.Net.Search.Suggest.Analyzing
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Lucene.Net.Search.Suggest.Analyzing
+   | Apache Lucene.NET 4.8.0-beta00008 Documentation ">
+    <meta name="generator" content="docfx 2.50.0.0">
+    
+    <link rel="shortcut icon" href="../../logo/favicon.ico">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.Suggest.Analyzing">
+  
+  <h1 id="Lucene_Net_Search_Suggest_Analyzing" data-uid="Lucene.Net.Search.Suggest.Analyzing" class="text-break">Namespace Lucene.Net.Search.Suggest.Analyzing
+  </h1>
+  <div class="markdown level0 summary"><!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<p>Analyzer based autosuggest.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingInfixSuggester.html">AnalyzingInfixSuggester</a></h4>
+      <section><p>Analyzes the input text and then suggests matches based
+on prefix matches to any tokens in the indexed text.
+This also highlights the tokens that match.</p>
+<p>This suggester supports payloads.  Matches are sorted only
+by the suggest weight; it would be nice to support
+blended score + weight sort in the future.  This means
+this suggester best applies when there is a strong
+a-priori ranking of all the suggestions.
+
+</p>
+<p>This suggester supports contexts, however the
+contexts must be valid utf8 (arbitrary binary terms will
+not work).
+
+@lucene.experimental 
+</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html">AnalyzingSuggester</a></h4>
+      <section><p>Suggester that first analyzes the surface form, adds the
+analyzed form to a weighted FST, and then does the same
+thing at lookup time.  This means lookup is based on the
+analyzed form while suggestions are still the surface
+form(s).</p>
+<p>
+This can result in powerful suggester functionality.  For
+example, if you use an analyzer removing stop words, 
+then the partial text &quot;ghost chr...&quot; could see the
+suggestion &quot;The Ghost of Christmas Past&quot;. Note that
+position increments MUST NOT be preserved for this example
+to work, so you should call the constructor with 
+<span class="xref">Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.preservePositionIncrements</span> parameter set to 
+false
+
+</p>
+<p>
+If SynonymFilter is used to map wifi and wireless network to
+hotspot then the partial text &quot;wirele...&quot; could suggest
+&quot;wifi router&quot;.  Token normalization like stemmers, accent
+removal, etc., would allow suggestions to ignore such
+variations.
+
+</p>
+<p>
+When two matching suggestions have the same weight, they
+are tie-broken by the analyzed form.  If their analyzed
+form is the same then the order is undefined.
+
+</p>
+<p>
+There are some limitations:
+<ol><li> A lookup from a query like &quot;net&quot; in English won&apos;t
+       be any different than &quot;net &quot; (ie, user added a
+       trailing space) because analyzers don&apos;t reflect
+       when they&apos;ve seen a token separator and when they
+       haven&apos;t.</li><li> If you&apos;re using <a class="xref" href="../Lucene.Net.Analysis.Common/Lucene.Net.Analysis.Core.StopFilter.html">StopFilter</a>, and the user will
+       type &quot;fast apple&quot;, but so far all they&apos;ve typed is
+       &quot;fast a&quot;, again because the analyzer doesn&apos;t convey whether
+       it&apos;s seen a token separator after the &quot;a&quot;,
+<a class="xref" href="../Lucene.Net.Analysis.Common/Lucene.Net.Analysis.Core.StopFilter.html">StopFilter</a> will remove that &quot;a&quot; causing
+far more matches than you&apos;d expect.</li><li> Lookups with the empty string return no results
+instead of all results.</li></ol>
+
+@lucene.experimental
+</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.BlendedInfixSuggester.html">BlendedInfixSuggester</a></h4>
+      <section><p>Extension of the <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingInfixSuggester.html">AnalyzingInfixSuggester</a> which transforms the weight
+after search to take into account the position of the searched term into
+the indexed text.
+Please note that it increases the number of elements searched and applies the
+ponderation after. It might be costly for long suggestions.</p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FreeTextSuggester.html">FreeTextSuggester</a></h4>
+      <section><p>Builds an ngram model from the text sent to <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FreeTextSuggester.html#Lucene_Net_Search_Suggest_Analyzing_FreeTextSuggester_Build_Lucene_Net_Search_Suggest_IInputIterator_System_Double_">Build(IInputIterator, Double)</a>
+and predicts based on the last grams-1 tokens in
+the request sent to <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FreeTextSuggester.html#Lucene_Net_Search_Suggest_Analyzing_FreeTextSuggester_DoLookup_System_String_System_Collections_Generic_IEnumerable_Lucene_Net_Util_BytesRef__System_Boolean_System_Int32_">DoLookup(String, IEnumerable&lt;BytesRef&gt;, Boolean, Int32)</a>.  This tries to
+handle the &quot;long tail&quot; of suggestions for when the
+incoming query is a never before seen query string.</p>
+<p>Likely this suggester would only be used as a
+fallback, when the primary suggester fails to find
+any suggestions.
+
+</p>
+<p>Note that the weight for each suggestion is unused,
+and the suggestions are the analyzed forms (so your
+analysis process should normally be very &quot;light&quot;).
+
+</p>
+<p>This uses the stupid backoff language model to smooth
+scores across ngram models; see 
+<a href="http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.76.1126">
+&quot;Large language models in machine translation&quot;</a> for details.
+
+</p>
+<p> From <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FreeTextSuggester.html#Lucene_Net_Search_Suggest_Analyzing_FreeTextSuggester_DoLookup_System_String_System_Collections_Generic_IEnumerable_Lucene_Net_Util_BytesRef__System_Boolean_System_Int32_">DoLookup(String, IEnumerable&lt;BytesRef&gt;, Boolean, Int32)</a>, the key of each result is the
+ngram token; the value is <span class="xref">System.Int64.MaxValue</span> * score (fixed
+point, cast to long).  Divide by <span class="xref">System.Int64.MaxValue</span> to get
+the score back, which ranges from 0.0 to 1.0.
+
+<code>onlyMorePopular</code> is unused.
+
+@lucene.experimental
+</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FSTUtil.html">FSTUtil</a></h4>
+      <section><p>Exposes a utility method to enumerate all paths
+intersecting an <a class="xref" href="../Lucene.Net/Lucene.Net.Util.Automaton.Automaton.html">Automaton</a> with an <a class="xref" href="../Lucene.Net/Lucene.Net.Util.Fst.FST.html">FST</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FSTUtil.Path-1.html">FSTUtil.Path&lt;T&gt;</a></h4>
+      <section><p>Holds a pair (automaton, fst) of states and accumulated output in the intersected machine. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.html">FuzzySuggester</a></h4>
+      <section><p>Implements a fuzzy <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html">AnalyzingSuggester</a>. The similarity measurement is
+based on the Damerau-Levenshtein (optimal string alignment) algorithm, though
+you can explicitly choose classic Levenshtein by passing <code>false</code>
+for the <span class="xref">Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.transpositions</span> parameter.
+<p>
+At most, this query will match terms up to <a class="xref" href="../Lucene.Net/Lucene.Net.Util.Automaton.LevenshteinAutomata.html#Lucene_Net_Util_Automaton_LevenshteinAutomata_MAXIMUM_SUPPORTED_DISTANCE">MAXIMUM_SUPPORTED_DISTANCE</a>
+edits. Higher distances are not supported.  Note that the
+fuzzy distance is measured in &quot;byte space&quot; on the bytes
+returned by the <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenStream.html">TokenStream</a>&apos;s <a class="xref" href="../Lucene.Net/Lucene.Net.Analysis.TokenAttributes.ITermToBytesRefAttribute.html">ITermToBytesRefAttribute</a>, 
+usually UTF8.  By default
+the analyzed bytes must be at least 3 <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.html#Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_MIN_FUZZY_LENGTH">DEFAULT_MIN_FUZZY_LENGTH</a>
+bytes before any edits are
+considered.  Furthermore, the first 1 <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.html#Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_NON_FUZZY_PREFIX">DEFAULT_NON_FUZZY_PREFIX</a>
+byte is not allowed to be
+edited.  We allow up to 1 <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.html#Lucene_Net_Search_Suggest_Analyzing_FuzzySuggester_DEFAULT_MAX_EDITS">DEFAULT_MAX_EDITS</a>
+edit.
+If <span class="xref">Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.unicodeAware</span> parameter in the constructor is set to true, maxEdits,
+minFuzzyLength, transpositions and nonFuzzyPrefix are measured in Unicode code 
+points (actual letters) instead of bytes. </p>
+<p>
+<p>
+NOTE: This suggester does not boost suggestions that
+required no edits over suggestions that did require
+edits.  This is a known limitation.</p>
+<p>
+<p>
+Note: complex query analyzers can have a significant impact on the lookup
+performance. It&apos;s recommended to not use analyzers that drop or inject terms
+like synonyms to keep the complexity of the prefix intersection low for good
+lookup performance. At index time, complex analyzers can safely be used.
+</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.SuggestStopFilter.html">SuggestStopFilter</a></h4>
+      <section><p>Like <a class="xref" href="../Lucene.Net.Analysis.Common/Lucene.Net.Analysis.Core.StopFilter.html">StopFilter</a> except it will not remove the
+last token if that token was not followed by some token
+separator.  For example, a query &apos;find the&apos; would
+preserve the &apos;the&apos; since it was not followed by a space or
+punctuation or something, and mark it KEYWORD so future
+stemmers won&apos;t touch it either while a query like &quot;find
+the popsicle&apos; would remove &apos;the&apos; as a stopword.</p>
+<p>
+Normally you&apos;d use the ordinary <a class="xref" href="../Lucene.Net.Analysis.Common/Lucene.Net.Analysis.Core.StopFilter.html">StopFilter</a>
+in your indexAnalyzer and then this class in your
+queryAnalyzer, when using one of the analyzing suggesters. 
+</p>
+</section>
+    <h3 id="enums">Enums
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.BlendedInfixSuggester.BlenderType.html">BlendedInfixSuggester.BlenderType</a></h4>
+      <section><p>The different types of blender.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.SuggesterOptions.html">SuggesterOptions</a></h4>
+      <section><p>LUCENENET specific type for specifying <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html">AnalyzingSuggester</a> 
+and <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.html">FuzzySuggester</a> options. </p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00008/src/Lucene.Net.Suggest/Suggest/Analyzing/package.md/#L2" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 Licensed to the Apache Software Foundation (ASF)
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>
