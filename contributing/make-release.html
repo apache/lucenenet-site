@@ -199,12 +199,9 @@
 <li><p>From the <code>release</code> build artifact that you downloaded from Azure DevOps in the <strong>Check the Release Artifacts</strong> section, copy both the <code>.src.zip</code> and <code>.bin.zip</code> files to a new folder named <code>&lt;repo root&gt;/svn-dev/&lt;packageVersion&gt;/</code></p>
 </li>
 <li><p>On your local Git clone, tag the repository using the info in <code>RELEASE-TODO.txt</code></p>
-<ul>
-<li><code>git log</code></li>
-<li>Verify the HEAD commit hash of the local repo matches that in <code>RELEASE-TODO.txt</code></li>
-<li><code>git tag -a &lt;tag from RELEASE-TODO.txt&gt; -m &quot;&lt;tag from RELEASE-TODO.txt&gt;&quot;</code></li>
-<li><code>git push &lt;remote-name (defaults to origin)&gt; master --tags</code></li>
-</ul>
+<pre><code class="lang-powershell">git tag -a &lt;tag from RELEASE-TODO.txt&gt; &lt;commit hash from RELEASE-TODO.txt&gt; -m &quot;&lt;tag from RELEASE-TODO.txt&gt;&quot;
+git push &lt;remote-name (defaults to origin)&gt; master --tags
+</code></pre>
 </li>
 <li><p><a href="https://infra.apache.org/release-signing.html">Sign the <code>release</code> artifacts</a> using GnuPG</p>
 <pre><code class="lang-powershell">dotnet msbuild -t:SignReleaseCandidate -p:PackageVersion=&lt;packageVersion&gt;
