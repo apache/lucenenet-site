@@ -81,11 +81,18 @@
 <p>To submit changes for the website, create a Pull Request to the <a href="https://github.com/apache/lucenenet">Lucene Git repositoriy</a>. (See <a class="xref" href="index.html#submit-a-pull-request">Contributing</a> for details)</p>
 <h2 id="website">Website</h2>
 <h3 id="build-script">Build script</h3>
-<p>To build the website and run it on your machine, run the Powershell script: <code>/websites/site/site.ps1</code>. You don't have to pass any parameters in and it will build the site and host it at <a href="http://localhost:8081">http://localhost:8081</a>.</p>
-<p>The script has 2 optional parameters:</p>
+<p>To build the website and run it on your machine, run the Powershell script: <code>/websites/site/site.ps1</code> with the <code>-ServeDocs</code> flag. For example:</p>
+<pre><code>/websites/site/site.ps1 -ServeDocs
+</code></pre>
+<p>When executed this will build the site and host it at <a href="http://localhost:8081">http://localhost:8081</a>.</p>
+<p>To build the website for release, run the script:</p>
+<pre><code>/websites/site/site.ps1
+</code></pre>
+<p>This will build the site with all live parameters configured correctly and output the built static site into the <code>_site</code> folder.</p>
+<p>The script parameters are:</p>
 <ul>
-<li><code>-ServeDocs</code> <em>(default is 1)</em> The value of <code>1</code> means it will build the docs and host the site, if <code>0</code> is specified, it will build the static site to be hosted elsewhere.</li>
-<li><code>-Clean</code> <em>(default is 0)</em> The value of <code>1</code> means that it will clear all caches and tool files before it builds again. This is handy if a new version of docfx is available or if there's odd things occurring with the incremental build.</li>
+<li><code>-ServeDocs</code> <em>(optional)</em> A boolean switch. If present, it will build the docs and host the site. If not present it will build the static site to be hosted elsewhere.</li>
+<li><code>-Clean</code> <em>(optional)</em> A boolean switch.  If present, it will clear all caches and tool files before it builds again. This is handy if a new version of docfx is available or if there's odd things occurring with the incremental build.</li>
 </ul>
 <h3 id="filefolder-structure">File/folder structure</h3>
 <p>The file/folder structure is within <code>/websites/site</code>:</p>
@@ -109,12 +116,26 @@
 </ul>
 <h2 id="api-docs">API Docs</h2>
 <h3 id="build-script-1">Build script</h3>
-<p>To build the api docs and run it on your machine, run the Powershell script: <code>/websites/apidocs/docs.ps1</code>. You don't have to pass any parameters in and it will build the site and host it at <a href="http://localhost:8080">http://localhost:8080</a>.</p>
-<p>The script has 3 parameters:</p>
+<p>To build the api docs and run it on your machine, run the Powershell script: <code>/websites/apidocs/docs.ps1</code>. For example:</p>
+<pre><code>/websites/apidocs/docs.ps1 -ServeDocs -LuceneNetVersion 4.8.0-beta00008 -BaseUrl http://localhost:8080
+</code></pre>
+<p>When executed this will build the site and host it at <a href="http://localhost:8080">http://localhost:8080</a>. <em>(Ensure to pass in the current version of Lucene.Net you are building.)</em></p>
+<p>To build the api docs for release, run the script:</p>
+<pre><code>/websites/apidocs/docs.ps1 -LuceneNetVersion 4.8.0-beta00008
+</code></pre>
+<p>This will build the site with all live parameters configured correctly and output the built static site into the <code>_site</code> folder.</p>
+<p>The script parameters are:</p>
 <ul>
 <li><code>-LuceneNetVersion</code> <em>(mandatory)</em> This is the Lucene.Net version including pre-release information that is being built. For example: <code>4.8.0-beta00008</code>. <em>(This value will correspond to the folder and branch name where the docs get hosted, see below)</em></li>
-<li><code>-ServeDocs</code> <em>(default is 1)</em> The value of <code>1</code> means it will build the docs and host the site, if <code>0</code> is specified, it will build the static site to be hosted elsewhere.</li>
-<li><code>-Clean</code> <em>(default is 0)</em> The value of <code>1</code> means that it will clear all caches and tool files before it builds again. This is handy if a new version of docfx is available or if there's odd things occurring with the incremental build.</li>
+</ul>
+<ul>
+<li><code>-ServeDocs</code> <em>(optional)</em> A boolean switch. If present, it will build the docs and host the site. If not present it will build the static site to be hosted elsewhere.</li>
+<li><code>-Clean</code> <em>(optional)</em> A boolean switch.  If present, it will clear all caches and tool files before it builds again. This is handy if a new version of docfx is available or if there's odd things occurring with the incremental build.</li>
+<li><code>-DisableMetaData</code> <em>(optional)</em> A boolean switch. If present it will disable the docfx metadata build operation of the docs build. Can be handy when debugging the docs build.</li>
+<li><code>-DisableBuild</code> <em>(optional)</em> A boolean switch. If present it will disable the site building operation of the docs build. Can be handy when debugging the docs build.</li>
+<li><code>-DisablePlugins</code> <em>(optional)</em> A boolean switch. If present it will not build the custom Lucene.Net <code>DocumentationTools.sln</code> docsfx plugins and exclude them from the build.</li>
+<li><code>-LogLevel</code> <em>(optional)</em> Default is Warning. Options are: Diagnostic, Verbose, Info, Warning, Error.</li>
+<li><code>-BaseUrl</code> <em>(optional)</em> Default is <a href="https://lucenenet.apache.org/docs/">https://lucenenet.apache.org/docs/</a>. Used to set the base URL of the docfx xref map files for cross linking between project builds.</li>
 </ul>
 <h3 id="filefolder-structure-1">File/folder structure</h3>
 <p>The file/folder structure is within <code>/websites/apidocs</code>:</p>
