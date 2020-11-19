@@ -1,0 +1,1097 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class StandardQueryParser
+   | Apache Lucene.NET 4.8.0-beta00013 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class StandardQueryParser
+   | Apache Lucene.NET 4.8.0-beta00013 Documentation ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="queryparser/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser">
+  
+  
+  <h1 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser" class="text-break">Class StandardQueryParser
+  </h1>
+  <div class="markdown level0 summary"><p>This class is a helper that enables users to easily use the Lucene query
+parser.
+<p>
+To construct a Query object from a query string, use the
+<a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.html#Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_Parse_System_String_System_String_">Parse(String, String)</a> method:</p>
+<pre><code>StandardQueryParser queryParserHelper = new StandardQueryParser();
+Query query = queryParserHelper.Parse(&quot;a AND b&quot;, &quot;defaultField&quot;);</code></pre>
+<p>
+To change any configuration before parsing the query string do, for example:
+<pre><code>// the query config handler returned by StandardQueryParser is a
+// StandardQueryConfigHandler
+queryParserHelper.QueryConfigHandler.Analyzer = new WhitespaceAnalyzer();</code></pre>
+<p>
+The syntax for query strings is as follows (copied from the old QueryParser
+javadoc):
+<p>
+A Query is a series of clauses. A clause may be prefixed by:
+<ul><li>
+    a plus (<code>+</code>) or a minus (<code>-</code>) sign, indicating that
+    the clause is required or prohibited respectively; or
+</li><li>
+a term followed by a colon, indicating the field to be searched. This
+enables one to construct queries which search multiple fields.
+</li></ul>
+
+A clause may be either:
+<ul><li>
+    a term, indicating all the documents that contain this term; or
+</li><li>
+a nested query, enclosed in parentheses. Note that this may be used with
+a <code>+</code>/<code>-</code> prefix to require any of a set of terms.
+</li></ul>
+
+Thus, in BNF, the query grammar is:
+<pre><code>    Query  ::= ( Clause )*
+    Clause ::= [&quot;+&quot;, &quot;-&quot;] [&lt;TERM> &quot;:&quot;] ( &lt;TERM> | &quot;(&quot; Query &quot;)&quot; )</code></pre>
+
+<p>
+Examples of appropriately formatted queries can be found in the query syntax documentation.
+</p>
+<p>
+The text parser used by this helper is a <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Parser.StandardSyntaxParser.html">StandardSyntaxParser</a>.
+</p>
+<p>
+The query node processor used by this helper is a
+<a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.StandardQueryNodeProcessorPipeline.html">StandardQueryNodeProcessorPipeline</a>.
+</p>
+<p>
+The builder used by this helper is a <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Builders.StandardQueryTreeBuilder.html">StandardQueryTreeBuilder</a>.
+</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryParserHelper-1.html">QueryParserHelper</a>&lt;<span class="xref">Lucene.Net.Search.Query</span>&gt;</div>
+    <div class="level2"><span class="xref">StandardQueryParser</span></div>
+      <div class="level3"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Precedence.PrecedenceQueryParser.html">PrecedenceQueryParser</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.ICommonQueryParserConfiguration.html">ICommonQueryParserConfiguration</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryParserHelper-1.html#Lucene_Net_QueryParsers_Flexible_Core_QueryParserHelper_1_QueryNodeProcessor">QueryParserHelper&lt;Query&gt;.QueryNodeProcessor</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryParserHelper-1.html#Lucene_Net_QueryParsers_Flexible_Core_QueryParserHelper_1_SetQueryNodeProcessor_Lucene_Net_QueryParsers_Flexible_Core_Processors_IQueryNodeProcessor_">QueryParserHelper&lt;Query&gt;.SetQueryNodeProcessor(IQueryNodeProcessor)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryParserHelper-1.html#Lucene_Net_QueryParsers_Flexible_Core_QueryParserHelper_1_SetSyntaxParser_Lucene_Net_QueryParsers_Flexible_Core_Parser_ISyntaxParser_">QueryParserHelper&lt;Query&gt;.SetSyntaxParser(ISyntaxParser)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryParserHelper-1.html#Lucene_Net_QueryParsers_Flexible_Core_QueryParserHelper_1_SetQueryBuilder_Lucene_Net_QueryParsers_Flexible_Core_Builders_IQueryBuilder__0__">QueryParserHelper&lt;Query&gt;.SetQueryBuilder(IQueryBuilder&lt;Query&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryParserHelper-1.html#Lucene_Net_QueryParsers_Flexible_Core_QueryParserHelper_1_QueryConfigHandler">QueryParserHelper&lt;Query&gt;.QueryConfigHandler</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryParserHelper-1.html#Lucene_Net_QueryParsers_Flexible_Core_QueryParserHelper_1_QueryBuilder">QueryParserHelper&lt;Query&gt;.QueryBuilder</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryParserHelper-1.html#Lucene_Net_QueryParsers_Flexible_Core_QueryParserHelper_1_SyntaxParser">QueryParserHelper&lt;Query&gt;.SyntaxParser</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryParserHelper-1.html#Lucene_Net_QueryParsers_Flexible_Core_QueryParserHelper_1_SetQueryConfigHandler_Lucene_Net_QueryParsers_Flexible_Core_Config_QueryConfigHandler_">QueryParserHelper&lt;Query&gt;.SetQueryConfigHandler(QueryConfigHandler)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.html">Lucene.Net.QueryParsers.Flexible.Standard</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.QueryParser.dll</h6>
+  <h5 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class StandardQueryParser : QueryParserHelper&lt;Query&gt;, ICommonQueryParserConfiguration</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L109">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser__ctor_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.#ctor*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser__ctor" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.#ctor">StandardQueryParser()</h4>
+  <div class="markdown level1 summary"><p>Constructs a <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.html">StandardQueryParser</a> object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public StandardQueryParser()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser__ctor_Lucene_Net_Analysis_Analyzer_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.%23ctor(Lucene.Net.Analysis.Analyzer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L126">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser__ctor_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.#ctor*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser__ctor_Lucene_Net_Analysis_Analyzer_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.#ctor(Lucene.Net.Analysis.Analyzer)">StandardQueryParser(Analyzer)</h4>
+  <div class="markdown level1 summary"><p>Constructs a <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.html">StandardQueryParser</a> object and sets an
+<span class="xref">Lucene.Net.Analysis.Analyzer</span> to it. The same as:</p>
+<pre><code>StandardQueryParser qp = new StandardQueryParser();
+qp.QueryConfigHandler.Analyzer = analyzer;</code></pre>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public StandardQueryParser(Analyzer analyzer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Analysis.Analyzer</span></td>
+        <td><span class="parametername">analyzer</span></td>
+        <td><p>the analyzer to be used by this query parser helper</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_AllowLeadingWildcard.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.AllowLeadingWildcard%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L191">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_AllowLeadingWildcard_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.AllowLeadingWildcard*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_AllowLeadingWildcard" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.AllowLeadingWildcard">AllowLeadingWildcard</h4>
+  <div class="markdown level1 summary"><p>Set to <code>true</code> to allow leading wildcard characters.
+<p>
+When set, <code>*</code> or <code>?</code> are allowed as the first
+character of a <a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00013/api/core/Lucene.Net.Search.PrefixQuery.html">PrefixQuery</a> and <a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00013/api/core/Lucene.Net.Search.WildcardQuery.html">WildcardQuery</a>. Note that this can produce
+very slow queries on big indexes.
+<p>
+Default: false.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool AllowLeadingWildcard { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_Analyzer.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.Analyzer%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L324">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_Analyzer_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.Analyzer*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_Analyzer" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.Analyzer">Analyzer</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Analyzer Analyzer { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Analysis.Analyzer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_DateResolution.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.DateResolution%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L393">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_DateResolution_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.DateResolution*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_DateResolution" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.DateResolution">DateResolution</h4>
+  <div class="markdown level1 summary"><p>Gets the default <span class="xref">Lucene.Net.Documents.DateTools.Resolution</span> used for certain field when
+no <span class="xref">Lucene.Net.Documents.DateTools.Resolution</span> is defined for this field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual DateTools.Resolution DateResolution { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Documents.DateTools.Resolution</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_DateResolutionMap.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.DateResolutionMap%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L408">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_DateResolutionMap_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.DateResolutionMap*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_DateResolutionMap" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.DateResolutionMap">DateResolutionMap</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the field to <see cref="T:DateTools.Resolution?"></see> map used to normalize each date field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IDictionary&lt;string, DateTools.Resolution?&gt; DateResolutionMap { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.Nullable</span>&lt;<span class="xref">Lucene.Net.Documents.DateTools.Resolution</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_DefaultOperator.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.DefaultOperator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L161">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_DefaultOperator_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.DefaultOperator*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_DefaultOperator" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.DefaultOperator">DefaultOperator</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the boolean operator of the QueryParser. In default mode (
+<a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Config.StandardQueryConfigHandler.Operator.html#Lucene_Net_QueryParsers_Flexible_Standard_Config_StandardQueryConfigHandler_Operator_OR">OR</a>) terms without any modifiers are considered optional:
+for example <code>capital of Hungary</code> is equal to
+<code>capital OR of OR Hungary</code>.
+<p>
+In <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Config.StandardQueryConfigHandler.Operator.html#Lucene_Net_QueryParsers_Flexible_Standard_Config_StandardQueryConfigHandler_Operator_AND">AND</a> mode terms are considered to be in conjunction: the
+above mentioned query is parsed as <code>capital AND of AND Hungary</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual StandardQueryConfigHandler.Operator DefaultOperator { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Config.StandardQueryConfigHandler.Operator.html">StandardQueryConfigHandler.Operator</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_EnablePositionIncrements.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.EnablePositionIncrements%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L206">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_EnablePositionIncrements_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.EnablePositionIncrements*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_EnablePositionIncrements" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.EnablePositionIncrements">EnablePositionIncrements</h4>
+  <div class="markdown level1 summary"><p>Set to <code>true</code> to enable position increments in result query.
+<p>
+When set, result phrase and multi-phrase queries will be aware of position
+increments. Useful when e.g. a <span class="xref">Lucene.Net.Analysis.Core.StopFilter</span> increases the position increment
+of the token that follows an omitted token.
+<p>
+Default: false.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool EnablePositionIncrements { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_FieldsBoost.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.FieldsBoost%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L372">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_FieldsBoost_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.FieldsBoost*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_FieldsBoost" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.FieldsBoost">FieldsBoost</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the field to boost map used to set boost for each field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IDictionary&lt;string, float?&gt; FieldsBoost { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.Nullable</span>&lt;<span class="xref">System.Single</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_FuzzyMinSim.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.FuzzyMinSim%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L344">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_FuzzyMinSim_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.FuzzyMinSim*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_FuzzyMinSim" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.FuzzyMinSim">FuzzyMinSim</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the minimum similarity for fuzzy queries. Default is defined on
+<a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00013/api/core/Lucene.Net.Search.FuzzyQuery.html#Lucene_Net_Search_FuzzyQuery_DefaultMinSimilarity">DefaultMinSimilarity</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual float FuzzyMinSim { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_FuzzyPrefixLength.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.FuzzyPrefixLength%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L258">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_FuzzyPrefixLength_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.FuzzyPrefixLength*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_FuzzyPrefixLength" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.FuzzyPrefixLength">FuzzyPrefixLength</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the prefix length for fuzzy queries. Default is 0.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int FuzzyPrefixLength { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_Locale.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.Locale%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L297">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_Locale_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.Locale*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_Locale" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.Locale">Locale</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets current locale, allowing access by subclasses. Used by date range parsing</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual CultureInfo Locale { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Globalization.CultureInfo</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_LowercaseExpandedTerms.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.LowercaseExpandedTerms%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L176">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_LowercaseExpandedTerms_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.LowercaseExpandedTerms*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_LowercaseExpandedTerms" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.LowercaseExpandedTerms">LowercaseExpandedTerms</h4>
+  <div class="markdown level1 summary"><p>Set to <code>true</code> to allow leading wildcard characters.
+<p>
+When set, <code>*</code> or <code>?</code> are allowed as the first
+character of a <a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00013/api/core/Lucene.Net.Search.PrefixQuery.html">PrefixQuery</a> and <a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00013/api/core/Lucene.Net.Search.WildcardQuery.html">WildcardQuery</a>. Note that this can produce
+very slow queries on big indexes.
+<p>
+Default: false.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool LowercaseExpandedTerms { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_MultiTermRewriteMethod.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.MultiTermRewriteMethod%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L222">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_MultiTermRewriteMethod_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.MultiTermRewriteMethod*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_MultiTermRewriteMethod" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.MultiTermRewriteMethod">MultiTermRewriteMethod</h4>
+  <div class="markdown level1 summary"><p>By default, it uses 
+<a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00013/api/core/Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_AUTO_REWRITE_DEFAULT">CONSTANT_SCORE_AUTO_REWRITE_DEFAULT</a> when creating a
+prefix, wildcard and range queries. This implementation is generally
+preferable because it a) Runs faster b) Does not have the scarcity of terms
+unduly influence score c) avoids any Exception due to too many listeners.
+However, if your application really needs to use the
+old-fashioned boolean queries expansion rewriting and the above points are
+not relevant then use this change the rewrite method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual MultiTermQuery.RewriteMethod MultiTermRewriteMethod { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.MultiTermQuery.RewriteMethod</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_NumericConfigMap.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.NumericConfigMap%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L288">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_NumericConfigMap_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.NumericConfigMap*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_NumericConfigMap" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.NumericConfigMap">NumericConfigMap</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IDictionary&lt;string, NumericConfig&gt; NumericConfigMap { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<span class="xref">System.String</span>, <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Config.NumericConfig.html">NumericConfig</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_PhraseSlop.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.PhraseSlop%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L334">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_PhraseSlop_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.PhraseSlop*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_PhraseSlop" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.PhraseSlop">PhraseSlop</h4>
+  <div class="markdown level1 summary"><p>Gets or Sets the default slop for phrases. If zero, then exact phrase matches are
+required. Default value is zero. NOTE: Setter is deprecated.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int PhraseSlop { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_TimeZone.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.TimeZone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L307">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_TimeZone_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.TimeZone*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_TimeZone" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.TimeZone">TimeZone</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TimeZoneInfo TimeZone { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.TimeZoneInfo</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_GetMultiFields.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.GetMultiFields%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L250">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_GetMultiFields_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.GetMultiFields*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_GetMultiFields" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.GetMultiFields">GetMultiFields()</h4>
+  <div class="markdown level1 summary"><p>Returns the fields used to expand the query when the field for a
+certain query is <code>null</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual string[] GetMultiFields()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><p>the fields used to expand the query</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_Parse_System_String_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.Parse(System.String%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L147">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_Parse_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.Parse*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_Parse_System_String_System_String_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.Parse(System.String,System.String)">Parse(String, String)</h4>
+  <div class="markdown level1 summary"><p>Overrides <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryParserHelper-1.html#Lucene_Net_QueryParsers_Flexible_Core_QueryParserHelper_1_Parse_System_String_System_String_">Parse(String, String)</a> so it casts the
+return object to <span class="xref">Lucene.Net.Search.Query</span>. For more reference about this method, check
+<a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryParserHelper-1.html#Lucene_Net_QueryParsers_Flexible_Core_QueryParserHelper_1_Parse_System_String_System_String_">Parse(String, String)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Query Parse(string query, string defaultField)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">query</span></td>
+        <td><p>the query string</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">defaultField</span></td>
+        <td><p>the default field used by the text parser</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Search.Query</span></td>
+        <td><p>the object built from the query</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.QueryParsers.Flexible.Core.QueryParserHelper&lt;Lucene.Net.Search.Query&gt;.Parse(System.String, System.String)</span></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryNodeException.html">QueryNodeException</a></td>
+        <td><p>if something wrong happens along the three phases</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_SetDateResolution_Lucene_Net_Documents_DateTools_Resolution_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.SetDateResolution(Lucene.Net.Documents.DateTools.Resolution)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L384">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_SetDateResolution_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.SetDateResolution*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_SetDateResolution_Lucene_Net_Documents_DateTools_Resolution_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.SetDateResolution(Lucene.Net.Documents.DateTools.Resolution)">SetDateResolution(DateTools.Resolution)</h4>
+  <div class="markdown level1 summary"><p>Sets the default <span class="xref">Lucene.Net.Documents.DateTools.Resolution</span> used for certain field when
+no <span class="xref">Lucene.Net.Documents.DateTools.Resolution</span> is defined for this field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetDateResolution(DateTools.Resolution dateResolution)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Documents.DateTools.Resolution</span></td>
+        <td><span class="parametername">dateResolution</span></td>
+        <td><p>the default <span class="xref">Lucene.Net.Documents.DateTools.Resolution</span></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_SetDateResolution_System_Collections_Generic_IDictionary_System_String_System_Nullable_Lucene_Net_Documents_DateTools_Resolution___.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.SetDateResolution(System.Collections.Generic.IDictionary%7BSystem.String%2CSystem.Nullable%7BLucene.Net.Documents.DateTools.Resolution%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L399">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_SetDateResolution_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.SetDateResolution*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_SetDateResolution_System_Collections_Generic_IDictionary_System_String_System_Nullable_Lucene_Net_Documents_DateTools_Resolution___" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.SetDateResolution(System.Collections.Generic.IDictionary{System.String,System.Nullable{Lucene.Net.Documents.DateTools.Resolution}})">SetDateResolution(IDictionary&lt;String, Nullable&lt;DateTools.Resolution&gt;&gt;)</h4>
+  <div class="markdown level1 summary"><p>Sets the <span class="xref">Lucene.Net.Documents.DateTools.Resolution</span> used for each field</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use DateResolutionMap property instead.&quot;)]
+public virtual void SetDateResolution(IDictionary&lt;string, DateTools.Resolution?&gt; dateRes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.Nullable</span>&lt;<span class="xref">Lucene.Net.Documents.DateTools.Resolution</span>&gt;&gt;</td>
+        <td><span class="parametername">dateRes</span></td>
+        <td><p>a collection that maps a field to its <span class="xref">Lucene.Net.Documents.DateTools.Resolution</span></p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_SetDefaultPhraseSlop_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.SetDefaultPhraseSlop(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L318">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_SetDefaultPhraseSlop_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.SetDefaultPhraseSlop*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_SetDefaultPhraseSlop_System_Int32_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.SetDefaultPhraseSlop(System.Int32)">SetDefaultPhraseSlop(Int32)</h4>
+  <div class="markdown level1 summary"><p>Sets the default slop for phrases. If zero, then exact phrase matches are
+required. Default value is zero.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Obsolete(&quot;Use PhraseSlop property setter instead.&quot;)]
+public virtual void SetDefaultPhraseSlop(int defaultPhraseSlop)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">defaultPhraseSlop</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_SetMultiFields_System_String___.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.SetMultiFields(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L233">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_SetMultiFields_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.SetMultiFields*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_SetMultiFields_System_String___" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.SetMultiFields(System.String[])">SetMultiFields(String[])</h4>
+  <div class="markdown level1 summary"><p>Set the fields a query should be expanded to when the field is
+<code>null</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetMultiFields(string[] fields)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">fields</span></td>
+        <td><p>the fields used to expand the query</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L132">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_ToString_" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.ToString*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser_ToString" data-uid="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.ICommonQueryParserConfiguration.html">ICommonQueryParserConfiguration</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser.html">StandardQueryParser</a></div>
+      <div><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Config.StandardQueryConfigHandler.html">StandardQueryConfigHandler</a></div>
+      <div><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Parser.StandardSyntaxParser.html">StandardSyntaxParser</a></div>
+      <div><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.StandardQueryNodeProcessorPipeline.html">StandardQueryNodeProcessorPipeline</a></div>
+      <div><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Builders.StandardQueryTreeBuilder.html">StandardQueryTreeBuilder</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Standard_StandardQueryParser.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Standard.StandardQueryParser%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.QueryParser/Flexible/Standard/StandardQueryParser.cs/#L104" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

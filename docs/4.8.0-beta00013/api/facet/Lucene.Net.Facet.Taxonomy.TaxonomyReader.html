@@ -1,0 +1,885 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class TaxonomyReader
+   | Apache Lucene.NET 4.8.0-beta00013 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class TaxonomyReader
+   | Apache Lucene.NET 4.8.0-beta00013 Documentation ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="facet/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader">
+  
+  
+  <h1 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader" class="text-break">Class TaxonomyReader
+  </h1>
+  <div class="markdown level0 summary"><p>TaxonomyReader is the read-only interface with which the faceted-search
+library uses the taxonomy during search time.
+<p>
+A TaxonomyReader holds a list of categories. Each category has a serial
+number which we call an &quot;ordinal&quot;, and a hierarchical &quot;path&quot; name:
+<ul><li>
+The ordinal is an integer that starts at 0 for the first category (which is
+always the root category), and grows contiguously as more categories are
+added; Note that once a category is added, it can never be deleted.
+</li><li>
+The path is a CategoryPath object specifying the category&apos;s position in the
+hierarchy.
+</li></ul>
+</p>
+<strong>Notes about concurrent access to the taxonomy:</strong>
+<p>
+An implementation must allow multiple readers to be active concurrently
+with a single writer. Readers follow so-called &quot;point in time&quot; semantics,
+i.e., a TaxonomyReader object will only see taxonomy entries which were
+available at the time it was created. What the writer writes is only
+available to (new) readers after the writer&apos;s <a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00013/api/core/Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_Commit">Commit()</a> is called.
+</p>
+<p>
+In faceted search, two separate indices are used: the main Lucene index,
+and the taxonomy. Because the main index refers to the categories listed
+in the taxonomy, it is important to open the taxonomy <em>after</em> opening the
+main index, and it is also necessary to Reopen() the taxonomy after
+Reopen()ing the main index.
+</p>
+<p>
+This order is important, otherwise it would be possible for the main index
+to refer to a category which is not yet visible in the old snapshot of
+the taxonomy. Note that it is indeed fine for the the taxonomy to be opened
+after the main index - even a long time after. The reason is that once
+a category is added to the taxonomy, it can never be changed or deleted,
+so there is no danger that a &quot;too new&quot; taxonomy not being consistent with
+an older index.
+</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">TaxonomyReader</span></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.Facet.Taxonomy.Directory.DirectoryTaxonomyReader.html">DirectoryTaxonomyReader</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Facet.Taxonomy.html">Lucene.Net.Facet.Taxonomy</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Facet.dll</h6>
+  <h5 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class TaxonomyReader : IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L113">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader__ctor_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.#ctor*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader__ctor" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.#ctor">TaxonomyReader()</h4>
+  <div class="markdown level1 summary"><p>Sole constructor.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected TaxonomyReader()</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_INVALID_ORDINAL.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.INVALID_ORDINAL%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L129">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_INVALID_ORDINAL" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.INVALID_ORDINAL">INVALID_ORDINAL</h4>
+  <div class="markdown level1 summary"><p>Ordinals are always non-negative, so a negative ordinal can be used to
+signify an error. Methods here return <a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyReader.html#Lucene_Net_Facet_Taxonomy_TaxonomyReader_INVALID_ORDINAL">INVALID_ORDINAL</a> (-1) in this case.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int INVALID_ORDINAL = -1</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_ROOT_ORDINAL.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.ROOT_ORDINAL%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L123">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_ROOT_ORDINAL" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.ROOT_ORDINAL">ROOT_ORDINAL</h4>
+  <div class="markdown level1 summary"><p>The root category (the category with the empty path) always has the ordinal
+0, to which we give a name ROOT_ORDINAL. <a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyReader.html#Lucene_Net_Facet_Taxonomy_TaxonomyReader_GetOrdinal_Lucene_Net_Facet_Taxonomy_FacetLabel_">GetOrdinal(FacetLabel)</a>
+of an empty path will always return <a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyReader.html#Lucene_Net_Facet_Taxonomy_TaxonomyReader_ROOT_ORDINAL">ROOT_ORDINAL</a>, and
+<a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyReader.html#Lucene_Net_Facet_Taxonomy_TaxonomyReader_GetPath_System_Int32_">GetPath(Int32)</a> with <a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyReader.html#Lucene_Net_Facet_Taxonomy_TaxonomyReader_ROOT_ORDINAL">ROOT_ORDINAL</a> will return the empty path.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int ROOT_ORDINAL = 0</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_CommitUserData.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.CommitUserData%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L251">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_CommitUserData_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.CommitUserData*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_CommitUserData" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.CommitUserData">CommitUserData</h4>
+  <div class="markdown level1 summary"><p>Retrieve user committed data.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract IDictionary&lt;string, string&gt; CommitUserData { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.String</span>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_CommitUserData_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Facet.Taxonomy.ITaxonomyWriter.html#Lucene_Net_Facet_Taxonomy_ITaxonomyWriter_CommitData">CommitData</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_Count.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.Count%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L291">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_Count_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.Count*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_Count" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.Count">Count</h4>
+  <div class="markdown level1 summary"><p>Returns the number of categories in the taxonomy. Note that the number of
+categories returned is often slightly higher than the number of categories
+inserted into the taxonomy; This is because when a category is added to the
+taxonomy, its ancestors are also added automatically (including the root,
+which always get ordinal 0).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_ParallelTaxonomyArrays.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.ParallelTaxonomyArrays%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L235">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_ParallelTaxonomyArrays_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.ParallelTaxonomyArrays*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_ParallelTaxonomyArrays" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.ParallelTaxonomyArrays">ParallelTaxonomyArrays</h4>
+  <div class="markdown level1 summary"><p>Returns a <a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyReader.html#Lucene_Net_Facet_Taxonomy_TaxonomyReader_ParallelTaxonomyArrays">ParallelTaxonomyArrays</a> object which can be used to
+efficiently traverse the taxonomy tree.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract ParallelTaxonomyArrays ParallelTaxonomyArrays { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Facet.Taxonomy.ParallelTaxonomyArrays.html">ParallelTaxonomyArrays</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_RefCount.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.RefCount%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L282">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_RefCount_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.RefCount*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_RefCount" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.RefCount">RefCount</h4>
+  <div class="markdown level1 summary"><p>Returns the current refCount for this taxonomy reader.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int RefCount { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_DecRef.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.DecRef%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L203">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_DecRef_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.DecRef*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_DecRef" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.DecRef">DecRef()</h4>
+  <div class="markdown level1 summary"><p>Expert: decreases the refCount of this TaxonomyReader instance. If the
+refCount drops to 0 this taxonomy reader is closed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void DecRef()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_Dispose.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L179">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_Dispose_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.Dispose*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_Dispose" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L197">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_Dispose_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.Dispose*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_Dispose_System_Boolean_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.Dispose(System.Boolean)">Dispose(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Performs the actual task of closing the resources that are used by the
+taxonomy reader.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">disposing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_DoOpenIfChanged.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.DoOpenIfChanged%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L164">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_DoOpenIfChanged_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.DoOpenIfChanged*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_DoOpenIfChanged" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.DoOpenIfChanged">DoOpenIfChanged()</h4>
+  <div class="markdown level1 summary"><p>Implements the actual opening of a new <a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyReader.html">TaxonomyReader</a> instance if
+the taxonomy has changed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract TaxonomyReader DoOpenIfChanged()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyReader.html">TaxonomyReader</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_DoOpenIfChanged_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyReader.html#Lucene_Net_Facet_Taxonomy_TaxonomyReader_OpenIfChanged__1___0_">OpenIfChanged&lt;T&gt;(T)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_EnsureOpen.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.EnsureOpen%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L169">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_EnsureOpen_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.EnsureOpen*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_EnsureOpen" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.EnsureOpen">EnsureOpen()</h4>
+  <div class="markdown level1 summary"><p>Throws <span class="xref">System.ObjectDisposedException</span> if this <span class="xref">Lucene.Net.Index.IndexReader</span> is disposed</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected void EnsureOpen()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_GetChildren_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.GetChildren(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L240">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_GetChildren_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.GetChildren*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_GetChildren_System_Int32_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.GetChildren(System.Int32)">GetChildren(Int32)</h4>
+  <div class="markdown level1 summary"><p>Returns an iterator over the children of the given ordinal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual TaxonomyReader.ChildrenEnumerator GetChildren(int ordinal)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">ordinal</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyReader.ChildrenEnumerator.html">TaxonomyReader.ChildrenEnumerator</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_GetOrdinal_Lucene_Net_Facet_Taxonomy_FacetLabel_.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.GetOrdinal(Lucene.Net.Facet.Taxonomy.FacetLabel)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L261">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_GetOrdinal_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.GetOrdinal*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_GetOrdinal_Lucene_Net_Facet_Taxonomy_FacetLabel_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.GetOrdinal(Lucene.Net.Facet.Taxonomy.FacetLabel)">GetOrdinal(FacetLabel)</h4>
+  <div class="markdown level1 summary"><p>Returns the ordinal of the category given as a path. The ordinal is the
+category&apos;s serial number, an integer which starts with 0 and grows as more
+categories are added (note that once a category is added, it can never be
+deleted).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract int GetOrdinal(FacetLabel categoryPath)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Facet.Taxonomy.FacetLabel.html">FacetLabel</a></td>
+        <td><span class="parametername">categoryPath</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>the category&apos;s ordinal or <a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyReader.html#Lucene_Net_Facet_Taxonomy_TaxonomyReader_INVALID_ORDINAL">INVALID_ORDINAL</a> if the category
+       wasn&apos;t found. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_GetOrdinal_System_String_System_String___.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.GetOrdinal(System.String%2CSystem.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L266">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_GetOrdinal_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.GetOrdinal*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_GetOrdinal_System_String_System_String___" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.GetOrdinal(System.String,System.String[])">GetOrdinal(String, String[])</h4>
+  <div class="markdown level1 summary"><p>Returns ordinal for the dim + path.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int GetOrdinal(string dim, string[] path)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">dim</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">path</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_GetPath_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.GetPath(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L277">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_GetPath_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.GetPath*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_GetPath_System_Int32_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.GetPath(System.Int32)">GetPath(Int32)</h4>
+  <div class="markdown level1 summary"><p>Returns the path name of the category with the given ordinal.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract FacetLabel GetPath(int ordinal)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">ordinal</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Facet.Taxonomy.FacetLabel.html">FacetLabel</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_IncRef.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.IncRef%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L300">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_IncRef_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.IncRef*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_IncRef" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.IncRef">IncRef()</h4>
+  <div class="markdown level1 summary"><p>Expert: increments the refCount of this TaxonomyReader instance. RefCounts
+can be used to determine when a taxonomy reader can be closed safely, i.e.
+as soon as there are no more references. Be sure to always call a
+corresponding <a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyReader.html#Lucene_Net_Facet_Taxonomy_TaxonomyReader_DecRef">DecRef()</a>, in a finally clause; otherwise the reader may never
+be disposed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void IncRef()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_OpenIfChanged__1___0_.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.OpenIfChanged%60%601(%60%600)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L143">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_OpenIfChanged_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.OpenIfChanged*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_OpenIfChanged__1___0_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.OpenIfChanged``1(``0)">OpenIfChanged&lt;T&gt;(T)</h4>
+  <div class="markdown level1 summary"><p>If the taxonomy has changed since the provided reader was opened, open and
+return a new <a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyReader.html">TaxonomyReader</a>; else, return <code>null</code>. The new
+reader, if not <code>null</code>, will be the same type of reader as the one
+given to this method.</p>
+<p>
+This method is typically far less costly than opening a fully new
+<a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyReader.html">TaxonomyReader</a> as it shares resources with the provided
+<a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyReader.html">TaxonomyReader</a>, when possible.
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static T OpenIfChanged&lt;T&gt;(T oldTaxoReader)
+    where T : TaxonomyReader</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td><span class="parametername">oldTaxoReader</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader_TryIncRef.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader.TryIncRef%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L311">View Source</a>
+  </span>
+  <a id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_TryIncRef_" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.TryIncRef*"></a>
+  <h4 id="Lucene_Net_Facet_Taxonomy_TaxonomyReader_TryIncRef" data-uid="Lucene.Net.Facet.Taxonomy.TaxonomyReader.TryIncRef">TryIncRef()</h4>
+  <div class="markdown level1 summary"><p>Expert: increments the refCount of this TaxonomyReader
+instance only if it has not been closed yet.  Returns
+<code>true</code> on success. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool TryIncRef()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Facet_Taxonomy_TaxonomyReader.md&amp;value=---%0Auid%3A%20Lucene.Net.Facet.Taxonomy.TaxonomyReader%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net.Facet/Taxonomy/TaxonomyReader.cs/#L72" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

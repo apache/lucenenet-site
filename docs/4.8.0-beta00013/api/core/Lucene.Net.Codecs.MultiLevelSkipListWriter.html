@@ -1,0 +1,495 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class MultiLevelSkipListWriter
+   | Apache Lucene.NET 4.8.0-beta00013 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class MultiLevelSkipListWriter
+   | Apache Lucene.NET 4.8.0-beta00013 Documentation ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter">
+  
+  
+  <h1 id="Lucene_Net_Codecs_MultiLevelSkipListWriter" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter" class="text-break">Class MultiLevelSkipListWriter
+  </h1>
+  <div class="markdown level0 summary"><p>This abstract class writes skip lists with multiple levels.</p>
+<pre><code>Example for skipInterval = 3:
+                                                    c            (skip level 2)
+                c                 c                 c            (skip level 1)
+    x     x     x     x     x     x     x     x     x     x      (skip level 0)
+d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d d  (posting list)
+    3     6     9     12    15    18    21    24    27    30     (df)
+
+d - document
+x - skip data
+c - skip data with child pointer
+
+Skip level i contains every skipInterval-th entry from skip level i-1.
+Therefore the number of entries on level i is: floor(df / ((skipInterval ^ (i + 1))).
+
+Each skip entry on a level i>0 contains a pointer to the corresponding skip entry in list i-1.
+this guarantees a logarithmic amount of skips to find the target document.
+
+While this class takes care of writing the different skip levels,
+subclasses must define the actual format of the skip data.</code></pre>
+<p><p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">MultiLevelSkipListWriter</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Codecs.html">Lucene.Net.Codecs</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Codecs_MultiLevelSkipListWriter_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class MultiLevelSkipListWriter</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_MultiLevelSkipListWriter__ctor_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.MultiLevelSkipListWriter.%23ctor(System.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net/Codecs/MultiLevelSkipListWriter.cs/#L103">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_MultiLevelSkipListWriter__ctor_" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_MultiLevelSkipListWriter__ctor_System_Int32_System_Int32_System_Int32_" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter.#ctor(System.Int32,System.Int32,System.Int32)">MultiLevelSkipListWriter(Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Creates a <a class="xref" href="Lucene.Net.Codecs.MultiLevelSkipListWriter.html">MultiLevelSkipListWriter</a>, where
+<span class="xref">Lucene.Net.Codecs.MultiLevelSkipListWriter.skipInterval</span> and <span class="xref">Lucene.Net.Codecs.MultiLevelSkipListWriter.skipMultiplier</span> are
+the same.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected MultiLevelSkipListWriter(int skipInterval, int maxSkipLevels, int df)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">skipInterval</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxSkipLevels</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">df</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_MultiLevelSkipListWriter__ctor_System_Int32_System_Int32_System_Int32_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.MultiLevelSkipListWriter.%23ctor(System.Int32%2CSystem.Int32%2CSystem.Int32%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net/Codecs/MultiLevelSkipListWriter.cs/#L76">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_MultiLevelSkipListWriter__ctor_" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_MultiLevelSkipListWriter__ctor_System_Int32_System_Int32_System_Int32_System_Int32_" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter.#ctor(System.Int32,System.Int32,System.Int32,System.Int32)">MultiLevelSkipListWriter(Int32, Int32, Int32, Int32)</h4>
+  <div class="markdown level1 summary"><p>Creates a <a class="xref" href="Lucene.Net.Codecs.MultiLevelSkipListWriter.html">MultiLevelSkipListWriter</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected MultiLevelSkipListWriter(int skipInterval, int skipMultiplier, int maxSkipLevels, int df)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">skipInterval</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">skipMultiplier</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxSkipLevels</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">df</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_MultiLevelSkipListWriter_m_numberOfSkipLevels.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.MultiLevelSkipListWriter.m_numberOfSkipLevels%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net/Codecs/MultiLevelSkipListWriter.cs/#L60">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_MultiLevelSkipListWriter_m_numberOfSkipLevels" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter.m_numberOfSkipLevels">m_numberOfSkipLevels</h4>
+  <div class="markdown level1 summary"><p>Number of levels in this skip list. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int m_numberOfSkipLevels</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_MultiLevelSkipListWriter_BufferSkip_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.MultiLevelSkipListWriter.BufferSkip(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net/Codecs/MultiLevelSkipListWriter.cs/#L151">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_MultiLevelSkipListWriter_BufferSkip_" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter.BufferSkip*"></a>
+  <h4 id="Lucene_Net_Codecs_MultiLevelSkipListWriter_BufferSkip_System_Int32_" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter.BufferSkip(System.Int32)">BufferSkip(Int32)</h4>
+  <div class="markdown level1 summary"><p>Writes the current skip data to the buffers. The current document frequency determines
+the max level is skip data is to be written to.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void BufferSkip(int df)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">df</span></td>
+        <td><p>The current document frequency. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>If an I/O error occurs. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_MultiLevelSkipListWriter_Init.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.MultiLevelSkipListWriter.Init%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net/Codecs/MultiLevelSkipListWriter.cs/#L110">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_MultiLevelSkipListWriter_Init_" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter.Init*"></a>
+  <h4 id="Lucene_Net_Codecs_MultiLevelSkipListWriter_Init" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter.Init">Init()</h4>
+  <div class="markdown level1 summary"><p>Allocates internal skip buffers. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void Init()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_MultiLevelSkipListWriter_ResetSkip.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.MultiLevelSkipListWriter.ResetSkip%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net/Codecs/MultiLevelSkipListWriter.cs/#L122">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_MultiLevelSkipListWriter_ResetSkip_" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter.ResetSkip*"></a>
+  <h4 id="Lucene_Net_Codecs_MultiLevelSkipListWriter_ResetSkip" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter.ResetSkip">ResetSkip()</h4>
+  <div class="markdown level1 summary"><p>Creates new buffers or empties the existing ones. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void ResetSkip()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_MultiLevelSkipListWriter_WriteSkip_Lucene_Net_Store_IndexOutput_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.MultiLevelSkipListWriter.WriteSkip(Lucene.Net.Store.IndexOutput)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net/Codecs/MultiLevelSkipListWriter.cs/#L188">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_MultiLevelSkipListWriter_WriteSkip_" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter.WriteSkip*"></a>
+  <h4 id="Lucene_Net_Codecs_MultiLevelSkipListWriter_WriteSkip_Lucene_Net_Store_IndexOutput_" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter.WriteSkip(Lucene.Net.Store.IndexOutput)">WriteSkip(IndexOutput)</h4>
+  <div class="markdown level1 summary"><p>Writes the buffered skip lists to the given output.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual long WriteSkip(IndexOutput output)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IndexOutput.html">IndexOutput</a></td>
+        <td><span class="parametername">output</span></td>
+        <td><p>The <a class="xref" href="Lucene.Net.Store.IndexOutput.html">IndexOutput</a> the skip lists shall be written to. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><p>The pointer the skip list starts. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_MultiLevelSkipListWriter_WriteSkipData_System_Int32_Lucene_Net_Store_IndexOutput_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.MultiLevelSkipListWriter.WriteSkipData(System.Int32%2CLucene.Net.Store.IndexOutput)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net/Codecs/MultiLevelSkipListWriter.cs/#L143">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_MultiLevelSkipListWriter_WriteSkipData_" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter.WriteSkipData*"></a>
+  <h4 id="Lucene_Net_Codecs_MultiLevelSkipListWriter_WriteSkipData_System_Int32_Lucene_Net_Store_IndexOutput_" data-uid="Lucene.Net.Codecs.MultiLevelSkipListWriter.WriteSkipData(System.Int32,Lucene.Net.Store.IndexOutput)">WriteSkipData(Int32, IndexOutput)</h4>
+  <div class="markdown level1 summary"><p>Subclasses must implement the actual skip data encoding in this method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract void WriteSkipData(int level, IndexOutput skipBuffer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">level</span></td>
+        <td><p>The level skip data shall be writing for. </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IndexOutput.html">IndexOutput</a></td>
+        <td><span class="parametername">skipBuffer</span></td>
+        <td><p>The skip buffer to write to. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Codecs_MultiLevelSkipListWriter.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.MultiLevelSkipListWriter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net/Codecs/MultiLevelSkipListWriter.cs/#L56" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>
