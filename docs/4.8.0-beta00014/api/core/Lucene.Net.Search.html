@@ -1,0 +1,1827 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Lucene.Net.Search
+   | Apache Lucene.NET 4.8.0-beta00014 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Lucene.Net.Search
+   | Apache Lucene.NET 4.8.0-beta00014 Documentation ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00014/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search">
+  
+  <h1 id="Lucene_Net_Search" data-uid="Lucene.Net.Search" class="text-break">Namespace Lucene.Net.Search
+  </h1>
+  <div class="markdown level0 summary"><!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<p>Code to search indices.</p>
+<h2 id="table-of-contents">Table Of Contents</h2>
+<ol>
+<li><a href="#search-basics">Search Basics</a></li>
+<li><a href="#query-classes">The Query Classes</a></li>
+<li><a href="#scoring--introduction">Scoring: Introduction</a></li>
+<li><a href="#scoring--basics">Scoring: Basics</a></li>
+<li><a href="#changing-scoring--similarity">Changing the Scoring</a></li>
+<li><a href="#appendix-search-algorithm">Appendix: Search Algorithm</a> </li>
+</ol>
+<h2 id="search-basics">Search Basics</h2>
+<p> Lucene offers a wide variety of <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> implementations, most of which are in this package, its subpackages (<a class="xref" href="Lucene.Net.Search.Spans.html">Lucene.Net.Spans</a>, <a class="xref" href="Lucene.Net.Search.Payloads.html">Lucene.Net.Payloads</a>), or the <a href="../queries/Lucene.Net.Queries.html">Lucene.Net.Queries module</a>. These implementations can be combined in a wide variety of ways to provide complex querying capabilities along with information about where matches took place in the document collection. The <a href="#query-classes">Query Classes</a> section below highlights some of the more important Query classes. For details on implementing your own Query class, see <a href="#custom-queries--expert-level">Custom Queries -- Expert Level</a> below. </p>
+<p> To perform a search, applications usually call <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_System_Int32_">Search(Query, int)</a> or <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_">Search(Query, Filter, int)</a>. </p>
+<p> Once a Query has been created and submitted to the <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a>, the scoring process begins. After some infrastructure setup, control finally passes to the <a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a> implementation and its <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> or <a class="xref" href="Lucene.Net.Search.BulkScorer.html">BulkScorer</a> instances. See the <a href="#appendix-search-algorithm">Algorithm</a> section for more notes on the process.</p>
+<h2 id="query-classes">Query Classes</h2>
+<h4 id="termqueryxreflucenenetsearchtermquery"><a class="xref" href="Lucene.Net.Search.TermQuery.html">TermQuery</a></h4>
+<p>Of the various implementations of <a class="xref" href="Lucene.Net.Search.Query.html">Query</a>, the <a class="xref" href="Lucene.Net.Search.TermQuery.html">TermQuery</a> is the easiest to understand and the most often used in applications. A <a class="xref" href="Lucene.Net.Search.TermQuery.html">TermQuery</a> matches all the documents that contain the specified <a class="xref" href="Lucene.Net.Index.Term.html">Term</a>, which is a word that occurs in a certain <a class="xref" href="Lucene.Net.Documents.Field.html">Field</a>. Thus, a <a class="xref" href="Lucene.Net.Search.TermQuery.html">TermQuery</a> identifies and scores all <a class="xref" href="Lucene.Net.Documents.Document.html">Document</a>s that have a <a class="xref" href="Lucene.Net.Documents.Field.html">Field</a> with the specified string in it. Constructing a <a class="xref" href="Lucene.Net.Search.TermQuery.html">TermQuery</a> is as simple as:</p>
+<pre><code class="lang-cs">TermQuery tq = new TermQuery(new Term(&quot;fieldName&quot;, &quot;term&quot;));
+</code></pre><p>In this example, the <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> identifies all <a class="xref" href="Lucene.Net.Documents.Document.html">Document</a>s that have the <a class="xref" href="Lucene.Net.Documents.Field.html">Field</a> named <code>&quot;fieldName&quot;</code> containing the word <code>&quot;term&quot;</code>. </p>
+<h4 id="booleanqueryxreflucenenetsearchbooleanquery"><a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a></h4>
+<p>Things start to get interesting when one combines multiple <a class="xref" href="Lucene.Net.Search.TermQuery.html">TermQuery</a> instances into a <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>. A <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a> contains multiple <a class="xref" href="Lucene.Net.Search.BooleanClause.html">BooleanClause</a>s, where each clause contains a sub-query (<a class="xref" href="Lucene.Net.Search.Query.html">Query</a> instance) and an operator (from <a class="xref" href="Lucene.Net.Search.Occur.html">BooleanClause.Occur</a>) describing how that sub-query is combined with the other clauses:</p>
+<ol>
+<li><p><a class="xref" href="Lucene.Net.Search.Occur.html#Lucene_Net_Search_Occur_SHOULD">Occur.SHOULD</a> — Use this operator when a clause can occur in the result set, but is not required. If a query is made up of all SHOULD clauses, then every document in the result set matches at least one of these clauses.</p></li>
+<li><p><a class="xref" href="Lucene.Net.Search.Occur.html#Lucene_Net_Search_Occur_MUST">Occur.MUST</a> — Use this operator when a clause is required to occur in the result set. Every document in the result set will match all such clauses.</p></li>
+<li><p><a class="xref" href="Lucene.Net.Search.Occur.html#Lucene_Net_Search_Occur_MUST_NOT">Occur.MUST_NOT</a> — Use this operator when a clause must not occur in the result set. No document in the result set will match any such clauses.</p></li>
+</ol>
+<p>Boolean queries are constructed by adding two or more <a class="xref" href="Lucene.Net.Search.BooleanClause.html">BooleanClause</a> instances. If too many clauses are added, a <a href="xref:Lucene.Net.Search.BooleanQuery.TooManyClauses">TooManyClauses</a> exception will be thrown during searching. This most often occurs when a <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> is rewritten into a <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a> with many <a class="xref" href="Lucene.Net.Search.TermQuery.html">TermQuery</a> clauses, for example by <a class="xref" href="Lucene.Net.Search.WildcardQuery.html">WildcardQuery</a>. The default setting for the maximum number of clauses 1024, but this can be changed via the static method <a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">BooleanQuery.MaxClauseCount</a>. </p>
+<h4 id="phrases">Phrases</h4>
+<p>Another common search is to find documents containing certain phrases. This is handled three different ways:</p>
+<ol>
+<li><p><a class="xref" href="Lucene.Net.Search.PhraseQuery.html">PhraseQuery</a> — Matches a sequence of <a class="xref" href="Lucene.Net.Index.Term.html">Term</a>s. <a class="xref" href="Lucene.Net.Search.PhraseQuery.html">PhraseQuery</a> uses a slop factor to determine how many positions may occur between any two terms in the phrase and still be considered a match. The slop is 0 by default, meaning the phrase must match exactly.</p>
+</li>
+<li><p><a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html">MultiPhraseQuery</a> — A more general form of PhraseQuery that accepts multiple Terms for a position in the phrase. For example, this can be used to perform phrase queries that also incorporate synonyms.</p>
+</li>
+<li><p><a class="xref" href="Lucene.Net.Search.Spans.SpanNearQuery.html">SpanNearQuery</a> — Matches a sequence of other <a class="xref" href="Lucene.Net.Search.Spans.SpanQuery.html">SpanQuery</a> instances. <a class="xref" href="Lucene.Net.Search.Spans.SpanNearQuery.html">SpanNearQuery</a> allows for much more complicated phrase queries since it is constructed from other <a class="xref" href="Lucene.Net.Search.Spans.SpanQuery.html">SpanQuery</a> instances, instead of only <a class="xref" href="Lucene.Net.Search.TermQuery.html">TermQuery</a> instances.</p>
+</li>
+</ol>
+<h4 id="termrangequeryxreflucenenetsearchtermrangequery"><a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a></h4>
+<p>The <a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a> matches all documents that occur in the exclusive range of a lower <a class="xref" href="Lucene.Net.Index.Term.html">Term</a> and an upper <a class="xref" href="Lucene.Net.Index.Term.html">Term</a> according to <a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Comparer">TermsEnum.Comparer</a>. It is not intended for numerical ranges; use <a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a> instead. For example, one could find all documents that have terms beginning with the letters <tt>a</tt> through <tt>c</tt>. </p>
+<h4 id="numericrangequeryxreflucenenetsearchnumericrangequery"><a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a></h4>
+<p>The <a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a> matches all documents that occur in a numeric range. For NumericRangeQuery to work, you must index the values using a one of the numeric fields (<a class="xref" href="Lucene.Net.Documents.Int32Field.html">Int32Field</a>, <a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a>, <a class="xref" href="Lucene.Net.Documents.SingleField.html">SingleField</a>, or <a class="xref" href="Lucene.Net.Documents.DoubleField.html">DoubleField</a>). </p>
+<h4 id="prefixqueryxreflucenenetsearchprefixquery-wildcardqueryxreflucenenetsearchwildcardquery-regexpqueryxreflucenenetsearchregexpquery"><a class="xref" href="Lucene.Net.Search.PrefixQuery.html">PrefixQuery</a>, <a class="xref" href="Lucene.Net.Search.WildcardQuery.html">WildcardQuery</a>, <a class="xref" href="Lucene.Net.Search.RegexpQuery.html">RegexpQuery</a></h4>
+<p>While the <a class="xref" href="Lucene.Net.Search.PrefixQuery.html">PrefixQuery</a> has a different implementation, it is essentially a special case of the <a class="xref" href="Lucene.Net.Search.WildcardQuery.html">WildcardQuery</a>. The <a class="xref" href="Lucene.Net.Search.PrefixQuery.html">PrefixQuery</a> allows an application to identify all documents with terms that begin with a certain string. The <a class="xref" href="Lucene.Net.Search.WildcardQuery.html">WildcardQuery</a> generalizes this by allowing for the use of <tt><em></em></tt> (matches 0 or more characters) and <tt>?</tt> (matches exactly one character) wildcards. Note that the <a class="xref" href="Lucene.Net.Search.WildcardQuery.html">WildcardQuery</a> can be quite slow. Also note that <a class="xref" href="Lucene.Net.Search.WildcardQuery.html">WildcardQuery</a> should not start with <tt></tt> and <tt>?</tt>, as these are extremely slow. Some QueryParsers may not allow this by default, but provide an <code>AllowLeadingWildcard</code> property to remove that protection. The <a class="xref" href="Lucene.Net.Search.RegexpQuery.html">RegexpQuery</a> is even more general than WildcardQuery, allowing an application to identify all documents with terms that match a regular expression pattern. </p>
+<h4 id="fuzzyqueryxreflucenenetsearchfuzzyquery"><a class="xref" href="Lucene.Net.Search.FuzzyQuery.html">FuzzyQuery</a></h4>
+<p>A <a class="xref" href="Lucene.Net.Search.FuzzyQuery.html">FuzzyQuery</a> matches documents that contain terms similar to the specified term. Similarity is determined using <a href="http://en.wikipedia.org/wiki/Levenshtein">Levenshtein (edit) distance</a>. This type of query can be useful when accounting for spelling variations in the collection. </p>
+<h2 id="scoring--introduction">Scoring — Introduction</h2>
+<p>Lucene scoring is the heart of why we all love Lucene. It is blazingly fast and it hides almost all of the complexity from the user. In a nutshell, it works. At least, that is, until it doesn&#39;t work, or doesn&#39;t work as one would expect it to work. Then we are left digging into Lucene internals or asking for help on <a href="mailto:user@lucenenet.apache.org">user@lucenenet.apache.org</a> to figure out why a document with five of our query terms scores lower than a different document with only one of the query terms. </p>
+<p>While this document won&#39;t answer your specific scoring issues, it will, hopefully, point you to the places that can help you figure out the <em>what</em> and <em>why</em> of Lucene scoring. </p>
+<p>Lucene scoring supports a number of pluggable information retrieval <a href="http://en.wikipedia.org/wiki/Information_retrieval#Model_types">models</a>, including:</p>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Vector_Space_Model">Vector Space Model (VSM)</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Probabilistic_relevance_model">Probablistic Models</a> such as <a href="http://en.wikipedia.org/wiki/Probabilistic_relevance_model_(BM25)">Okapi BM25</a> and <a href="http://en.wikipedia.org/wiki/Divergence-from-randomness_model">DFR</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Language_model">Language models</a></li>
+</ul>
+<p>These models can be plugged in via the <a class="xref" href="Lucene.Net.Search.Similarities.html">Similarity API</a>, and offer extension hooks and parameters for tuning. In general, Lucene first finds the documents that need to be scored based on boolean logic in the Query specification, and then ranks this subset of matching documents via the retrieval model. For some valuable references on VSM and IR in general refer to <a href="http://wiki.apache.org/lucene-java/InformationRetrieval">Lucene Wiki IR references</a>. </p>
+<p>The rest of this document will cover <a href="#scoring--basics">Scoring basics</a> and explain how to change your <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a>. Next, it will cover ways you can customize the Lucene internals in <a href="#customQueriesExpert">Custom Queries -- Expert Level</a>, which gives details on implementing your own <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> class and related functionality. Finally, we will finish up with some reference material in the <a href="#appendix-search-algorithm">Appendix</a>. </p>
+<h2 id="scoring--basics">Scoring — Basics</h2>
+<p>Scoring is very much dependent on the way documents are indexed, so it is important to understand indexing. (see <a class="xref" href="overview.html">Lucene overview</a> before continuing on with this section) Be sure to use the useful <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Explain_Lucene_Net_Search_Query_System_Int32_">IndexSearcher.Explain(Query, int)</a> to understand how the score for a certain matching document was computed.</p>
+<p>Generally, the Query determines which documents match (a binary decision), while the Similarity determines how to assign scores to the matching documents. </p>
+<h4 id="fields-and-documents">Fields and Documents</h4>
+<p>In Lucene, the objects we are scoring are <a class="xref" href="Lucene.Net.Documents.Document.html">Document</a>s. A Document is a collection of <a class="xref" href="Lucene.Net.Documents.Field.html">Field</a>s. Each Field has <a class="xref" href="Lucene.Net.Documents.FieldType.html">semantics</a> about how it is created and stored (<a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_IsTokenized">Tokenized</a>, <a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_IsStored">Stored</a>, etc). It is important to note that Lucene scoring works on Fields and then combines the results to return Documents. This is important because two Documents with the exact same content, but one having the content in two Fields and the other in one Field may return different scores for the same query due to length normalization. </p>
+<h4 id="score-boosting">Score Boosting</h4>
+<p>Lucene allows influencing search results by &quot;boosting&quot; at different times:</p>
+<ul>
+<li><strong>Index-time boost</strong> by setting <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_Boost">Field.Boost</a> before a document is added to the index.</li>
+<li><strong>Query-time boost</strong> by setting a boost on a query clause, setting <a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Boost">Query.Boost</a>. </li>
+</ul>
+<p>Indexing time boosts are pre-processed for storage efficiency and written to storage for a field as follows:</p>
+<ul>
+<li>All boosts of that field (i.e. all boosts under the same field name in that doc) are multiplied.</li>
+<li>The boost is then encoded into a normalization value by the Similarity object at index-time: <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html#Lucene_Net_Search_Similarities_Similarity_ComputeNorm_Lucene_Net_Index_FieldInvertState_">ComputeNorm</a>. The actual encoding depends upon the Similarity implementation, but note that most use a lossy encoding (such as multiplying the boost with document length or similar, packed into a single byte!).</li>
+<li>Decoding of any index-time normalization values and integration into the document&#39;s score is also performed at search time by the Similarity. </li>
+</ul>
+<h2 id="changing-scoring--similarity">Changing Scoring — Similarity</h2>
+<p> Changing <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a> is an easy way to influence scoring, this is done at index-time with <a class="xref" href="Lucene.Net.Index.IndexWriterConfig.html#methods">IndexWriterConfig.setSimilarity</a> and at query-time with <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Index_IndexWriterConfig_Similarity">IndexSearcher.Similarity</a>. Be sure to use the same Similarity at query-time as at index-time (so that norms are encoded/decoded correctly); Lucene makes no effort to verify this. </p>
+<p> You can influence scoring by configuring a different built-in Similarity implementation, or by tweaking its parameters, subclassing it to override behavior. Some implementations also offer a modular API which you can extend by plugging in a different component (e.g. term frequency normalizer). </p>
+<p> Finally, you can extend the low level <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a> directly to implement a new retrieval model, or to use external scoring factors particular to your application. For example, a custom Similarity can access per-document values via <a class="xref" href="Lucene.Net.Search.FieldCache.html">FieldCache</a> or <a class="xref" href="Lucene.Net.Index.NumericDocValues.html">NumericDocValues</a> and integrate them into the score. </p>
+<p> See the <a class="xref" href="Lucene.Net.Search.Similarities.html">Lucene.Net.Search.Similarities</a> package documentation for information on the built-in available scoring models and extending or changing Similarity. </p>
+<h2 id="custom-queries--expert-level">Custom Queries — Expert Level</h2>
+<p>Custom queries are an expert level task, so tread carefully and be prepared to share your code if you want help. </p>
+<p>With the warning out of the way, it is possible to change a lot more than just the Similarity when it comes to matching and scoring in Lucene. Lucene&#39;s search is a complex mechanism that is grounded by <span>three main classes</span>:</p>
+<ol>
+<li><a class="xref" href="Lucene.Net.Search.Query.html">Query</a> — The abstract object representation of the user&#39;s information need.</li>
+<li><a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a> — The internal interface representation of the user&#39;s Query, so that Query objects may be reused. This is global (across all segments of the index) and generally will require global statistics (such as DocFreq for a given term across all segments).</li>
+<li><a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> — An abstract class containing common functionality for scoring. Provides both scoring and explanation capabilities. This is created per-segment.</li>
+<li><a class="xref" href="Lucene.Net.Search.BulkScorer.html">BulkScorer</a> — An abstract class that scores a range of documents. A default implementation simply iterates through the hits from <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a>, but some queries such as <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a> have more efficient implementations. Details on each of these classes, and their children, can be found in the subsections below. </li>
+</ol>
+<h4 id="the-query-class">The Query Class</h4>
+<p>In some sense, the <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> class is where it all begins. Without a Query, there would be nothing to score. Furthermore, the Query class is the catalyst for the other scoring classes as it is often responsible for creating them or coordinating the functionality between them. The <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> class has several methods that are important for derived classes:</p>
+<ol>
+<li><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_CreateWeight_Lucene_Net_Search_IndexSearcher_">CreateWeight(IndexSearcher searcher)</a> — A <a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a> is the internal representation of the Query, so each Query implementation must provide an implementation of Weight. See the subsection on <a href="#weightclass">The Weight Interface</a> below for details on implementing the Weight interface.</li>
+<li><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Rewrite_Lucene_Net_Index_IndexReader_">Rewrite(IndexReader reader)</a> — Rewrites queries into primitive queries. Primitive queries are: <a class="xref" href="Lucene.Net.Search.TermQuery.html">TermQuery</a>, <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>, <span>and other queries that implement <a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_CreateWeight_Lucene_Net_Search_IndexSearcher_">CreateWeight(IndexSearcher searcher)</a></span> </li>
+</ol>
+<h4 id="the-weight-interface">The Weight Interface</h4>
+<p>The <a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a> interface provides an internal representation of the Query so that it can be reused. Any <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> dependent state should be stored in the Weight implementation, not in the Query class. The interface defines five members that must be implemented:</p>
+<ol>
+<li><a class="xref" href="Lucene.Net.Search.Weight.html#Lucene_Net_Search_Weight_Query">Query</a> — Pointer to the Query that this Weight represents.</li>
+<li><a class="xref" href="Lucene.Net.Search.Weight.html#Lucene_Net_Search_Weight_GetValueForNormalization">GetValueForNormalization()</a> — A weight can return a floating point value to indicate its magnitude for query normalization. Typically a weight such as TermWeight that scores via a <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a> will just defer to the Similarity&#39;s implementation: <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.SimWeight.html#Lucene_Net_Search_Similarities_Similarity_SimWeight_GetValueForNormalization">SimWeight.GetValueForNormalization()</a>. For example, with <a class="xref" href="Lucene.Net.Search.Similarities.TFIDFSimilarity.html">Lucene&#39;s classic vector-space formula</a>, this is implemented as the sum of squared weights: <code>(idf * boost)</code>&sup2;</li>
+<li><a class="xref" href="Lucene.Net.Search.Weight.html#Lucene_Net_Search_Weight_Normalize_System_Single_System_Single_">Normalize(float norm, float topLevelBoost)</a> — Performs query normalization:<ul>
+<li><code>topLevelBoost</code>: A query-boost factor from any wrapping queries that should be multiplied into every document&#39;s score. For example, a TermQuery that is wrapped within a BooleanQuery with a boost of <code>5</code> would receive this value at this time. This allows the TermQuery (the leaf node in this case) to compute this up-front a single time (e.g. by multiplying into the IDF), rather than for every document.</li>
+<li><code>norm</code>: Passes in a a normalization factor which may allow for comparing scores between queries. Typically a weight such as TermWeight that scores via a <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a> will just defer to the Similarity&#39;s implementation: <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.SimWeight.html#Lucene_Net_Search_Similarities_Similarity_SimWeight_Normalize_System_Single_System_Single_">SimWeight.Normalize(float, float)</a>.</li>
+</ul>
+</li>
+<li><a class="xref" href="Lucene.Net.Search.Weight.html#Lucene_Net_Search_Weight_GetScorer_Lucene_Net_Index_AtomicReaderContext_Lucene_Net_Util_IBits_">GetScorer(AtomicReaderContext context, IBits acceptDocs)</a> — Construct a new <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> for this Weight. See <a href="#the-scorer-class">The Scorer Class</a> below for help defining a Scorer. As the name implies, the Scorer is responsible for doing the actual scoring of documents given the Query.</li>
+<li><a class="xref" href="Lucene.Net.Search.Weight.html#Lucene_Net_Search_Weight_GetBulkScorer_Lucene_Net_Index_AtomicReaderContext_System_Boolean_Lucene_Net_Util_IBits_">GetScorer(AtomicReaderContext, bool scoreDocsInOrder, IBits acceptDocs)</a> — Construct a new <a class="xref" href="Lucene.Net.Search.BulkScorer.html">BulkScorer</a> for this Weight. See <a href="#the-bulkscorer-class">The BulkScorer Class</a> below for help defining a BulkScorer. This is an optional method, and most queries do not implement it.</li>
+<li><a class="xref" href="Lucene.Net.Search.Weight.html#Lucene_Net_Search_Weight_Explain_Lucene_Net_Index_AtomicReaderContext_System_Int32_">Explain(AtomicReaderContext context, int doc)</a> — Provide a means for explaining why a given document was scored the way it was. Typically a weight such as TermWeight that scores via a <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a> will make use of the Similarity&#39;s implementation: <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.SimScorer.html#Lucene_Net_Search_Similarities_Similarity_SimScorer_Explain_System_Int32_Lucene_Net_Search_Explanation_">SimScorer.Explain(int doc, Explanation freq)</a>. </li>
+</ol>
+<h4 id="the-scorer-class">The Scorer Class</h4>
+<p>The <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> abstract class provides common scoring functionality for all Scorer implementations and is the heart of the Lucene scoring process. The Scorer defines the following abstract (some of them are not yet abstract, but will be in future versions and should be considered as such now) methods which must be implemented (some of them inherited from <a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html">DocIdSetIterator</a>):</p>
+<ol>
+<li><a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html#Lucene_Net_Search_DocIdSetIterator_NextDoc">NextDoc()</a> — Advances to the next document that matches this Query, returning true if and only if there is another document that matches.</li>
+<li><a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html#Lucene_Net_Search_DocIdSetIterator_DocID">DocID</a> — Returns the id of the <a class="xref" href="Lucene.Net.Documents.Document.html">Document</a> that contains the match.</li>
+<li><a class="xref" href="Lucene.Net.Search.Scorer.html#Lucene_Net_Search_Scorer_GetScore">GetScore()</a> — Return the score of the current document. This value can be determined in any appropriate way for an application. For instance, the <a href="xref:Lucene.Net.Search.TermScorer">TermScorer</a> simply defers to the configured Similarity: <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.SimScorer.html#Lucene_Net_Search_Similarities_Similarity_SimScorer_Score_System_Int32_System_Single_">SimScorer.Score(int doc, float freq)</a>.</li>
+<li><a class="xref" href="Lucene.Net.Index.DocsEnum.html#Lucene_Net_Index_DocsEnum_Freq">Freq</a> — Returns the number of matches for the current document. This value can be determined in any appropriate way for an application. For instance, the <a href="xref:Lucene.Net.Search.TermScorer">TermScorer</a> simply defers to the term frequency from the inverted index: <a class="xref" href="Lucene.Net.Index.DocsEnum.html#Lucene_Net_Index_DocsEnum_Freq">DocsEnum.Freq</a>.</li>
+<li><a class="xref" href="Lucene.Net.Search.Scorer.html#Lucene_Net_Search_DocIdSetIterator_Advance_System_Int32_">Advance()</a> — Skip ahead in the document matches to the document whose id is greater than or equal to the passed in value. In many instances, advance can be implemented more efficiently than simply looping through all the matching documents until the target document is identified.</li>
+<li><a class="xref" href="Lucene.Net.Search.Scorer.html#Lucene_Net_Search_Scorer_GetChildren">GetChildren()</a> — Returns any child subscorers underneath this scorer. This allows for users to navigate the scorer hierarchy and receive more fine-grained details on the scoring process. </li>
+</ol>
+<h4 id="the-bulkscorer-class">The BulkScorer Class</h4>
+<p>The <a class="xref" href="Lucene.Net.Search.BulkScorer.html">BulkScorer</a> scores a range of documents. There is only one abstract method:</p>
+<ol>
+<li><a class="xref" href="Lucene.Net.Search.BulkScorer.html#Lucene_Net_Search_BulkScorer_Score_Lucene_Net_Search_ICollector_System_Int32_">Score(ICollector, int)</a> — Score all documents up to but not including the specified max document. </li>
+</ol>
+<h4 id="why-would-i-want-to-add-my-own-query">Why would I want to add my own Query?</h4>
+<p>In a nutshell, you want to add your own custom Query implementation when you think that Lucene&#39;s aren&#39;t appropriate for the task that you want to do. You might be doing some cutting edge research or you need more information back out of Lucene (similar to Doug adding SpanQuery functionality).</p>
+<h2 id="appendix-search-algorithm">Appendix: Search Algorithm</h2>
+<p>This section is mostly notes on stepping through the Scoring process and serves as fertilizer for the earlier sections.</p>
+<p>In the typical search application, a <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> is passed to the <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a>, beginning the scoring process.</p>
+<p>Once inside the IndexSearcher, a <a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> is used for the scoring and sorting of the search results. These important objects are involved in a search:</p>
+<ol>
+<li>The <a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a> object of the Query. The Weight object is an internal representation of the Query that allows the Query to be reused by the IndexSearcher.</li>
+<li>The IndexSearcher that initiated the call.</li>
+<li>A <a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a> for limiting the result set. Note, the Filter may be <code>null</code>.</li>
+<li>A <a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a> object for specifying how to sort the results if the standard score-based sort method is not desired. </li>
+</ol>
+<p>Assuming we are not sorting (since sorting doesn&#39;t affect the raw Lucene score), we call one of the search methods of the IndexSearcher, passing in the <a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a> object created by <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_CreateNormalizedWeight_Lucene_Net_Search_Query_">IndexSearcher.CreateNormalizedWeight(Query)</a>, <a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a> and the number of results we want. This method returns a <a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a> object, which is an internal collection of search results. The IndexSearcher creates a <a class="xref" href="Lucene.Net.Search.TopScoreDocCollector.html">TopScoreDocCollector</a> and passes it along with the Weight, Filter to another expert search method (for more on the <a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> mechanism, see <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a>). The TopScoreDocCollector uses a <a href="xref:Lucene.Net.Util.PriorityQueue">PriorityQueue</a> to collect the top results for the search. </p>
+<p>If a Filter is being used, some initial setup is done to determine which docs to include. Otherwise, we ask the Weight for a <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> for each <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> segment and proceed by calling <a class="xref" href="Lucene.Net.Search.BulkScorer.html#Lucene_Net_Search_BulkScorer_Score_Lucene_Net_Search_ICollector_">BulkScorer.Score(ICollector)</a>. </p>
+<p>At last, we are actually going to score some documents. The score method takes in the ICollector (most likely the TopScoreDocCollector or TopFieldCollector) and does its business. Of course, here is where things get involved. The <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> that is returned by the <a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a> object depends on what type of Query was submitted. In most real world applications with multiple query terms, the <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> is going to be a <code>BooleanScorer2</code> created from <a class="xref" href="Lucene.Net.Search.BooleanQuery.BooleanWeight.html">BooleanWeight</a> (see the section on <a href="#custom-queries--expert-level">custom queries</a> for info on changing this). </p>
+<p>Assuming a BooleanScorer2, we first initialize the Coordinator, which is used to apply the Coord() factor. We then get a internal Scorer based on the required, optional and prohibited parts of the query. Using this internal Scorer, the BooleanScorer2 then proceeds into a while loop based on the <a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html#Lucene_Net_Search_DocIdSetIterator_NextDoc">Scorer.NextDoc()</a> method. The NextDoc() method advances to the next document matching the query. This is an abstract method in the Scorer class and is thus overridden by all derived implementations. If you have a simple OR query your internal Scorer is most likely a DisjunctionSumScorer, which essentially combines the scorers from the sub scorers of the OR&#39;d terms.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Search.AutomatonQuery.html">AutomatonQuery</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> that will match terms against a finite-state machine.
+<p>
+This query will match documents that contain terms accepted by a given
+finite-state machine. The automaton can be constructed with the
+<a class="xref" href="Lucene.Net.Util.Automaton.html">Lucene.Net.Util.Automaton</a> API. Alternatively, it can be
+created from a regular expression with <a class="xref" href="Lucene.Net.Search.RegexpQuery.html">RegexpQuery</a> or from
+the standard Lucene wildcard syntax with <a class="xref" href="Lucene.Net.Search.WildcardQuery.html">WildcardQuery</a>.
+</p>
+<p>
+When the query is executed, it will create an equivalent DFA of the
+finite-state machine, and will enumerate the term dictionary in an
+intelligent way to reduce the number of comparisons. For example: the regular
+expression of <code>[dl]og?</code> will make approximately four comparisons:
+do, dog, lo, and log.
+</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.BitsFilteredDocIdSet.html">BitsFilteredDocIdSet</a></h4>
+      <section><p>This implementation supplies a filtered <a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a>, that excludes all
+docids which are not in a <a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a> instance. This is especially useful in
+<a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a> to apply the <span class="xref">Lucene.Net.Search.BitsFilteredDocIdSet.acceptDocs</span>
+passed to <a class="xref" href="Lucene.Net.Search.Filter.html#Lucene_Net_Search_Filter_GetDocIdSet_Lucene_Net_Index_AtomicReaderContext_Lucene_Net_Util_IBits_">GetDocIdSet(AtomicReaderContext, IBits)</a> before returning the final <a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.BooleanClause.html">BooleanClause</a></h4>
+      <section><p>A clause in a <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> that matches documents matching boolean combinations of other
+queries, e.g. <a class="xref" href="Lucene.Net.Search.TermQuery.html">TermQuery</a>s, <a class="xref" href="Lucene.Net.Search.PhraseQuery.html">PhraseQuery</a>s or other
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>s.
+<p>
+Collection initializer note: To create and populate a <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>
+in a single statement, you can use the following example as a guide:</p>
+<pre><code>var booleanQuery = new BooleanQuery() {
+    { new WildcardQuery(new Term(&quot;field2&quot;, &quot;foobar&quot;)), Occur.SHOULD },
+    { new MultiPhraseQuery() {
+        new Term(&quot;field&quot;, &quot;microsoft&quot;), 
+        new Term(&quot;field&quot;, &quot;office&quot;)
+    }, Occur.SHOULD }
+};
+
+// or
+
+var booleanQuery = new BooleanQuery() {
+    new BooleanClause(new WildcardQuery(new Term(&quot;field2&quot;, &quot;foobar&quot;)), Occur.SHOULD),
+    new BooleanClause(new MultiPhraseQuery() {
+        new Term(&quot;field&quot;, &quot;microsoft&quot;), 
+        new Term(&quot;field&quot;, &quot;office&quot;)
+    }, Occur.SHOULD)
+};</code></pre>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.BooleanQuery.BooleanWeight.html">BooleanQuery.BooleanWeight</a></h4>
+      <section><p>Expert: the <a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a> for <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>, used to
+normalize, score and explain these queries.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></h4>
+      <section><p>Thrown when an attempt is made to add more than 
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a> clauses. This typically happens if
+a <a class="xref" href="Lucene.Net.Search.PrefixQuery.html">PrefixQuery</a>, <a class="xref" href="Lucene.Net.Search.FuzzyQuery.html">FuzzyQuery</a>, <a class="xref" href="Lucene.Net.Search.WildcardQuery.html">WildcardQuery</a>, or <a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a>
+is expanded to many terms during search.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.BoostAttribute.html">BoostAttribute</a></h4>
+      <section><p>Implementation class for <a class="xref" href="Lucene.Net.Search.IBoostAttribute.html">IBoostAttribute</a>.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.BulkScorer.html">BulkScorer</a></h4>
+      <section><p>This class is used to score a range of documents at
+once, and is returned by <a class="xref" href="Lucene.Net.Search.Weight.html#Lucene_Net_Search_Weight_GetBulkScorer_Lucene_Net_Index_AtomicReaderContext_System_Boolean_Lucene_Net_Util_IBits_">GetBulkScorer(AtomicReaderContext, Boolean, IBits)</a>.  Only
+queries that have a more optimized means of scoring
+across a range of documents need to override this.
+Otherwise, a default implementation is wrapped around
+the <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> returned by <a class="xref" href="Lucene.Net.Search.Weight.html#Lucene_Net_Search_Weight_GetScorer_Lucene_Net_Index_AtomicReaderContext_Lucene_Net_Util_IBits_">GetScorer(AtomicReaderContext, IBits)</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.CachingCollector.html">CachingCollector</a></h4>
+      <section><p>Caches all docs, and optionally also scores, coming from
+a search, and is then able to replay them to another
+collector.  You specify the max RAM this class may use.
+Once the collection is done, call <a class="xref" href="Lucene.Net.Search.CachingCollector.html#Lucene_Net_Search_CachingCollector_IsCached">IsCached</a>. If
+this returns <code>true</code>, you can use <a class="xref" href="Lucene.Net.Search.CachingCollector.html#Lucene_Net_Search_CachingCollector_Replay_Lucene_Net_Search_ICollector_">Replay(ICollector)</a>
+against a new collector.  If it returns <code>false</code>, this means
+too much RAM was required and you must instead re-run the
+original search.</p>
+<p><strong>NOTE</strong>: this class consumes 4 (or 8 bytes, if
+scoring is cached) per collected document.  If the result
+set is large this can easily be a very substantial amount
+of RAM!
+
+<p><strong>NOTE</strong>: this class caches at least 128 documents
+before checking RAM limits.
+
+<p>See the Lucene <code>modules/grouping</code> module for more
+details including a full code example.</p>
+
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.CachingWrapperFilter.html">CachingWrapperFilter</a></h4>
+      <section><p>Wraps another <a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a>&apos;s result and caches it.  The purpose is to allow
+filters to simply filter, and then wrap with this class
+to add caching.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.CollectionStatistics.html">CollectionStatistics</a></h4>
+      <section><p>Contains statistics for a collection (field)
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.CollectionTerminatedException.html">CollectionTerminatedException</a></h4>
+      <section><p>Throw this exception in <a class="xref" href="Lucene.Net.Search.ICollector.html#Lucene_Net_Search_ICollector_Collect_System_Int32_">Collect(Int32)</a> to prematurely
+terminate collection of the current leaf.
+<p>Note: <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> swallows this exception and never re-throws it.
+As a consequence, you should not catch it when calling any overload of
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Weight_Lucene_Net_Search_FieldDoc_System_Int32_Lucene_Net_Search_Sort_System_Boolean_System_Boolean_System_Boolean_">Search(Weight, FieldDoc, Int32, Sort, Boolean, Boolean, Boolean)</a> as it is unnecessary and might hide misuse
+of this exception.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Collector.html">Collector</a></h4>
+      <section><p>LUCENENET specific class used to hold the 
+<a class="xref" href="Lucene.Net.Search.Collector.html#Lucene_Net_Search_Collector_NewAnonymous_System_Action_Lucene_Net_Search_Scorer__System_Action_System_Int32__System_Action_Lucene_Net_Index_AtomicReaderContext__System_Func_System_Boolean__">NewAnonymous(Action&lt;Scorer&gt;, Action&lt;Int32&gt;, Action&lt;AtomicReaderContext&gt;, Func&lt;Boolean&gt;)</a> static method.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.ComplexExplanation.html">ComplexExplanation</a></h4>
+      <section><p>Expert: Describes the score computation for document and query, and
+can distinguish a match independent of a positive value.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.ConstantScoreAutoRewrite.html">ConstantScoreAutoRewrite</a></h4>
+      <section><p>A rewrite method that tries to pick the best
+constant-score rewrite method based on term and
+document counts from the query.  If both the number of
+terms and documents is small enough, then 
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_BOOLEAN_QUERY_REWRITE">CONSTANT_SCORE_BOOLEAN_QUERY_REWRITE</a> is used.
+Otherwise, <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_FILTER_REWRITE">CONSTANT_SCORE_FILTER_REWRITE</a> is
+used.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.ConstantScoreQuery.html">ConstantScoreQuery</a></h4>
+      <section><p>A query that wraps another query or a filter and simply returns a constant score equal to the
+query boost for every document that matches the filter or query.
+For queries it therefore simply strips of all scores and returns a constant one.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.ConstantScoreQuery.ConstantBulkScorer.html">ConstantScoreQuery.ConstantBulkScorer</a></h4>
+      <section><p>We return this as our <a class="xref" href="Lucene.Net.Search.BulkScorer.html">BulkScorer</a> so that if the CSQ
+wraps a query with its own optimized top-level
+scorer (e.g. <span class="xref">Lucene.Net.Search.BooleanScorer</span>) we can use that
+top-level scorer.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.ConstantScoreQuery.ConstantScorer.html">ConstantScoreQuery.ConstantScorer</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Search.ConstantScoreQuery.ConstantWeight.html">ConstantScoreQuery.ConstantWeight</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Search.ControlledRealTimeReopenThread-1.html">ControlledRealTimeReopenThread&lt;T&gt;</a></h4>
+      <section><p>Utility class that runs a thread to manage periodic
+reopens of a <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html">ReferenceManager&lt;G&gt;</a>, with methods to wait for a specific
+index changes to become visible.  To use this class you
+must first wrap your <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> with a
+<a class="xref" href="Lucene.Net.Index.TrackingIndexWriter.html">TrackingIndexWriter</a> and always use it to make changes
+to the index, saving the returned generation.  Then,
+when a given search request needs to see a specific
+index change, call the <a class="xref" href="Lucene.Net.Search.ControlledRealTimeReopenThread-1.html#Lucene_Net_Search_ControlledRealTimeReopenThread_1_WaitForGeneration_System_Int64_">WaitForGeneration(Int64)</a> to wait for
+that change to be visible.  Note that this will only
+scale well if most searches do not need to wait for a
+specific index generation.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.html">DisjunctionMaxQuery</a></h4>
+      <section><p>A query that generates the union of documents produced by its subqueries, and that scores each document with the maximum
+score for that document as produced by any subquery, plus a tie breaking increment for any additional matching subqueries.
+This is useful when searching for a word in multiple fields with different boost factors (so that the fields cannot be
+combined equivalently into a single search field).  We want the primary score to be the one associated with the highest boost,
+not the sum of the field scores (as <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a> would give).
+<p>
+If the query is &quot;albino elephant&quot; this ensures that &quot;albino&quot; matching one field and &quot;elephant&quot; matching
+another gets a higher score than &quot;albino&quot; matching both fields.
+<p>
+To get this result, use both <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a> and <a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.html">DisjunctionMaxQuery</a>:  for each term a <a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.html">DisjunctionMaxQuery</a> searches for it in
+each field, while the set of these <a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.html">DisjunctionMaxQuery</a>&apos;s is combined into a <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>.
+The tie breaker capability allows results that include the same term in multiple fields to be judged better than results that
+include this term in only the best of those multiple fields, without confusing this with the better case of two different terms
+in the multiple fields.
+<p>
+Collection initializer note: To create and populate a <a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.html">DisjunctionMaxQuery</a>
+in a single statement, you can use the following example as a guide:</p>
+<pre><code>var disjunctionMaxQuery = new DisjunctionMaxQuery(0.1f) {
+    new TermQuery(new Term(&quot;field1&quot;, &quot;albino&quot;)), 
+    new TermQuery(new Term(&quot;field2&quot;, &quot;elephant&quot;))
+};</code></pre>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.DisjunctionMaxWeight.html">DisjunctionMaxQuery.DisjunctionMaxWeight</a></h4>
+      <section><p>Expert: the Weight for DisjunctionMaxQuery, used to
+normalize, score and explain these queries.</p>
+<p>NOTE: this API and implementation is subject to
+change suddenly in the next release.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a> contains a set of doc ids. Implementing classes must
+only implement <a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_GetIterator">GetIterator()</a> to provide access to the set.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html">DocIdSetIterator</a></h4>
+      <section><p>This abstract class defines methods to iterate over a set of non-decreasing
+doc ids. Note that this class assumes it iterates on doc Ids, and therefore
+<a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html#Lucene_Net_Search_DocIdSetIterator_NO_MORE_DOCS">NO_MORE_DOCS</a> is set to <span class="xref">System.Int32.MaxValue</span> in order to be used as
+a sentinel object. Implementations of this class are expected to consider
+<span class="xref">System.Int32.MaxValue</span> as an invalid value.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.DocTermOrdsRangeFilter.html">DocTermOrdsRangeFilter</a></h4>
+      <section><p>A range filter built on top of a cached multi-valued term field (in <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>).</p>
+<p>Like <a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter.html">FieldCacheRangeFilter</a>, this is just a specialized range query versus
+   using a <a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a> with <a class="xref" href="Lucene.Net.Search.DocTermOrdsRewriteMethod.html">DocTermOrdsRewriteMethod</a>: it will only do
+   two ordinal to term lookups.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.DocTermOrdsRewriteMethod.html">DocTermOrdsRewriteMethod</a></h4>
+      <section><p>Rewrites <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html">MultiTermQuery</a>s into a filter, using DocTermOrds for term enumeration.
+<p>
+This can be used to perform these queries against an unindexed docvalues field.
+</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.Explanation.html">Explanation</a></h4>
+      <section><p>Expert: Describes the score computation for document and query. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.html">FieldCache</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.Bytes.html">FieldCache.Bytes</a></h4>
+      <section><p>Field values as 8-bit signed bytes</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.CacheEntry.html">FieldCache.CacheEntry</a></h4>
+      <section><p>EXPERT: A unique Identifier/Description for each item in the <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>. 
+Can be useful for logging/debugging.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.CreationPlaceholder-1.html">FieldCache.CreationPlaceholder&lt;TValue&gt;</a></h4>
+      <section><p>Placeholder indicating creation of this cache is currently in-progress.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.Doubles.html">FieldCache.Doubles</a></h4>
+      <section><p>Field values as 64-bit doubles</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.Int16s.html">FieldCache.Int16s</a></h4>
+      <section><p>Field values as 16-bit signed shorts
+<p>
+NOTE: This was Shorts in Lucene</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.Int32s.html">FieldCache.Int32s</a></h4>
+      <section><p>Field values as 32-bit signed integers
+<p>
+NOTE: This was Ints in Lucene</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.Int64s.html">FieldCache.Int64s</a></h4>
+      <section><p>Field values as 64-bit signed long integers
+<p>
+NOTE: This was Longs in Lucene</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.Singles.html">FieldCache.Singles</a></h4>
+      <section><p>Field values as 32-bit floats
+<p>
+NOTE: This was Floats in Lucene</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCacheDocIdSet.html">FieldCacheDocIdSet</a></h4>
+      <section><p>Base class for <a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a> to be used with <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>. The implementation
+of its iterator is very stupid and slow if the implementation of the
+<a class="xref" href="Lucene.Net.Search.FieldCacheDocIdSet.html#Lucene_Net_Search_FieldCacheDocIdSet_MatchDoc_System_Int32_">MatchDoc(Int32)</a> method is not optimized, as iterators simply increment
+the document id until <a class="xref" href="Lucene.Net.Search.FieldCacheDocIdSet.html#Lucene_Net_Search_FieldCacheDocIdSet_MatchDoc_System_Int32_">MatchDoc(Int32)</a> returns <code>true</code>. Because of this
+<a class="xref" href="Lucene.Net.Search.FieldCacheDocIdSet.html#Lucene_Net_Search_FieldCacheDocIdSet_MatchDoc_System_Int32_">MatchDoc(Int32)</a> must be as fast as possible and in no case do any
+I/O.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter.html">FieldCacheRangeFilter</a></h4>
+      <section><p>A range filter built on top of a cached single term field (in <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>).</p>
+<p><p><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter.html">FieldCacheRangeFilter</a> builds a single cache for the field the first time it is used.
+Each subsequent <a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter.html">FieldCacheRangeFilter</a> on the same field then reuses this cache,
+even if the range itself changes.</p>
+<p><p>this means that <a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter.html">FieldCacheRangeFilter</a> is much faster (sometimes more than 100x as fast)
+as building a <a class="xref" href="Lucene.Net.Search.TermRangeFilter.html">TermRangeFilter</a>, if using a <a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter.html#Lucene_Net_Search_FieldCacheRangeFilter_NewStringRange_System_String_System_String_System_String_System_Boolean_System_Boolean_">NewStringRange(String, String, String, Boolean, Boolean)</a>.
+However, if the range never changes it is slower (around 2x as slow) than building
+a <a class="xref" href="Lucene.Net.Search.CachingWrapperFilter.html">CachingWrapperFilter</a> on top of a single <a class="xref" href="Lucene.Net.Search.TermRangeFilter.html">TermRangeFilter</a>.</p>
+<p><p>For numeric data types, this filter may be significantly faster than <a class="xref" href="Lucene.Net.Search.NumericRangeFilter.html">NumericRangeFilter</a>.
+Furthermore, it does not need the numeric values encoded
+by <a class="xref" href="Lucene.Net.Documents.Int32Field.html">Int32Field</a>, <a class="xref" href="Lucene.Net.Documents.SingleField.html">SingleField</a>,
+<a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a> or <a class="xref" href="Lucene.Net.Documents.DoubleField.html">DoubleField</a>. But
+it has the problem that it only works with exact one value/document (see below).</p>
+<p><p>As with all <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a> based functionality, <a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter.html">FieldCacheRangeFilter</a> is only valid for
+fields which exact one term for each document (except for <a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter.html#Lucene_Net_Search_FieldCacheRangeFilter_NewStringRange_System_String_System_String_System_String_System_Boolean_System_Boolean_">NewStringRange(String, String, String, Boolean, Boolean)</a>
+where 0 terms are also allowed). Due to a restriction of <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>, for numeric ranges
+all terms that do not have a numeric value, 0 is assumed.</p>
+<p><p>Thus it works on dates, prices and other single value fields but will not work on
+regular text fields. It is preferable to use a <a class="xref" href="Lucene.Net.Documents.Field.Index.html#Lucene_Net_Documents_Field_Index_NOT_ANALYZED">NOT_ANALYZED</a> field to ensure that
+there is only a single term.</p>
+<p><p>This class does not have an constructor, use one of the static factory methods available,
+that create a correct instance for different data types supported by <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter-1.html">FieldCacheRangeFilter&lt;T&gt;</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCacheRewriteMethod.html">FieldCacheRewriteMethod</a></h4>
+      <section><p>Rewrites <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html">MultiTermQuery</a>s into a filter, using the <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a> for term enumeration.
+<p>
+This can be used to perform these queries against an unindexed docvalues field.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCacheTermsFilter.html">FieldCacheTermsFilter</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a> that only accepts documents whose single
+term value in the specified field is contained in the
+provided set of allowed terms.</p>
+<p>
+
+<p>This is the same functionality as TermsFilter (from
+queries/), except this filter requires that the
+field contains only a single term for all documents.
+Because of drastically different implementations, they
+also have different performance characteristics, as
+described below.</p>
+<p>
+
+<p>The first invocation of this filter on a given field will
+be slower, since a <a class="xref" href="Lucene.Net.Index.SortedDocValues.html">SortedDocValues</a> must be
+created.  Subsequent invocations using the same field
+will re-use this cache.  However, as with all
+functionality based on <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>, persistent RAM
+is consumed to hold the cache, and is not freed until the
+<a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> is disposed.  In contrast, TermsFilter
+has no persistent RAM consumption.</p>
+<p>
+
+<p>With each search, this filter translates the specified
+set of <a class="xref" href="Lucene.Net.Index.Terms.html">Terms</a> into a private <a class="xref" href="Lucene.Net.Util.FixedBitSet.html">FixedBitSet</a> keyed by
+term number per unique <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a> (normally one
+reader per segment).  Then, during matching, the term
+number for each docID is retrieved from the cache and
+then checked for inclusion using the <a class="xref" href="Lucene.Net.Util.FixedBitSet.html">FixedBitSet</a>.
+Since all testing is done using RAM resident data
+structures, performance should be very fast, most likely
+fast enough to not require further caching of the
+<a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a> for each possible combination of terms.
+However, because docIDs are simply scanned linearly, an
+index with a great many small documents may find this
+linear scan too costly.</p>
+<p>
+
+<p>In contrast, TermsFilter builds up a <a class="xref" href="Lucene.Net.Util.FixedBitSet.html">FixedBitSet</a>,
+keyed by docID, every time it&apos;s created, by enumerating
+through all matching docs using <a class="xref" href="Lucene.Net.Index.DocsEnum.html">DocsEnum</a> to seek
+and scan through each term&apos;s docID list.  While there is
+no linear scan of all docIDs, besides the allocation of
+the underlying array in the <a class="xref" href="Lucene.Net.Util.FixedBitSet.html">FixedBitSet</a>, this
+approach requires a number of &quot;disk seeks&quot; in proportion
+to the number of terms, which can be exceptionally costly
+when there are cache misses in the OS&apos;s IO cache.</p>
+<p>
+
+<p>Generally, this filter will be slower on the first
+invocation for a given field, but subsequent invocations,
+even if you change the allowed set of <a class="xref" href="Lucene.Net.Index.Terms.html">Terms</a>, should be
+faster than TermsFilter, especially as the number of
+<a class="xref" href="Lucene.Net.Index.Terms.html">Terms</a> being matched increases.  If you are matching only
+a very small number of terms, and those terms in turn
+match a very small number of documents, TermsFilter may
+perform faster.</p>
+<p>
+
+<p>Which filter is best is very application dependent.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldComparer.html">FieldComparer</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldComparer.ByteComparer.html">FieldComparer.ByteComparer</a></h4>
+      <section><p>Parses field&apos;s values as <span class="xref">System.Byte</span> (using 
+<a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetBytes_Lucene_Net_Index_AtomicReader_System_String_Lucene_Net_Search_FieldCache_IByteParser_System_Boolean_">GetBytes(AtomicReader, String, FieldCache.IByteParser, Boolean)</a> and sorts by ascending value</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldComparer.DocComparer.html">FieldComparer.DocComparer</a></h4>
+      <section><p>Sorts by ascending docID </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldComparer.DoubleComparer.html">FieldComparer.DoubleComparer</a></h4>
+      <section><p>Parses field&apos;s values as <span class="xref">System.Double</span> (using 
+<a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetDoubles_Lucene_Net_Index_AtomicReader_System_String_Lucene_Net_Search_FieldCache_IDoubleParser_System_Boolean_">GetDoubles(AtomicReader, String, FieldCache.IDoubleParser, Boolean)</a> and sorts by ascending value</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldComparer.Int16Comparer.html">FieldComparer.Int16Comparer</a></h4>
+      <section><p>Parses field&apos;s values as <span class="xref">System.Int16</span> (using 
+<a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetInt16s_Lucene_Net_Index_AtomicReader_System_String_Lucene_Net_Search_FieldCache_IInt16Parser_System_Boolean_">GetInt16s(AtomicReader, String, FieldCache.IInt16Parser, Boolean)</a> and sorts by ascending value
+<p>
+NOTE: This was ShortComparator in Lucene</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldComparer.Int32Comparer.html">FieldComparer.Int32Comparer</a></h4>
+      <section><p>Parses field&apos;s values as <span class="xref">System.Int32</span> (using 
+<a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetInt32s_Lucene_Net_Index_AtomicReader_System_String_Lucene_Net_Search_FieldCache_IInt32Parser_System_Boolean_">GetInt32s(AtomicReader, String, FieldCache.IInt32Parser, Boolean)</a> and sorts by ascending value
+<p>
+NOTE: This was IntComparator in Lucene</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldComparer.Int64Comparer.html">FieldComparer.Int64Comparer</a></h4>
+      <section><p>Parses field&apos;s values as <span class="xref">System.Int64</span> (using
+<a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetInt64s_Lucene_Net_Index_AtomicReader_System_String_Lucene_Net_Search_FieldCache_IInt64Parser_System_Boolean_">GetInt64s(AtomicReader, String, FieldCache.IInt64Parser, Boolean)</a> and sorts by ascending value
+<p>
+NOTE: This was LongComparator in Lucene</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldComparer.NumericComparer-1.html">FieldComparer.NumericComparer&lt;T&gt;</a></h4>
+      <section><p>Base FieldComparer class for numeric types</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldComparer.RelevanceComparer.html">FieldComparer.RelevanceComparer</a></h4>
+      <section><p>Sorts by descending relevance.  NOTE: if you are
+sorting only by descending relevance and then
+secondarily by ascending docID, performance is faster
+using <a class="xref" href="Lucene.Net.Search.TopScoreDocCollector.html">TopScoreDocCollector</a> directly (which all overloads of
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_System_Int32_">Search(Query, Int32)</a> use when no <a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a> is
+specified).</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldComparer.SingleComparer.html">FieldComparer.SingleComparer</a></h4>
+      <section><p>Parses field&apos;s values as <span class="xref">System.Single</span> (using 
+<a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetSingles_Lucene_Net_Index_AtomicReader_System_String_Lucene_Net_Search_FieldCache_ISingleParser_System_Boolean_">GetSingles(AtomicReader, String, FieldCache.ISingleParser, Boolean)</a>  and sorts by ascending value
+<p>
+NOTE: This was FloatComparator in Lucene</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldComparer.TermOrdValComparer.html">FieldComparer.TermOrdValComparer</a></h4>
+      <section><p>Sorts by field&apos;s natural <a class="xref" href="Lucene.Net.Index.Term.html">Term</a> sort order, using
+ordinals.  This is functionally equivalent to 
+<a class="xref" href="Lucene.Net.Search.FieldComparer.TermValComparer.html">FieldComparer.TermValComparer</a>, but it first resolves the string
+to their relative ordinal positions (using the index
+returned by <a class="xref" href="Lucene.Net.Search.IFieldCache.html#Lucene_Net_Search_IFieldCache_GetTermsIndex_Lucene_Net_Index_AtomicReader_System_String_System_Single_">GetTermsIndex(AtomicReader, String, Single)</a>), and
+does most comparisons using the ordinals.  For medium
+to large results, this comparer will be much faster
+than <a class="xref" href="Lucene.Net.Search.FieldComparer.TermValComparer.html">FieldComparer.TermValComparer</a>.  For very small
+result sets it may be slower.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldComparer.TermValComparer.html">FieldComparer.TermValComparer</a></h4>
+      <section><p>Sorts by field&apos;s natural <a class="xref" href="Lucene.Net.Index.Term.html">Term</a> sort order.  All
+comparisons are done using <a class="xref" href="Lucene.Net.Util.BytesRef.html#Lucene_Net_Util_BytesRef_CompareTo_Lucene_Net_Util_BytesRef_">CompareTo(BytesRef)</a>, which is
+slow for medium to large result sets but possibly
+very fast for very small results sets.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldComparer-1.html">FieldComparer&lt;T&gt;</a></h4>
+      <section><p>Expert: a <a class="xref" href="Lucene.Net.Search.FieldComparer.html">FieldComparer</a> compares hits so as to determine their
+sort order when collecting the top results with
+<a class="xref" href="Lucene.Net.Search.TopFieldCollector.html">TopFieldCollector</a>.  The concrete public <a class="xref" href="Lucene.Net.Search.FieldComparer.html">FieldComparer</a>
+classes here correspond to the <a class="xref" href="Lucene.Net.Search.SortField.html">SortField</a> types.</p>
+<p>This API is designed to achieve high performance
+sorting, by exposing a tight interaction with 
+<a class="xref" href="Lucene.Net.Search.FieldValueHitQueue.html">FieldValueHitQueue</a> as it visits hits.  Whenever a hit is
+competitive, it&apos;s enrolled into a virtual slot, which is
+an <span class="xref">System.Int32</span> ranging from 0 to numHits-1.  The 
+<a class="xref" href="Lucene.Net.Search.FieldComparer.html">FieldComparer</a> is made aware of segment transitions
+during searching in case any internal state it&apos;s tracking
+needs to be recomputed during these transitions.</p>
+
+<p>A comparer must define these functions:</p>
+
+<p><ul><li><a class="xref" href="Lucene.Net.Search.FieldComparer-1.html#Lucene_Net_Search_FieldComparer_1_Compare_System_Int32_System_Int32_">Compare(Int32, Int32)</a> Compare a hit at &apos;slot a&apos;
+      with hit &apos;slot b&apos;.</li><li><a class="xref" href="Lucene.Net.Search.FieldComparer-1.html#Lucene_Net_Search_FieldComparer_1_SetBottom_System_Int32_">SetBottom(Int32)</a>This method is called by
+<a class="xref" href="Lucene.Net.Search.FieldValueHitQueue.html">FieldValueHitQueue</a> to notify the
+<a class="xref" href="Lucene.Net.Search.FieldComparer.html">FieldComparer</a> of the current weakest (&quot;bottom&quot;)
+slot.  Note that this slot may not hold the weakest
+value according to your comparer, in cases where
+your comparer is not the primary one (ie, is only
+used to break ties from the comparers before it).</li><li><a class="xref" href="Lucene.Net.Search.FieldComparer-1.html#Lucene_Net_Search_FieldComparer_1_CompareBottom_System_Int32_">CompareBottom(Int32)</a>Compare a new hit (docID)
+against the &quot;weakest&quot; (bottom) entry in the queue.</li><li><a class="xref" href="Lucene.Net.Search.FieldComparer-1.html#Lucene_Net_Search_FieldComparer_1_SetTopValue_System_Object_">SetTopValue(Object)</a>This method is called by
+<a class="xref" href="Lucene.Net.Search.TopFieldCollector.html">TopFieldCollector</a> to notify the
+<a class="xref" href="Lucene.Net.Search.FieldComparer.html">FieldComparer</a> of the top most value, which is
+used by future calls to <a class="xref" href="Lucene.Net.Search.FieldComparer-1.html#Lucene_Net_Search_FieldComparer_1_CompareTop_System_Int32_">CompareTop(Int32)</a>.</li><li><a class="xref" href="Lucene.Net.Search.FieldComparer-1.html#Lucene_Net_Search_FieldComparer_1_CompareTop_System_Int32_">CompareTop(Int32)</a>Compare a new hit (docID)
+against the top value previously set by a call to
+<a class="xref" href="Lucene.Net.Search.FieldComparer-1.html#Lucene_Net_Search_FieldComparer_1_SetTopValue_System_Object_">SetTopValue(Object)</a>.</li><li><a class="xref" href="Lucene.Net.Search.FieldComparer-1.html#Lucene_Net_Search_FieldComparer_1_Copy_System_Int32_System_Int32_">Copy(Int32, Int32)</a>Installs a new hit into the
+priority queue.  The <a class="xref" href="Lucene.Net.Search.FieldValueHitQueue.html">FieldValueHitQueue</a>
+calls this method when a new hit is competitive.</li><li><a class="xref" href="Lucene.Net.Search.FieldComparer-1.html#Lucene_Net_Search_FieldComparer_1_SetNextReader_Lucene_Net_Index_AtomicReaderContext_">SetNextReader(AtomicReaderContext)</a>Invoked
+when the search is switching to the next segment.
+You may need to update internal state of the
+comparer, for example retrieving new values from
+the <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>.</li><li><a class="xref" href="Lucene.Net.Search.FieldComparer.html#Lucene_Net_Search_FieldComparer_Item_System_Int32_">Item[Int32]</a>Return the sort value stored in
+the specified slot.  This is only called at the end
+of the search, in order to populate
+<a class="xref" href="Lucene.Net.Search.FieldDoc.html#Lucene_Net_Search_FieldDoc_Fields">Fields</a> when returning the top results.</li></ul>
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldComparerSource.html">FieldComparerSource</a></h4>
+      <section><p>Provides a <a class="xref" href="Lucene.Net.Search.FieldComparer.html">FieldComparer</a> for custom field sorting.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldDoc.html">FieldDoc</a></h4>
+      <section><p>Expert: A <a class="xref" href="Lucene.Net.Search.ScoreDoc.html">ScoreDoc</a> which also contains information about
+how to sort the referenced document.  In addition to the
+document number and score, this object contains an array
+of values for the document from the field(s) used to sort.
+For example, if the sort criteria was to sort by fields
+&quot;a&quot;, &quot;b&quot; then &quot;c&quot;, the <code>fields</code> object array
+will have three elements, corresponding respectively to
+the term values for the document in fields &quot;a&quot;, &quot;b&quot; and &quot;c&quot;.
+The class of each element in the array will be either
+<span class="xref">System.Int32</span>, <span class="xref">System.Single</span> or <span class="xref">System.String</span> depending on the type of values
+in the terms of each field.</p>
+<p><p>Created: Feb 11, 2004 1:23:38 PM
+<p>
+@since   lucene 1.4 </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldValueFilter.html">FieldValueFilter</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a> that accepts all documents that have one or more values in a
+given field. this <a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a> request <a class="xref" href="Lucene.Net.Util.IBits.html">IBits</a> from the
+<a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a> and build the bits if not present.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldValueHitQueue.html">FieldValueHitQueue</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldValueHitQueue.Entry.html">FieldValueHitQueue.Entry</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldValueHitQueue-1.html">FieldValueHitQueue&lt;T&gt;</a></h4>
+      <section><p>Expert: A hit queue for sorting by hits by terms in more than one field.
+Uses <code>FieldCache.DEFAULT</code> for maintaining
+internal term lookup tables.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div><p>@since 2.9 </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a></h4>
+      <section><p>Abstract base class for restricting which documents may
+be returned during searching.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FilteredDocIdSet.html">FilteredDocIdSet</a></h4>
+      <section><p>Abstract decorator class for a <a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a> implementation
+that provides on-demand filtering/validation
+mechanism on a given <a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a>.</p>
+<p>
+
+<p>Technically, this same functionality could be achieved
+with ChainedFilter (under queries/), however the
+benefit of this class is it never materializes the full
+bitset for the filter.  Instead, the <a class="xref" href="Lucene.Net.Search.FilteredDocIdSet.html#Lucene_Net_Search_FilteredDocIdSet_Match_System_Int32_">Match(Int32)</a>
+method is invoked on-demand, per docID visited during
+searching.  If you know few docIDs will be visited, and
+the logic behind <a class="xref" href="Lucene.Net.Search.FilteredDocIdSet.html#Lucene_Net_Search_FilteredDocIdSet_Match_System_Int32_">Match(Int32)</a> is relatively costly,
+this may be a better way to filter than ChainedFilter.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FilteredDocIdSetIterator.html">FilteredDocIdSetIterator</a></h4>
+      <section><p>Abstract decorator class of a <a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html">DocIdSetIterator</a>
+implementation that provides on-demand filter/validation
+mechanism on an underlying <a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html">DocIdSetIterator</a>.  See 
+<a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html">DocIdSetIterator</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FilteredQuery.html">FilteredQuery</a></h4>
+      <section><p>A query that applies a filter to the results of another query.</p>
+<p><p>Note: the bits are retrieved from the filter each time this
+query is used in a search - use a <a class="xref" href="Lucene.Net.Search.CachingWrapperFilter.html">CachingWrapperFilter</a> to avoid
+regenerating the bits every time.
+<p>
+@since   1.4 </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FilteredQuery.FilterStrategy.html">FilteredQuery.FilterStrategy</a></h4>
+      <section><p>Abstract class that defines how the filter (<a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a>) applied during document collection. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FilteredQuery.RandomAccessFilterStrategy.html">FilteredQuery.RandomAccessFilterStrategy</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.FilteredQuery.FilterStrategy.html">FilteredQuery.FilterStrategy</a> that conditionally uses a random access filter if
+the given <a class="xref" href="Lucene.Net.Search.DocIdSet.html">DocIdSet</a> supports random access (returns a non-null value
+from <a class="xref" href="Lucene.Net.Search.DocIdSet.html#Lucene_Net_Search_DocIdSet_Bits">Bits</a>) and
+<a class="xref" href="Lucene.Net.Search.FilteredQuery.RandomAccessFilterStrategy.html#Lucene_Net_Search_FilteredQuery_RandomAccessFilterStrategy_UseRandomAccess_Lucene_Net_Util_IBits_System_Int32_">UseRandomAccess(IBits, Int32)</a> returns</p>
+<pre><code>true</code></pre>. Otherwise this strategy falls back to a &quot;zig-zag join&quot; (
+<p><a class="xref" href="Lucene.Net.Search.FilteredQuery.html#Lucene_Net_Search_FilteredQuery_LEAP_FROG_FILTER_FIRST_STRATEGY">LEAP_FROG_FILTER_FIRST_STRATEGY</a>) strategy .</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FuzzyQuery.html">FuzzyQuery</a></h4>
+      <section><p>Implements the fuzzy search query. The similarity measurement
+is based on the Damerau-Levenshtein (optimal string alignment) algorithm,
+though you can explicitly choose classic Levenshtein by passing <code>false</code>
+to the <code>transpositions</code> parameter.</p>
+<p><p>this query uses <a class="xref" href="Lucene.Net.Search.MultiTermQuery.TopTermsScoringBooleanQueryRewrite.html">MultiTermQuery.TopTermsScoringBooleanQueryRewrite</a>
+as default. So terms will be collected and scored according to their
+edit distance. Only the top terms are used for building the <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>.
+It is not recommended to change the rewrite mode for fuzzy queries.</p>
+<p><p>At most, this query will match terms up to
+<a class="xref" href="Lucene.Net.Util.Automaton.LevenshteinAutomata.html#Lucene_Net_Util_Automaton_LevenshteinAutomata_MAXIMUM_SUPPORTED_DISTANCE">MAXIMUM_SUPPORTED_DISTANCE</a> edits.
+Higher distances (especially with transpositions enabled), are generally not useful and
+will match a significant amount of the term dictionary. If you really want this, consider
+using an n-gram indexing technique (such as the SpellChecker in the
+<a href="{@docRoot}/../suggest/overview-summary.html">suggest module</a>) instead.</p>
+<p><p>NOTE: terms of length 1 or 2 will sometimes not match because of how the scaled
+distance between two terms is computed.  For a term to match, the edit distance between
+the terms must be less than the minimum length term (either the input term, or
+the candidate term).  For example, <a class="xref" href="Lucene.Net.Search.FuzzyQuery.html">FuzzyQuery</a> on term &quot;abcd&quot; with maxEdits=2 will
+not match an indexed term &quot;ab&quot;, and <a class="xref" href="Lucene.Net.Search.FuzzyQuery.html">FuzzyQuery</a> on term &quot;a&quot; with maxEdits=2 will not
+match an indexed term &quot;abc&quot;.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FuzzyTermsEnum.html">FuzzyTermsEnum</a></h4>
+      <section><p>Subclass of <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> for enumerating all terms that are similar
+to the specified filter term.</p>
+<p>Term enumerations are always ordered by
+<a class="xref" href="Lucene.Net.Search.FuzzyTermsEnum.html#Lucene_Net_Search_FuzzyTermsEnum_Comparer">Comparer</a>.  Each term in the enumeration is
+greater than all that precede it.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FuzzyTermsEnum.LevenshteinAutomataAttribute.html">FuzzyTermsEnum.LevenshteinAutomataAttribute</a></h4>
+      <section><p>Stores compiled automata as a list (indexed by edit distance)
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a></h4>
+      <section><p>Implements search over a single <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a>.</p>
+<p>Applications usually need only call the inherited
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_System_Int32_">Search(Query, Int32)</a>
+or <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_">Search(Query, Filter, Int32)</a> methods. For
+performance reasons, if your index is unchanging, you
+should share a single <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> instance across
+multiple searches instead of creating a new one
+per-search.  If your index has changed and you wish to
+see the changes reflected in searching, you should
+use <a class="xref" href="Lucene.Net.Index.DirectoryReader.html#Lucene_Net_Index_DirectoryReader_OpenIfChanged_Lucene_Net_Index_DirectoryReader_">OpenIfChanged(DirectoryReader)</a>
+to obtain a new reader and
+then create a new <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> from that.  Also, for
+low-latency turnaround it&apos;s best to use a near-real-time
+reader (<a class="xref" href="Lucene.Net.Index.DirectoryReader.html#Lucene_Net_Index_DirectoryReader_Open_Lucene_Net_Index_IndexWriter_System_Boolean_">Open(IndexWriter, Boolean)</a>).
+Once you have a new <a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a>, it&apos;s relatively
+cheap to create a new <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> from it.
+
+<p><a name="thread-safety"></a><p><strong>NOTE</strong>: 
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> instances are completely
+thread safe, meaning multiple threads can call any of its
+methods, concurrently.  If your application requires
+external synchronization, you should <strong>not</strong>
+synchronize on the <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> instance;
+use your own (non-Lucene) objects instead.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.IndexSearcher.LeafSlice.html">IndexSearcher.LeafSlice</a></h4>
+      <section><p>A class holding a subset of the <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a>s leaf contexts to be
+executed within a single thread.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.LiveFieldValues-2.html">LiveFieldValues&lt;S, T&gt;</a></h4>
+      <section><p>Tracks live field values across NRT reader reopens.
+This holds a map for all updated ids since
+the last reader reopen.  Once the NRT reader is reopened,
+it prunes the map.  This means you must reopen your NRT
+reader periodically otherwise the RAM consumption of
+this class will grow unbounded!</p>
+<p><p>NOTE: you must ensure the same id is never updated at
+the same time by two threads, because in this case you
+cannot in general know which thread &quot;won&quot;.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.MatchAllDocsQuery.html">MatchAllDocsQuery</a></h4>
+      <section><p>A query that matches all documents.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.MaxNonCompetitiveBoostAttribute.html">MaxNonCompetitiveBoostAttribute</a></h4>
+      <section><p>Implementation class for <a class="xref" href="Lucene.Net.Search.IMaxNonCompetitiveBoostAttribute.html">IMaxNonCompetitiveBoostAttribute</a>.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.MultiCollector.html">MultiCollector</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> which allows running a search with several
+<a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a>s. It offers a static <a class="xref" href="Lucene.Net.Search.MultiCollector.html#Lucene_Net_Search_MultiCollector_Wrap_Lucene_Net_Search_ICollector___">Wrap(ICollector[])</a> method which accepts a
+list of collectors and wraps them with <a class="xref" href="Lucene.Net.Search.MultiCollector.html">MultiCollector</a>, while
+filtering out the <code>null</code> ones.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html">MultiPhraseQuery</a></h4>
+      <section><p><a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html">MultiPhraseQuery</a> is a generalized version of <a class="xref" href="Lucene.Net.Search.PhraseQuery.html">PhraseQuery</a>, with an added
+method <a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html#Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term___">Add(Term[])</a>.
+<p>
+To use this class, to search for the phrase &quot;Microsoft app*&quot; first use
+<a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html#Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term_">Add(Term)</a> on the term &quot;Microsoft&quot;, then find all terms that have &quot;app&quot; as
+prefix using <code>MultiFields.GetFields(IndexReader).GetTerms(string)</code>, and use <a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html#Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term___">Add(Term[])</a>
+to add them to the query.
+<p>
+Collection initializer note: To create and populate a <a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html">MultiPhraseQuery</a>
+in a single statement, you can use the following example as a guide:</p>
+<pre><code>var multiPhraseQuery = new MultiPhraseQuery() {
+    new Term(&quot;field&quot;, &quot;microsoft&quot;), 
+    new Term(&quot;field&quot;, &quot;office&quot;)
+};</code></pre>
+<p>Note that as long as you specify all of the parameters, you can use either
+<a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html#Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term_">Add(Term)</a>, <a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html#Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term___">Add(Term[])</a>, or <a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html#Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term___System_Int32_">Add(Term[], Int32)</a>
+as the method to use to initialize. If there are multiple parameters, each parameter set
+must be surrounded by curly braces.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.MultiTermQuery.html">MultiTermQuery</a></h4>
+      <section><p>An abstract <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> that matches documents
+containing a subset of terms provided by a 
+<a class="xref" href="Lucene.Net.Index.FilteredTermsEnum.html">FilteredTermsEnum</a> enumeration.</p>
+<p><p>This query cannot be used directly; you must subclass
+it and define <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_GetTermsEnum_Lucene_Net_Index_Terms_Lucene_Net_Util_AttributeSource_">GetTermsEnum(Terms, AttributeSource)</a> to provide a 
+<a class="xref" href="Lucene.Net.Index.FilteredTermsEnum.html">FilteredTermsEnum</a> that iterates through the terms to be
+matched.</p>
+<p><p><strong>NOTE</strong>: if <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_MultiTermRewriteMethod">MultiTermRewriteMethod</a> is either
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_BOOLEAN_QUERY_REWRITE">CONSTANT_SCORE_BOOLEAN_QUERY_REWRITE</a> or
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_SCORING_BOOLEAN_QUERY_REWRITE">SCORING_BOOLEAN_QUERY_REWRITE</a>, you may encounter a
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a> exception during
+searching, which happens when the number of terms to be
+searched exceeds 
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a>.  Setting 
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_MultiTermRewriteMethod">MultiTermRewriteMethod</a> to <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_FILTER_REWRITE">CONSTANT_SCORE_FILTER_REWRITE</a>
+prevents this.</p>
+<p><p>The recommended rewrite method is 
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_AUTO_REWRITE_DEFAULT">CONSTANT_SCORE_AUTO_REWRITE_DEFAULT</a>: it doesn&apos;t spend CPU
+computing unhelpful scores, and it tries to pick the most
+performant rewrite method given the query. If you
+need scoring (like <seea cref="T:Lucene.Net.Search.FuzzyQuery"></seea>, use
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.TopTermsScoringBooleanQueryRewrite.html">MultiTermQuery.TopTermsScoringBooleanQueryRewrite</a> which uses
+a priority queue to only collect competitive terms
+and not hit this limitation.</p>
+<p><p>Note that QueryParsers.Classic.QueryParser produces
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.html">MultiTermQuery</a>s using 
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_AUTO_REWRITE_DEFAULT">CONSTANT_SCORE_AUTO_REWRITE_DEFAULT</a> by default.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.MultiTermQuery.RewriteMethod.html">MultiTermQuery.RewriteMethod</a></h4>
+      <section><p>Abstract class that defines how the query is rewritten. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.MultiTermQuery.TopTermsBoostOnlyBooleanQueryRewrite.html">MultiTermQuery.TopTermsBoostOnlyBooleanQueryRewrite</a></h4>
+      <section><p>A rewrite method that first translates each term into
+<a class="xref" href="Lucene.Net.Search.Occur.html#Lucene_Net_Search_Occur_SHOULD">SHOULD</a> clause in a <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>, but the scores
+are only computed as the boost.
+<p>
+This rewrite method only uses the top scoring terms so it will not overflow
+the boolean max clause count.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.MultiTermQuery.TopTermsScoringBooleanQueryRewrite.html">MultiTermQuery.TopTermsScoringBooleanQueryRewrite</a></h4>
+      <section><p>A rewrite method that first translates each term into
+<a class="xref" href="Lucene.Net.Search.Occur.html#Lucene_Net_Search_Occur_SHOULD">SHOULD</a> clause in a <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>, and keeps the
+scores as computed by the query.</p>
+<p><p>
+This rewrite method only uses the top scoring terms so it will not overflow
+the boolean max clause count. It is the default rewrite method for
+<a class="xref" href="Lucene.Net.Search.FuzzyQuery.html">FuzzyQuery</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.MultiTermQueryWrapperFilter-1.html">MultiTermQueryWrapperFilter&lt;Q&gt;</a></h4>
+      <section><p>A wrapper for <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html">MultiTermQuery</a>, that exposes its
+functionality as a <a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a>.
+<p>
+<a class="xref" href="Lucene.Net.Search.MultiTermQueryWrapperFilter-1.html">MultiTermQueryWrapperFilter&lt;Q&gt;</a> is not designed to
+be used by itself. Normally you subclass it to provide a <a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a>
+counterpart for a <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html">MultiTermQuery</a> subclass.
+<p>
+For example, <a class="xref" href="Lucene.Net.Search.TermRangeFilter.html">TermRangeFilter</a> and <a class="xref" href="Lucene.Net.Search.PrefixFilter.html">PrefixFilter</a> extend
+<a class="xref" href="Lucene.Net.Search.MultiTermQueryWrapperFilter-1.html">MultiTermQueryWrapperFilter&lt;Q&gt;</a>.
+This class also provides the functionality behind
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_FILTER_REWRITE">CONSTANT_SCORE_FILTER_REWRITE</a>;
+this is why it is not abstract.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.NGramPhraseQuery.html">NGramPhraseQuery</a></h4>
+      <section><p>This is a <a class="xref" href="Lucene.Net.Search.PhraseQuery.html">PhraseQuery</a> which is optimized for n-gram phrase query.
+For example, when you query &quot;ABCD&quot; on a 2-gram field, you may want to use
+<a class="xref" href="Lucene.Net.Search.NGramPhraseQuery.html">NGramPhraseQuery</a> rather than <a class="xref" href="Lucene.Net.Search.PhraseQuery.html">PhraseQuery</a>, because <a class="xref" href="Lucene.Net.Search.NGramPhraseQuery.html">NGramPhraseQuery</a>
+will <a class="xref" href="Lucene.Net.Search.NGramPhraseQuery.html#Lucene_Net_Search_NGramPhraseQuery_Rewrite_Lucene_Net_Index_IndexReader_">Rewrite(IndexReader)</a> the query to &quot;AB/0 CD/2&quot;, while <a class="xref" href="Lucene.Net.Search.PhraseQuery.html">PhraseQuery</a>
+will query &quot;AB/0 BC/1 CD/2&quot; (where term/position).
+<p>
+Collection initializer note: To create and populate a <a class="xref" href="Lucene.Net.Search.PhraseQuery.html">PhraseQuery</a>
+in a single statement, you can use the following example as a guide:</p>
+<pre><code>var phraseQuery = new NGramPhraseQuery(2) {
+    new Term(&quot;field&quot;, &quot;ABCD&quot;), 
+    new Term(&quot;field&quot;, &quot;EFGH&quot;)
+};</code></pre>
+<p>Note that as long as you specify all of the parameters, you can use either
+<a class="xref" href="Lucene.Net.Search.PhraseQuery.html#Lucene_Net_Search_PhraseQuery_Add_Lucene_Net_Index_Term_">Add(Term)</a> or <a class="xref" href="Lucene.Net.Search.PhraseQuery.html#Lucene_Net_Search_PhraseQuery_Add_Lucene_Net_Index_Term_System_Int32_">Add(Term, Int32)</a>
+as the method to use to initialize. If there are multiple parameters, each parameter set
+must be surrounded by curly braces.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.NumericRangeFilter.html">NumericRangeFilter</a></h4>
+      <section><p>LUCENENET specific static class to provide access to static methods without referring to the
+<a class="xref" href="Lucene.Net.Search.NumericRangeFilter-1.html">NumericRangeFilter&lt;T&gt;</a>&apos;s generic closing type.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.NumericRangeFilter-1.html">NumericRangeFilter&lt;T&gt;</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a> that only accepts numeric values within
+a specified range. To use this, you must first index the
+numeric values using <a class="xref" href="Lucene.Net.Documents.Int32Field.html">Int32Field</a>, 
+<a class="xref" href="Lucene.Net.Documents.SingleField.html">SingleField</a>, <a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a> or <a class="xref" href="Lucene.Net.Documents.DoubleField.html">DoubleField</a> (expert:
+<a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a>).</p>
+<p><p>You create a new <a class="xref" href="Lucene.Net.Search.NumericRangeFilter.html">NumericRangeFilter</a> with the static
+factory methods, eg:</p>
+<pre><code>Filter f = NumericRangeFilter.NewFloatRange(&quot;weight&quot;, 0.03f, 0.10f, true, true);</code></pre>
+
+<p>Accepts all documents whose float valued &quot;weight&quot; field
+ranges from 0.03 to 0.10, inclusive.
+See <a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a> for details on how Lucene
+indexes and searches numeric valued fields.
+<p>
+@since 2.9</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a></h4>
+      <section><p>LUCENENET specific class to provide access to static factory metods of <a class="xref" href="Lucene.Net.Search.NumericRangeQuery-1.html">NumericRangeQuery&lt;T&gt;</a>
+without referring to its genereic closing type.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.NumericRangeQuery-1.html">NumericRangeQuery&lt;T&gt;</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> that matches numeric values within a
+specified range.  To use this, you must first index the
+numeric values using <a class="xref" href="Lucene.Net.Documents.Int32Field.html">Int32Field</a>, 
+<a class="xref" href="Lucene.Net.Documents.SingleField.html">SingleField</a>, <a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a> or <a class="xref" href="Lucene.Net.Documents.DoubleField.html">DoubleField</a> (expert: 
+<a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a>).  If your terms are instead textual,
+you should use <a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a>.<br><a class="xref" href="Lucene.Net.Search.NumericRangeFilter.html">NumericRangeFilter</a> is the filter equivalent of this
+query.</p>
+
+<p>You create a new <a class="xref" href="Lucene.Net.Search.NumericRangeQuery-1.html">NumericRangeQuery&lt;T&gt;</a> with the static
+factory methods, eg:
+
+<pre><code>Query q = NumericRangeQuery.NewFloatRange(&quot;weight&quot;, 0.03f, 0.10f, true, true);</code></pre>
+
+matches all documents whose <span class="xref">System.Single</span> valued &quot;weight&quot; field
+ranges from 0.03 to 0.10, inclusive.</p>
+
+<p>The performance of <a class="xref" href="Lucene.Net.Search.NumericRangeQuery-1.html">NumericRangeQuery&lt;T&gt;</a> is much better
+than the corresponding <a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a> because the
+number of terms that must be searched is usually far
+fewer, thanks to trie indexing, described below.</p>
+
+<p>You can optionally specify a <a href="#precisionStepDesc"><span class="xref">Lucene.Net.Search.NumericRangeQuery`1.precisionStep</span></a>
+when creating this query.  This is necessary if you&apos;ve
+changed this configuration from its default (4) during
+indexing.  Lower values consume more disk space but speed
+up searching.  Suitable values are between <strong>1</strong> and
+<strong>8</strong>. A good starting point to test is <strong>4</strong>,
+which is the default value for all <code>Numeric*</code>
+classes.  See <a href="#precisionStepDesc">below</a> for
+details.</p>
+
+<p>This query defaults to 
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_AUTO_REWRITE_DEFAULT">CONSTANT_SCORE_AUTO_REWRITE_DEFAULT</a>.
+With precision steps of &lt;=4, this query can be run with
+one of the <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a> rewrite methods without changing
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>&apos;s default max clause count.</p>
+
+<p><h3>How it works</h3>
+
+<p>See the publication about <a target="_blank" href="http://www.panfmp.org">panFMP</a>,
+where this algorithm was described (referred to as <code>TrieRangeQuery</code>):
+</p>
+<blockquote><strong>Schindler, U, Diepenbroek, M</strong>, 2008.
+<em>Generic XML-based Framework for Metadata Portals.</em>
+Computers &amp; Geosciences 34 (12), 1947-1955.
+<a href="http://dx.doi.org/10.1016/j.cageo.2008.02.023" target="_blank">doi:10.1016/j.cageo.2008.02.023</a></blockquote>
+
+<p><em>A quote from this paper:</em> Because Apache Lucene is a full-text
+search engine and not a conventional database, it cannot handle numerical ranges
+(e.g., field value is inside user defined bounds, even dates are numerical values).
+We have developed an extension to Apache Lucene that stores
+the numerical values in a special string-encoded format with variable precision
+(all numerical values like <span class="xref">System.Double</span>s, <span class="xref">System.Int64</span>s, <span class="xref">System.Single</span>s, and <span class="xref">System.Int32</span>s are converted to
+lexicographic sortable string representations and stored with different precisions
+(for a more detailed description of how the values are stored,
+see <a class="xref" href="Lucene.Net.Util.NumericUtils.html">NumericUtils</a>). A range is then divided recursively into multiple intervals for searching:
+The center of the range is searched only with the lowest possible precision in the <em>trie</em>,
+while the boundaries are matched more exactly. This reduces the number of terms dramatically.</p>
+
+<p>For the variant that stores long values in 8 different precisions (each reduced by 8 bits) that
+uses a lowest precision of 1 byte, the index contains only a maximum of 256 distinct values in the
+lowest precision. Overall, a range could consist of a theoretical maximum of
+<pre><code>7*255*2 + 255 = 3825</code></pre> distinct terms (when there is a term for every distinct value of an
+8-byte-number in the index and the range covers almost all of them; a maximum of 255 distinct values is used
+because it would always be possible to reduce the full 256 values to one term with degraded precision).
+In practice, we have seen up to 300 terms in most cases (index with 500,000 metadata records
+and a uniform value distribution).</p>
+
+<p><a name="precisionStepDesc"><h3>Precision Step</h3></a>
+<p>You can choose any <span class="xref">Lucene.Net.Search.NumericRangeQuery`1.precisionStep</span> when encoding values.
+Lower step values mean more precisions and so more terms in index (and index gets larger). The number
+of indexed terms per value is (those are generated by <a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a>):
+<p>
+  indexedTermsPerValue = <strong>ceil</strong><big>(</big>bitsPerValue / precisionStep<big>)</big>
+</p>
+As the lower precision terms are shared by many values, the additional terms only
+slightly grow the term dictionary (approx. 7% for <code>precisionStep=4</code>), but have a larger
+impact on the postings (the postings file will have  more entries, as every document is linked to
+<code>indexedTermsPerValue</code> terms instead of one). The formula to estimate the growth
+of the term dictionary in comparison to one term per value:
+<p>
+<!-- the formula in the alt attribute was transformed from latex to PNG with http://1.618034.com/latex.php (with 110 dpi): -->
+<p><img src="doc-files/nrq-formula-1.png" alt="\mathrm{termDictOverhead} = \sum\limits_{i=0}^{\mathrm{indexedTermsPerValue}-1} \frac{1}{2^{\mathrm{precisionStep}\cdot i}}">
+</p>
+<p>On the other hand, if the <span class="xref">Lucene.Net.Search.NumericRangeQuery`1.precisionStep</span> is smaller, the maximum number of terms to match reduces,
+which optimizes query speed. The formula to calculate the maximum number of terms that will be visited while
+executing the query is:
+</p>
+<p>
+<!-- the formula in the alt attribute was transformed from latex to PNG with http://1.618034.com/latex.php (with 110 dpi): -->
+<p><img src="doc-files/nrq-formula-2.png" alt="\mathrm{maxQueryTerms} = \left[ \left( \mathrm{indexedTermsPerValue} - 1 \right) \cdot \left(2^\mathrm{precisionStep} - 1 \right) \cdot 2 \right] + \left( 2^\mathrm{precisionStep} - 1 \right)">
+</p>
+<p>For longs stored using a precision step of 4, <code>maxQueryTerms = 15<em>15</em>2 + 15 = 465</code>, and for a precision
+step of 2, <code>maxQueryTerms = 31<em>3</em>2 + 3 = 189</code>. But the faster search speed is reduced by more seeking
+in the term enum of the index. Because of this, the ideal <span class="xref">Lucene.Net.Search.NumericRangeQuery`1.precisionStep</span> value can only
+be found out by testing. <strong>Important:</strong> You can index with a lower precision step value and test search speed
+using a multiple of the original step value.</p></p>
+<p>Good values for <span class="xref">Lucene.Net.Search.NumericRangeQuery`1.precisionStep</span> are depending on usage and data type:</p>
+<ul><li>The default for all data types is <strong>4</strong>, which is used, when no <pre><code>precisionStep</code></pre> is given.</li><li>Ideal value in most cases for <em>64 bit</em> data types <em>(long, double)</em> is <strong>6</strong> or <strong>8</strong>.</li><li>Ideal value in most cases for <em>32 bit</em> data types <em>(int, float)</em> is <strong>4</strong>.</li><li>For low cardinality fields larger precision steps are good. If the cardinality is &lt; 100, it is
+ fair to use <span class="xref">System.Int32.MaxValue</span> (see below).</li><li>Steps <strong>&gt;=64</strong> for <em>long/double</em> and <strong>&gt;=32</strong> for <em>int/float</em> produces one token
+ per value in the index and querying is as slow as a conventional <a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a>. But it can be used
+ to produce fields, that are solely used for sorting (in this case simply use <span class="xref">System.Int32.MaxValue</span> as
+<span class="xref">Lucene.Net.Search.NumericRangeQuery`1.precisionStep</span>). Using <a class="xref" href="Lucene.Net.Documents.Int32Field.html">Int32Field</a>,
+<a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a>, <a class="xref" href="Lucene.Net.Documents.SingleField.html">SingleField</a> or <a class="xref" href="Lucene.Net.Documents.DoubleField.html">DoubleField</a> for sorting
+is ideal, because building the field cache is much faster than with text-only numbers.
+These fields have one term per value and therefore also work with term enumeration for building distinct lists
+(e.g. facets / preselected values to search for).
+Sorting is also possible with range query optimized fields using one of the above <span class="xref">Lucene.Net.Search.NumericRangeQuery`1.precisionStep</span>s.</li></ul>
+
+<p>Comparisons of the different types of RangeQueries on an index with about 500,000 docs showed
+that <a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a> in boolean rewrite mode (with raised <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a> clause count)
+took about 30-40 secs to complete, <a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a> in constant score filter rewrite mode took 5 secs
+and executing this class took &lt;100ms to complete (on an Opteron64 machine, Java 1.5, 8 bit
+precision step). This query type was developed for a geographic portal, where the performance for
+e.g. bounding boxes or exact date/time stamps is important.</p>
+
+<p>@since 2.9</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.PhraseQuery.html">PhraseQuery</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> that matches documents containing a particular sequence of terms.
+A <a class="xref" href="Lucene.Net.Search.PhraseQuery.html">PhraseQuery</a> is built by QueryParser for input like <code>&quot;new york&quot;</code>.</p>
+<p><p>This query may be combined with other terms or queries with a <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>.
+<p>
+Collection initializer note: To create and populate a <a class="xref" href="Lucene.Net.Search.PhraseQuery.html">PhraseQuery</a>
+in a single statement, you can use the following example as a guide:</p>
+<pre><code>var phraseQuery = new PhraseQuery() {
+    new Term(&quot;field&quot;, &quot;microsoft&quot;), 
+    new Term(&quot;field&quot;, &quot;office&quot;)
+};</code></pre>
+<p>Note that as long as you specify all of the parameters, you can use either
+<a class="xref" href="Lucene.Net.Search.PhraseQuery.html#Lucene_Net_Search_PhraseQuery_Add_Lucene_Net_Index_Term_">Add(Term)</a> or <a class="xref" href="Lucene.Net.Search.PhraseQuery.html#Lucene_Net_Search_PhraseQuery_Add_Lucene_Net_Index_Term_System_Int32_">Add(Term, Int32)</a>
+as the method to use to initialize. If there are multiple parameters, each parameter set
+must be surrounded by curly braces.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.PositiveScoresOnlyCollector.html">PositiveScoresOnlyCollector</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> implementation which wraps another
+<a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> and makes sure only documents with
+scores &gt; 0 are collected.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.PrefixFilter.html">PrefixFilter</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a> that restricts search results to values that have a matching prefix in a given
+field.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.PrefixQuery.html">PrefixQuery</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> that matches documents containing terms with a specified prefix. A <a class="xref" href="Lucene.Net.Search.PrefixQuery.html">PrefixQuery</a>
+is built by QueryParser for input like <code>app*</code>.</p>
+<p><p>This query uses the
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_AUTO_REWRITE_DEFAULT">CONSTANT_SCORE_AUTO_REWRITE_DEFAULT</a>
+rewrite method.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.PrefixTermsEnum.html">PrefixTermsEnum</a></h4>
+      <section><p>Subclass of <a class="xref" href="Lucene.Net.Index.FilteredTermsEnum.html">FilteredTermsEnum</a> for enumerating all terms that match the
+specified prefix filter term.
+<p>Term enumerations are always ordered by
+<a class="xref" href="Lucene.Net.Index.TermsEnum.html#Lucene_Net_Index_TermsEnum_Comparer">Comparer</a>.  Each term in the enumeration is
+greater than all that precede it.</p></p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></h4>
+      <section><p>The abstract base class for queries.
+<p>Instantiable subclasses are:
+<ul><li> <a class="xref" href="Lucene.Net.Search.TermQuery.html">TermQuery</a> </li><li> <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a> </li><li> <a class="xref" href="Lucene.Net.Search.WildcardQuery.html">WildcardQuery</a> </li><li> <a class="xref" href="Lucene.Net.Search.PhraseQuery.html">PhraseQuery</a> </li><li> <a class="xref" href="Lucene.Net.Search.PrefixQuery.html">PrefixQuery</a> </li><li> <a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html">MultiPhraseQuery</a> </li><li> <a class="xref" href="Lucene.Net.Search.FuzzyQuery.html">FuzzyQuery</a> </li><li> <a class="xref" href="Lucene.Net.Search.RegexpQuery.html">RegexpQuery</a> </li><li> <a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a> </li><li> <a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a> </li><li> <a class="xref" href="Lucene.Net.Search.ConstantScoreQuery.html">ConstantScoreQuery</a> </li><li> <a class="xref" href="Lucene.Net.Search.DisjunctionMaxQuery.html">DisjunctionMaxQuery</a> </li><li> <a class="xref" href="Lucene.Net.Search.MatchAllDocsQuery.html">MatchAllDocsQuery</a> </li></ul>
+<p>See also the family of Span Queries (<a class="xref" href="Lucene.Net.Search.Spans.html">Lucene.Net.Search.Spans</a>)
+   and additional queries available in the <a href="{@docRoot}/../queries/overview-summary.html">Queries module</a></p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.QueryRescorer.html">QueryRescorer</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Rescorer.html">Rescorer</a> that uses a provided <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> to assign
+scores to the first-pass hits.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.QueryWrapperFilter.html">QueryWrapperFilter</a></h4>
+      <section><p>Constrains search results to only match those which also match a provided
+query.</p>
+<p><p> This could be used, for example, with a <a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a> on a suitably
+formatted date field to implement date filtering.  One could re-use a single
+<code>CachingWrapperFilter(QueryWrapperFilter)</code> that matches, e.g., only documents modified
+within the last week.  This would only need to be reconstructed once per day.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.ReferenceContext-1.html">ReferenceContext&lt;T&gt;</a></h4>
+      <section><p><a class="xref" href="Lucene.Net.Search.ReferenceContext-1.html">ReferenceContext&lt;T&gt;</a> holds a reference instance and
+ensures it is properly de-referenced from its corresponding <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html">ReferenceManager&lt;G&gt;</a>
+when <a class="xref" href="Lucene.Net.Search.ReferenceContext-1.html#Lucene_Net_Search_ReferenceContext_1_Dispose">Dispose()</a> is called. This class is primarily intended
+to be used with a using block.
+<p>
+LUCENENET specific</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.ReferenceManager.html">ReferenceManager</a></h4>
+      <section><p>LUCENENET specific class used to provide static access to <a class="xref" href="Lucene.Net.Search.ReferenceManager.IRefreshListener.html">ReferenceManager.IRefreshListener</a>
+without having to specifiy the generic closing type of <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html">ReferenceManager&lt;G&gt;</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html">ReferenceManager&lt;G&gt;</a></h4>
+      <section><p>Utility class to safely share instances of a certain type across multiple
+threads, while periodically refreshing them. This class ensures each
+reference is closed only once all threads have finished using it. It is
+recommended to consult the documentation of <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html">ReferenceManager&lt;G&gt;</a>
+implementations for their <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_MaybeRefresh">MaybeRefresh()</a> semantics.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.ReferenceManagerExtensions.html">ReferenceManagerExtensions</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Search.RegexpQuery.html">RegexpQuery</a></h4>
+      <section><p>A fast regular expression query based on the
+<a class="xref" href="Lucene.Net.Util.Automaton.html">Lucene.Net.Util.Automaton</a> package.
+<ul><li>Comparisons are <a href="http://tusker.org/regex/regex_benchmark.html">fast</a></li><li>The term dictionary is enumerated in an intelligent way, to avoid
+        comparisons. See <a class="xref" href="Lucene.Net.Search.AutomatonQuery.html">AutomatonQuery</a> for more details.</li></ul>
+<p>
+The supported syntax is documented in the <a class="xref" href="Lucene.Net.Util.Automaton.RegExp.html">RegExp</a> class.
+Note this might be different than other regular expression implementations.
+For some alternatives with different syntax, look under the sandbox.
+</p>
+<p>
+Note this query can be slow, as it needs to iterate over many terms. In order
+to prevent extremely slow <a class="xref" href="Lucene.Net.Search.RegexpQuery.html">RegexpQuery</a>s, a <a class="xref" href="Lucene.Net.Util.Automaton.RegExp.html">RegExp</a> term should not start with
+the expression <code>.*</code>
+</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.Rescorer.html">Rescorer</a></h4>
+      <section><p>Re-scores the topN results (<a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a>) from an original
+query.  See <a class="xref" href="Lucene.Net.Search.QueryRescorer.html">QueryRescorer</a> for an actual
+implementation.  Typically, you run a low-cost
+first-pass query across the entire index, collecting the
+top few hundred hits perhaps, and then use this class to
+mix in a more costly second pass scoring.</p>
+<p><p>See 
+<a class="xref" href="Lucene.Net.Search.QueryRescorer.html#Lucene_Net_Search_QueryRescorer_Rescore_Lucene_Net_Search_IndexSearcher_Lucene_Net_Search_TopDocs_Lucene_Net_Search_Query_System_Double_System_Int32_">Rescore(IndexSearcher, TopDocs, Query, Double, Int32)</a>
+for a simple static method to call to rescore using a 2nd
+pass <a class="xref" href="Lucene.Net.Search.Query.html">Query</a>.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.ScoreCachingWrappingScorer.html">ScoreCachingWrappingScorer</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> which wraps another scorer and caches the score of the
+current document. Successive calls to <a class="xref" href="Lucene.Net.Search.ScoreCachingWrappingScorer.html#Lucene_Net_Search_ScoreCachingWrappingScorer_GetScore">GetScore()</a> will return the same
+result and will not invoke the wrapped Scorer&apos;s GetScore() method, unless the
+current document has changed.
+<p>
+This class might be useful due to the changes done to the <a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a>
+interface, in which the score is not computed for a document by default, only
+if the collector requests it. Some collectors may need to use the score in
+several places, however all they have in hand is a <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> object, and
+might end up computing the score of a document more than once.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.ScoreDoc.html">ScoreDoc</a></h4>
+      <section><p>Holds one hit in <a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a>. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a></h4>
+      <section><p>Expert: Common scoring functionality for different types of queries.</p>
+<p>
+A <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> iterates over documents matching a
+query in increasing order of doc Id.
+</p>
+<p>
+Document scores are computed using a given <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a>
+implementation.
+</p>
+
+<p><strong>NOTE</strong>: The values <span class="xref">System.Single.NaN</span>,
+<span class="xref">System.Single.NegativeInfinity</span> and <span class="xref">System.Single.PositiveInfinity</span> are
+not valid scores.  Certain collectors (eg 
+<a class="xref" href="Lucene.Net.Search.TopScoreDocCollector.html">TopScoreDocCollector</a>) will not properly collect hits
+with these scores.
+</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Scorer.ChildScorer.html">Scorer.ChildScorer</a></h4>
+      <section><p>A child <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> and its relationship to its parent.
+The meaning of the relationship depends upon the parent query.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.ScoringRewrite-1.html">ScoringRewrite&lt;Q&gt;</a></h4>
+      <section><p>Base rewrite method that translates each term into a query, and keeps
+the scores as computed by the query.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div><ul>
+<li>Only public to be accessible by spans package.</li>
+</ul>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.SearcherFactory.html">SearcherFactory</a></h4>
+      <section><p>Factory class used by <a class="xref" href="Lucene.Net.Search.SearcherManager.html">SearcherManager</a> to
+create new <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a>s. The default implementation just creates
+an <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> with no custom behavior:</p>
+<pre><code>    public IndexSearcher NewSearcher(IndexReader r)
+    {
+        return new IndexSearcher(r);
+    }</code></pre>
+
+<p>You can pass your own factory instead if you want custom behavior, such as:
+<ul><li>Setting a custom scoring model: <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Similarity">Similarity</a></li><li>Parallel per-segment search: <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher__ctor_Lucene_Net_Index_IndexReader_System_Threading_Tasks_TaskScheduler_">IndexSearcher(IndexReader, TaskScheduler)</a></li><li>Return custom subclasses of <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> (for example that implement distributed scoring)</li><li>Run queries to warm your <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> before it is used. Note: when using near-realtime search
+      you may want to also set <a class="xref" href="Lucene.Net.Index.LiveIndexWriterConfig.html#Lucene_Net_Index_LiveIndexWriterConfig_MergedSegmentWarmer">MergedSegmentWarmer</a> to warm
+      newly merged segments in the background, outside of the reopen path.</li></ul></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.SearcherLifetimeManager.html">SearcherLifetimeManager</a></h4>
+      <section><p>Keeps track of current plus old <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a>s, disposing
+the old ones once they have timed out.</p>
+<p>Use it like this:</p>
+<pre><code>    SearcherLifetimeManager mgr = new SearcherLifetimeManager();</code></pre>
+
+<p>Per search-request, if it&apos;s a &quot;new&quot; search request, then
+obtain the latest searcher you have (for example, by
+using <a class="xref" href="Lucene.Net.Search.SearcherManager.html">SearcherManager</a>), and then record this
+searcher:</p>
+<pre><code>    // Record the current searcher, and save the returend
+    // token into user&apos;s search results (eg as a  hidden
+    // HTML form field):
+    long token = mgr.Record(searcher);</code></pre>
+
+<p>When a follow-up search arrives, for example the user
+clicks next page, drills down/up, etc., take the token
+that you saved from the previous search and:</p>
+<pre><code>    // If possible, obtain the same searcher as the last
+    // search:
+    IndexSearcher searcher = mgr.Acquire(token);
+    if (searcher != null) 
+    {
+        // Searcher is still here
+        try 
+        {
+            // do searching...
+        } 
+        finally 
+        {
+            mgr.Release(searcher);
+            // Do not use searcher after this!
+            searcher = null;
+        }
+    } 
+    else 
+    {
+        // Searcher was pruned -- notify user session timed
+        // out, or, pull fresh searcher again
+    }</code></pre>
+
+<p>Finally, in a separate thread, ideally the same thread
+that&apos;s periodically reopening your searchers, you should
+periodically prune old searchers:</p>
+<pre><code>    mgr.Prune(new PruneByAge(600.0));</code></pre>
+
+<p><strong>NOTE</strong>: keeping many searchers around means
+you&apos;ll use more resources (open files, RAM) than a single
+searcher.  However, as long as you are using 
+<a class="xref" href="Lucene.Net.Index.DirectoryReader.html#Lucene_Net_Index_DirectoryReader_OpenIfChanged_Lucene_Net_Index_DirectoryReader_">OpenIfChanged(DirectoryReader)</a>, the searchers
+will usually share almost all segments and the added resource usage
+is contained.  When a large merge has completed, and
+you reopen, because that is a large change, the new
+searcher will use higher additional RAM than other
+searchers; but large merges don&apos;t complete very often and
+it&apos;s unlikely you&apos;ll hit two of them in your expiration
+window.  Still you should budget plenty of heap in the
+runtime to have a good safety margin.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.SearcherLifetimeManager.PruneByAge.html">SearcherLifetimeManager.PruneByAge</a></h4>
+      <section><p>Simple pruner that drops any searcher older by
+more than the specified seconds, than the newest
+searcher.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.SearcherManager.html">SearcherManager</a></h4>
+      <section><p>Utility class to safely share <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> instances across multiple
+threads, while periodically reopening. This class ensures each searcher is
+disposed only once all threads have finished using it.</p>
+<p><p>
+Use <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_Acquire">Acquire()</a> to obtain the current searcher, and <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_Release__0_">Release(G)</a> to
+release it, like this:</p>
+<pre><code>IndexSearcher s = manager.Acquire();
+try 
+{
+    // Do searching, doc retrieval, etc. with s
+} 
+finally 
+{
+    manager.Release(s);
+    // Do not use s after this!
+    s = null;
+}</code></pre>
+
+<p><p>
+In addition you should periodically call <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_MaybeRefresh">MaybeRefresh()</a>. While it&apos;s
+possible to call this just before running each query, this is discouraged
+since it penalizes the unlucky queries that do the reopen. It&apos;s better to use
+a separate background thread, that periodically calls <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_MaybeRefresh">MaybeRefresh()</a>. Finally,
+be sure to call <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_Dispose">Dispose()</a> once you are done.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a></h4>
+      <section><p>Encapsulates sort criteria for returned hits.</p>
+<p><p>The fields used to determine sort order must be carefully chosen.
+<a class="xref" href="Lucene.Net.Documents.Document.html">Document</a>s must contain a single term in such a field,
+and the value of the term should indicate the document&apos;s relative position in
+a given sort order.  The field must be indexed, but should not be tokenized,
+and does not need to be stored (unless you happen to want it back with the
+rest of your document data).  In other words:</p>
+<p><p><pre><code>document.Add(new Field(&quot;byNumber&quot;, x.ToString(CultureInfo.InvariantCulture), Field.Store.NO, Field.Index.NOT_ANALYZED));</code></pre></p>
+<p><p><h3>Valid Types of Values</h3></p>
+<p><p>There are four possible kinds of term values which may be put into
+sorting fields: <span class="xref">System.Int32</span>s, <span class="xref">System.Int64</span>s, <span class="xref">System.Single</span>s, or <span class="xref">System.String</span>s.  Unless
+<a class="xref" href="Lucene.Net.Search.SortField.html">SortField</a> objects are specified, the type of value
+in the field is determined by parsing the first term in the field.</p>
+<p><p><span class="xref">System.Int32</span> term values should contain only digits and an optional
+preceding negative sign.  Values must be base 10 and in the range
+<span class="xref">System.Int32.MinValue</span> and <span class="xref">System.Int32.MaxValue</span> inclusive.
+Documents which should appear first in the sort
+should have low value integers, later documents high values
+(i.e. the documents should be numbered <code>1..n</code> where
+<code>1</code> is the first and <code>n</code> the last).</p>
+<p><p><span class="xref">System.Int64</span> term values should contain only digits and an optional
+preceding negative sign.  Values must be base 10 and in the range
+<span class="xref">System.Int64.MinValue</span> and <span class="xref">System.Int64.MaxValue</span> inclusive.
+Documents which should appear first in the sort
+should have low value integers, later documents high values.</p>
+<p><p><span class="xref">System.Single</span> term values should conform to values accepted by
+<span class="xref">System.Single</span> (except that <code>NaN</code>
+and <code>Infinity</code> are not supported).
+<a class="xref" href="Lucene.Net.Documents.Document.html">Document</a>s which should appear first in the sort
+should have low values, later documents high values.</p>
+<p><p><span class="xref">System.String</span> term values can contain any valid <span class="xref">System.String</span>, but should
+not be tokenized.  The values are sorted according to their
+comparable natural order (<span class="xref">System.StringComparer.Ordinal</span>).  Note that using this type
+of term value has higher memory requirements than the other
+two types.</p>
+<p><p><h3>Object Reuse</h3></p>
+<p><p>One of these objects can be
+used multiple times and the sort order changed between usages.</p>
+<p><p>This class is thread safe.</p>
+<p><p><h3>Memory Usage</h3></p>
+<p><p>Sorting uses of caches of term values maintained by the
+internal HitQueue(s).  The cache is static and contains an <span class="xref">System.Int32</span>
+or <span class="xref">System.Single</span> array of length <code>IndexReader.MaxDoc</code> for each field
+name for which a sort is performed.  In other words, the size of the
+cache in bytes is:</p>
+<p><p><pre><code>4 * IndexReader.MaxDoc * (# of different fields actually used to sort)</code></pre></p>
+<p><p>For <span class="xref">System.String</span> fields, the cache is larger: in addition to the
+above array, the value of every term in the field is kept in memory.
+If there are many unique terms in the field, this could
+be quite large.</p>
+<p><p>Note that the size of the cache is not affected by how many
+fields are in the index and <em>might</em> be used to sort - only by
+the ones actually used to sort a result set.</p>
+<p><p>Created: Feb 12, 2004 10:53:57 AM
+<p>
+@since   lucene 1.4</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.SortField.html">SortField</a></h4>
+      <section><p>Stores information about how to sort documents by terms in an individual
+field.  Fields must be indexed in order to sort by them.</p>
+<p><p>Created: Feb 11, 2004 1:25:29 PM
+<p>
+@since   lucene 1.4 </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.SortRescorer.html">SortRescorer</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Rescorer.html">Rescorer</a> that re-sorts according to a provided
+Sort.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.TermCollectingRewrite-1.html">TermCollectingRewrite&lt;Q&gt;</a></h4>
+      <section></section>
+      <h4><a class="xref" href="Lucene.Net.Search.TermQuery.html">TermQuery</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> that matches documents containing a term.
+this may be combined with other terms with a <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.TermRangeFilter.html">TermRangeFilter</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Filter.html">Filter</a> that restricts search results to a range of term
+values in a given field.</p>
+<p><p>This filter matches the documents looking for terms that fall into the
+supplied range according to 
+<span class="xref">System.Byte.CompareTo(System.Byte)</span>,  It is not intended
+for numerical ranges; use <a class="xref" href="Lucene.Net.Search.NumericRangeFilter.html">NumericRangeFilter</a> instead.</p>
+<p><p>If you construct a large number of range filters with different ranges but on the
+same field, <a class="xref" href="Lucene.Net.Search.FieldCacheRangeFilter.html">FieldCacheRangeFilter</a> may have significantly better performance.
+<p>
+@since 2.9</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> that matches documents within an range of terms.</p>
+<p><p>This query matches the documents looking for terms that fall into the
+supplied range according to 
+<span class="xref">System.Byte.CompareTo(System.Byte)</span>. It is not intended
+for numerical ranges; use <a class="xref" href="Lucene.Net.Search.NumericRangeQuery.html">NumericRangeQuery</a> instead.</p>
+<p><p>This query uses the
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_AUTO_REWRITE_DEFAULT">CONSTANT_SCORE_AUTO_REWRITE_DEFAULT</a>
+rewrite method.
+<p>
+@since 2.9</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.TermRangeTermsEnum.html">TermRangeTermsEnum</a></h4>
+      <section><p>Subclass of <a class="xref" href="Lucene.Net.Index.FilteredTermsEnum.html">FilteredTermsEnum</a> for enumerating all terms that match the
+specified range parameters.
+<p>Term enumerations are always ordered by
+<a class="xref" href="Lucene.Net.Index.FilteredTermsEnum.html#Lucene_Net_Index_FilteredTermsEnum_Comparer">Comparer</a>.  Each term in the enumeration is
+greater than all that precede it.</p></p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.TermStatistics.html">TermStatistics</a></h4>
+      <section><p>Contains statistics for a specific term
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.TimeLimitingCollector.html">TimeLimitingCollector</a></h4>
+      <section><p>The <a class="xref" href="Lucene.Net.Search.TimeLimitingCollector.html">TimeLimitingCollector</a> is used to timeout search requests that
+take longer than the maximum allowed search time limit. After this time is
+exceeded, the search thread is stopped by throwing a
+<a class="xref" href="Lucene.Net.Search.TimeLimitingCollector.TimeExceededException.html">TimeLimitingCollector.TimeExceededException</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.TimeLimitingCollector.TimeExceededException.html">TimeLimitingCollector.TimeExceededException</a></h4>
+      <section><p>Thrown when elapsed search time exceeds allowed search time. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.TimeLimitingCollector.TimerThread.html">TimeLimitingCollector.TimerThread</a></h4>
+      <section><p>Thread used to timeout search requests.
+Can be stopped completely with <a class="xref" href="Lucene.Net.Search.TimeLimitingCollector.TimerThread.html#Lucene_Net_Search_TimeLimitingCollector_TimerThread_StopTimer">StopTimer()</a>
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a></h4>
+      <section><p>Represents hits returned by 
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_">Search(Query, Filter, Int32)</a> and 
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_System_Int32_">Search(Query, Int32)</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.TopDocsCollector-1.html">TopDocsCollector&lt;T&gt;</a></h4>
+      <section><p>A base class for all collectors that return a <a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a> output. This
+collector allows easy extension by providing a single constructor which
+accepts a <a class="xref" href="Lucene.Net.Util.PriorityQueue-1.html">PriorityQueue&lt;T&gt;</a> as well as protected members for that
+priority queue and a counter of the number of total hits.
+<p>
+Extending classes can override any of the methods to provide their own
+implementation, as well as avoid the use of the priority queue entirely by
+passing null to <a class="xref" href="Lucene.Net.Search.TopDocsCollector-1.html#Lucene_Net_Search_TopDocsCollector_1__ctor_Lucene_Net_Util_PriorityQueue__0__">TopDocsCollector(PriorityQueue&lt;T&gt;)</a>. In that case
+however, you might want to consider overriding all methods, in order to avoid
+a <span class="xref">System.NullReferenceException</span>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.TopFieldCollector.html">TopFieldCollector</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> that sorts by <a class="xref" href="Lucene.Net.Search.SortField.html">SortField</a> using
+<a class="xref" href="Lucene.Net.Search.FieldComparer.html">FieldComparer</a>s.
+<p>
+See the <a class="xref" href="Lucene.Net.Search.TopFieldCollector.html#Lucene_Net_Search_TopFieldCollector_Create_Lucene_Net_Search_Sort_System_Int32_System_Boolean_System_Boolean_System_Boolean_System_Boolean_">Create(Sort, Int32, Boolean, Boolean, Boolean, Boolean)</a> method
+for instantiating a <a class="xref" href="Lucene.Net.Search.TopFieldCollector.html">TopFieldCollector</a>.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.TopFieldDocs.html">TopFieldDocs</a></h4>
+      <section><p>Represents hits returned by 
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_Lucene_Net_Search_Sort_">Search(Query, Filter, Int32, Sort)</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.TopScoreDocCollector.html">TopScoreDocCollector</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> implementation that collects the top-scoring hits,
+returning them as a <a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a>. this is used by <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> to
+implement <a class="xref" href="Lucene.Net.Search.TopDocs.html">TopDocs</a>-based search. Hits are sorted by score descending
+and then (when the scores are tied) docID ascending. When you create an
+instance of this collector you should know in advance whether documents are
+going to be collected in doc Id order or not.</p>
+<p><p><strong>NOTE</strong>: The values <span class="xref">System.Single.NaN</span> and
+<span class="xref">System.Single.NegativeInfinity</span> are not valid scores.  This
+collector will not properly collect hits with such
+scores.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.TopTermsRewrite-1.html">TopTermsRewrite&lt;Q&gt;</a></h4>
+      <section><p>Base rewrite method for collecting only the top terms
+via a priority queue.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div><ul>
+<li>Only public to be accessible by spans package.</li>
+</ul>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.TotalHitCountCollector.html">TotalHitCountCollector</a></h4>
+      <section><p>Just counts the total number of hits.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a></h4>
+      <section><p>Expert: Calculate query weights and build query scorers.
+<p>
+The purpose of <a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a> is to ensure searching does not modify a
+<a class="xref" href="Lucene.Net.Search.Query.html">Query</a>, so that a <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> instance can be reused.
+<p>
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> dependent state of the query should reside in the
+<a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a>.
+<p>
+<a class="xref" href="Lucene.Net.Index.AtomicReader.html">AtomicReader</a> dependent state should reside in the <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a>.
+<p>
+Since <a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a> creates <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> instances for a given
+<a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a> (<a class="xref" href="Lucene.Net.Search.Weight.html#Lucene_Net_Search_Weight_GetScorer_Lucene_Net_Index_AtomicReaderContext_Lucene_Net_Util_IBits_">GetScorer(AtomicReaderContext, IBits)</a>)
+callers must maintain the relationship between the searcher&apos;s top-level
+<a class="xref" href="Lucene.Net.Index.IndexReaderContext.html">IndexReaderContext</a> and the context used to create a <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a>.
+<p>
+A <a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a> is used in the following way:
+<ol><li>A <a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a> is constructed by a top-level query, given a
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> (<a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_CreateWeight_Lucene_Net_Search_IndexSearcher_">CreateWeight(IndexSearcher)</a>).</li><li>The <a class="xref" href="Lucene.Net.Search.Weight.html#Lucene_Net_Search_Weight_GetValueForNormalization">GetValueForNormalization()</a> method is called on the
+<a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a> to compute the query normalization factor
+<a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html#Lucene_Net_Search_Similarities_Similarity_QueryNorm_System_Single_">QueryNorm(Single)</a> of the query clauses contained in the
+query.</li><li>The query normalization factor is passed to <a class="xref" href="Lucene.Net.Search.Weight.html#Lucene_Net_Search_Weight_Normalize_System_Single_System_Single_">Normalize(Single, Single)</a>. At
+this point the weighting is complete.</li><li>A <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> is constructed by
+<a class="xref" href="Lucene.Net.Search.Weight.html#Lucene_Net_Search_Weight_GetScorer_Lucene_Net_Index_AtomicReaderContext_Lucene_Net_Util_IBits_">GetScorer(AtomicReaderContext, IBits)</a>.</li></ol>
+<p>
+@since 2.9</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.WildcardQuery.html">WildcardQuery</a></h4>
+      <section><p>Implements the wildcard search query. Supported wildcards are <code><em></em></code>, which
+matches any character sequence (including the empty one), and <code>?</code>,
+which matches any single character. &apos;&amp;apos; is the escape character.
+<p>
+Note this query can be slow, as it
+needs to iterate over many terms. In order to prevent extremely slow WildcardQueries,
+a Wildcard term should not start with the wildcard <code></code></p>
+<p><p>This query uses the 
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_AUTO_REWRITE_DEFAULT">CONSTANT_SCORE_AUTO_REWRITE_DEFAULT</a>
+rewrite method.</p>
+</section>
+    <h3 id="interfaces">Interfaces
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.IByteParser.html">FieldCache.IByteParser</a></h4>
+      <section><p>Interface to parse bytes from document fields.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.ICreationPlaceholder.html">FieldCache.ICreationPlaceholder</a></h4>
+      <section><p>Interface used to identify a <a class="xref" href="Lucene.Net.Search.FieldCache.CreationPlaceholder-1.html">FieldCache.CreationPlaceholder&lt;TValue&gt;</a> without
+referencing its generic closing type.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.IDoubleParser.html">FieldCache.IDoubleParser</a></h4>
+      <section><p>Interface to parse <span class="xref">System.Double</span>s from document fields.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.IInt16Parser.html">FieldCache.IInt16Parser</a></h4>
+      <section><p>Interface to parse <span class="xref">System.Int16</span>s from document fields.
+<p>
+NOTE: This was ShortParser in Lucene</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.IInt32Parser.html">FieldCache.IInt32Parser</a></h4>
+      <section><p>Interface to parse <span class="xref">System.Int32</span>s from document fields.
+<p>
+NOTE: This was IntParser in Lucene</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.IInt64Parser.html">FieldCache.IInt64Parser</a></h4>
+      <section><p>Interface to parse <span class="xref">System.Int64</span> from document fields.
+<p>
+NOTE: This was LongParser in Lucene</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.IParser.html">FieldCache.IParser</a></h4>
+      <section><p>Marker interface as super-interface to all parsers. It
+is used to specify a custom parser to
+<a class="xref" href="Lucene.Net.Search.SortField.html#Lucene_Net_Search_SortField__ctor_System_String_Lucene_Net_Search_FieldCache_IParser_">SortField(String, FieldCache.IParser)</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FieldCache.ISingleParser.html">FieldCache.ISingleParser</a></h4>
+      <section><p>Interface to parse <span class="xref">System.Single</span>s from document fields.
+<p>
+NOTE: This was FloatParser in Lucene</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.FuzzyTermsEnum.ILevenshteinAutomataAttribute.html">FuzzyTermsEnum.ILevenshteinAutomataAttribute</a></h4>
+      <section><p>Reuses compiled automata across different segments,
+because they are independent of the index
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.IBoostAttribute.html">IBoostAttribute</a></h4>
+      <section><p>Add this <a class="xref" href="Lucene.Net.Util.IAttribute.html">IAttribute</a> to a <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a> returned by <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_GetTermsEnum_Lucene_Net_Index_Terms_Lucene_Net_Util_AttributeSource_">GetTermsEnum(Terms, AttributeSource)</a>
+and update the boost on each returned term. This enables to control the boost factor
+for each matching term in <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_SCORING_BOOLEAN_QUERY_REWRITE">SCORING_BOOLEAN_QUERY_REWRITE</a> or
+<a class="xref" href="Lucene.Net.Search.TopTermsRewrite-1.html">TopTermsRewrite&lt;Q&gt;</a> mode.
+<a class="xref" href="Lucene.Net.Search.FuzzyQuery.html">FuzzyQuery</a> is using this to take the edit distance into account.
+<p><strong>Please note:</strong> this attribute is intended to be added only by the <a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a>
+to itself in its constructor and consumed by the <a class="xref" href="Lucene.Net.Search.MultiTermQuery.RewriteMethod.html">MultiTermQuery.RewriteMethod</a>.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a></h4>
+      <section><p>Expert: Collectors are primarily meant to be used to
+gather raw results from a search, and implement sorting
+or custom result filtering, collation, etc. </p>
+
+<p>Lucene&apos;s core collectors are derived from Collector.
+Likely your application can use one of these classes, or
+subclass <a class="xref" href="Lucene.Net.Search.TopDocsCollector-1.html">TopDocsCollector&lt;T&gt;</a>, instead of
+implementing <a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> directly:
+
+<ul><li><a class="xref" href="Lucene.Net.Search.TopDocsCollector-1.html">TopDocsCollector&lt;T&gt;</a> is an abstract base class
+  that assumes you will retrieve the top N docs,
+  according to some criteria, after collection is
+  done.  </li><li><a class="xref" href="Lucene.Net.Search.TopScoreDocCollector.html">TopScoreDocCollector</a> is a concrete subclass
+<a class="xref" href="Lucene.Net.Search.TopDocsCollector-1.html">TopDocsCollector&lt;T&gt;</a> and sorts according to score +
+docID.  This is used internally by the 
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> search methods that do not take an
+explicit <a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a>. It is likely the most frequently
+used collector.</li><li><a class="xref" href="Lucene.Net.Search.TopFieldCollector.html">TopFieldCollector</a> subclasses 
+<a class="xref" href="Lucene.Net.Search.TopDocsCollector-1.html">TopDocsCollector&lt;T&gt;</a> and sorts according to a specified
+<a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a> object (sort by field).  This is used
+internally by the <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> search methods
+that take an explicit <a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a>.</li><li><a class="xref" href="Lucene.Net.Search.TimeLimitingCollector.html">TimeLimitingCollector</a>, which wraps any other
+Collector and aborts the search if it&apos;s taken too much
+time.</li><li><a class="xref" href="Lucene.Net.Search.PositiveScoresOnlyCollector.html">PositiveScoresOnlyCollector</a> wraps any other
+<a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> and prevents collection of hits whose score
+is &lt;= 0.0</li></ul>
+</p>
+
+<p><a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> decouples the score from the collected doc:
+the score computation is skipped entirely if it&apos;s not
+needed.  Collectors that do need the score should
+implement the <a class="xref" href="Lucene.Net.Search.ICollector.html#Lucene_Net_Search_ICollector_SetScorer_Lucene_Net_Search_Scorer_">SetScorer(Scorer)</a> method, to hold onto the
+passed <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> instance, and call 
+<a class="xref" href="Lucene.Net.Search.Scorer.html#Lucene_Net_Search_Scorer_GetScore">GetScore()</a> within the collect method to compute the
+current hit&apos;s score.  If your collector may request the
+score for a single hit multiple times, you should use
+<a class="xref" href="Lucene.Net.Search.ScoreCachingWrappingScorer.html">ScoreCachingWrappingScorer</a>. </p>
+
+<p><strong>NOTE:</strong> The doc that is passed to the collect
+method is relative to the current reader. If your
+collector needs to resolve this to the docID space of the
+Multi*Reader, you must re-base it by recording the
+docBase from the most recent <a class="xref" href="Lucene.Net.Search.ICollector.html#Lucene_Net_Search_ICollector_SetNextReader_Lucene_Net_Index_AtomicReaderContext_">SetNextReader(AtomicReaderContext)</a> call.  Here&apos;s
+a simple example showing how to collect docIDs into an
+<a class="xref" href="Lucene.Net.Util.OpenBitSet.html">OpenBitSet</a>:</p>
+
+<pre><code>private class MySearchCollector : ICollector
+{
+    private readonly OpenBitSet bits;
+    private int docBase;
+
+    public MySearchCollector(OpenBitSet bits)
+    {
+        if (bits == null) throw new ArgumentNullException(&quot;bits&quot;);
+        this.bits = bits;
+    }
+
+    // ignore scorer
+    public void SetScorer(Scorer scorer)
+    { 
+    }
+
+    // accept docs out of order (for a BitSet it doesn&apos;t matter)
+    public bool AcceptDocsOutOfOrder
+    {
+        get { return true; }
+    }
+
+    public void Collect(int doc)
+    {
+        bits.Set(doc + docBase);
+    }
+
+    public void SetNextReader(AtomicReaderContext context)
+    {
+        this.docBase = context.DocBase;
+    }
+}
+
+IndexSearcher searcher = new IndexSearcher(indexReader);
+OpenBitSet bits = new OpenBitSet(indexReader.MaxDoc);
+searcher.Search(query, new MySearchCollector(bits));</code></pre>
+
+<p>Not all collectors will need to rebase the docID.  For
+example, a collector that simply counts the total number
+of hits would skip it.</p>
+
+<p><strong>NOTE:</strong> Prior to 2.9, Lucene silently filtered
+out hits with score &lt;= 0.  As of 2.9, the core <a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a>s
+no longer do that.  It&apos;s very unusual to have such hits
+(a negative query boost, or function query returning
+negative custom scores, could cause it to happen).  If
+you need that behavior, use 
+<a class="xref" href="Lucene.Net.Search.PositiveScoresOnlyCollector.html">PositiveScoresOnlyCollector</a>.</p>
+
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div><p><p>
+@since 2.9</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a></h4>
+      <section><p>Expert: Maintains caches of term values.</p>
+<p><p>Created: May 19, 2004 11:13:14 AM
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div><p><p>
+@since   lucene 1.4 </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.IMaxNonCompetitiveBoostAttribute.html">IMaxNonCompetitiveBoostAttribute</a></h4>
+      <section><p>Add this <a class="xref" href="Lucene.Net.Util.IAttribute.html">IAttribute</a> to a fresh <a class="xref" href="Lucene.Net.Util.AttributeSource.html">AttributeSource</a> before calling
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_GetTermsEnum_Lucene_Net_Index_Terms_Lucene_Net_Util_AttributeSource_">GetTermsEnum(Terms, AttributeSource)</a>.
+<a class="xref" href="Lucene.Net.Search.FuzzyQuery.html">FuzzyQuery</a> is using this to control its internal behaviour
+to only return competitive terms.
+<p><strong>Please note:</strong> this attribute is intended to be added by the <a class="xref" href="Lucene.Net.Search.MultiTermQuery.RewriteMethod.html">MultiTermQuery.RewriteMethod</a>
+to an empty <a class="xref" href="Lucene.Net.Util.AttributeSource.html">AttributeSource</a> that is shared for all segments
+during query rewrite. This attribute source is passed to all segment enums
+on <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_GetTermsEnum_Lucene_Net_Index_Terms_Lucene_Net_Util_AttributeSource_">GetTermsEnum(Terms, AttributeSource)</a>.
+<a class="xref" href="Lucene.Net.Search.TopTermsRewrite-1.html">TopTermsRewrite&lt;Q&gt;</a> uses this attribute to
+inform all enums about the current boost, that is not competitive.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Search.ITopDocsCollector.html">ITopDocsCollector</a></h4>
+      <section><p>LUCENENET specific interface used to reference <a class="xref" href="Lucene.Net.Search.TopDocsCollector-1.html">TopDocsCollector&lt;T&gt;</a>
+without referencing its generic type.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.ReferenceManager.IRefreshListener.html">ReferenceManager.IRefreshListener</a></h4>
+      <section><p>Use to receive notification when a refresh has
+finished.  See <a class="xref" href="Lucene.Net.Search.ReferenceManager-1.html#Lucene_Net_Search_ReferenceManager_1_AddListener_Lucene_Net_Search_ReferenceManager_IRefreshListener_">AddListener(ReferenceManager.IRefreshListener)</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.SearcherLifetimeManager.IPruner.html">SearcherLifetimeManager.IPruner</a></h4>
+      <section><p>See <a class="xref" href="Lucene.Net.Search.SearcherLifetimeManager.html#Lucene_Net_Search_SearcherLifetimeManager_Prune_Lucene_Net_Search_SearcherLifetimeManager_IPruner_">Prune(SearcherLifetimeManager.IPruner)</a>. </p>
+</section>
+    <h3 id="enums">Enums
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Search.Occur.html">Occur</a></h4>
+      <section><p>Specifies how clauses are to occur in matching documents. </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Search.SortFieldType.html">SortFieldType</a></h4>
+      <section><p>Specifies the type of the terms to be sorted, or special types such as CUSTOM</p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/package.md/#L2" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>
