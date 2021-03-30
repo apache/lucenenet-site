@@ -108,40 +108,41 @@
 -->
 <p>This modules support index-time and query-time joins.</p>
 <h2 id="index-time-joins">Index-time joins</h2>
-<p>The index-time joining support joins while searching, where joined documents are indexed as a single document block using <a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00014/api/core/Lucene.Net.Index.IndexWriter.html#methods">IndexWriter.addDocuments</a>. This is useful for any normalized content (XML documents or database tables). In database terms, all rows for all joined tables matching a single row of the primary table must be indexed as a single document block, with the parent document being last in the group.</p>
+<p>The index-time joining support joins while searching, where joined documents are indexed as a single document block using <a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00014/api/core/Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_AddDocuments_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___">IndexWriter.AddDocuments()</a>. This is useful for any normalized content (XML documents or database tables). In database terms, all rows for all joined tables matching a single row of the primary table must be indexed as a single document block, with the parent document being last in the group.</p>
 <p>When you index in this way, the documents in your index are divided into parent documents (the last document of each block) and child documents (all others). You provide a &lt;xref:Lucene.Net.Search.Filter&gt; that identifies the parent documents, as Lucene does not currently record any information about doc blocks.</p>
 <p>At search time, use <a class="xref" href="Lucene.Net.Join.ToParentBlockJoinQuery.html">ToParentBlockJoinQuery</a> to remap/join matches from any child &lt;xref:Lucene.Net.Search.Query&gt; (ie, a query that matches only child documents) up to the parent document space. The resulting query can then be used as a clause in any query that matches parent.</p>
-<p>If you only care about the parent documents matching the query, you can use any collector to collect the parent hits, but if you&#39;d also like to see which child documents match for each parent document, use the <a class="xref" href="Lucene.Net.Join.ToParentBlockJoinCollector.html">ToParentBlockJoinCollector</a> to collect the hits. Once the search is done, you retrieve a &lt;xref:Lucene.Net.Grouping.TopGroups&gt; instance from the <a class="xref" href="Lucene.Net.Join.ToParentBlockJoinCollector.html#methods">ToParentBlockJoinCollector.getTopGroups</a> method.</p>
+<p>If you only care about the parent documents matching the query, you can use any collector to collect the parent hits, but if you&#39;d also like to see which child documents match for each parent document, use the <a class="xref" href="Lucene.Net.Join.ToParentBlockJoinCollector.html">ToParentBlockJoinCollector</a> to collect the hits. Once the search is done, you retrieve a &lt;xref:Lucene.Net.Search.Grouping.ITopGroups`1&gt; instance from the <a class="xref" href="Lucene.Net.Join.ToParentBlockJoinCollector.html#Lucene_Net_Join_ToParentBlockJoinCollector_GetTopGroups_Lucene_Net_Join_ToParentBlockJoinQuery_Lucene_Net_Search_Sort_System_Int32_System_Int32_System_Int32_System_Boolean_">ToParentBlockJoinCollector.GetTopGroups()</a> method.</p>
 <p>To map/join in the opposite direction, use <a class="xref" href="Lucene.Net.Join.ToChildBlockJoinQuery.html">ToChildBlockJoinQuery</a>.  This wraps
-  any query matching parent documents, creating the joined query
-  matching only child documents.</p>
+any query matching parent documents, creating the joined query
+matching only child documents.</p>
 <h2 id="query-time-joins">Query-time joins</h2>
-<p> The query time joining is index term based and implemented as two pass search. The first pass collects all the terms from a fromField that match the fromQuery. The second pass returns all documents that have matching terms in a toField to the terms collected in the first pass. </p>
+<p>The query time joining is index term based and implemented as two pass search. The first pass collects all the terms from a <code>fromField</code> that match the <code>fromQuery</code>. The second pass returns all documents that have matching terms in a <code>toField</code> to the terms collected in the first pass. </p>
 <p>Query time joining has the following input:</p>
 <ul>
 <li><p><code>fromField</code>: The from field to join from.</p>
 </li>
 <li><p><code>fromQuery</code>:  The query executed to collect the from terms. This is usually the user specified query.</p>
 </li>
-<li><p><code>multipleValuesPerDocument</code>:  Whether the fromField contains more than one value per document</p>
+<li><p><code>multipleValuesPerDocument</code>:  Whether the <code>fromField</code> contains more than one value per document</p>
 </li>
 <li><p><code>scoreMode</code>:  Defines how scores are translated to the other join side. If you don&#39;t care about scoring
-use <a class="xref" href="Lucene.Net.Join.ScoreMode.html">#None</a> mode. This will disable scoring and is therefore more
+use <a class="xref" href="Lucene.Net.Join.ScoreMode.html#Lucene_Net_Join_ScoreMode_None">ScoreMode.None</a> mode. This will disable scoring and is therefore more
 efficient (requires less memory and is faster).</p>
 </li>
 <li><p><code>toField</code>: The to field to join to</p>
-<p>Basically the query-time joining is accessible from one static method. The user of this method supplies the method with the described input and a <code>IndexSearcher</code> where the from terms need to be collected from. The returned query can be executed with the same <code>IndexSearcher</code>, but also with another <code>IndexSearcher</code>. Example usage of the <a class="xref" href="Lucene.Net.Join.JoinUtil.html#methods">JoinUtil.createJoinQuery</a> : </p>
-<p>  String fromField = &quot;from&quot;; // Name of the from field
-  boolean multipleValuesPerDocument = false; // Set only yo true in the case when your fromField has multiple values per document in your index
-  String toField = &quot;to&quot;; // Name of the to field
-  ScoreMode scoreMode = ScoreMode.Max // Defines how the scores are translated into the other side of the join.
-  Query fromQuery = new TermQuery(new Term(&quot;content&quot;, searchTerm)); // Query executed to collect from values to join to the to values</p>
-<p>Query joinQuery = JoinUtil.createJoinQuery(fromField, multipleValuesPerDocument, toField, fromQuery, fromSearcher, scoreMode);
-  TopDocs topDocs = toSearcher.search(joinQuery, 10); // Note: toSearcher can be the same as the fromSearcher
-  // Render topDocs...</p>
 </li>
 </ul>
-</div>
+<p>Basically the query-time joining is accessible from one static method. The user of this method supplies the method with the described input and a <code>IndexSearcher</code> where the from terms need to be collected from. The returned query can be executed with the same <code>IndexSearcher</code>, but also with another <code>IndexSearcher</code>. Example usage of the <a class="xref" href="Lucene.Net.Join.JoinUtil.html#Lucene_Net_Join_JoinUtil_CreateJoinQuery_System_String_System_Boolean_System_String_Lucene_Net_Search_Query_Lucene_Net_Search_IndexSearcher_Lucene_Net_Join_ScoreMode_">JoinUtil.CreateJoinQuery()</a>: </p>
+<pre><code class="lang-cs">string fromField = &quot;from&quot;; // Name of the from field
+bool multipleValuesPerDocument = false; // Set only yo true in the case when your fromField has multiple values per document in your index
+string toField = &quot;to&quot;; // Name of the to field
+ScoreMode scoreMode = ScoreMode.Max; // Defines how the scores are translated into the other side of the join.
+Query fromQuery = new TermQuery(new Term(&quot;content&quot;, searchTerm)); // Query executed to collect from values to join to the to values
+
+Query joinQuery = JoinUtil.CreateJoinQuery(fromField, multipleValuesPerDocument, toField, fromQuery, fromSearcher, scoreMode);
+TopDocs topDocs = toSearcher.Search(joinQuery, 10); // Note: toSearcher can be the same as the fromSearcher
+// Render topDocs...
+</code></pre></div>
   <div class="markdown level0 conceptual"></div>
   <div class="markdown level0 remarks"></div>
     <h3 id="classes">Classes

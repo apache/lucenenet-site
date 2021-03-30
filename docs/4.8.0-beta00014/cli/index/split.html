@@ -85,13 +85,13 @@
 <h3 id="name">Name</h3>
 <p><code>index-split</code> - Splits an index into multiple equal parts.</p>
 <h3 id="synopsis">Synopsis</h3>
-<p><code>lucene index split &lt;OUTPUT_DIRECTORY&gt; &lt;INPUT_DIRECTORY&gt;[ &lt;INPUT_DIRECTORY_2&gt;...] [-n|--number-of-parts] [-s|--sequential] [?|-h|--help]</code></p>
-<h3 id="description">Description</h3>
+<pre><code class="lang-console">lucene index split &lt;OUTPUT_DIRECTORY&gt; &lt;INPUT_DIRECTORY&gt;[ &lt;INPUT_DIRECTORY_2&gt;...] [-n|--number-of-parts] [-s|--sequential] [?|-h|--help]
+</code></pre><h3 id="description">Description</h3>
 <p>Splits the input index into multiple equal parts. The method employed here uses <code>IndexWriter.AddIndexes(IndexReader[])</code> where the input data comes from the input index with artificially applied deletes to the document ids that fall outside the selected partition.</p>
 <p>Deletes are only applied to a buffered list of deleted documents and don&#39;t affect the source index. This tool works also with read-only indexes.</p>
 <p>The disadvantage of this tool is that source index needs to be read as many times as there are parts to be created. The multiple passes may be slow.</p>
-<blockquote><p><strong>NOTE:</strong> This tool is unaware of documents added automatically via <code>IndexWriter.AddDocuments(IEnumerable&amp;lt;IEnumerable&amp;lt;IIndexableField&amp;gt;&amp;gt;, Analyzer)</code> or <code>IndexWriter.UpdateDocuments(Term, IEnumerable&amp;lt;IEnumerable&amp;lt;IIndexableField&amp;gt;&amp;gt;, Analyzer)</code>, which means it can easily break up such document groups.</p>
-</blockquote>
+<div class="NOTE"><h5>Note</h5><p>This tool is unaware of documents added automatically via <code>IndexWriter.AddDocuments(IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;, Analyzer)</code> or <code>IndexWriter.UpdateDocuments(Term, IEnumerable&lt;IEnumerable&lt;IIndexableField&gt;&gt;, Analyzer)</code>, which means it can easily break up such document groups.</p>
+</div>
 <h3 id="arguments">Arguments</h3>
 <p><code>OUTPUT_DIRECTORY</code></p>
 <p>Path to output directory to contain partial indexes.</p>
@@ -106,10 +106,10 @@
 <p>Sequential doc-id range split (default is round-robin).</p>
 <h3 id="example">Example</h3>
 <p>Split the index located at <code>X:\old-index\</code> sequentially, placing the resulting 2 indices into the <code>X:\new-index\</code> directory:</p>
-<p><code>lucene index split X:\new-index X:\old-index --sequential</code></p>
-<p>Split the index located at <code>T:\in\</code> into 4 parts and place them into the <code>T:\out\</code> directory:</p>
-<p><code>lucene index split T:\out T:\in -n 4</code></p>
-</article>
+<pre><code class="lang-console">lucene index split X:\new-index X:\old-index --sequential
+</code></pre><p>Split the index located at <code>T:\in\</code> into 4 parts and place them into the <code>T:\out\</code> directory:</p>
+<pre><code class="lang-console">lucene index split T:\out T:\in -n 4
+</code></pre></article>
           </div>
           
           <div class="hidden-sm col-md-2" role="complementary">

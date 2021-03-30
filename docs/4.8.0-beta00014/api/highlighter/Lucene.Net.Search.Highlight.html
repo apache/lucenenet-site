@@ -110,36 +110,83 @@
 typically used to highlight search terms in the text of results pages.
 The Highlighter class is the central component and can be used to extract the
 most interesting sections of a piece of text and highlight them, with the help of
-Fragmenter, fragment Scorer, and Formatter classes.</p>
+<a class="xref" href="Lucene.Net.Search.Highlight.IFragmenter.html">Fragmenter</a>, fragment <a class="xref" href="Lucene.Net.Search.Highlight.IScorer.html">Scorer</a>, and <a class="xref" href="Lucene.Net.Search.Highlight.IFormatter.html">Formatter</a> classes.</p>
 <h2 id="example-usage">Example Usage</h2>
-<pre><code>  //... Above, create documents with two fields, one with term vectors (tv) and one without (notv)
-  IndexSearcher searcher = new IndexSearcher(directory);
-  QueryParser parser = new QueryParser(&quot;notv&quot;, analyzer);
-  Query query = parser.parse(&quot;million&quot;);
-</code></pre><p>  TopDocs hits = searcher.search(query, 10);</p>
-<p>  SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter();
-      Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
-      for (int i = 0; i &lt; 10;=&quot;&quot; i++)=&quot;&quot; {=&quot;&quot; int=&quot;&quot; id=&quot;hits.scoreDocs[i].doc;&quot; document=&quot;&quot; doc=&quot;searcher.doc(id);&quot; string=&quot;&quot; text=&quot;doc.get(&quot; notv&quot;);&quot;=&quot;&quot; tokenstream=&quot;&quot; tokenstream=&quot;TokenSources.getAnyTokenStream(searcher.getIndexReader(),&quot; id,=&quot;&quot; &quot;notv&quot;,=&quot;&quot; analyzer);=&quot;&quot; textfragment[]=&quot;&quot; frag=&quot;highlighter.getBestTextFragments(tokenStream,&quot; text,=&quot;&quot; false,=&quot;&quot; 10);//highlighter.getbestfragments(tokenstream,=&quot;&quot; text,=&quot;&quot; 3,=&quot;&quot; &quot;...&quot;);=&quot;&quot; for=&quot;&quot; (int=&quot;&quot; j=&quot;0;&quot; j=&quot;&quot;&gt;&lt; frag.length;=&quot;&quot; j++)=&quot;&quot; {=&quot;&quot; if=&quot;&quot; ((frag[j]=&quot;&quot; !=&quot;null)&quot; &amp;&amp;=&quot;&quot; (frag[j].getscore()=&quot;&quot;&gt; 0)) {
-            System.out.println((frag[j].toString()));
-          }
+<pre><code class="lang-cs">const LuceneVersion matchVersion = LuceneVersion.LUCENE_48;
+Analyzer analyzer = new StandardAnalyzer(matchVersion);
+
+// Create an index to search
+string indexPath = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(Path.GetTempFileName()));
+Directory dir = FSDirectory.Open(indexPath);
+using IndexWriter writer = new IndexWriter(dir, new IndexWriterConfig(matchVersion, analyzer));
+
+// This field must store term vectors and term vector offsets
+var fieldType = new FieldType(TextField.TYPE_STORED)
+{
+    StoreTermVectors = true,
+    StoreTermVectorOffsets = true
+};
+fieldType.Freeze();
+
+// Create documents with two fields, one with term vectors (tv) and one without (notv)
+writer.AddDocument(new Document {
+    new Field(&quot;tv&quot;, &quot;Thanks a million!&quot;, fieldType),
+    new TextField(&quot;notv&quot;, &quot;A million ways to win.&quot;, Field.Store.YES)
+});
+writer.AddDocument(new Document {
+    new Field(&quot;tv&quot;, &quot;Hopefully, this won&#39;t highlight a million times.&quot;, fieldType),
+    new TextField(&quot;notv&quot;, &quot;There are a million different ways to do that!&quot;, Field.Store.YES)
+});
+
+using IndexReader indexReader = writer.GetReader(applyAllDeletes: true);
+writer.Dispose();
+
+// Now search our index using an existing or new IndexReader
+
+IndexSearcher searcher = new IndexSearcher(indexReader);
+QueryParser parser = new QueryParser(matchVersion, &quot;notv&quot;, analyzer);
+Query query = parser.Parse(&quot;million&quot;);
+
+TopDocs hits = searcher.Search(query, 10);
+
+SimpleHTMLFormatter htmlFormatter = new SimpleHTMLFormatter();
+Highlighter highlighter = new Highlighter(htmlFormatter, new QueryScorer(query));
+int totalScoreDocs = hits.ScoreDocs.Length &gt; 10 ? 10 : hits.ScoreDocs.Length;
+for (int i = 0; i &lt; totalScoreDocs; i++)
+{
+    int id = hits.ScoreDocs[i].Doc;
+    Document doc = searcher.Doc(id);
+    string text = doc.Get(&quot;notv&quot;);
+    TokenStream tokenStream = TokenSources.GetAnyTokenStream(searcher.IndexReader, id, &quot;notv&quot;, analyzer);
+    TextFragment[] frag = highlighter.GetBestTextFragments(
+        tokenStream, text, mergeContiguousFragments: false, maxNumFragments: 10); // highlighter.GetBestFragments(tokenStream, text, 3, &quot;...&quot;);
+    for (int j = 0; j &lt; frag.Length; j++)
+    {
+        if (frag[j] != null &amp;&amp; frag[j].Score &gt; 0)
+        {
+            Console.WriteLine(frag[j].ToString());
         }
-        //Term vector
-        text = doc.get(&quot;tv&quot;);
-        tokenStream = TokenSources.getAnyTokenStream(searcher.getIndexReader(), hits.scoreDocs[i].doc, &quot;tv&quot;, analyzer);
-        frag = highlighter.getBestTextFragments(tokenStream, text, false, 10);
-        for (int j = 0; j &lt; frag.length;=&quot;&quot; j++)=&quot;&quot; {=&quot;&quot; if=&quot;&quot; ((frag[j]=&quot;&quot; !=&quot;null)&quot; &amp;&amp;=&quot;&quot; (frag[j].getscore()=&quot;&quot;&gt; 0)) {
-            System.out.println((frag[j].toString()));
-          }
+    }
+    //Term vector
+    text = doc.Get(&quot;tv&quot;);
+    tokenStream = TokenSources.GetAnyTokenStream(searcher.IndexReader, hits.ScoreDocs[i].Doc, &quot;tv&quot;, analyzer);
+    frag = highlighter.GetBestTextFragments(tokenStream, text, false, 10);
+    for (int j = 0; j &lt; frag.Length; j++)
+    {
+        if (frag[j] != null &amp;&amp; frag[j].Score &gt; 0)
+        {
+            Console.WriteLine(frag[j].ToString());
         }
-        System.out.println(&quot;-------------&quot;);
-      }</p>
-<h2 id="new-features-06022005">New features 06/02/2005</h2>
+    }
+    Console.WriteLine(&quot;-------------&quot;);
+}
+</code></pre><h2 id="new-features-2005-02-06">New features 2005-02-06</h2>
 <p>This release adds options for encoding (thanks to Nicko Cadell).
 An &quot;Encoder&quot; implementation such as the new SimpleHTMLEncoder class can be passed to the highlighter to encode
 all those non-xhtml standard characters such as &amp; into legal values. This simple class may not suffice for
 some languages -  Commons Lang has an implementation that could be used: escapeHtml(String) in
 <a href="http://svn.apache.org/viewcvs.cgi/jakarta/commons/proper/lang/trunk/src/java/org/apache/commons/lang/StringEscapeUtils.java?rev=137958&amp;view=markup">http://svn.apache.org/viewcvs.cgi/jakarta/commons/proper/lang/trunk/src/java/org/apache/commons/lang/StringEscapeUtils.java?rev=137958&view=markup</a></p>
-<h2 id="new-features-22122004">New features 22/12/2004</h2>
+<h2 id="new-features-2004-12-22">New features 2004-12-22</h2>
 <p>This release adds some new capabilities:</p>
 <ol>
 <li><p>Faster highlighting using Term vector support</p>
@@ -147,11 +194,11 @@ some languages -  Commons Lang has an implementation that could be used: escapeH
 <li><p>New formatting options to use color intensity to show informational value</p>
 </li>
 <li><p>Options for better summarization by using term IDF scores to influence fragment selection</p>
-<p>The highlighter takes a TokenStream as input. Until now these streams have typically been produced using an Analyzer but the new class TokenSources provides helper methods for obtaining TokenStreams from the new TermVector position support (see latest CVS version).</p>
 </li>
 </ol>
-<p>The new class GradientFormatter can use a scale of colors to highlight terms according to their score. A subtle use of color can help emphasise the reasons for matching (useful when doing &quot;MoreLikeThis&quot; queries and you want to see what the basis of the similarities are).</p>
-<p>The QueryScorer class has a new constructor which can use an IndexReader to derive the IDF (inverse document frequency) for each term in order to influence the score. This is useful for helping to extracting the most significant sections of a document and in supplying scores used by the new GradientFormatter to color significant words more strongly. The QueryScorer.getMaxWeight method is useful when passed to the GradientFormatter constructor to define the top score which is associated with the top color.</p>
+<p>The highlighter takes a &lt;xref:Lucene.Net.Analysis.TokenStream&gt; as input. Until now these streams have typically been produced using an &lt;xref:Lucene.Net.Analysis.Analyzer&gt; but the new class TokenSources provides helper methods for obtaining TokenStreams from the new TermVector position support (see latest CVS version).</p>
+<p>The new class <a class="xref" href="Lucene.Net.Search.Highlight.GradientFormatter.html">GradientFormatter</a> can use a scale of colors to highlight terms according to their score. A subtle use of color can help emphasize the reasons for matching (useful when doing &quot;MoreLikeThis&quot; queries and you want to see what the basis of the similarities are).</p>
+<p>The <a class="xref" href="Lucene.Net.Search.Highlight.QueryScorer.html">QueryScorer</a> class has a new constructor which can use an &lt;xref:Lucene.Net.Index.IndexReader&gt; to derive the IDF (inverse document frequency) for each term in order to influence the score. This is useful for helping to extracting the most significant sections of a document and in supplying scores used by the new GradientFormatter to color significant words more strongly. The <a class="xref" href="Lucene.Net.Search.Highlight.QueryScorer.html#Lucene_Net_Search_Highlight_QueryScorer_MaxTermWeight">QueryScorer.MaxTermWeight</a> method is useful when passed to the GradientFormatter constructor to define the top score which is associated with the top color.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="markdown level0 remarks"></div>

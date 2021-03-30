@@ -117,8 +117,6 @@
 </li>
 <li><p>support multi-term (includes wildcard, range, regexp, etc) queries</p>
 </li>
-<li><p>need Java 1.5</p>
-</li>
 <li><p>highlight fields need to be stored with Positions and Offsets</p>
 </li>
 <li><p>take into account query boost and/or IDF-weight to score fragments</p>
@@ -155,23 +153,25 @@
 +--------*-----------------------------------+
 </code></pre><h3 id="step-1">Step 1.</h3>
 <p>In Step 1, Fast Vector Highlighter generates <a class="xref" href="Lucene.Net.Search.VectorHighlight.FieldQuery.QueryPhraseMap.html">FieldQuery.QueryPhraseMap</a> from the user query. <code>QueryPhraseMap</code> consists of the following members:</p>
-<pre><code>public class QueryPhraseMap {
-  boolean terminal;
-  int slop;   // valid if terminal == true and phraseHighlight == true
-  float boost;  // valid if terminal == true
-  Map&lt;String, QueryPhraseMap&gt; subMap;
-} 
+<pre><code class="lang-cs">public class QueryPhraseMap
+{
+    bool terminal;
+    int slop;   // valid if terminal == true and phraseHighlight == true
+    float boost;  // valid if terminal == true
+    IDictonary&lt;string, QueryPhraseMap&gt; subMap;
+}
 </code></pre><p><code>QueryPhraseMap</code> has subMap. The key of the subMap is a term text in the user query and the value is a subsequent <code>QueryPhraseMap</code>. If the query is a term (not phrase), then the subsequent <code>QueryPhraseMap</code> is marked as terminal. If the query is a phrase, then the subsequent <code>QueryPhraseMap</code> is not a terminal and it has the next term text in the phrase.</p>
 <p>From the sample user query, the following <code>QueryPhraseMap</code> will be generated:</p>
 <pre><code>   QueryPhraseMap
 +--------+-+  +-------+-+
 |&quot;Lucene&quot;|o+-&gt;|boost=2|*|  * : terminal
 +--------+-+  +-------+-+
-</code></pre><p>+--------+-+  +---------+-+  +-------+------+-+
-    |&quot;search&quot;|o+-&gt;|&quot;library&quot;|o+-&gt;|boost=1|slop=1|*|
-    +--------+-+  +---------+-+  +-------+------+-+</p>
-<h3 id="step-2">Step 2.</h3>
-<p>In Step 2, Fast Vector Highlighter generates <a class="xref" href="Lucene.Net.Search.VectorHighlight.FieldTermStack.html">FieldTermStack</a>. Fast Vector Highlighter uses term vector data (must be stored <a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00014/api/core/Lucene.Net.Documents.FieldType.html">#setStoreTermVectorOffsets(boolean)</a> and <a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00014/api/core/Lucene.Net.Documents.FieldType.html">#setStoreTermVectorPositions(boolean)</a>) to generate it. <code>FieldTermStack</code> keeps the terms in the user query. Therefore, in this sample case, Fast Vector Highlighter generates the following <code>FieldTermStack</code>:</p>
+
++--------+-+  +---------+-+  +-------+------+-+
+|&quot;search&quot;|o+-&gt;|&quot;library&quot;|o+-&gt;|boost=1|slop=1|*|
++--------+-+  +---------+-+  +-------+------+-+
+</code></pre><h3 id="step-2">Step 2.</h3>
+<p>In Step 2, Fast Vector Highlighter generates <a class="xref" href="Lucene.Net.Search.VectorHighlight.FieldTermStack.html">FieldTermStack</a>. Fast Vector Highlighter uses term vector data (must be stored <a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00014/api/core/Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_StoreTermVectorOffsets">FieldType.StoreTermVectorOffsets = true</a> and <a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00014/api/core/Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_StoreTermVectorPositions">FieldType.StoreTermVectorPositions = true</a>) to generate it. <code>FieldTermStack</code> keeps the terms in the user query. Therefore, in this sample case, Fast Vector Highlighter generates the following <code>FieldTermStack</code>:</p>
 <pre><code>   FieldTermStack
 +------------------+
 |&quot;Lucene&quot;(0,6,0)   |
@@ -198,21 +198,24 @@ where : &quot;termText&quot;(startOffset,endOffset,position)
 |&quot;search library&quot;[(12,18),(26,33)]|
 |totalBoost=3                     |
 +---------------------------------+
-</code></pre><p>The calculation for each <code>FieldFragList.WeightedFragInfo.totalBoost</code> (weight)<br>depends on the implementation of <code>FieldFragList.add( ... )</code>:</p>
-<pre><code>  public void add( int startOffset, int endOffset, List&lt;WeightedPhraseInfo&gt; phraseInfoList ) {
+</code></pre><p>The calculation for each <code>FieldFragList.WeightedFragInfo.totalBoost</code> (weight)<br>depends on the implementation of <code>FieldFragList.Add( ... )</code>:</p>
+<pre><code class="lang-cs">public override void Add(int startOffset, int endOffset, IList&lt;WeightedPhraseInfo&gt; phraseInfoList)
+{
     float totalBoost = 0;
-    List&lt;SubInfo&gt; subInfos = new ArrayList&lt;SubInfo&gt;();
-    for( WeightedPhraseInfo phraseInfo : phraseInfoList ){
-      subInfos.add( new SubInfo( phraseInfo.getText(), phraseInfo.getTermsOffsets(), phraseInfo.getSeqnum() ) );
-      totalBoost += phraseInfo.getBoost();
+    List&lt;SubInfo&gt; subInfos = new List&lt;SubInfo&gt;();
+    foreach (WeightedPhraseInfo phraseInfo in phraseInfoList)
+    {
+        subInfos.Add(new SubInfo(phraseInfo.GetText(), phraseInfo.TermsOffsets, phraseInfo.Seqnum, phraseInfo.Boost));
+        totalBoost += phraseInfo.Boost;
     }
-    getFragInfos().add( new WeightedFragInfo( startOffset, endOffset, subInfos, totalBoost ) );
-  }
+    FragInfos.Add(new WeightedFragInfo(startOffset, endOffset, subInfos, totalBoost));
+}
 </code></pre><p>The used implementation of <code>FieldFragList</code> is noted in <code>BaseFragListBuilder.createFieldFragList( ... )</code>:</p>
-<pre><code>  public FieldFragList createFieldFragList( FieldPhraseList fieldPhraseList, int fragCharSize ){
-    return createFieldFragList( fieldPhraseList, new SimpleFieldFragList( fragCharSize ), fragCharSize );
-  }
-</code></pre><p> Currently there are basically to approaches available: </p>
+<pre><code class="lang-cs">public override FieldFragList CreateFieldFragList(FieldPhraseList fieldPhraseList, int fragCharSize)
+{
+    return CreateFieldFragList(fieldPhraseList, new SimpleFieldFragList(fragCharSize), fragCharSize);
+}
+</code></pre><p>Currently there are basically to approaches available: </p>
 <ul>
 <li><p><code>SimpleFragListBuilder using SimpleFieldFragList</code>: <em>sum-of-boosts</em>-approach. The totalBoost is calculated by summarizing the query-boosts per term. Per default a term is boosted by 1.0</p>
 </li>
@@ -244,7 +247,7 @@ where : &quot;termText&quot;(startOffset,endOffset,position)
 </table>
 
 <h3 id="step-5">Step 5.</h3>
-<p>In Step 5, by using <code>FieldFragList</code> and the field stored data, Fast Vector Highlighter creates highlighted snippets!</p>
+<p>In Step 5, by using <a class="xref" href="Lucene.Net.Search.VectorHighlight.FieldFragList.html">FieldFragList</a> and the field stored data, Fast Vector Highlighter creates highlighted snippets!</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="markdown level0 remarks"></div>
