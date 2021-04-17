@@ -110,8 +110,6 @@
 <p>Note that JavaCC defines lots of public classes, methods and fields
 that do not need to be public.  These clutter the documentation. 
 Sorry.</p>
-<p>Note that because JavaCC defines a class named <tt>Token</tt>, <tt>org.apache.lucene.analysis.Token</tt>
-must always be fully qualified in source code in this package.</p>
 <p><strong>NOTE</strong>: <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.html">Lucene.Net.QueryParsers.Flexible.Standard</a> has an alternative queryparser that matches the syntax of this one, but is more modular,
 enabling substantial customization to how a query is created.</p>
 <h2 id="query-parser-syntax">Query Parser Syntax</h2>
@@ -126,7 +124,7 @@ enabling substantial customization to how a query is created.</p>
 <ul>
 <li><p><a href="#wildcard-searches">Wildcard Searches</a></p>
 </li>
-<li><p><a href="#regexp-searches">Regular expression Searches</a></p>
+<li><p><a href="#regular-expression-searches">Regular expression Searches</a></p>
 </li>
 <li><p><a href="#fuzzy-searches">Fuzzy Searches</a></p>
 </li>
@@ -144,7 +142,7 @@ enabling substantial customization to how a query is created.</p>
 </li>
 <li><p><a href="#and">AND</a></p>
 </li>
-<li><p><a href="#+">+</a></p>
+<li><p><a href="#nbsp">+</a></p>
 </li>
 <li><p><a href="#not">NOT</a></p>
 </li>
@@ -160,9 +158,14 @@ enabling substantial customization to how a query is created.</p>
 </li>
 </ul>
 <h2 id="overview">Overview</h2>
-<p>Although Lucene provides the ability to create your own queries through its API, it also provides a rich query language through the Query Parser, a lexer which interprets a string into a Lucene Query using JavaCC. </p>
-<p>Generally, the query parser syntax may change from release to release. This page describes the syntax as of the current release. If you are using a different version of Lucene, please consult the copy of <span class="codefrag">docs/queryparsersyntax.html</span> that was distributed with the version you are using. </p>
-<p> Before choosing to use the provided Query Parser, please consider the following: 1. If you are programmatically generating a query string and then parsing it with the query parser then you should seriously consider building your queries directly with the query API. In other words, the query parser is designed for human-entered text, not for program-generated text. 2. Untokenized fields are best added directly to queries, and not through the query parser. If a field&#39;s values are generated programmatically by the application, then so should query clauses for this field. An analyzer, which the query parser uses, is designed to convert human-entered text to terms. Program-generated values, like dates, keywords, etc., should be consistently program-generated. 3. In a query form, fields which are general text should use the query parser. All others, such as date ranges, keywords, etc. are better added directly through the query API. A field with a limit set of values, that can be specified with a pull-down menu should not be added to a query string which is subsequently parsed, but rather added as a TermQuery clause. </p>
+<p>Although Lucene.NET provides the ability to create your own queries through its API, it also provides a rich query language through the Query Parser, a lexer which interprets a string into a Lucene.NET Query using JavaCC. </p>
+<p>Generally, the query parser syntax may change from release to release. This page describes the syntax as of the current release. If you are using a different version of Lucene.NET, please consult the copy of this document that was distributed with the version you are using. </p>
+<p>Before choosing to use the provided Query Parser, please consider the following:</p>
+<ol>
+<li>If you are programmatically generating a query string and then parsing it with the query parser then you should seriously consider building your queries directly with the query API. In other words, the query parser is designed for human-entered text, not for program-generated text.</li>
+<li>Untokenized fields are best added directly to queries, and not through the query parser. If a field&#39;s values are generated programmatically by the application, then so should query clauses for this field. An analyzer, which the query parser uses, is designed to convert human-entered text to terms. Program-generated values, like dates, keywords, etc., should be consistently program-generated.</li>
+<li>In a query form, fields which are general text should use the query parser. All others, such as date ranges, keywords, etc. are better added directly through the query API. A field with a limit set of values, that can be specified with a pull-down menu should not be added to a query string which is subsequently parsed, but rather added as a TermQuery clause. </li>
+</ol>
 <h2 id="terms">Terms</h2>
 <p>A query is broken up into terms and operators. There are two types of terms: Single Terms and Phrases.</p>
 <p>A Single Term is a single word such as &quot;test&quot; or &quot;hello&quot;.</p>
@@ -173,13 +176,13 @@ enabling substantial customization to how a query is created.</p>
 <p>Lucene supports fielded data. When performing a search you can either specify a field, or use the default field. The field names and default field is implementation specific.</p>
 <p>You can search any field by typing the field name followed by a colon &quot;:&quot; and then the term you are looking for. </p>
 <p>As an example, let&#39;s assume a Lucene index contains two fields, title and text and text is the default field. If you want to find the document entitled &quot;The Right Way&quot; which contains the text &quot;don&#39;t go this way&quot;, you can enter: </p>
-<p>title:&quot;The Right Way&quot; AND text:go</p>
-<p>or</p>
-<p>title:&quot;The Right Way&quot; AND go</p>
-<p>Since text is the default field, the field indicator is not required.</p>
+<pre><code class="lang-console">title:&quot;The Right Way&quot; AND text:go
+</code></pre><p>or</p>
+<pre><code class="lang-console">title:&quot;The Right Way&quot; AND go
+</code></pre><p>Since text is the default field, the field indicator is not required.</p>
 <p>Note: The field is only valid for the term that it directly precedes, so the query</p>
-<p>title:The Right Way</p>
-<p>Will only find &quot;The&quot; in the title field. It will find &quot;Right&quot; and &quot;Way&quot; in the default field (in this case the text field). </p>
+<pre><code class="lang-console">title:The Right Way
+</code></pre><p>Will only find &quot;The&quot; in the title field. It will find &quot;Right&quot; and &quot;Way&quot; in the default field (in this case the text field). </p>
 <h2 id="term-modifiers">Term Modifiers</h2>
 <p>Lucene supports modifying query terms to provide a wide range of searching options.</p>
 <h3 id="wildcard-searches">Wildcard Searches</h3>
@@ -187,88 +190,83 @@ enabling substantial customization to how a query is created.</p>
 <p>To perform a single character wildcard search use the &quot;?&quot; symbol.</p>
 <p>To perform a multiple character wildcard search use the &quot;*&quot; symbol.</p>
 <p>The single character wildcard search looks for terms that match that with the single character replaced. For example, to search for &quot;text&quot; or &quot;test&quot; you can use the search:</p>
-<p>te?t</p>
-<p>Multiple character wildcard searches looks for 0 or more characters. For example, to search for test, tests or tester, you can use the search: </p>
-<p>test*</p>
-<p>You can also use the wildcard searches in the middle of a term.</p>
-<p>te*t</p>
-<p>Note: You cannot use a * or ? symbol as the first character of a search.</p>
+<pre><code class="lang-console">te?t
+</code></pre><p>Multiple character wildcard searches looks for 0 or more characters. For example, to search for test, tests or tester, you can use the search: </p>
+<pre><code class="lang-console">test*
+</code></pre><p>You can also use the wildcard searches in the middle of a term.</p>
+<pre><code class="lang-console">te*t
+</code></pre><p>Note: You cannot use a * or ? symbol as the first character of a search.</p>
 <h3 id="regular-expression-searches">Regular Expression Searches</h3>
 <p>Lucene supports regular expression searches matching a pattern between forward slashes &quot;/&quot;. The syntax may change across releases, but the current supported syntax is documented in the <a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00014/api/core/Lucene.Net.Util.Automaton.RegExp.html">RegExp</a> class. For example to find documents containing &quot;moat&quot; or &quot;boat&quot;: </p>
-<p>/[mb]oat/</p>
-<h3 id="fuzzy-searches">Fuzzy Searches</h3>
+<pre><code class="lang-console">/[mb]oat/
+</code></pre><h3 id="fuzzy-searches">Fuzzy Searches</h3>
 <p>Lucene supports fuzzy searches based on Damerau-Levenshtein Distance. To do a fuzzy search use the tilde, &quot;~&quot;, symbol at the end of a Single word Term. For example to search for a term similar in spelling to &quot;roam&quot; use the fuzzy search: </p>
-<p>roam~</p>
-<p>This search will find terms like foam and roams.</p>
+<pre><code class="lang-console">roam~
+</code></pre><p>This search will find terms like foam and roams.</p>
 <p>An additional (optional) parameter can specify the maximum number of edits allowed. The value is between 0 and 2, For example:</p>
-<p>roam~1</p>
-<p>The default that is used if the parameter is not given is 2 edit distances.</p>
+<pre><code class="lang-console">roam~1
+</code></pre><p>The default that is used if the parameter is not given is 2 edit distances.</p>
 <p>Previously, a floating point value was allowed here. This syntax is considered deprecated and will be removed in Lucene 5.0</p>
 <h3 id="proximity-searches">Proximity Searches</h3>
 <p>Lucene supports finding words are a within a specific distance away. To do a proximity search use the tilde, &quot;~&quot;, symbol at the end of a Phrase. For example to search for a &quot;apache&quot; and &quot;jakarta&quot; within 10 words of each other in a document use the search: </p>
-<p>&quot;jakarta apache&quot;~10</p>
-<h3 id="range-searches">Range Searches</h3>
+<pre><code class="lang-console">&quot;jakarta apache&quot;~10
+</code></pre><h3 id="range-searches">Range Searches</h3>
 <p>Range Queries allow one to match documents whose field(s) values are between the lower and upper bound specified by the Range Query. Range Queries can be inclusive or exclusive of the upper and lower bounds. Sorting is done lexicographically.</p>
-<p>mod_date:[20020101 TO 20030101]</p>
-<p>This will find documents whose mod_date fields have values between 20020101 and 20030101, inclusive. Note that Range Queries are not reserved for date fields. You could also use range queries with non-date fields:</p>
-<p>title:{Aida TO Carmen}</p>
-<p>This will find all documents whose titles are between Aida and Carmen, but not including Aida and Carmen.</p>
+<pre><code class="lang-console">mod_date:[20020101 TO 20030101]
+</code></pre><p>This will find documents whose mod_date fields have values between 20020101 and 20030101, inclusive. Note that Range Queries are not reserved for date fields. You could also use range queries with non-date fields:</p>
+<pre><code class="lang-console">title:{Aida TO Carmen}
+</code></pre><p>This will find all documents whose titles are between Aida and Carmen, but not including Aida and Carmen.</p>
 <p>Inclusive range queries are denoted by square brackets. Exclusive range queries are denoted by curly brackets.</p>
 <h3 id="boosting-a-term">Boosting a Term</h3>
 <p>Lucene provides the relevance level of matching documents based on the terms found. To boost a term use the caret, &quot;^&quot;, symbol with a boost factor (a number) at the end of the term you are searching. The higher the boost factor, the more relevant the term will be.</p>
 <p>Boosting allows you to control the relevance of a document by boosting its term. For example, if you are searching for</p>
-<p>jakarta apache</p>
-<p>and you want the term &quot;jakarta&quot; to be more relevant boost it using the ^ symbol along with the boost factor next to the term. You would type:</p>
-<p>jakarta^4 apache</p>
-<p>This will make documents with the term jakarta appear more relevant. You can also boost Phrase Terms as in the example: </p>
-<p>&quot;jakarta apache&quot;^4 &quot;Apache Lucene&quot;</p>
-<p>By default, the boost factor is 1. Although the boost factor must be positive, it can be less than 1 (e.g. 0.2)</p>
+<pre><code class="lang-console">jakarta apache
+</code></pre><p>and you want the term &quot;jakarta&quot; to be more relevant boost it using the ^ symbol along with the boost factor next to the term. You would type:</p>
+<pre><code class="lang-console">jakarta^4 apache
+</code></pre><p>This will make documents with the term jakarta appear more relevant. You can also boost Phrase Terms as in the example: </p>
+<pre><code class="lang-console">&quot;jakarta apache&quot;^4 &quot;Apache Lucene&quot;
+</code></pre><p>By default, the boost factor is 1. Although the boost factor must be positive, it can be less than 1 (e.g. 0.2)</p>
 <h2 id="boolean-operators">Boolean Operators</h2>
 <p>Boolean operators allow terms to be combined through logic operators. Lucene supports AND, &quot;+&quot;, OR, NOT and &quot;-&quot; as Boolean operators(Note: Boolean operators must be ALL CAPS).</p>
 <h3 id="or">OR</h3>
 <p>The OR operator is the default conjunction operator. This means that if there is no Boolean operator between two terms, the OR operator is used. The OR operator links two terms and finds a matching document if either of the terms exist in a document. This is equivalent to a union using sets. The symbol || can be used in place of the word OR.</p>
 <p>To search for documents that contain either &quot;jakarta apache&quot; or just &quot;jakarta&quot; use the query:</p>
-<p>&quot;jakarta apache&quot; jakarta</p>
-<p>or</p>
-<p>&quot;jakarta apache&quot; OR jakarta</p>
-<h3 id="and">AND</h3>
+<pre><code class="lang-console">&quot;jakarta apache&quot; jakarta
+</code></pre><p>or</p>
+<pre><code class="lang-console">&quot;jakarta apache&quot; OR jakarta
+</code></pre><h3 id="and">AND</h3>
 <p>The AND operator matches documents where both terms exist anywhere in the text of a single document. This is equivalent to an intersection using sets. The symbol &amp;&amp; can be used in place of the word AND.</p>
 <p>To search for documents that contain &quot;jakarta apache&quot; and &quot;Apache Lucene&quot; use the query: </p>
-<p>&quot;jakarta apache&quot; AND &quot;Apache Lucene&quot;</p>
-<h3 id="">+</h3>
+<pre><code class="lang-console">&quot;jakarta apache&quot; AND &quot;Apache Lucene&quot;
+</code></pre><h3 id="nbsp">+&nbsp;</h3>
 <p>The &quot;+&quot; or required operator requires that the term after the &quot;+&quot; symbol exist somewhere in a the field of a single document.</p>
 <p>To search for documents that must contain &quot;jakarta&quot; and may contain &quot;lucene&quot; use the query:</p>
-<p>+jakarta lucene</p>
-<h3 id="not">NOT</h3>
+<pre><code class="lang-console">+jakarta lucene
+</code></pre><h3 id="not">NOT</h3>
 <p>The NOT operator excludes documents that contain the term after NOT. This is equivalent to a difference using sets. The symbol ! can be used in place of the word NOT.</p>
 <p>To search for documents that contain &quot;jakarta apache&quot; but not &quot;Apache Lucene&quot; use the query: </p>
-<p>&quot;jakarta apache&quot; NOT &quot;Apache Lucene&quot;</p>
-<p>Note: The NOT operator cannot be used with just one term. For example, the following search will return no results:</p>
-<p>NOT &quot;jakarta apache&quot;</p>
-<h3 id="-">-</h3>
+<pre><code class="lang-console">&quot;jakarta apache&quot; NOT &quot;Apache Lucene&quot;
+</code></pre><p>Note: The NOT operator cannot be used with just one term. For example, the following search will return no results:</p>
+<pre><code class="lang-console">NOT &quot;jakarta apache&quot;
+</code></pre><h3 id="-">-</h3>
 <p>The &quot;-&quot; or prohibit operator excludes documents that contain the term after the &quot;-&quot; symbol.</p>
-<p>To search for documents that contain &quot;jakarta apache&quot; but not &quot;Apache Lucene&quot; use the query: </p>
-<p>&quot;jakarta apache&quot; -&quot;Apache Lucene&quot;</p>
-<h2 id="grouping">Grouping</h2>
+<p>To search for documents that contain &quot;jakarta apache&quot; but not &quot;Apache Lucene&quot; use the query:</p>
+<pre><code class="lang-console">&quot;jakarta apache&quot; -&quot;Apache Lucene&quot;
+</code></pre><h2 id="grouping">Grouping</h2>
 <p>Lucene supports using parentheses to group clauses to form sub queries. This can be very useful if you want to control the boolean logic for a query.</p>
 <p>To search for either &quot;jakarta&quot; or &quot;apache&quot; and &quot;website&quot; use the query:</p>
-<p>(jakarta OR apache) AND website</p>
-<p>This eliminates any confusion and makes sure you that website must exist and either term jakarta or apache may exist.</p>
+<pre><code class="lang-console">(jakarta OR apache) AND website
+</code></pre><p>This eliminates any confusion and makes sure you that website must exist and either term jakarta or apache may exist.</p>
 <h2 id="field-grouping">Field Grouping</h2>
 <p>Lucene supports using parentheses to group multiple clauses to a single field.</p>
 <p>To search for a title that contains both the word &quot;return&quot; and the phrase &quot;pink panther&quot; use the query:</p>
-<p>title:(+return +&quot;pink panther&quot;)</p>
-<h2 id="escaping-special-characters">Escaping Special Characters</h2>
+<pre><code class="lang-console">title:(+return +&quot;pink panther&quot;)
+</code></pre><h2 id="escaping-special-characters">Escaping Special Characters</h2>
 <p>Lucene supports escaping special characters that are part of the query syntax. The current list special characters are</p>
-<ul>
-<li><ul>
-<li>&amp;&amp; || ! ( ) { } [ ] ^ &quot; ~ * ? : \ /</li>
-</ul>
-</li>
-</ul>
-<p>To escape these character use the \ before the character. For example to search for (1+1):2 use the query:</p>
-<p>(1+1):2</p>
-</div>
+<pre><code class="lang-console">+ - &amp;&amp; || ! ( ) { } [ ] ^ &quot; ~ * ? : \ /
+</code></pre><p>To escape these character use the \ before the character. For example to search for (1+1):2 use the query:</p>
+<pre><code class="lang-console">\(1\+1\)\:2
+</code></pre></div>
   <div class="markdown level0 conceptual"></div>
   <div class="markdown level0 remarks"></div>
     <h3 id="classes">Classes

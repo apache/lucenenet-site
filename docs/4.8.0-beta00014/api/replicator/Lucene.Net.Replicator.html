@@ -90,61 +90,174 @@
   
   <h1 id="Lucene_Net_Replicator" data-uid="Lucene.Net.Replicator" class="text-break">Namespace Lucene.Net.Replicator
   </h1>
-  <div class="markdown level0 summary"><!-- 
- Licensed to the Apache Software Foundation (ASF) under one or more
- contributor license agreements.  See the NOTICE file distributed with
- this work for additional information regarding copyright ownership.
- The ASF licenses this file to You under the Apache License, Version 2.0
- (the "License"); you may not use this file except in compliance with
- the License.  You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
--->
-<h1 id="files-replication-framework">Files replication framework</h1>
+  <div class="markdown level0 summary"><h1 id="files-replication-framework">Files replication framework</h1>
 <p>The
-<a href="Replicator.html">Replicator</a> allows replicating files between a server and client(s). Producers publish
-<a href="Revision.html">revisions</a> and consumers update to the latest revision available.
-<a href="ReplicationClient.html">ReplicationClient</a> is a helper utility for performing the update operation. It can
+<a class="xref" href="Lucene.Net.Replicator.IReplicator.html">Replicator</a> allows replicating files between a server and client(s). Producers publish
+<a class="xref" href="Lucene.Net.Replicator.IRevision.html">revisions</a> and consumers update to the latest revision available.
+<a class="xref" href="Lucene.Net.Replicator.ReplicationClient.html">ReplicationClient</a> is a helper utility for performing the update operation. It can
 be invoked either
-<a href="ReplicationClient.html#updateNow()">manually</a> or periodically by
-[starting an update thread](ReplicationClient.html#startUpdateThread(long, java.lang.String)).
-<a href="http/HttpReplicator.html">HttpReplicator</a> can be used to replicate revisions by consumers that reside on
+<a class="xref" href="Lucene.Net.Replicator.ReplicationClient.html#Lucene_Net_Replicator_ReplicationClient_UpdateNow">manually</a> or periodically by
+<a class="xref" href="Lucene.Net.Replicator.ReplicationClient.html#Lucene_Net_Replicator_ReplicationClient_StartUpdateThread_System_Int64_System_String_">starting an update thread</a>.
+<a class="xref" href="Lucene.Net.Replicator.Http.HttpReplicator.html">HttpReplicator</a> can be used to replicate revisions by consumers that reside on
 a different node than the producer.</p>
 <p>The replication framework supports replicating any type of files, with built-in support for a single search index as
 well as an index and taxonomy pair. For a single index, the application should publish an
-<a href="IndexRevision.html">IndexRevision</a> and set
-<a href="IndexReplicationHandler.html">IndexReplicationHandler</a> on the client. For an index and taxonomy pair, the
-application should publish an <a href="IndexAndTaxonomyRevision.html">IndexAndTaxonomyRevision</a> and set
-<a href="IndexAndTaxonomyReplicationHandler.html">IndexAndTaxonomyReplicationHandler</a> on the client.</p>
+<a class="xref" href="Lucene.Net.Replicator.IndexRevision.html">IndexRevision</a> and set
+<a class="xref" href="Lucene.Net.Replicator.IndexReplicationHandler.html">IndexReplicationHandler</a> on the client. For an index and taxonomy pair, the
+application should publish an <a class="xref" href="Lucene.Net.Replicator.IndexAndTaxonomyRevision.html">IndexAndTaxonomyRevision</a> and set
+<a class="xref" href="Lucene.Net.Replicator.IndexAndTaxonomyReplicationHandler.html">IndexAndTaxonomyReplicationHandler</a> on the client.</p>
 <p>When the replication client detects that there is a newer revision available, it copies the files of the revision and
-then invokes the handler to complete the operation (e.g. copy the files to the index directory, fsync them, reopen an
+then invokes the handler to complete the operation (e.g. copy the files to the index directory, sync them, reopen an
 index reader etc.). By default, only files that do not exist in the handler&#39;s
-<a href="ReplicationClient.ReplicationHandler.html#currentRevisionFiles()">current revision files</a> are copied,
+<a href="xref:Lucene.Net.Replicator.IReplicationHandler.html#Lucene_Net_Replicator_IReplicationHandler_CurrentRevisionFiles">current revision files</a> are copied,
 however this can be overridden by extending the client.</p>
-<p>An example usage of the Replicator:</p>
-<p>// ++++++++++++++ SERVER SIDE ++++++++++++++ //
+<!-- Old Code Sample - not sure whether this is useful
+```cs
+An example usage of the Replicator:
+
+// ++++++++++++++ SERVER SIDE ++++++++++++++ //
 IndexWriter publishWriter; // the writer used for indexing
 Replicator replicator = new LocalReplicator();
-replicator.publish(new IndexRevision(publishWriter));</p>
-<p>// ++++++++++++++ CLIENT SIDE ++++++++++++++ //
+replicator.publish(new IndexRevision(publishWriter));
+
+// ++++++++++++++ CLIENT SIDE ++++++++++++++ //
 // either LocalReplictor, or HttpReplicator if client and server are on different nodes
-Replicator replicator;</p>
-<p>// callback invoked after handler finished handling the revision and e.g. can reopen the reader.
-Callable<boolean> callback = null; // can also be null if no callback is needed
+Replicator replicator;
+
+// callback invoked after handler finished handling the revision and e.g. can reopen the reader.
+Callable<Boolean> callback = null; // can also be null if no callback is needed
 ReplicationHandler handler = new IndexReplicationHandler(indexDir, callback);
 SourceDirectoryFactory factory = new PerSessionDirectoryFactory(workDir);
-ReplicationClient client = new ReplicationClient(replicator, handler, factory);<p>
-<p>// invoke client manually
-client.updateNow();</p>
-<p>// or, periodically
-client.startUpdateThread(100); // check for update every 100 milliseconds</p>
-</boolean></div>
+ReplicationClient client = new ReplicationClient(replicator, handler, factory);
+
+// invoke client manually
+client.updateNow();
+
+// or, periodically
+client.startUpdateThread(100); // check for update every 100 milliseconds
+```
+-->
+<h1 id="using-the-replicatorservice">Using the ReplicatorService</h1>
+<p>Because there are a number of different hosting frameworks to choose from on .NET and they don&#39;t implement common
+abstractions for requests and responses, the ReplicatorService provides abstractions so that it can
+be integrated easily into any of these frameworks.</p>
+<p>To integrate the replicator into an existing hosting framework, the <a class="xref" href="Lucene.Net.Replicator.Http.Abstractions.IReplicationRequest.html">IReplicationRequest</a> and <a class="xref" href="Lucene.Net.Replicator.Http.Abstractions.IReplicationResponse.html">IReplicationResponse</a> interfaces must be implemented for the chosen framework.</p>
+<h2 id="an-aspnet-core-implementation">An ASP.NET Core Implementation</h2>
+<p>Below is an example of how these wrappers can be implemented for the ASP.NET Core framework.
+The example only covers the absolute minimum needed in order for it to become functional within ASP.NET Core.</p>
+<p>It does not go as far as to implement custom middleware, action results for controllers or anything else, while this
+would be a natural to do, such implementations extends beyond the scope of this document.</p>
+<h4 id="aspnet-core-request-wrapper">ASP.NET Core Request Wrapper</h4>
+<p>The first thing to do is to wrap the ASP.NET Core Request object in a class that implements the <a class="xref" href="Lucene.Net.Replicator.Http.Abstractions.IReplicationRequest.html">IReplicationRequest</a> interface.
+This is very straight forward.</p>
+<pre><code class="lang-cs">// Wrapper class for the Microsoft.AspNetCore.Http.HttpRequest
+public class AspNetCoreReplicationRequest : IReplicationRequest
+{
+    private readonly HttpRequest request;
+
+    // Inject the actual request object in the constructor.
+    public AspNetCoreReplicationRequest(HttpRequest request) 
+        =&gt; this.request = request;
+
+    // Provide the full path relative to the host.
+    // In the common case in AspNetCore this should just return the full path, so PathBase + Path are concatenated and returned.
+    // 
+    // The path expected by the ReplicatorService is {context}/{shard}/{action} where:
+    //  - action may be Obtain, Release or Update
+    //  - context is the same context that is provided to the ReplicatorService constructor and defaults to &#39;/replicate&#39;
+    public string Path 
+        =&gt; request.PathBase + request.Path;
+
+    // Return values for parameters used by the ReplicatorService
+    // The ReplicatorService will call this with:
+    // - version: The index revision
+    // - sessionid: The ID of the session
+    // - source: The source index for the files
+    // - filename: The file name
+    //
+    // In this implementation a exception is thrown in the case that parameters are provided multiple times.
+    public string QueryParam(string name) 
+        =&gt; request.Query[name].SingleOrDefault();
+}
+</code></pre><h4 id="aspnet-core-response-wrapper">ASP.NET Core Response Wrapper</h4>
+<p>Secondly the ASP.NET Core Response object is wrapped in a class that implements the <a class="xref" href="Lucene.Net.Replicator.Http.Abstractions.IReplicationResponse.html">IReplicationResponse</a> interface.
+This is also very straight forward.</p>
+<pre><code class="lang-cs">// Wrapper class for the Microsoft.AspNetCore.Http.HttpResponse
+public class AspNetCoreReplicationResponse : IReplicationResponse
+{
+    private readonly HttpResponse response;
+
+    // Inject the actual response object in the constructor.
+    public AspNetCoreReplicationResponse(HttpResponse response)
+        =&gt; this.response = response;
+
+    // Getter and Setter for the http Status code, in case of failure the ReplicatorService will set this
+    // Property.
+    public int StatusCode
+    {
+        get =&gt; response.StatusCode;
+        set =&gt; response.StatusCode = value;
+    }
+
+    // Return a stream where the ReplicatorService can write to for the response.
+    // Depending on the action either the file or the sesssion token will be written to this stream.
+    public Stream Body =&gt; response.Body;
+
+    // Called when the ReplicatorService is done writing data to the response.
+    // Here it is mapped to the flush method on the &quot;body&quot; stream on the response.
+    public void Flush() =&gt; response.Body.Flush();
+}
+</code></pre><h4 id="aspnet-core-utility-extension-method">ASP.NET Core Utility Extension Method</h4>
+<p>This part is not nessesary, however by providing a extension method as a overload to the ReplicatorService Perform method
+that instead takes the ASP.NET Core HttpRequest and HttpResponse response objects, it&#39;s easier to call the ReplicatorService
+from either ASP.NET Core MVC controllers, inside of middleare or for the absolute minimal solution directly in the delegate parameter of a IApplicationBuilder.Run() method.</p>
+<pre><code class="lang-cs">public static class AspNetCoreReplicationServiceExtentions
+{
+    // Optionally, provide a extension method for calling the perform method directly using the specific request
+    // and response objects from AspNetCore
+    public static void Perform(this ReplicationService self, HttpRequest request, HttpResponse response)
+        =&gt; self.Perform(
+            new AspNetCoreReplicationRequest(request),
+            new AspNetCoreReplicationResponse(response));
+}
+</code></pre><h2 id="using-the-implementation">Using the Implementation</h2>
+<p>Now the implementation can be used within ASP.NET Core in order to service Lucene.NET Replicator requests over HTTP.</p>
+<p>In order to enable replication of indexes, the &lt;xref:Lucene.Net.Index.IndexWriter&gt; that writes the index should be created with a &lt;xref:Lucene.Net.Index.SnapshotDeletionPolicy&gt;.</p>
+<pre><code class="lang-cs">IndexWriterConfig config = new IndexWriterConfig(...ver..., new StandardAnalyzer(...ver...));
+config.IndexDeletionPolicy = new SnapshotDeletionPolicy(config.IndexDeletionPolicy);
+IndexWriter writer = new IndexWriter(FSDirectory.Open(&quot;...&quot;), config);
+</code></pre><p>For the absolute minimal solution we can wire the <a class="xref" href="Lucene.Net.Replicator.Http.ReplicationService.html">ReplicationService</a> up on the server side as:</p>
+<pre><code class="lang-cs">LocalReplicator replicator = new LocalReplicator(); 
+ReplicatorService service = new ReplicationService(new Dictionary&lt;string, IReplicator&gt;{
+    [&quot;shard_name&quot;] = replicator
+}, &quot;/api/replicate&quot;);
+
+app.Map(&quot;/api/replicate&quot;, builder =&gt; {
+    builder.Run(async context =&gt; {
+        await Task.Yield();
+        service.Perform(context.Request, context.Response); 
+    });
+});
+</code></pre><p>Now in order to publish a <a class="xref" href="Lucene.Net.Replicator.IRevision.html">Revision</a> call the <a class="xref" href="Lucene.Net.Replicator.LocalReplicator.html#Lucene_Net_Replicator_LocalReplicator_Publish_Lucene_Net_Replicator_IRevision_">Publish()</a> method in the <a class="xref" href="Lucene.Net.Replicator.LocalReplicator.html">LocalReplicator</a>:</p>
+<pre><code class="lang-cs">IndexWriter writer = ...;
+LocalReplicator replicator = ...;
+replicator.Publish(new IndexRevision(writer));
+</code></pre><p>On the client side create a new <a class="xref" href="Lucene.Net.Replicator.Http.HttpReplicator.html">HttpReplicator</a> and start replicating, e.g.:</p>
+<pre><code class="lang-cs">IReplicator replicator = new HttpReplicator(&quot;http://{host}:{port}/api/replicate/shard_name&quot;);
+ReplicationClient client = new ReplicationClient(
+    replicator, 
+    new IndexReplicationHandler(
+        FSDirectory.Open(...directory...), 
+        () =&gt; ...onUpdate...), 
+        new PerSessionDirectoryFactory(...temp-working-directory...));
+
+//Now either start the Update Thread or do manual pulls periodically.
+client.UpdateNow(); //Manual Pull
+client.StartUpdateThread(1000, &quot;Replicator Thread&quot;); //Pull automatically every second if there is any changes.
+</code></pre><p>From here it would be natural to use a <a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00014/api/core/Lucene.Net.Search.SearcherManager.html">SearcherManager</a> over the directory in order to get Searchers updated automatically.
+But this cannot be created before the first actual replication as the <a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00014/api/core/Lucene.Net.Search.SearcherManager.html">SearcherManager</a> will fail because there is no index.</p>
+<p>We can use the onUpdate handler to perform the first initialization in this case.</p>
+</div>
   <div class="markdown level0 conceptual"></div>
   <div class="markdown level0 remarks"></div>
     <h3 id="classes">Classes
