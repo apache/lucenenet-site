@@ -1,0 +1,814 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class BytesRefHash
+   | Apache Lucene.NET 4.8.0-beta00014 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class BytesRefHash
+   | Apache Lucene.NET 4.8.0-beta00014 Documentation ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00014/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Util.BytesRefHash">
+  
+  
+  <h1 id="Lucene_Net_Util_BytesRefHash" data-uid="Lucene.Net.Util.BytesRefHash" class="text-break">Class BytesRefHash
+  </h1>
+  <div class="markdown level0 summary"><p><a class="xref" href="Lucene.Net.Util.BytesRefHash.html">BytesRefHash</a> is a special purpose hash-map like data-structure
+optimized for <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> instances. <a class="xref" href="Lucene.Net.Util.BytesRefHash.html">BytesRefHash</a> maintains mappings of
+byte arrays to ids (Map&lt;BytesRef,int&gt;) storing the hashed bytes
+efficiently in continuous storage. The mapping to the id is
+encapsulated inside <a class="xref" href="Lucene.Net.Util.BytesRefHash.html">BytesRefHash</a> and is guaranteed to be increased
+for each added <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a>.</p>
+<p>
+Note: The maximum capacity <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> instance passed to
+<a class="xref" href="Lucene.Net.Util.BytesRefHash.html#Lucene_Net_Util_BytesRefHash_Add_Lucene_Net_Util_BytesRef_">Add(BytesRef)</a> must not be longer than <a class="xref" href="Lucene.Net.Util.ByteBlockPool.html#Lucene_Net_Util_ByteBlockPool_BYTE_BLOCK_SIZE">BYTE_BLOCK_SIZE</a>-2.
+The internal storage is limited to 2GB total byte storage.
+</p>
+
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">BytesRefHash</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Util.html">Lucene.Net.Util</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Util_BytesRefHash_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class BytesRefHash : IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L71">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BytesRefHash__ctor_" data-uid="Lucene.Net.Util.BytesRefHash.#ctor*"></a>
+  <h4 id="Lucene_Net_Util_BytesRefHash__ctor" data-uid="Lucene.Net.Util.BytesRefHash.#ctor">BytesRefHash()</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Util.BytesRefHash.html">BytesRefHash</a> with a <a class="xref" href="Lucene.Net.Util.ByteBlockPool.html">ByteBlockPool</a> using a
+<a class="xref" href="Lucene.Net.Util.ByteBlockPool.DirectAllocator.html">ByteBlockPool.DirectAllocator</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BytesRefHash()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash__ctor_Lucene_Net_Util_ByteBlockPool_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.%23ctor(Lucene.Net.Util.ByteBlockPool)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L79">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BytesRefHash__ctor_" data-uid="Lucene.Net.Util.BytesRefHash.#ctor*"></a>
+  <h4 id="Lucene_Net_Util_BytesRefHash__ctor_Lucene_Net_Util_ByteBlockPool_" data-uid="Lucene.Net.Util.BytesRefHash.#ctor(Lucene.Net.Util.ByteBlockPool)">BytesRefHash(ByteBlockPool)</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Util.BytesRefHash.html">BytesRefHash</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BytesRefHash(ByteBlockPool pool)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.ByteBlockPool.html">ByteBlockPool</a></td>
+        <td><span class="parametername">pool</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash__ctor_Lucene_Net_Util_ByteBlockPool_System_Int32_Lucene_Net_Util_BytesRefHash_BytesStartArray_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.%23ctor(Lucene.Net.Util.ByteBlockPool%2CSystem.Int32%2CLucene.Net.Util.BytesRefHash.BytesStartArray)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L87">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BytesRefHash__ctor_" data-uid="Lucene.Net.Util.BytesRefHash.#ctor*"></a>
+  <h4 id="Lucene_Net_Util_BytesRefHash__ctor_Lucene_Net_Util_ByteBlockPool_System_Int32_Lucene_Net_Util_BytesRefHash_BytesStartArray_" data-uid="Lucene.Net.Util.BytesRefHash.#ctor(Lucene.Net.Util.ByteBlockPool,System.Int32,Lucene.Net.Util.BytesRefHash.BytesStartArray)">BytesRefHash(ByteBlockPool, Int32, BytesRefHash.BytesStartArray)</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Util.BytesRefHash.html">BytesRefHash</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BytesRefHash(ByteBlockPool pool, int capacity, BytesRefHash.BytesStartArray bytesStartArray)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.ByteBlockPool.html">ByteBlockPool</a></td>
+        <td><span class="parametername">pool</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">capacity</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRefHash.BytesStartArray.html">BytesRefHash.BytesStartArray</a></td>
+        <td><span class="parametername">bytesStartArray</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash_DEFAULT_CAPACITY.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.DEFAULT_CAPACITY%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L49">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Util_BytesRefHash_DEFAULT_CAPACITY" data-uid="Lucene.Net.Util.BytesRefHash.DEFAULT_CAPACITY">DEFAULT_CAPACITY</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int DEFAULT_CAPACITY = 16</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash_Count.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.Count%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L107">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BytesRefHash_Count_" data-uid="Lucene.Net.Util.BytesRefHash.Count*"></a>
+  <h4 id="Lucene_Net_Util_BytesRefHash_Count" data-uid="Lucene.Net.Util.BytesRefHash.Count">Count</h4>
+  <div class="markdown level1 summary"><p>Returns the number of <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> values in this <a class="xref" href="Lucene.Net.Util.BytesRefHash.html">BytesRefHash</a>.
+<p>
+NOTE: This was size() in Lucene.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The number of <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> values in this <a class="xref" href="Lucene.Net.Util.BytesRefHash.html">BytesRefHash</a>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash_Add_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.Add(Lucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L311">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BytesRefHash_Add_" data-uid="Lucene.Net.Util.BytesRefHash.Add*"></a>
+  <h4 id="Lucene_Net_Util_BytesRefHash_Add_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Util.BytesRefHash.Add(Lucene.Net.Util.BytesRef)">Add(BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Adds a new <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Add(BytesRef bytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">bytes</span></td>
+        <td><p>The bytes to hash </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The id the given bytes are hashed if there was no mapping for the
+       given bytes, otherwise <code>(-(id)-1)</code>. this guarantees
+       that the return value will always be &gt;= 0 if the given bytes
+       haven&apos;t been hashed before.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRefHash.MaxBytesLengthExceededException.html">BytesRefHash.MaxBytesLengthExceededException</a></td>
+        <td><p>if the given bytes are &gt; 2 +
+<a class="xref" href="Lucene.Net.Util.ByteBlockPool.html#Lucene_Net_Util_ByteBlockPool_BYTE_BLOCK_SIZE">BYTE_BLOCK_SIZE</a> </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash_AddByPoolOffset_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.AddByPoolOffset(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L420">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BytesRefHash_AddByPoolOffset_" data-uid="Lucene.Net.Util.BytesRefHash.AddByPoolOffset*"></a>
+  <h4 id="Lucene_Net_Util_BytesRefHash_AddByPoolOffset_System_Int32_" data-uid="Lucene.Net.Util.BytesRefHash.AddByPoolOffset(System.Int32)">AddByPoolOffset(Int32)</h4>
+  <div class="markdown level1 summary"><p>Adds a &quot;arbitrary&quot; int offset instead of a <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a>
+term.  This is used in the indexer to hold the hash for term
+vectors, because they do not redundantly store the <span class="xref">byte[]</span> term
+directly and instead reference the <span class="xref">byte[]</span> term
+already stored by the postings <a class="xref" href="Lucene.Net.Util.BytesRefHash.html">BytesRefHash</a>.  See
+<span class="xref">Lucene.Net.Index.TermsHashPerField.Add(System.Int32)</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int AddByPoolOffset(int offset)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">offset</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash_ByteStart_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.ByteStart(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L558">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BytesRefHash_ByteStart_" data-uid="Lucene.Net.Util.BytesRefHash.ByteStart*"></a>
+  <h4 id="Lucene_Net_Util_BytesRefHash_ByteStart_System_Int32_" data-uid="Lucene.Net.Util.BytesRefHash.ByteStart(System.Int32)">ByteStart(Int32)</h4>
+  <div class="markdown level1 summary"><p>Returns the bytesStart offset into the internally used
+<a class="xref" href="Lucene.Net.Util.ByteBlockPool.html">ByteBlockPool</a> for the given <code data-dev-comment-type="paramref" class="paramref">bytesID</code></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int ByteStart(int bytesID)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">bytesID</span></td>
+        <td><p>The id to look up </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The bytesStart offset into the internally used
+<a class="xref" href="Lucene.Net.Util.ByteBlockPool.html">ByteBlockPool</a> for the given id </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash_Clear.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.Clear%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L282">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BytesRefHash_Clear_" data-uid="Lucene.Net.Util.BytesRefHash.Clear*"></a>
+  <h4 id="Lucene_Net_Util_BytesRefHash_Clear" data-uid="Lucene.Net.Util.BytesRefHash.Clear">Clear()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash_Clear_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.Clear(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L265">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BytesRefHash_Clear_" data-uid="Lucene.Net.Util.BytesRefHash.Clear*"></a>
+  <h4 id="Lucene_Net_Util_BytesRefHash_Clear_System_Boolean_" data-uid="Lucene.Net.Util.BytesRefHash.Clear(System.Boolean)">Clear(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Clears the <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> which maps to the given <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Clear(bool resetPool)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">resetPool</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash_Compact.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.Compact%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L142">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BytesRefHash_Compact_" data-uid="Lucene.Net.Util.BytesRefHash.Compact*"></a>
+  <h4 id="Lucene_Net_Util_BytesRefHash_Compact" data-uid="Lucene.Net.Util.BytesRefHash.Compact">Compact()</h4>
+  <div class="markdown level1 summary"><p>Returns the ids array in arbitrary order. Valid ids start at offset of 0
+and end at a limit of <a class="xref" href="Lucene.Net.Util.BytesRefHash.html#Lucene_Net_Util_BytesRefHash_Count">Count</a> - 1
+<p>
+Note: this is a destructive operation. <a class="xref" href="Lucene.Net.Util.BytesRefHash.html#Lucene_Net_Util_BytesRefHash_Clear">Clear()</a> must be called in
+order to reuse this <a class="xref" href="Lucene.Net.Util.BytesRefHash.html">BytesRefHash</a> instance.
+</p></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int[] Compact()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash_Dispose.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.Dispose%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L291">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BytesRefHash_Dispose_" data-uid="Lucene.Net.Util.BytesRefHash.Dispose*"></a>
+  <h4 id="Lucene_Net_Util_BytesRefHash_Dispose" data-uid="Lucene.Net.Util.BytesRefHash.Dispose">Dispose()</h4>
+  <div class="markdown level1 summary"><p>Closes the <a class="xref" href="Lucene.Net.Util.BytesRefHash.html">BytesRefHash</a> and releases all internally used memory</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Dispose()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash_Find_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.Find(Lucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L382">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BytesRefHash_Find_" data-uid="Lucene.Net.Util.BytesRefHash.Find*"></a>
+  <h4 id="Lucene_Net_Util_BytesRefHash_Find_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Util.BytesRefHash.Find(Lucene.Net.Util.BytesRef)">Find(BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Returns the id of the given <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int Find(BytesRef bytes)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">bytes</span></td>
+        <td><p>The bytes to look for</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><p>The id of the given bytes, or <code>-1</code> if there is no mapping for the
+       given bytes. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash_Get_System_Int32_Lucene_Net_Util_BytesRef_.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.Get(System.Int32%2CLucene.Net.Util.BytesRef)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L123">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BytesRefHash_Get_" data-uid="Lucene.Net.Util.BytesRefHash.Get*"></a>
+  <h4 id="Lucene_Net_Util_BytesRefHash_Get_System_Int32_Lucene_Net_Util_BytesRef_" data-uid="Lucene.Net.Util.BytesRefHash.Get(System.Int32,Lucene.Net.Util.BytesRef)">Get(Int32, BytesRef)</h4>
+  <div class="markdown level1 summary"><p>Populates and returns a <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> with the bytes for the given
+bytesID.
+<p>
+Note: the given bytesID must be a positive integer less than the current
+size (<a class="xref" href="Lucene.Net.Util.BytesRefHash.html#Lucene_Net_Util_BytesRefHash_Count">Count</a>)</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BytesRef Get(int bytesID, BytesRef ref)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">bytesID</span></td>
+        <td><p>The id </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><span class="parametername">ref</span></td>
+        <td><p>The <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> to populate</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a></td>
+        <td><p>The given <a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a> instance populated with the bytes for the given
+       bytesID </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash_Reinit.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.Reinit%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L536">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BytesRefHash_Reinit_" data-uid="Lucene.Net.Util.BytesRefHash.Reinit*"></a>
+  <h4 id="Lucene_Net_Util_BytesRefHash_Reinit" data-uid="Lucene.Net.Util.BytesRefHash.Reinit">Reinit()</h4>
+  <div class="markdown level1 summary"><p>Reinitializes the <a class="xref" href="Lucene.Net.Util.BytesRefHash.html">BytesRefHash</a> after a previous <a class="xref" href="Lucene.Net.Util.BytesRefHash.html#Lucene_Net_Util_BytesRefHash_Clear">Clear()</a>
+call. If <a class="xref" href="Lucene.Net.Util.BytesRefHash.html#Lucene_Net_Util_BytesRefHash_Clear">Clear()</a> has not been called previously this method has no
+effect.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Reinit()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash_Sort_System_Collections_Generic_IComparer_Lucene_Net_Util_BytesRef__.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash.Sort(System.Collections.Generic.IComparer%7BLucene.Net.Util.BytesRef%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L173">View Source</a>
+  </span>
+  <a id="Lucene_Net_Util_BytesRefHash_Sort_" data-uid="Lucene.Net.Util.BytesRefHash.Sort*"></a>
+  <h4 id="Lucene_Net_Util_BytesRefHash_Sort_System_Collections_Generic_IComparer_Lucene_Net_Util_BytesRef__" data-uid="Lucene.Net.Util.BytesRefHash.Sort(System.Collections.Generic.IComparer{Lucene.Net.Util.BytesRef})">Sort(IComparer&lt;BytesRef&gt;)</h4>
+  <div class="markdown level1 summary"><p>Returns the values array sorted by the referenced byte values.
+<p>
+Note: this is a destructive operation. <a class="xref" href="Lucene.Net.Util.BytesRefHash.html#Lucene_Net_Util_BytesRefHash_Clear">Clear()</a> must be called in
+order to reuse this <a class="xref" href="Lucene.Net.Util.BytesRefHash.html">BytesRefHash</a> instance.
+</p></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int[] Sort(IComparer&lt;BytesRef&gt; comp)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IComparer</span>&lt;<a class="xref" href="Lucene.Net.Util.BytesRef.html">BytesRef</a>&gt;</td>
+        <td><span class="parametername">comp</span></td>
+        <td><p>The <span class="xref">IComparer{BytesRef}</span> used for sorting </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Util_BytesRefHash.md&amp;value=---%0Auid%3A%20Lucene.Net.Util.BytesRefHash%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Util/BytesRefHash.cs/#L47" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

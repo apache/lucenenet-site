@@ -5,10 +5,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Welcome to the Lucene.Net website! | Apache Lucene.NET 4.8.0 </title>
+    <title>Welcome to the Lucene.NET website! | Apache Lucene.NET 4.8.0 </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Welcome to the Lucene.Net website! | Apache Lucene.NET 4.8.0 ">
-    <meta name="generator" content="docfx 2.50.0.0">
+    <meta name="title" content="Welcome to the Lucene.NET website! | Apache Lucene.NET 4.8.0 ">
+    <meta name="generator" content="docfx 2.56.6.0">
     
     <link rel="shortcut icon" href="logo/favicon.ico">
     <link rel="stylesheet" href="styles/docfx.vendor.css">
@@ -23,12 +23,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.0/css/academicons.min.css" integrity="sha512-GGGNUPDhnG8LEAEDsjqYIQns+Gu8RBs4j5XGlxl7UfRaZBhCCm5jenJkeJL8uPuOXGqgl8/H1gjlWQDRjd3cUQ==" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
     
-    <script data-ad-client="ca-pub-3370160606703795" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono">
     <link rel="stylesheet" href="/styles/site.css">
   
   </head>  <body id="homepage" data-spy="scroll" data-target="#affix">
-  <span id="forkongithub"><a href="https://github.com/apache/lucenenet">Fork me on GitHub</a></span>
+  <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
     <div id="wrapper">
       <header>
         
@@ -89,12 +88,12 @@
 <p class="text-center">Create an index and define a text analyzer</p>
 <pre class="clean">
 <code class="csharp">
-// Ensures index backwards compatibility
+// Ensures index backward compatibility
 const LuceneVersion AppLuceneVersion = LuceneVersion.LUCENE_48;
 
 // Construct a machine-independent path for the index
-var personalFolder = Environment.SpecialFolder.Personal;
-var basePath = Environment.GetFolderPath(personalFolder);
+var basePath = Environment.GetFolderPath(
+    Environment.SpecialFolder.CommonApplicationData);
 var indexPath = Path.Combine(basePath, "index");
 
 using var dir = FSDirectory.Open(indexPath);
@@ -153,12 +152,17 @@ var phrase = new MultiPhraseQuery
 using var reader = writer.GetReader(applyAllDeletes: true);
 var searcher = new IndexSearcher(reader);
 var hits = searcher.Search(phrase, 20 /* top 20 */).ScoreDocs;
+
+// Display the output in a table
+Console.WriteLine($"{"Score",10}" +
+    $" {"Name",-15}" +
+    $" {"Favorite Phrase",-40}");
 foreach (var hit in hits)
 {
-&nbsp;&nbsp;&nbsp;&nbsp;var foundDoc = searcher.Doc(hit.Doc);
-&nbsp;&nbsp;&nbsp;&nbsp;hit.Score.Dump("Score");
-&nbsp;&nbsp;&nbsp;&nbsp;foundDoc.Get("name").Dump("Name");
-&nbsp;&nbsp;&nbsp;&nbsp;foundDoc.Get("favoritePhrase").Dump("Favorite Phrase");
+    var foundDoc = searcher.Doc(hit.Doc);
+    Console.WriteLine($"{hit.Score:f8}" +
+        $" {foundDoc.Get("name"),-15}" +
+        $" {foundDoc.Get("favoritePhrase"),-40}");
 }
 </code>
 </pre>
@@ -173,6 +177,15 @@ foreach (var hit in hits)
               
 <h2 id="about" class="text-center">About the project</h2>
 <p>Lucene.Net is a port of the Lucene search engine library, written in C# and targeted at .NET runtime users</p>
+<h3 id="latest-version---lucenenet-480-beta">Latest Version - Lucene.NET 4.8.0 Beta</h3>
+<ul>
+<li>The beta version is extremely stable</li>
+<li>Has more than 7800+ passing unit tests</li>
+<li>Integrates well with .NET 5.0 and .NET Core 2+</li>
+<li>Supports .NET Standard 2.1 and .NET Standard 2.0</li>
+<li>Supports .NET Framework 4.5+</li>
+<li>Some developers already use it in production environments</li>
+</ul>
 <h3 id="our-goals">Our Goals</h3>
 <ul>
 <li>Maintain the existing line-by-line port from Java to C#, fully automating and commoditizing the process such that the project can easily synchronize with the Java Lucene release schedule</li>
@@ -216,7 +229,7 @@ foreach (var hit in hits)
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Copyright © 2020 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
             
           </div>
         </div>

@@ -1,0 +1,827 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class CachingCollector
+   | Apache Lucene.NET 4.8.0-beta00014 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class CachingCollector
+   | Apache Lucene.NET 4.8.0-beta00014 Documentation ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00014/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.CachingCollector">
+  
+  
+  <h1 id="Lucene_Net_Search_CachingCollector" data-uid="Lucene.Net.Search.CachingCollector" class="text-break">Class CachingCollector
+  </h1>
+  <div class="markdown level0 summary"><p>Caches all docs, and optionally also scores, coming from
+a search, and is then able to replay them to another
+collector.  You specify the max RAM this class may use.
+Once the collection is done, call <a class="xref" href="Lucene.Net.Search.CachingCollector.html#Lucene_Net_Search_CachingCollector_IsCached">IsCached</a>. If
+this returns <code>true</code>, you can use <a class="xref" href="Lucene.Net.Search.CachingCollector.html#Lucene_Net_Search_CachingCollector_Replay_Lucene_Net_Search_ICollector_">Replay(ICollector)</a>
+against a new collector.  If it returns <code>false</code>, this means
+too much RAM was required and you must instead re-run the
+original search.</p>
+<p><strong>NOTE</strong>: this class consumes 4 (or 8 bytes, if
+scoring is cached) per collected document.  If the result
+set is large this can easily be a very substantial amount
+of RAM!
+
+<p><strong>NOTE</strong>: this class caches at least 128 documents
+before checking RAM limits.
+
+<p>See the Lucene <code>modules/grouping</code> module for more
+details including a full code example.</p>
+
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">CachingCollector</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Search.html">Lucene.Net.Search</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Search_CachingCollector_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class CachingCollector : ICollector</code></pre>
+  </div>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_m_base.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.m_base%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L366">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_CachingCollector_m_base" data-uid="Lucene.Net.Search.CachingCollector.m_base">m_base</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int m_base</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_m_cachedDocs.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.m_cachedDocs%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L360">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_CachingCollector_m_cachedDocs" data-uid="Lucene.Net.Search.CachingCollector.m_cachedDocs">m_cachedDocs</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly IList&lt;int[]&gt; m_cachedDocs</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<span class="xref">System.Int32</span>[]&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_m_curDocs.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.m_curDocs%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L364">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_CachingCollector_m_curDocs" data-uid="Lucene.Net.Search.CachingCollector.m_curDocs">m_curDocs</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int[] m_curDocs</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_m_lastDocBase.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.m_lastDocBase%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L367">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_CachingCollector_m_lastDocBase" data-uid="Lucene.Net.Search.CachingCollector.m_lastDocBase">m_lastDocBase</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int m_lastDocBase</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_m_maxDocsToCache.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.m_maxDocsToCache%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L358">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_CachingCollector_m_maxDocsToCache" data-uid="Lucene.Net.Search.CachingCollector.m_maxDocsToCache">m_maxDocsToCache</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly int m_maxDocsToCache</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_m_other.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.m_other%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L356">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_CachingCollector_m_other" data-uid="Lucene.Net.Search.CachingCollector.m_other">m_other</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly ICollector m_other</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_m_upto.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.m_upto%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L365">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_CachingCollector_m_upto" data-uid="Lucene.Net.Search.CachingCollector.m_upto">m_upto</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int m_upto</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_AcceptsDocsOutOfOrder.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.AcceptsDocsOutOfOrder%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L468">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_CachingCollector_AcceptsDocsOutOfOrder_" data-uid="Lucene.Net.Search.CachingCollector.AcceptsDocsOutOfOrder*"></a>
+  <h4 id="Lucene_Net_Search_CachingCollector_AcceptsDocsOutOfOrder" data-uid="Lucene.Net.Search.CachingCollector.AcceptsDocsOutOfOrder">AcceptsDocsOutOfOrder</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool AcceptsDocsOutOfOrder { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_IsCached.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.IsCached%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L470">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_CachingCollector_IsCached_" data-uid="Lucene.Net.Search.CachingCollector.IsCached*"></a>
+  <h4 id="Lucene_Net_Search_CachingCollector_IsCached" data-uid="Lucene.Net.Search.CachingCollector.IsCached">IsCached</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool IsCached { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_Collect_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.Collect(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L505">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_CachingCollector_Collect_" data-uid="Lucene.Net.Search.CachingCollector.Collect*"></a>
+  <h4 id="Lucene_Net_Search_CachingCollector_Collect_System_Int32_" data-uid="Lucene.Net.Search.CachingCollector.Collect(System.Int32)">Collect(Int32)</h4>
+  <div class="markdown level1 summary"><p>Called once for every document matching a query, with the unbased document
+number.
+<p>Note: The collection of the current segment can be terminated by throwing
+a <a class="xref" href="Lucene.Net.Search.CollectionTerminatedException.html">CollectionTerminatedException</a>. In this case, the last docs of the
+current <a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a> will be skipped and <a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a>
+will swallow the exception and continue collection with the next leaf.
+<p>
+Note: this is called in an inner search loop. For good search performance,
+implementations of this method should not call <a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Doc_System_Int32_">Doc(Int32)</a> or
+<a class="xref" href="Lucene.Net.Index.IndexReader.html#Lucene_Net_Index_IndexReader_Document_System_Int32_">Document(Int32)</a> on every hit.
+Doing so can slow searches by an order of magnitude or more.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void Collect(int doc)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">doc</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_Create_Lucene_Net_Search_ICollector_System_Boolean_System_Double_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.Create(Lucene.Net.Search.ICollector%2CSystem.Boolean%2CSystem.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L418">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_CachingCollector_Create_" data-uid="Lucene.Net.Search.CachingCollector.Create*"></a>
+  <h4 id="Lucene_Net_Search_CachingCollector_Create_Lucene_Net_Search_ICollector_System_Boolean_System_Double_" data-uid="Lucene.Net.Search.CachingCollector.Create(Lucene.Net.Search.ICollector,System.Boolean,System.Double)">Create(ICollector, Boolean, Double)</h4>
+  <div class="markdown level1 summary"><p>Create a new <a class="xref" href="Lucene.Net.Search.CachingCollector.html">CachingCollector</a> that wraps the given collector and
+caches documents and scores up to the specified RAM threshold.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static CachingCollector Create(ICollector other, bool cacheScores, double maxRAMMB)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a></td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The <a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> to wrap and delegate calls to. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">cacheScores</span></td>
+        <td><p>Whether to cache scores in addition to document IDs. Note that
+this increases the RAM consumed per doc. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">maxRAMMB</span></td>
+        <td><p>The maximum RAM in MB to consume for caching the documents and
+scores. If the collector exceeds the threshold, no documents and
+scores are cached. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.CachingCollector.html">CachingCollector</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_Create_Lucene_Net_Search_ICollector_System_Boolean_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.Create(Lucene.Net.Search.ICollector%2CSystem.Boolean%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L436">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_CachingCollector_Create_" data-uid="Lucene.Net.Search.CachingCollector.Create*"></a>
+  <h4 id="Lucene_Net_Search_CachingCollector_Create_Lucene_Net_Search_ICollector_System_Boolean_System_Int32_" data-uid="Lucene.Net.Search.CachingCollector.Create(Lucene.Net.Search.ICollector,System.Boolean,System.Int32)">Create(ICollector, Boolean, Int32)</h4>
+  <div class="markdown level1 summary"><p>Create a new <a class="xref" href="Lucene.Net.Search.CachingCollector.html">CachingCollector</a> that wraps the given collector and
+caches documents and scores up to the specified max docs threshold.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static CachingCollector Create(ICollector other, bool cacheScores, int maxDocsToCache)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a></td>
+        <td><span class="parametername">other</span></td>
+        <td><p>The <a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a> to wrap and delegate calls to. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">cacheScores</span></td>
+        <td><p>Whether to cache scores in addition to document IDs. Note that
+this increases the RAM consumed per doc. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxDocsToCache</span></td>
+        <td><p>The maximum number of documents for caching the documents and
+possible the scores. If the collector exceeds the threshold,
+no documents and scores are cached. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.CachingCollector.html">CachingCollector</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_Create_System_Boolean_System_Boolean_System_Double_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.Create(System.Boolean%2CSystem.Boolean%2CSystem.Double)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L375">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_CachingCollector_Create_" data-uid="Lucene.Net.Search.CachingCollector.Create*"></a>
+  <h4 id="Lucene_Net_Search_CachingCollector_Create_System_Boolean_System_Boolean_System_Double_" data-uid="Lucene.Net.Search.CachingCollector.Create(System.Boolean,System.Boolean,System.Double)">Create(Boolean, Boolean, Double)</h4>
+  <div class="markdown level1 summary"><p>Creates a <a class="xref" href="Lucene.Net.Search.CachingCollector.html">CachingCollector</a> which does not wrap another collector.
+The cached documents and scores can later be replayed (<a class="xref" href="Lucene.Net.Search.CachingCollector.html#Lucene_Net_Search_CachingCollector_Replay_Lucene_Net_Search_ICollector_">Replay(ICollector)</a>).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static CachingCollector Create(bool acceptDocsOutOfOrder, bool cacheScores, double maxRAMMB)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">acceptDocsOutOfOrder</span></td>
+        <td><p>whether documents are allowed to be collected out-of-order </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">cacheScores</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Double</span></td>
+        <td><span class="parametername">maxRAMMB</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.CachingCollector.html">CachingCollector</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_Replay_Lucene_Net_Search_ICollector_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.Replay(Lucene.Net.Search.ICollector)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L540">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_CachingCollector_Replay_" data-uid="Lucene.Net.Search.CachingCollector.Replay*"></a>
+  <h4 id="Lucene_Net_Search_CachingCollector_Replay_Lucene_Net_Search_ICollector_" data-uid="Lucene.Net.Search.CachingCollector.Replay(Lucene.Net.Search.ICollector)">Replay(ICollector)</h4>
+  <div class="markdown level1 summary"><p>Replays the cached doc IDs (and scores) to the given <a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a>. If this
+instance does not cache scores, then <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> is not set on
+<code>other.SetScorer(Scorer)</code> as well as scores are not replayed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void Replay(ICollector other)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a></td>
+        <td><span class="parametername">other</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.InvalidOperationException</span></td>
+        <td><p>If this collector is not cached (i.e., if the RAM limits were too
+low for the number of documents + scores to cache). </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>If the given Collect&apos;s does not support out-of-order collection,
+while the collector passed to the ctor does. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_SetNextReader_Lucene_Net_Index_AtomicReaderContext_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.SetNextReader(Lucene.Net.Index.AtomicReaderContext)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L472">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_CachingCollector_SetNextReader_" data-uid="Lucene.Net.Search.CachingCollector.SetNextReader*"></a>
+  <h4 id="Lucene_Net_Search_CachingCollector_SetNextReader_Lucene_Net_Index_AtomicReaderContext_" data-uid="Lucene.Net.Search.CachingCollector.SetNextReader(Lucene.Net.Index.AtomicReaderContext)">SetNextReader(AtomicReaderContext)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetNextReader(AtomicReaderContext context)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.AtomicReaderContext.html">AtomicReaderContext</a></td>
+        <td><span class="parametername">context</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector_SetScorer_Lucene_Net_Search_Scorer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector.SetScorer(Lucene.Net.Search.Scorer)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L490">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_CachingCollector_SetScorer_" data-uid="Lucene.Net.Search.CachingCollector.SetScorer*"></a>
+  <h4 id="Lucene_Net_Search_CachingCollector_SetScorer_Lucene_Net_Search_Scorer_" data-uid="Lucene.Net.Search.CachingCollector.SetScorer(Lucene.Net.Search.Scorer)">SetScorer(Scorer)</h4>
+  <div class="markdown level1 summary"><p>Called before successive calls to <a class="xref" href="Lucene.Net.Search.CachingCollector.html#Lucene_Net_Search_CachingCollector_Collect_System_Int32_">Collect(Int32)</a>. Implementations
+that need the score of the current document (passed-in to
+<also cref="M:Lucene.Net.Search.CachingCollector.Collect(System.Int32)"></also>), should save the passed-in <a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a> and call
+<a class="xref" href="Lucene.Net.Search.Scorer.html#Lucene_Net_Search_Scorer_GetScore">GetScore()</a> when needed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract void SetScorer(Scorer scorer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Scorer.html">Scorer</a></td>
+        <td><span class="parametername">scorer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Search.ICollector.html">ICollector</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_CachingCollector.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.CachingCollector%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/CachingCollector.cs/#L50" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

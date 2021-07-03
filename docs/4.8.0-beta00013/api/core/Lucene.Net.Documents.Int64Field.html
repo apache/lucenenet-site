@@ -1,0 +1,605 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Int64Field
+   | Apache Lucene.NET 4.8.0-beta00013 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Int64Field
+   | Apache Lucene.NET 4.8.0-beta00013 Documentation ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Documents.Int64Field">
+  
+  
+  <h1 id="Lucene_Net_Documents_Int64Field" data-uid="Lucene.Net.Documents.Int64Field" class="text-break">Class Int64Field
+  </h1>
+  <div class="markdown level0 summary"><p>
+Field that indexes <span class="xref">System.Int64</span> values
+for efficient range filtering and sorting. Here&apos;s an example usage:
+
+<pre><code>document.Add(new Int64Field(name, 6L, Field.Store.NO));</code></pre>
+
+For optimal performance, re-use the <a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a> and
+<a class="xref" href="Lucene.Net.Documents.Document.html">Document</a> instance for more than one document:
+
+<pre><code>    Int64Field field = new Int64Field(name, 0L, Field.Store.NO);
+    Document document = new Document();
+    document.Add(field);
+
+    for (all documents) {
+        ...
+        field.SetInt64Value(value)
+        writer.AddDocument(document);
+        ...
+    }</code></pre>
+
+See also <a class="xref" href="Lucene.Net.Documents.Int32Field.html">Int32Field</a>, <a class="xref" href="Lucene.Net.Documents.SingleField.html">SingleField</a>, 
+<a class="xref" href="Lucene.Net.Documents.DoubleField.html">DoubleField</a>.
+</p>
+
+<p>
+Any type that can be converted to long can also be
+indexed.  For example, date/time values represented by a
+<span class="xref">System.DateTime</span> can be translated into a long
+value using the <span class="xref">System.DateTime.Ticks</span> property.  If you
+don&apos;t need millisecond precision, you can quantize the
+value, either by dividing the result of
+<span class="xref">System.DateTime.Ticks</span> or using the separate getters
+(for year, month, etc.) to construct an <span class="xref">System.Int32</span> or
+<span class="xref">System.Int64</span> value.</p>
+
+<p>To perform range querying or filtering against a
+<a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a>, use <a class="xref" href="Lucene.Net.Search.NumericRangeQuery-1.html">NumericRangeQuery&lt;T&gt;</a> or 
+<a class="xref" href="Lucene.Net.Search.NumericRangeFilter-1.html">NumericRangeFilter&lt;T&gt;</a>.  To sort according to a
+<a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a>, use the normal numeric sort types, eg
+<a class="xref" href="Lucene.Net.Search.SortFieldType.html#Lucene_Net_Search_SortFieldType_INT64">INT64</a>. <a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a>
+values can also be loaded directly from <a class="xref" href="Lucene.Net.Search.IFieldCache.html">IFieldCache</a>.</p>
+
+<p>You may add the same field name as an <a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a> to
+the same document more than once.  Range querying and
+filtering will be the logical OR of all values; so a range query
+will hit all documents that have at least one value in
+the range. However sort behavior is not defined.  If you need to sort,
+you should separately index a single-valued <a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a>.</p>
+
+<p>An <a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a> will consume somewhat more disk space
+in the index than an ordinary single-valued field.
+However, for a typical index that includes substantial
+textual content per document, this increase will likely
+be in the noise. </p>
+
+<p>Within Lucene, each numeric value is indexed as a
+<em>trie</em> structure, where each term is logically
+assigned to larger and larger pre-defined brackets (which
+are simply lower-precision representations of the value).
+The step size between each successive bracket is called the
+<code>precisionStep</code>, measured in bits.  Smaller
+<code>precisionStep</code> values result in larger number
+of brackets, which consumes more disk space in the index
+but may result in faster range search performance.  The
+default value, 4, was selected for a reasonable tradeoff
+of disk space consumption versus performance.  You can
+create a custom <a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a> and invoke the 
+<a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_NumericPrecisionStep">NumericPrecisionStep</a> setter if you&apos;d
+like to change the value.  Note that you must also
+specify a congruent value when creating 
+<a class="xref" href="Lucene.Net.Search.NumericRangeQuery-1.html">NumericRangeQuery&lt;T&gt;</a> or <a class="xref" href="Lucene.Net.Search.NumericRangeFilter-1.html">NumericRangeFilter&lt;T&gt;</a>.
+For low cardinality fields larger precision steps are good.
+If the cardinality is &lt; 100, it is fair
+to use <span class="xref">System.Int32.MaxValue</span>, which produces one
+term per value.</p>
+
+<p>For more information on the internals of numeric trie
+indexing, including the <a class="xref" href="Lucene.Net.Search.NumericRangeQuery-1.html#Lucene_Net_Search_NumericRangeQuery_1_PrecisionStep">PrecisionStep</a> <a href="../search/NumericRangeQuery.html#precisionStepDesc"><code>precisionStep</code></a>
+configuration, see <a class="xref" href="Lucene.Net.Search.NumericRangeQuery-1.html">NumericRangeQuery&lt;T&gt;</a>. The format of
+indexed values is described in <a class="xref" href="Lucene.Net.Util.NumericUtils.html">NumericUtils</a>.</p>
+
+<p>If you only need to sort by numeric value, and never
+run range querying/filtering, you can index using a
+<code>precisionStep</code> of <span class="xref">System.Int32.MaxValue</span>.
+this will minimize disk space consumed. </p>
+
+<p><p>More advanced users can instead use 
+<a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a> directly, 
+when indexing numbers. this
+class is a wrapper around this token stream type for
+easier, more intuitive usage.</p>
+<p>
+NOTE: This was LongField in Lucene
+</p>
+@since 2.9</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Documents.Field.html">Field</a></div>
+    <div class="level2"><span class="xref">Int64Field</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_m_type">Field.m_type</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_m_name">Field.m_name</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_FieldsData">Field.FieldsData</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_m_tokenStream">Field.m_tokenStream</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_m_boost">Field.m_boost</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetStringValue">Field.GetStringValue()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetStringValue_System_IFormatProvider_">Field.GetStringValue(IFormatProvider)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetStringValue_System_String_">Field.GetStringValue(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetStringValue_System_String_System_IFormatProvider_">Field.GetStringValue(String, IFormatProvider)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetReaderValue">Field.GetReaderValue()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetTokenStreamValue">Field.GetTokenStreamValue()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetStringValue_System_String_">Field.SetStringValue(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetReaderValue_System_IO_TextReader_">Field.SetReaderValue(TextReader)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetBytesValue_Lucene_Net_Util_BytesRef_">Field.SetBytesValue(BytesRef)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetBytesValue_System_Byte___">Field.SetBytesValue(Byte[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetByteValue_System_Byte_">Field.SetByteValue(Byte)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetInt16Value_System_Int16_">Field.SetInt16Value(Int16)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetInt32Value_System_Int32_">Field.SetInt32Value(Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetInt64Value_System_Int64_">Field.SetInt64Value(Int64)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetSingleValue_System_Single_">Field.SetSingleValue(Single)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetDoubleValue_System_Double_">Field.SetDoubleValue(Double)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_SetTokenStream_Lucene_Net_Analysis_TokenStream_">Field.SetTokenStream(TokenStream)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_Name">Field.Name</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_Boost">Field.Boost</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetNumericValue">Field.GetNumericValue()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_NumericType">Field.NumericType</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetByteValue">Field.GetByteValue()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetInt16Value">Field.GetInt16Value()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetInt32Value">Field.GetInt32Value()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetInt64Value">Field.GetInt64Value()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetSingleValue">Field.GetSingleValue()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetDoubleValue">Field.GetDoubleValue()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetBinaryValue">Field.GetBinaryValue()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_ToString">Field.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_FieldType">Field.FieldType</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_IndexableFieldType">Field.IndexableFieldType</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_GetTokenStream_Lucene_Net_Analysis_Analyzer_">Field.GetTokenStream(Analyzer)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Documents.Field.html#Lucene_Net_Documents_Field_TranslateFieldType_Lucene_Net_Documents_Field_Store_Lucene_Net_Documents_Field_Index_Lucene_Net_Documents_Field_TermVector_">Field.TranslateFieldType(Field.Store, Field.Index, Field.TermVector)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Documents.html">Lucene.Net.Documents</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Documents_Int64Field_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class Int64Field : Field, IIndexableField</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Int64Field__ctor_System_String_System_Int64_Lucene_Net_Documents_Field_Store_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Int64Field.%23ctor(System.String%2CSystem.Int64%2CLucene.Net.Documents.Field.Store)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net/Document/LongField.cs/#L177">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Int64Field__ctor_" data-uid="Lucene.Net.Documents.Int64Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Int64Field__ctor_System_String_System_Int64_Lucene_Net_Documents_Field_Store_" data-uid="Lucene.Net.Documents.Int64Field.#ctor(System.String,System.Int64,Lucene.Net.Documents.Field.Store)">Int64Field(String, Int64, Field.Store)</h4>
+  <div class="markdown level1 summary"><p>Creates a stored or un-stored <a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a> with the provided value
+and default <code>precisionStep</code> 
+<a class="xref" href="Lucene.Net.Util.NumericUtils.html#Lucene_Net_Util_NumericUtils_PRECISION_STEP_DEFAULT">PRECISION_STEP_DEFAULT</a> (4). </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Int64Field(string name, long value, Field.Store stored)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>field name </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>64-bit <span class="xref">System.Int64</span> value </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.Field.Store.html">Field.Store</a></td>
+        <td><span class="parametername">stored</span></td>
+        <td><p><a class="xref" href="Lucene.Net.Documents.Field.Store.html#Lucene_Net_Documents_Field_Store_YES">YES</a> if the content should also be stored </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>if the field <code data-dev-comment-type="paramref" class="paramref">name</code> is <code>null</code>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Int64Field__ctor_System_String_System_Int64_Lucene_Net_Documents_FieldType_.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Int64Field.%23ctor(System.String%2CSystem.Int64%2CLucene.Net.Documents.FieldType)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net/Document/LongField.cs/#L193">View Source</a>
+  </span>
+  <a id="Lucene_Net_Documents_Int64Field__ctor_" data-uid="Lucene.Net.Documents.Int64Field.#ctor*"></a>
+  <h4 id="Lucene_Net_Documents_Int64Field__ctor_System_String_System_Int64_Lucene_Net_Documents_FieldType_" data-uid="Lucene.Net.Documents.Int64Field.#ctor(System.String,System.Int64,Lucene.Net.Documents.FieldType)">Int64Field(String, Int64, FieldType)</h4>
+  <div class="markdown level1 summary"><p>Expert: allows you to customize the <a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Int64Field(string name, long value, FieldType type)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">name</span></td>
+        <td><p>field name </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int64</span></td>
+        <td><span class="parametername">value</span></td>
+        <td><p>64-bit <span class="xref">System.Int64</span> value </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a></td>
+        <td><span class="parametername">type</span></td>
+        <td><p>customized field type: must have <a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_NumericType">NumericType</a>
+       of <a class="xref" href="Lucene.Net.Documents.NumericType.html#Lucene_Net_Documents_NumericType_INT64">INT64</a>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.ArgumentNullException</span></td>
+        <td><p>if the field <code data-dev-comment-type="paramref" class="paramref">name</code> or <code data-dev-comment-type="paramref" class="paramref">type</code> is <a class="xref" href="Lucene.Net.Documents.NumericType.html#Lucene_Net_Documents_NumericType_NONE">NONE</a> </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.ArgumentException</span></td>
+        <td><p>if the field type does not have a 
+<a class="xref" href="Lucene.Net.Documents.FieldType.html#Lucene_Net_Documents_FieldType_NumericType">NumericType</a> of <a class="xref" href="Lucene.Net.Documents.NumericType.html#Lucene_Net_Documents_NumericType_INT64">INT64</a> </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Int64Field_TYPE_NOT_STORED.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Int64Field.TYPE_NOT_STORED%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net/Document/LongField.cs/#L131">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Documents_Int64Field_TYPE_NOT_STORED" data-uid="Lucene.Net.Documents.Int64Field.TYPE_NOT_STORED">TYPE_NOT_STORED</h4>
+  <div class="markdown level1 summary"><p>Type for a <a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a> that is not stored:
+normalization factors, frequencies, and positions are omitted.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly FieldType TYPE_NOT_STORED</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Int64Field_TYPE_STORED.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Int64Field.TYPE_STORED%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net/Document/LongField.cs/#L151">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Documents_Int64Field_TYPE_STORED" data-uid="Lucene.Net.Documents.Int64Field.TYPE_STORED">TYPE_STORED</h4>
+  <div class="markdown level1 summary"><p>Type for a stored <a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a>:
+normalization factors, frequencies, and positions are omitted.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly FieldType TYPE_STORED</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Documents.FieldType.html">FieldType</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Index.IIndexableField.html">IIndexableField</a>
+  </div>
+  <h3 id="extensionmethods">Extension Methods</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.Documents.Extensions.IndexableFieldExtensions.html#Lucene_Net_Documents_Extensions_IndexableFieldExtensions_GetByteValueOrDefault_Lucene_Net_Index_IIndexableField_">IndexableFieldExtensions.GetByteValueOrDefault(IIndexableField)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Documents.Extensions.IndexableFieldExtensions.html#Lucene_Net_Documents_Extensions_IndexableFieldExtensions_GetInt16ValueOrDefault_Lucene_Net_Index_IIndexableField_">IndexableFieldExtensions.GetInt16ValueOrDefault(IIndexableField)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Documents.Extensions.IndexableFieldExtensions.html#Lucene_Net_Documents_Extensions_IndexableFieldExtensions_GetInt32ValueOrDefault_Lucene_Net_Index_IIndexableField_">IndexableFieldExtensions.GetInt32ValueOrDefault(IIndexableField)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Documents.Extensions.IndexableFieldExtensions.html#Lucene_Net_Documents_Extensions_IndexableFieldExtensions_GetInt64ValueOrDefault_Lucene_Net_Index_IIndexableField_">IndexableFieldExtensions.GetInt64ValueOrDefault(IIndexableField)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Documents.Extensions.IndexableFieldExtensions.html#Lucene_Net_Documents_Extensions_IndexableFieldExtensions_GetSingleValueOrDefault_Lucene_Net_Index_IIndexableField_">IndexableFieldExtensions.GetSingleValueOrDefault(IIndexableField)</a>
+  </div>
+  <div>
+      <a class="xref" href="Lucene.Net.Documents.Extensions.IndexableFieldExtensions.html#Lucene_Net_Documents_Extensions_IndexableFieldExtensions_GetDoubleValueOrDefault_Lucene_Net_Index_IIndexableField_">IndexableFieldExtensions.GetDoubleValueOrDefault(IIndexableField)</a>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00013/websites/apidocs/apiSpec/new?filename=Lucene_Net_Documents_Int64Field.md&amp;value=---%0Auid%3A%20Lucene.Net.Documents.Int64Field%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/fix/apidocs-layout/src/Lucene.Net/Document/LongField.cs/#L125" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

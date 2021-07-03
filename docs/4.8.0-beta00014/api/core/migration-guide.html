@@ -1,0 +1,689 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Apache Lucene.NET 4.8.0 Migration Guide | Apache Lucene.NET 4.8.0-beta00014 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Apache Lucene.NET 4.8.0 Migration Guide | Apache Lucene.NET 4.8.0-beta00014 Documentation ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00014/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Migration.Guide">
+
+  <h1 id="apache-lucenenet-480-migration-guide">Apache Lucene.NET 4.8.0 Migration Guide</h1>
+
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<h2 id="net-api-conventions">.NET API Conventions</h2>
+<p>Several Java conventions were replaced with their .NET counterparts:</p>
+<ul>
+<li><p>Classes suffixed with <code>Comparator</code> are now suffixed with <code>Comparer</code>.</p>
+</li>
+<li><p>Most iterator classes were converted to .NET enumerators.</p>
+<ul>
+<li><p>Instead of <code>Iterator()</code>, call <code>GetEnumerator()</code> (in some cases, it may be <code>GetIterator()</code>).</p>
+</li>
+<li><p>Instead of <code>HasNext()</code>, call <code>MoveNext()</code> however note that this will advance the position of the enumerator.</p>
+</li>
+<li><p>Instead of <code>Next()</code> the return value can be retrieved from the <code>Current</code> property after calling <code>MoveNext()</code>.</p>
+</li>
+</ul>
+</li>
+<li><p>Classes and members that include numeric type names now use the language-agnostic .NET name. For example:</p>
+<ul>
+<li><p>Instead of <code>Short</code> or <code>GetShort()</code> use <code>Int16</code> or <code>GetInt16()</code>.</p>
+</li>
+<li><p>Instead of <code>Integer</code> or <code>GetInteger()</code> use <code>Int32</code> or <code>GetInt32()</code>.</p>
+</li>
+<li><p>Instead of <code>Long</code> or <code>GetLong()</code> use <code>Int364</code> or <code>GetInt64()</code>.</p>
+</li>
+<li><p>Instead of <code>Float</code> use <code>Single</code>. Note that <code>Lucene.Net.Queries.Function.ValueSources.SingleFunction</code> was renamed <code>Lucene.Net.Queries.Function.ValueSources.SingularFunction</code> to distinguish it from the <code>System.Single</code> data type.</p>
+</li>
+</ul>
+</li>
+<li><p>For collections, the <code>Size</code> property is now named <code>Count</code>.</p>
+</li>
+<li><p>For arrays and files, the <code>Size</code> property is now named <code>Length</code>.</p>
+</li>
+<li><p>Some classes, enums, and interfaces have been de-nested from their original Lucene location to make them easier to find when using Intellisense.</p>
+</li>
+<li><p>Some methods were lacking a verb, so the verb <code>Get</code> was added to make the method&#39;s function more clear. For example, instead of <code>Analysis.TokenStream()</code> we now have <code>Analysis.GetTokenStream()</code>.</p>
+</li>
+</ul>
+<h2 id="four-dimensional-enumerations">Four-dimensional enumerations</h2>
+<p>Flexible indexing changed the low level fields/terms/docs/positions
+enumeration APIs.  Here are the major changes:</p>
+<ul>
+<li><p>Terms are now binary in nature (arbitrary <code>byte[]</code>), represented
+by the <code>BytesRef</code> class (which provides an offset + length &quot;slice&quot;
+into an existing <code>byte[]</code>).</p>
+</li>
+<li><p>Fields are separately enumerated (<code>Fields.GetEnumerator()</code>) from the terms
+within each field (<code>TermEnum</code>).  So instead of this:</p>
+<pre><code class="lang-cs">TermEnum termsEnum = ...;
+while (termsEnum.Next())
+{
+    Term t = termsEnum.Term;
+    Console.WriteLine(&quot;field=&quot; + t.Field + &quot;; text=&quot; + t.Text);
+}
+</code></pre><p>  Do this:</p>
+<pre><code class="lang-cs">foreach (string field in fields)
+{
+    Terms terms = fields.GetTerms(field);
+    TermsEnum termsEnum = terms.GetEnumerator();
+    BytesRef text;
+    while(termsEnum.MoveNext())
+    {
+        Console.WriteLine(&quot;field=&quot; + field + &quot;; text=&quot; + termsEnum.Current.Utf8ToString());
+    }
+}
+</code></pre></li>
+<li><p><code>TermDocs</code> is renamed to <code>DocsEnum</code>.  Instead of this:</p>
+<pre><code class="lang-cs">while (td.Next())
+{
+    int doc = td.Doc;
+    ...
+}
+</code></pre><p>  do this:</p>
+<pre><code class="lang-cs">int doc;
+while ((doc = td.Next()) != DocsEnum.NO_MORE_DOCS)
+{
+    ...
+}
+</code></pre><p>  Instead of this:</p>
+<pre><code class="lang-cs">if (td.SkipTo(target))
+{
+    int doc = td.Doc;
+    ...
+}
+</code></pre><p>  do this:</p>
+<pre><code class="lang-cs">if ((doc = td.Advance(target)) != DocsEnum.NO_MORE_DOCS)
+{
+    ...
+}
+</code></pre></li>
+<li><p><code>TermPositions</code> is renamed to <code>DocsAndPositionsEnum</code>, and no longer
+extends the docs only enumerator (<code>DocsEnum</code>).</p>
+</li>
+<li><p>Deleted docs are no longer implicitly filtered from
+docs/positions enums.  Instead, you pass a <code>IBits</code>
+<code>SkipDocs</code> (set bits are skipped) when obtaining the enums.  Also,
+you can now ask a reader for its deleted docs.</p>
+</li>
+<li><p>The docs/positions enums cannot seek to a term.  Instead,
+<code>TermsEnum</code> is able to seek, and then you request the
+docs/positions enum from that <code>TermsEnum</code>.</p>
+</li>
+<li><p><code>TermsEnum</code>&#39;s seek method returns more information.  So instead of this:</p>
+<pre><code class="lang-cs">Term t;
+TermEnum termEnum = reader.Terms(t);
+if (t.Equals(termEnum.Term))
+{
+    ...
+}
+</code></pre><p>  do this:</p>
+<pre><code class="lang-cs">TermsEnum termsEnum = ...;
+BytesRef text;
+if (termsEnum.Seek(text) == TermsEnum.SeekStatus.FOUND)
+{
+    ...
+}
+</code></pre><p>  <code>SeekStatus</code> also contains <code>END</code> (enumerator is done) and <code>NOT_FOUND</code> (term was not found but enumerator is now positioned to the next term).</p>
+</li>
+<li><p><code>TermsEnum</code> has an <code>Ord</code> property, returning the long numeric
+ordinal (ie, first term is 0, next is 1, and so on) for the term
+it&#39;s not positioned to.  There is also a corresponding Seek(long
+ord) method.  Note that these members are optional; in
+particular the <code>MultiFields</code> <code>TermsEnum</code> does not implement them.</p>
+</li>
+<li><p>How you obtain the enums has changed.  The primary entry point is
+the <code>Fields</code> class.  If you know your reader is a single segment
+reader, do this:</p>
+<pre><code class="lang-cs">Fields fields = reader.Fields();
+if (fields != null)
+{
+    ...
+}
+</code></pre><p>  If the reader might be multi-segment, you must do this:</p>
+<pre><code class="lang-cs">Fields fields = MultiFields.GetFields(reader);
+if (fields != null)
+{
+    ...
+}
+</code></pre><p>  The fields may be <code>null</code> (eg if the reader has no fields).<br>
+  Note that the <code>MultiFields</code> approach entails a performance hit on <code>MultiReaders</code>, as it must merge terms/docs/positions on the fly. It&#39;s generally better to instead get the sequential readers (use <code>Lucene.Net.Util.ReaderUtil</code>) and then step through those readers yourself, if you can (this is how Lucene drives searches).<br>
+  If you pass a <code>SegmentReader</code> to <code>MultiFields.GetFields()</code> it will simply return <code>reader.GetFields()</code>, so there is no performance hit in that case.<br>
+  Once you have a non-null <code>Fields</code> you can do this:</p>
+<pre><code class="lang-cs">Terms terms = fields.GetTerms(&quot;field&quot;);
+if (terms != null)
+{
+    ...
+}
+</code></pre><p>  The terms may be <code>null</code> (eg if the field does not exist).<br>
+  Once you have a non-null terms you can get an enum like this:</p>
+<pre><code class="lang-cs">TermsEnum termsEnum = terms.GetIterator();
+</code></pre><p>  The returned <code>TermsEnum</code> will not be <code>null</code>.<br>
+  You can then .Next() through the TermsEnum, or Seek.  If you want a <code>DocsEnum</code>, do this:</p>
+<pre><code class="lang-cs">IBits liveDocs = reader.GetLiveDocs();
+DocsEnum docsEnum = null;
+
+docsEnum = termsEnum.Docs(liveDocs, docsEnum, needsFreqs);
+</code></pre><p>  You can pass in a prior <code>DocsEnum</code> and it will be reused if possible.<br>
+  Likewise for <code>DocsAndPositionsEnum</code>.<br>
+  <code>IndexReader</code> has several sugar methods (which just go through the above steps, under the hood).  Instead of:</p>
+<pre><code class="lang-cs">Term t;
+TermDocs termDocs = reader.TermDocs;
+termDocs.Seek(t);
+</code></pre><p>  do this:</p>
+<pre><code class="lang-cs">Term t;
+DocsEnum docsEnum = reader.GetTermDocsEnum(t);
+</code></pre><p>  Likewise for <code>DocsAndPositionsEnum</code>.</p>
+</li>
+</ul>
+<h2 id="lucene-2380httpsissuesapacheorgjirabrowselucene-2380-fieldcachegetstringsindex----fieldcachegetdoctermsindex"><a href="https://issues.apache.org/jira/browse/LUCENE-2380">LUCENE-2380</a>: FieldCache.GetStrings/Index --&gt; FieldCache.GetDocTerms/Index</h2>
+<ul>
+<li><p>The field values returned when sorting by <code>SortField.STRING</code> are now
+<code>BytesRef</code>.  You can call <code>value.Utf8ToString()</code> to convert back to
+string, if necessary.</p>
+</li>
+<li><p>In <code>FieldCache</code>, <code>GetStrings</code> (returning <code>string[]</code>) has been replaced
+with <code>GetTerms</code> (returning a <code>BinaryDocValues</code> instance).
+<code>BinaryDocValues</code> provides a <code>Get</code> method, taking a <code>docID</code> and a <code>BytesRef</code>
+to fill (which must not be <code>null</code>), and it fills it in with the
+reference to the bytes for that term.<br>
+  If you had code like this before:</p>
+<pre><code class="lang-cs">string[] values = FieldCache.DEFAULT.GetStrings(reader, field);
+...
+string aValue = values[docID];
+</code></pre><p>  you can do this instead:</p>
+<pre><code class="lang-cs">BinaryDocValues values = FieldCache.DEFAULT.GetTerms(reader, field);
+...
+BytesRef term = new BytesRef();
+values.Get(docID, term);
+string aValue = term.Utf8ToString();
+</code></pre><p>  Note however that it can be costly to convert to <code>String</code>, so it&#39;s better to work directly with the <code>BytesRef</code>.</p>
+</li>
+<li><p>Similarly, in <code>FieldCache</code>, GetStringIndex (returning a <code>StringIndex</code>
+instance, with direct arrays <code>int[]</code> order and <code>String[]</code> lookup) has
+been replaced with <code>GetTermsIndex</code> (returning a
+<code>SortedDocValues</code> instance).  <code>SortedDocValues</code> provides the
+<code>GetOrd(int docID)</code> method to lookup the int order for a document,
+<code>LookupOrd(int ord, BytesRef result)</code> to lookup the term from a given
+order, and the sugar method <code>Get(int docID, BytesRef result)</code>
+which internally calls <code>GetOrd</code> and then <code>LookupOrd</code>.<br>
+  If you had code like this before:</p>
+<pre><code class="lang-cs">StringIndex idx = FieldCache.DEFAULT.GetStringIndex(reader, field);
+...
+int ord = idx.order[docID];
+String aValue = idx.lookup[ord];
+</code></pre><p>  you can do this instead:</p>
+<pre><code class="lang-cs">DocTermsIndex idx = FieldCache.DEFAULT.GetTermsIndex(reader, field);
+...
+int ord = idx.GetOrd(docID);
+BytesRef term = new BytesRef();
+idx.LookupOrd(ord, term);
+string aValue = term.Utf8ToString();
+</code></pre><p>  Note however that it can be costly to convert to <code>String</code>, so it&#39;s better to work directly with the <code>BytesRef</code>.<br>
+  <code>DocTermsIndex</code> also has a <code>GetTermsEnum()</code> method, which returns an iterator (<code>TermsEnum</code>) over the term values in the index (ie, iterates ord = 0..NumOrd-1).</p>
+</li>
+<li><p><code>FieldComparator.StringComparatorLocale</code> has been removed.
+(it was very CPU costly since it does not compare using
+indexed collation keys; use CollationKeyFilter for better
+performance), since it converts <code>BytesRef</code> -&gt; <code>String</code> on the fly.</p>
+</li>
+<li><p><code>FieldComparator.StringOrdValComparator</code> has been renamed to
+<code>FieldComparer.TermOrdValComparer</code>, and now uses <code>BytesRef</code> for its values.
+Likewise for <code>StringValComparator</code>, renamed to <code>TermValComparer</code>.
+This means when sorting by <code>SortField.STRING</code> or
+<code>SortField.STRING_VAL</code> (or directly invoking these comparers) the
+values returned in the <code>FieldDoc.Fields</code> array will be <code>BytesRef</code> not
+<code>String</code>.  You can call the <code>.Utf8ToString()</code> method on the <code>BytesRef</code>
+instances, if necessary.</p>
+</li>
+</ul>
+<h2 id="lucene-2600httpsissuesapacheorgjirabrowselucene-2600-indexreaders-are-now-read-only"><a href="https://issues.apache.org/jira/browse/LUCENE-2600">LUCENE-2600</a>: <code>IndexReader</code>s are now read-only</h2>
+<p>Instead of <code>IndexReader.IsDeleted(int n)</code>, do this:</p>
+<pre><code class="lang-cs">using Lucene.Net.Util;
+using Lucene.Net.Index;
+
+IBits liveDocs = MultiFields.GetLiveDocs(indexReader);
+if (liveDocs != null &amp;&amp; !liveDocs.Get(docID))
+{
+    // document is deleted...
+}
+</code></pre><h2 id="lucene-2858httpsissuesapacheorgjirabrowselucene-2858-lucene-3733httpsissuesapacheorgjirabrowselucene-3733-indexreader----atomicreadercompositereaderdirectoryreader-refactoring"><a href="https://issues.apache.org/jira/browse/LUCENE-2858">LUCENE-2858</a>, <a href="https://issues.apache.org/jira/browse/LUCENE-3733">LUCENE-3733</a>: <code>IndexReader</code> --&gt; <code>AtomicReader</code>/<code>CompositeReader</code>/<code>DirectoryReader</code> refactoring</h2>
+<p>The abstract class <code>IndexReader</code> has been 
+refactored to expose only essential methods to access stored fields 
+during display of search results. It is no longer possible to retrieve 
+terms or postings data from the underlying index, not even deletions are 
+visible anymore. You can still pass <code>IndexReader</code> as constructor parameter 
+to <code>IndexSearcher</code> and execute your searches; Lucene will automatically 
+delegate procedures like query rewriting and document collection atomic 
+subreaders. </p>
+<p>If you want to dive deeper into the index and want to write own queries, 
+take a closer look at the new abstract sub-classes <code>AtomicReader</code> and 
+<code>CompositeReader</code>: </p>
+<p><code>AtomicReader</code> instances are now the only source of <code>Terms</code>, <code>Postings</code>, 
+<code>DocValues</code> and <code>FieldCache</code>. Queries are forced to execute on an <code>AtomicReader</code> on a per-segment basis and <code>FieldCache</code>s are keyed by 
+<code>AtomicReader</code>s. </p>
+<p>Its counterpart <code>CompositeReader</code> exposes a utility method to retrieve 
+its composites. But watch out, composites are not necessarily atomic. 
+Next to the added type-safety we also removed the notion of 
+index-commits and version numbers from the abstract <code>IndexReader</code>, the 
+associations with <code>IndexWriter</code> were pulled into a specialized 
+<code>DirectoryReader</code>. To open <code>Directory</code>-based indexes use 
+<code>DirectoryReader.Open()</code>, the corresponding method in <code>IndexReader</code> is now 
+deprecated for easier migration. Only <code>DirectoryReader</code> supports commits, 
+versions, and reopening with <code>OpenIfChanged()</code>. Terms, postings, 
+docvalues, and norms can from now on only be retrieved using 
+<code>AtomicReader</code>; <code>DirectoryReader</code> and <code>MultiReader</code> extend <code>CompositeReader</code>, 
+only offering stored fields and access to the sub-readers (which may be 
+composite or atomic). </p>
+<p>If you have more advanced code dealing with custom <code>Filter</code>s, you might 
+have noticed another new class hierarchy in Lucene (see <a href="https://issues.apache.org/jira/browse/LUCENE-2831">LUCENE-2831</a>): 
+<code>IndexReaderContext</code> with corresponding Atomic-/<code>CompositeReaderContext</code>. </p>
+<p>The move towards per-segment search Lucene 2.9 exposed lots of custom 
+<code>Query</code>s and <code>Filter</code>s that couldn&#39;t handle it. For example, some <code>Filter</code> 
+implementations expected the <code>IndexReader</code> passed in is identical to the 
+<code>IndexReader</code> passed to <code>IndexSearcher</code> with all its advantages like 
+absolute document IDs etc. Obviously this &quot;paradigm-shift&quot; broke lots of 
+applications and especially those that utilized cross-segment data 
+structures (like Apache Solr). </p>
+<p>In Lucene 4.0, we introduce <code>IndexReaderContext</code>s &quot;searcher-private&quot; 
+reader hierarchy. During <code>Query</code> or <code>Filter</code> execution Lucene no longer 
+passes raw readers down <code>Query</code>s, <code>Filter</code>s or <code>Collector</code>s; instead 
+components are provided an <code>AtomicReaderContext</code> (essentially a hierarchy 
+leaf) holding relative properties like the document-basis in relation to 
+the top-level reader. This allows <code>Query</code>s and <code>Filter</code> to build up logic 
+based on document IDs, albeit the per-segment orientation. </p>
+<p>There are still valid use-cases where top-level readers ie. &quot;atomic 
+views&quot; on the index are desirable. Let say you want to iterate all terms 
+of a complete index for auto-completion or faceting, Lucene provides
+utility wrappers like <code>SlowCompositeReaderWrapper</code> (<a href="https://issues.apache.org/jira/browse/LUCENE-2597">LUCENE-2597</a>) emulating 
+an <code>AtomicReader</code>. Note: using &quot;atomicity emulators&quot; can cause serious 
+slowdowns due to the need to merge terms, postings, <code>DocValues</code>, and 
+<code>FieldCache</code>, use them with care! </p>
+<h2 id="lucene-4306httpsissuesapacheorgjirabrowselucene-4306-getsequentialsubreaders-readerutilgather"><a href="https://issues.apache.org/jira/browse/LUCENE-4306">LUCENE-4306</a>: <code>GetSequentialSubReaders()</code>, <code>ReaderUtil.Gather()</code></h2>
+<p>The method <code>IndexReader.GetSequentialSubReaders()</code> was moved to <code>CompositeReader</code>
+(see <a href="https://issues.apache.org/jira/browse/LUCENE-2858">LUCENE-2858</a>, <a href="https://issues.apache.org/jira/browse/LUCENE-3733">LUCENE-3733</a>) and made protected. It is solely used by <code>CompositeReader</code> itself to build its reader tree. To get all atomic leaves
+of a reader, use <code>IndexReader.Leaves</code>, which also provides the doc base
+of each leave. Readers that are already atomic return itself as leaf with
+doc base 0. To emulate Lucene 3.x <code>GetSequentialSubReaders()</code>,
+use <code>Context.Children</code>.</p>
+<h2 id="lucene-2413httpsissuesapacheorgjirabrowselucene-2413lucene-3396httpsissuesapacheorgjirabrowselucene-3396-analyzer-package-changes-lucenes-core-and-contrib-analyzers-along-with-solrs-analyzers"><a href="https://issues.apache.org/jira/browse/LUCENE-2413">LUCENE-2413</a>,<a href="https://issues.apache.org/jira/browse/LUCENE-3396">LUCENE-3396</a>: Analyzer package changes Lucene&#39;s core and contrib analyzers, along with Solr&#39;s analyzers,</h2>
+<p>were consolidated into lucene/analysis. During the refactoring some
+package names have changed, and <code>ReusableAnalyzerBase</code> was renamed to
+<code>Analyzer</code>:</p>
+<ul>
+<li><code>Lucene.Net.Analysis.KeywordAnalyzer</code> -&gt; <code>Lucene.Net.Analysis.Core.KeywordAnalyzer</code></li>
+<li><code>Lucene.Net.Analysis.KeywordTokenizer</code> -&gt; <code>Lucene.Net.Analysis.Core.KeywordTokenizer</code></li>
+<li><code>Lucene.Net.Analysis.LetterTokenizer</code> -&gt; <code>Lucene.Net.Analysis.Core.LetterTokenizer</code></li>
+<li><code>Lucene.Net.Analysis.LowerCaseFilter</code> -&gt; <code>Lucene.Net.Analysis.Core.LowerCaseFilter</code></li>
+<li><code>Lucene.Net.Analysis.LowerCaseTokenizer</code> -&gt; <code>Lucene.Net.Analysis.Core.LowerCaseTokenizer</code></li>
+<li><code>Lucene.Net.Analysis.SimpleAnalyzer</code> -&gt; <code>Lucene.Net.Analysis.Core.SimpleAnalyzer</code></li>
+<li><code>Lucene.Net.Analysis.StopAnalyzer</code> -&gt; <code>Lucene.Net.Analysis.Core.StopAnalyzer</code></li>
+<li><code>Lucene.Net.Analysis.StopFilter</code> -&gt; <code>Lucene.Net.Analysis.Core.StopFilter</code></li>
+<li><code>Lucene.Net.Analysis.WhitespaceAnalyzer</code> -&gt; <code>Lucene.Net.Analysis.Core.WhitespaceAnalyzer</code></li>
+<li><code>Lucene.Net.Analysis.WhitespaceTokenizer</code> -&gt; <code>Lucene.Net.Analysis.Core.WhitespaceTokenizer</code></li>
+<li><code>Lucene.Net.Analysis.PorterStemFilter</code> -&gt; <code>Lucene.Net.Analysis.En.PorterStemFilter</code></li>
+<li><code>Lucene.Net.Analysis.ASCIIFoldingFilter</code> -&gt; <code>Lucene.Net.Analysis.Miscellaneous.ASCIIFoldingFilter</code></li>
+<li><code>Lucene.Net.Analysis.ISOLatin1AccentFilter</code> -&gt; <code>Lucene.Net.Analysis.Miscellaneous.ISOLatin1AccentFilter</code></li>
+<li><code>Lucene.Net.Analysis.KeywordMarkerFilter</code> -&gt; <code>Lucene.Net.Analysis.Miscellaneous.KeywordMarkerFilter</code></li>
+<li><code>Lucene.Net.Analysis.LengthFilter</code> -&gt; <code>Lucene.Net.Analysis.Miscellaneous.LengthFilter</code></li>
+<li><code>Lucene.Net.Analysis.PerFieldAnalyzerWrapper</code> -&gt; <code>Lucene.Net.Analysis.Miscellaneous.PerFieldAnalyzerWrapper</code></li>
+<li><code>Lucene.Net.Analysis.TeeSinkTokenFilter</code> -&gt; <code>Lucene.Net.Analysis.Sinks.TeeSinkTokenFilter</code></li>
+<li><code>Lucene.Net.Analysis.CharFilter</code> -&gt; <code>Lucene.Net.Analysis.CharFilter.CharFilter</code></li>
+<li><code>Lucene.Net.Analysis.BaseCharFilter</code> -&gt; <code>Lucene.Net.Analysis.CharFilter.BaseCharFilter</code></li>
+<li><code>Lucene.Net.Analysis.MappingCharFilter</code> -&gt; <code>Lucene.Net.Analysis.CharFilter.MappingCharFilter</code></li>
+<li><code>Lucene.Net.Analysis.NormalizeCharMap</code> -&gt; <code>Lucene.Net.Analysis.CharFilter.NormalizeCharMap</code></li>
+<li><code>Lucene.Net.Analysis.CharArraySet</code> -&gt; <code>Lucene.Net.Analysis.Util.CharArraySet</code></li>
+<li><code>Lucene.Net.Analysis.CharArrayMap</code> -&gt; <code>Lucene.Net.Analysis.Util.CharArrayMap</code></li>
+<li><code>Lucene.Net.Analysis.ReusableAnalyzerBase</code> -&gt; <code>Lucene.Net.Analysis.Analyzer</code></li>
+<li><code>Lucene.Net.Analysis.StopwordAnalyzerBase</code> -&gt; <code>Lucene.Net.Analysis.Util.StopwordAnalyzerBase</code></li>
+<li><code>Lucene.Net.Analysis.WordListLoader</code> -&gt; <code>Lucene.Net.Analysis.Util.WordListLoader</code></li>
+<li><code>Lucene.Net.Analysis.CharTokenizer</code> -&gt; <code>Lucene.Net.Analysis.Util.CharTokenizer</code></li>
+<li><code>Lucene.Net.Util.CharacterUtils</code> -&gt; <code>Lucene.Net.Analysis.Util.CharacterUtils</code></li>
+</ul>
+<h2 id="lucene-2514httpsissuesapacheorgjirabrowselucene-2514-collators"><a href="https://issues.apache.org/jira/browse/LUCENE-2514">LUCENE-2514</a>: Collators</h2>
+<p>The option to use a Collator&#39;s order (instead of binary order) for
+sorting and range queries has been moved to lucene/queries.
+The Collated TermRangeQuery/Filter has been moved to SlowCollatedTermRangeQuery/Filter, 
+and the collated sorting has been moved to <code>SlowCollatedStringComparer</code>.</p>
+<p>Note: this functionality isn&#39;t very scalable and if you are using it, consider 
+indexing collation keys with the collation support in the analysis module instead.</p>
+<p>To perform collated range queries, use the collating analyzer: <code>ICUCollationKeyAnalyzer</code>, and set <code>qp.AnalyzeRangeTerms = true</code>.</p>
+<p><code>TermRangeQuery</code> and <code>TermRangeFilter</code> now work purely on bytes. Both have helper factory methods
+(<code>NewStringRange</code>) similar to the <code>NumericRange</code> API, to easily perform range queries on <code>String</code>s.</p>
+<h2 id="lucene-2883httpsissuesapacheorgjirabrowselucene-2883-valuesource-changes"><a href="https://issues.apache.org/jira/browse/LUCENE-2883">LUCENE-2883</a>: <code>ValueSource</code> changes</h2>
+<p>Lucene&#39;s <code>Lucene.Net.Search.Function.ValueSource</code> based functionality, was consolidated
+into <code>Lucene.Net</code>/<code>Lucene.Net.Queries</code> along with Solr&#39;s similar functionality.  The following classes were moved:</p>
+<ul>
+<li><code>Lucene.Net.Search.Function.CustomScoreQuery</code> -&gt; <code>Lucene.Net.Queries.CustomScoreQuery</code></li>
+<li><code>Lucene.Net.Search.Function.CustomScoreProvider</code> -&gt; <code>Lucene.Net.Queries.CustomScoreProvider</code></li>
+<li><code>Lucene.Net.Search.Function.NumericIndexDocValueSource</code> -&gt; <code>Lucene.Net.Queries.Function.ValueSource.NumericIndexDocValueSource</code></li>
+</ul>
+<p>The following lists the replacement classes for those removed:</p>
+<ul>
+<li><code>Lucene.Net.Search.Function.DocValues</code> -&gt; <code>Lucene.Net.Queries.Function.DocValues</code></li>
+<li><code>Lucene.Net.Search.Function.FieldCacheSource</code> -&gt; <code>Lucene.Net.Queries.Function.ValueSources.FieldCacheSource</code></li>
+<li><code>Lucene.Net.Search.Function.FieldScoreQuery</code> -&gt;<code>Lucene.Net.Queries.Function.FunctionQuery</code></li>
+<li><code>Lucene.Net.Search.Function.FloatFieldSource</code> -&gt; <code>Lucene.Net.Queries.Function.ValueSources.FloatFieldSource</code></li>
+<li><code>Lucene.Net.Search.Function.IntFieldSource</code> -&gt; <code>Lucene.Net.Queries.Function.ValueSources.IntFieldSource</code></li>
+<li><code>Lucene.Net.Search.Function.OrdFieldSource</code> -&gt; <code>Lucene.Net.Queries.Function.ValueSources.OrdFieldSource</code></li>
+<li><code>Lucene.Net.Search.Function.ReverseOrdFieldSource</code> -&gt; <code>Lucene.Net.Queries.Function.ValueSources.ReverseOrdFieldSource</code></li>
+<li><code>Lucene.Net.Search.Function.ShortFieldSource</code> -&gt; <code>Lucene.Net.Queries.Function.ValueSources.ShortFieldSource</code></li>
+<li><code>Lucene.Net.Search.Function.ValueSource</code> -&gt; <code>Lucene.Net.Queries.Function.ValueSource</code></li>
+<li><code>Lucene.Net.Search.Function.ValueSourceQuery</code> -&gt; <code>Lucene.Net.Queries.Function.FunctionQuery</code></li>
+</ul>
+<p><code>DocValues</code> are now named <code>FunctionValues</code>, to not confuse with Lucene&#39;s per-document values.</p>
+<h2 id="lucene-2392httpsissuesapacheorgjirabrowselucene-2392-enable-flexible-scoring"><a href="https://issues.apache.org/jira/browse/LUCENE-2392">LUCENE-2392</a>: Enable flexible scoring</h2>
+<p>The existing <code>Similarity</code> API is now <code>TFIDFSimilarity</code>, if you were extending
+<code>Similarity</code> before, you should likely extend this instead.</p>
+<p><code>Weight.Normalize()</code> no longer takes a norm value that incorporates the top-level
+boost from outer queries such as <code>BooleanQuery</code>, instead it takes 2 parameters,
+the outer boost (<code>topLevelBoost</code>) and the norm. <code>Weight.SumOfSquaredWeights</code> has
+been renamed to <code>Weight.GetValueForNormalization()</code>.</p>
+<p>The <code>ScorePayload()</code> method now takes a <code>BytesRef</code>. It is never <code>null</code>.</p>
+<h2 id="lucene-3283httpsissuesapacheorgjirabrowselucene-3283-query-parsers-moved-to-separate-module"><a href="https://issues.apache.org/jira/browse/LUCENE-3283">LUCENE-3283</a>: Query parsers moved to separate module</h2>
+<p>Lucene&#39;s core <code>Lucene.Net.QueryParsers</code> query parsers have been consolidated into lucene/queryparser,
+where other <code>QueryParser</code>s from the codebase will also be placed.  The following classes were moved:</p>
+<ul>
+<li><code>Lucene.Net.QueryParsers.CharStream</code> -&gt; <code>Lucene.Net.QueryParsers.Classic.CharStream</code></li>
+<li><code>Lucene.Net.QueryParsers.FastCharStream</code> -&gt; <code>Lucene.Net.QueryParsers.Classic.FastCharStream</code></li>
+<li><code>Lucene.Net.QueryParsers.MultiFieldQueryParser</code> -&gt; <code>Lucene.Net.QueryParsers.Classic.MultiFieldQueryParser</code></li>
+<li><code>Lucene.Net.QueryParsers.ParseException</code> -&gt; <code>Lucene.Net.QueryParsers.Classic.ParseException</code></li>
+<li><code>Lucene.Net.QueryParsers.QueryParser</code> -&gt; <code>Lucene.Net.QueryParsers.Classic.QueryParser</code></li>
+<li><code>Lucene.Net.QueryParsers.QueryParserBase</code> -&gt; <code>Lucene.Net.QueryParsers.Classic.QueryParserBase</code></li>
+<li><code>Lucene.Net.QueryParsers.QueryParserConstants</code> -&gt; <code>Lucene.Net.QueryParsers.Classic.QueryParserConstants</code></li>
+<li><code>Lucene.Net.QueryParsers.QueryParserTokenManager</code> -&gt; <code>Lucene.Net.QueryParsers.Classic.QueryParserTokenManager</code></li>
+<li><code>Lucene.Net.QueryParsers.QueryParserToken</code> -&gt; <code>Lucene.Net.QueryParsers.Classic.Token</code></li>
+<li><code>Lucene.Net.QueryParsers.QueryParserTokenMgrError</code> -&gt; <code>Lucene.Net.QueryParsers.Classic.TokenMgrError</code></li>
+</ul>
+<h2 id="lucene-2308httpsissuesapacheorgjirabrowselucene-2308-lucene-3453httpsissuesapacheorgjirabrowselucene-3453-separate-indexablefieldtype-from-field-instances"><a href="https://issues.apache.org/jira/browse/LUCENE-2308">LUCENE-2308</a>, <a href="https://issues.apache.org/jira/browse/LUCENE-3453">LUCENE-3453</a>: Separate <code>IndexableFieldType</code> from <code>Field</code> instances</h2>
+<p>With this change, the indexing details (indexed, tokenized, norms,
+indexOptions, stored, etc.) are moved into a separate <code>FieldType</code>
+instance (rather than being stored directly on the <code>Field</code>).</p>
+<p>This means you can create the FieldType instance once, up front,
+for a given field, and then re-use that instance whenever you instantiate
+the Field.</p>
+<p>Certain field types are pre-defined since they are common cases:</p>
+<ul>
+<li><code>StringField</code>: indexes a <code>String</code> value as a single token (ie, does
+not tokenize).  This field turns off norms and indexes only doc
+IDS (does not index term frequency nor positions).  This field
+does not store its value, but exposes <code>TYPE_STORED</code> as well.</li>
+<li><code>TextField</code>: indexes and tokenizes a <code>String</code>, <code>Reader</code> or <code>TokenStream</code>
+value, without term vectors.  This field does not store its value,
+but exposes <code>TYPE_STORED</code> as well.</li>
+<li><code>StoredField</code>: field that stores its value</li>
+<li><code>DocValuesField</code>: indexes the value as a <code>DocValues</code> field</li>
+<li><code>NumericField</code>: indexes the numeric value so that <code>NumericRangeQuery</code>
+can be used at search-time.</li>
+</ul>
+<p>If your usage fits one of those common cases you can simply
+instantiate the above class.  If you need to store the value, you can
+add a separate <code>StoredField</code> to the document, or you can use
+<code>TYPE_STORED</code> for the field:</p>
+<pre><code class="lang-cs">Field f = new Field(&quot;field&quot;, &quot;value&quot;, StringField.TYPE_STORED);
+</code></pre><p>Alternatively, if an existing type is close to what you want but you
+need to make a few changes, you can copy that type and make changes:</p>
+<pre><code class="lang-cs">FieldType bodyType = new FieldType(TextField.TYPE_STORED)
+{
+    StoreTermVectors = true
+};
+</code></pre><p>You can of course also create your own <code>FieldType</code> from scratch:</p>
+<pre><code class="lang-cs">FieldType t = new FieldType
+{
+    Indexed = true,
+    Stored = true,
+    OmitNorms = true,
+    IndexOptions = IndexOptions.DOCS_AND_FREQS
+};
+t.Freeze();
+</code></pre><p><code>FieldType</code> has a <code>Freeze()</code> method to prevent further changes.</p>
+<p>There is also a deprecated transition API, providing the same <code>Index</code>,
+<code>Store</code>, <code>TermVector</code> enums from 3.x, and <code>Field</code> constructors taking these
+enums.</p>
+<p>When migrating from the 3.x API, if you did this before:</p>
+<pre><code class="lang-cs">new Field(&quot;field&quot;, &quot;value&quot;, Field.Store.NO, Field.Indexed.NOT_ANALYZED_NO_NORMS)
+</code></pre><p>you can now do this:</p>
+<pre><code class="lang-cs">new StringField(&quot;field&quot;, &quot;value&quot;)
+</code></pre><p>(though note that <code>StringField</code> indexes <code>DOCS_ONLY</code>).</p>
+<p>If instead the value was stored:</p>
+<pre><code class="lang-cs">new Field(&quot;field&quot;, &quot;value&quot;, Field.Store.YES, Field.Indexed.NOT_ANALYZED_NO_NORMS)
+</code></pre><p>you can now do this:</p>
+<pre><code class="lang-cs">new Field(&quot;field&quot;, &quot;value&quot;, TextField.TYPE_STORED)
+</code></pre><p>If you didn&#39;t omit norms:</p>
+<pre><code class="lang-cs">new Field(&quot;field&quot;, &quot;value&quot;, Field.Store.YES, Field.Indexed.NOT_ANALYZED)
+</code></pre><p>you can now do this:</p>
+<pre><code class="lang-cs">FieldType ft = new FieldType(TextField.TYPE_STORED)
+{
+    OmitNorms = false
+};
+new Field(&quot;field&quot;, &quot;value&quot;, ft)
+</code></pre><p>If you did this before (value can be <code>String</code> or <code>TextReader</code>):</p>
+<pre><code class="lang-cs">new Field(&quot;field&quot;, value, Field.Store.NO, Field.Indexed.ANALYZED)
+</code></pre><p>you can now do this:</p>
+<pre><code class="lang-cs">new TextField(&quot;field&quot;, value, Field.Store.NO)
+</code></pre><p>If instead the value was stored:</p>
+<pre><code class="lang-cs">new Field(&quot;field&quot;, value, Field.Store.YES, Field.Indexed.ANALYZED)
+</code></pre><p>you can now do this:</p>
+<pre><code class="lang-cs">new TextField(&quot;field&quot;, value, Field.Store.YES)
+</code></pre><p>If in addition you omit norms:</p>
+<pre><code class="lang-cs">new Field(&quot;field&quot;, value, Field.Store.YES, Field.Indexed.ANALYZED_NO_NORMS)
+</code></pre><p>you can now do this:</p>
+<pre><code class="lang-cs">FieldType ft = new FieldType(TextField.TYPE_STORED)
+{
+    OmitNorms = true
+};
+new Field(&quot;field&quot;, value, ft)
+</code></pre><p>If you did this before (bytes is a <code>byte[]</code>):</p>
+<pre><code class="lang-cs">new Field(&quot;field&quot;, bytes)
+</code></pre><p>you can now do this:</p>
+<pre><code class="lang-cs">new StoredField(&quot;field&quot;, bytes)
+</code></pre><p>If you previously used the setter of <code>Document.Boost</code>, you must now pre-multiply
+the document boost into each <code>Field.Boost</code>.  If you have a
+multi-valued field, you should do this only for the first <code>Field</code>
+instance (ie, subsequent Field instance sharing the same field name
+should only include their per-field boost and not the document level
+boost) as the boost for multi-valued field instances are multiplied
+together by Lucene.</p>
+<h2 id="other-changes">Other changes</h2>
+<ul>
+<li><p><a href="https://issues.apache.org/jira/browse/LUCENE-2674">LUCENE-2674</a>:
+A new <code>IdfExplain</code> method was added to <code>Similarity</code> (which is now <code>TFIDFSimilarity</code>), that accepts an incoming docFreq.  If you subclass <code>TFIDFSimilarity</code>, make sure you also override this method on upgrade, otherwise your customizations won&#39;t run for certain <code>MultiTermQuery</code>s.</p>
+</li>
+<li><p><a href="https://issues.apache.org/jira/browse/LUCENE-2691">LUCENE-2691</a>: The near-real-time API has moved from <code>IndexWriter</code> to
+<code>DirectoryReader</code>.  Instead of <code>IndexWriter.GetReader()</code>, call
+<code>DirectoryReader.Open(IndexWriter)</code> or <code>DirectoryReader.OpenIfChanged(IndexWriter)</code>.</p>
+</li>
+<li><p><a href="https://issues.apache.org/jira/browse/LUCENE-2680">LUCENE-2690</a>: <code>MultiTermQuery</code> boolean rewrites per segment. Also <code>MultiTermQuery.GetTermsEnum()</code> now takes an <code>AttributeSource</code>. <code>FuzzyTermsEnum</code> is both consumer and producer of attributes: <code>MultiTermQuery.BoostAttribute</code> is added to the <code>FuzzyTermsEnum</code> and <code>MultiTermQuery</code>&#39;s rewrite mode consumes it. The other way round <code>MultiTermQuery.TopTermsBooleanQueryRewrite</code> supplies a global <code>AttributeSource</code> to each segments <code>TermsEnum</code>. The <code>TermsEnum</code> is consumer and gets the current minimum competitive boosts (<code>MultiTermQuery.MaxNonCompetitiveBoostAttribute</code>).</p>
+</li>
+<li><p><a href="https://issues.apache.org/jira/browse/LUCENE-2374">LUCENE-2374</a>: The backwards layer in <code>Attribute</code> was removed. To support correct reflection of <code>Attribute</code> instances, where the reflection was done using deprecated <code>ToString()</code> parsing, you have to now override <code>ReflectWith()</code> to customize output. <code>ToString()</code> is no longer implemented by <code>Attribute</code>, so if you have overridden <code>ToString()</code>, port your customization over to <code>ReflectWith()</code>. <code>ReflectAsString()</code> would then return what <code>ToString()</code> did before.</p>
+</li>
+<li><p><a href="https://issues.apache.org/jira/browse/LUCENE-2236">LUCENE-2236</a>, <a href="https://issues.apache.org/jira/browse/LUCENE-2912">LUCENE-2912</a>: <code>DefaultSimilarity</code> can no longer be set statically 
+(and dangerously) for the entire <code>AppDomain</code>.
+<code>Similarity</code> can now be configured on a per-field basis (via <code>PerFieldSimilarityWrapper</code>)
+<code>Similarity</code> has a lower-level API, if you want the higher-level vector-space API
+like in previous Lucene releases, then look at <code>TFIDFSimilarity</code>.</p>
+</li>
+<li><p><a href="https://issues.apache.org/jira/browse/LUCENE-1076">LUCENE-1076</a>: <code>TieredMergePolicy</code> is now the default merge policy.
+It&#39;s able to merge non-contiguous segments; this may cause problems
+for applications that rely on Lucene&#39;s internal document ID
+assignment.  If so, you should instead use <code>LogByteSize</code>/<code>DocMergePolicy</code>
+during indexing.</p>
+</li>
+<li><p><a href="https://issues.apache.org/jira/browse/LUCENE-3722">LUCENE-3722</a>: <code>Similarity</code> methods and collection/term statistics now take
+<code>long</code> instead of <code>int</code> (to enable distributed scoring of &gt; 2B docs). 
+For example, in <code>TFIDFSimilarity</code> <code>Idf(int, int)</code> is now <code>Idf(long, long)</code>. </p>
+</li>
+<li><p><a href="https://issues.apache.org/jira/browse/LUCENE-3559">LUCENE-3559</a>: The members <code>DocFreq()</code> and <code>MaxDoc</code> on <code>IndexSearcher</code> were removed,
+as these are no longer used by the scoring system.
+If you were using these casually in your code for reasons unrelated to scoring,
+call them on the <code>IndexSearcher</code>&#39;s reader instead: <code>IndexSearcher.IndexReader</code>.
+If you were subclassing <code>IndexSearcher</code> and overriding these members to alter
+scoring, override <code>IndexSearcher</code>&#39;s <code>TermStatistics()</code> and <code>CollectionStatistics()</code>
+methods instead.</p>
+</li>
+<li><p><a href="https://issues.apache.org/jira/browse/LUCENE-3396">LUCENE-3396</a>: <code>Analyzer.TokenStream()</code> has been renamed <code>Analyzer.GetTokenStream()</code>. <code>Analyzer.TokenStream()</code> has been made sealed. <code>.ReusableTokenStream()</code> has been removed.
+It is now necessary to use <code>Analyzer.GetTokenStreamComponents()</code> to define an analysis process.
+<code>Analyzer</code> also has its own way of managing the reuse of <code>TokenStreamComponents</code> (either
+globally, or per-field).  To define another <code>Strategy</code>, implement <code>ReuseStrategy</code>.</p>
+</li>
+<li><p><a href="https://issues.apache.org/jira/browse/LUCENE-3464">LUCENE-3464</a>: <code>IndexReader.Reopen()</code> has been renamed to
+<code>DirectoryReader.OpenIfChanged()</code> (a static method), and now returns <code>null</code>
+(instead of the old reader) if there are no changes to the index, to
+prevent the common pitfall of accidentally closing the old reader.</p>
+</li>
+<li><p><a href="https://issues.apache.org/jira/browse/LUCENE-3687">LUCENE-3687</a>: <code>Similarity.ComputeNorm()</code> now expects a <code>Norm</code> object to set the computed 
+norm value instead of returning a fixed single byte value. Custom similarities can now
+set integer, float and byte values if a single byte is not sufficient.</p>
+</li>
+<li><p><a href="https://issues.apache.org/jira/browse/LUCENE-2621">LUCENE-2621</a>: Term vectors are now accessed via flexible indexing API.
+If you used <code>IndexReader.GetTermFreqVectors()</code> before, you should now
+use <code>IndexReader.GetTermVectors()</code>.  The new method returns a <code>Fields</code>
+instance exposing the inverted index of the one document.  From
+<code>Fields</code> you can enumerate all fields, terms, positions, offsets.</p>
+</li>
+<li><p><a href="https://issues.apache.org/jira/browse/LUCENE-4227">LUCENE-4227</a>: If you were previously using <code>Instantiated</code> index, you
+may want to use <code>DirectPostingsFormat</code> after upgrading: it stores all
+postings in simple arrays (<code>byte[]</code> for terms, <code>int[]</code> for docs, freqs,
+positions, offsets).  Note that this only covers postings, whereas
+<code>Instantiated</code> covered all other parts of the index as well.</p>
+</li>
+<li><p><a href="https://issues.apache.org/jira/browse/LUCENE-3309">LUCENE-3309</a>: The expert <code>FieldSelector</code> API has been replaced with
+<code>StoredFieldVisitor</code>.  The idea is the same (you have full control
+over which fields should be loaded).  Instead of a single accept
+method, <code>StoredFieldVisitor</code> has a <code>NeedsField()</code> method: if that method
+returns <code>true</code> then the field will be loaded and the appropriate
+type-specific method will be invoked with that fields&#39;s value.</p>
+</li>
+<li><p><a href="https://issues.apache.org/jira/browse/LUCENE-4122">LUCENE-4122</a>: Removed the <code>Payload</code> class and replaced with <code>BytesRef</code>.
+<code>PayloadAttribute</code>&#39;s name is unchanged, it just uses the <code>BytesRef</code>
+class to refer to the payload bytes/start offset/end offset 
+(or <code>null</code> if there is no payload).</p>
+</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/migration-guide.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

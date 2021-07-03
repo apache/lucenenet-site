@@ -1,0 +1,672 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class UpgradeIndexMergePolicy
+   | Apache Lucene.NET 4.8.0-beta00014 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class UpgradeIndexMergePolicy
+   | Apache Lucene.NET 4.8.0-beta00014 Documentation ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00014/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy">
+  
+  
+  <h1 id="Lucene_Net_Index_UpgradeIndexMergePolicy" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy" class="text-break">Class UpgradeIndexMergePolicy
+  </h1>
+  <div class="markdown level0 summary"><p>This <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> is used for upgrading all existing segments of
+an index when calling <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_">ForceMerge(Int32)</a>.
+All other methods delegate to the base <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> given to the constructor.
+This allows for an as-cheap-as possible upgrade of an older index by only upgrading segments that
+are created by previous Lucene versions. ForceMerge does no longer really merge;
+it is just used to &quot;ForceMerge&quot; older segment versions away.
+<p>In general one would use <a class="xref" href="Lucene.Net.Index.IndexUpgrader.html">IndexUpgrader</a>, but for a fully customizeable upgrade,
+you can use this like any other <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> and call <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_">ForceMerge(Int32)</a>:</p>
+<pre><code>    IndexWriterConfig iwc = new IndexWriterConfig(LuceneVersion.LUCENE_XX, new KeywordAnalyzer());
+    iwc.MergePolicy = new UpgradeIndexMergePolicy(iwc.MergePolicy);
+    using (IndexWriter w = new IndexWriter(dir, iwc))
+    {
+        w.ForceMerge(1);
+    }</code></pre>
+<p><p><strong>Warning:</strong> this merge policy may reorder documents if the index was partially
+upgraded before calling <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_">ForceMerge(Int32)</a> (e.g., documents were added). If your application relies
+on &quot;monotonicity&quot; of doc IDs (which means that the order in which the documents
+were added to the index is preserved), do a <code>ForceMerge(1)</code> instead. Please note, the
+delegate <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> may also reorder documents.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a></div>
+    <div class="level2"><span class="xref">UpgradeIndexMergePolicy</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.IDisposable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_DEFAULT_NO_CFS_RATIO">MergePolicy.DEFAULT_NO_CFS_RATIO</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_DEFAULT_MAX_CFS_SEGMENT_SIZE">MergePolicy.DEFAULT_MAX_CFS_SEGMENT_SIZE</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_m_writer">MergePolicy.m_writer</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_m_noCFSRatio">MergePolicy.m_noCFSRatio</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_m_maxCFSSegmentSize">MergePolicy.m_maxCFSSegmentSize</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_Clone">MergePolicy.Clone()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_Dispose">MergePolicy.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_Size_Lucene_Net_Index_SegmentCommitInfo_">MergePolicy.Size(SegmentCommitInfo)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_IsMerged_Lucene_Net_Index_SegmentInfos_Lucene_Net_Index_SegmentCommitInfo_">MergePolicy.IsMerged(SegmentInfos, SegmentCommitInfo)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_NoCFSRatio">MergePolicy.NoCFSRatio</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_MaxCFSSegmentSizeMB">MergePolicy.MaxCFSSegmentSizeMB</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Index.html">Lucene.Net.Index</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Index_UpgradeIndexMergePolicy_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class UpgradeIndexMergePolicy : MergePolicy, IDisposable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_UpgradeIndexMergePolicy__ctor_Lucene_Net_Index_MergePolicy_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.UpgradeIndexMergePolicy.%23ctor(Lucene.Net.Index.MergePolicy)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Index/UpgradeIndexMergePolicy.cs/#L61">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_UpgradeIndexMergePolicy__ctor_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_UpgradeIndexMergePolicy__ctor_Lucene_Net_Index_MergePolicy_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.#ctor(Lucene.Net.Index.MergePolicy)">UpgradeIndexMergePolicy(MergePolicy)</h4>
+  <div class="markdown level1 summary"><p>Wrap the given <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> and intercept <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_">ForceMerge(Int32)</a> requests to
+only upgrade segments written with previous Lucene versions.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public UpgradeIndexMergePolicy(MergePolicy base)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a></td>
+        <td><span class="parametername">base</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_UpgradeIndexMergePolicy_m_base.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.UpgradeIndexMergePolicy.m_base%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Index/UpgradeIndexMergePolicy.cs/#L55">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Index_UpgradeIndexMergePolicy_m_base" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.m_base">m_base</h4>
+  <div class="markdown level1 summary"><p>Wrapped <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly MergePolicy m_base</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_UpgradeIndexMergePolicy_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.UpgradeIndexMergePolicy.Dispose(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Index/UpgradeIndexMergePolicy.cs/#L163">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_UpgradeIndexMergePolicy_Dispose_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.Dispose*"></a>
+  <h4 id="Lucene_Net_Index_UpgradeIndexMergePolicy_Dispose_System_Boolean_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.Dispose(System.Boolean)">Dispose(Boolean)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">disposing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_Dispose_System_Boolean_">MergePolicy.Dispose(Boolean)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_UpgradeIndexMergePolicy_FindForcedDeletesMerges_Lucene_Net_Index_SegmentInfos_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.UpgradeIndexMergePolicy.FindForcedDeletesMerges(Lucene.Net.Index.SegmentInfos)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Index/UpgradeIndexMergePolicy.cs/#L153">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_UpgradeIndexMergePolicy_FindForcedDeletesMerges_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.FindForcedDeletesMerges*"></a>
+  <h4 id="Lucene_Net_Index_UpgradeIndexMergePolicy_FindForcedDeletesMerges_Lucene_Net_Index_SegmentInfos_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.FindForcedDeletesMerges(Lucene.Net.Index.SegmentInfos)">FindForcedDeletesMerges(SegmentInfos)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override MergePolicy.MergeSpecification FindForcedDeletesMerges(SegmentInfos segmentInfos)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentInfos.html">SegmentInfos</a></td>
+        <td><span class="parametername">segmentInfos</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.MergePolicy.MergeSpecification.html">MergePolicy.MergeSpecification</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_FindForcedDeletesMerges_Lucene_Net_Index_SegmentInfos_">MergePolicy.FindForcedDeletesMerges(SegmentInfos)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_UpgradeIndexMergePolicy_FindForcedMerges_Lucene_Net_Index_SegmentInfos_System_Int32_System_Collections_Generic_IDictionary_Lucene_Net_Index_SegmentCommitInfo_System_Nullable_System_Boolean___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.UpgradeIndexMergePolicy.FindForcedMerges(Lucene.Net.Index.SegmentInfos%2CSystem.Int32%2CSystem.Collections.Generic.IDictionary%7BLucene.Net.Index.SegmentCommitInfo%2CSystem.Nullable%7BSystem.Boolean%7D%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Index/UpgradeIndexMergePolicy.cs/#L89">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_UpgradeIndexMergePolicy_FindForcedMerges_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.FindForcedMerges*"></a>
+  <h4 id="Lucene_Net_Index_UpgradeIndexMergePolicy_FindForcedMerges_Lucene_Net_Index_SegmentInfos_System_Int32_System_Collections_Generic_IDictionary_Lucene_Net_Index_SegmentCommitInfo_System_Nullable_System_Boolean___" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.FindForcedMerges(Lucene.Net.Index.SegmentInfos,System.Int32,System.Collections.Generic.IDictionary{Lucene.Net.Index.SegmentCommitInfo,System.Nullable{System.Boolean}})">FindForcedMerges(SegmentInfos, Int32, IDictionary&lt;SegmentCommitInfo, Nullable&lt;Boolean&gt;&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override MergePolicy.MergeSpecification FindForcedMerges(SegmentInfos segmentInfos, int maxSegmentCount, IDictionary&lt;SegmentCommitInfo, bool?&gt; segmentsToMerge)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentInfos.html">SegmentInfos</a></td>
+        <td><span class="parametername">segmentInfos</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">maxSegmentCount</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a>, <span class="xref">System.Nullable</span>&lt;<span class="xref">System.Boolean</span>&gt;&gt;</td>
+        <td><span class="parametername">segmentsToMerge</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.MergePolicy.MergeSpecification.html">MergePolicy.MergeSpecification</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_FindForcedMerges_Lucene_Net_Index_SegmentInfos_System_Int32_System_Collections_Generic_IDictionary_Lucene_Net_Index_SegmentCommitInfo_System_Nullable_System_Boolean___">MergePolicy.FindForcedMerges(SegmentInfos, Int32, IDictionary&lt;SegmentCommitInfo, Nullable&lt;Boolean&gt;&gt;)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_UpgradeIndexMergePolicy_FindMerges_Lucene_Net_Index_MergeTrigger_Lucene_Net_Index_SegmentInfos_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.UpgradeIndexMergePolicy.FindMerges(Lucene.Net.Index.MergeTrigger%2CLucene.Net.Index.SegmentInfos)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Index/UpgradeIndexMergePolicy.cs/#L83">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_UpgradeIndexMergePolicy_FindMerges_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.FindMerges*"></a>
+  <h4 id="Lucene_Net_Index_UpgradeIndexMergePolicy_FindMerges_Lucene_Net_Index_MergeTrigger_Lucene_Net_Index_SegmentInfos_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.FindMerges(Lucene.Net.Index.MergeTrigger,Lucene.Net.Index.SegmentInfos)">FindMerges(MergeTrigger, SegmentInfos)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override MergePolicy.MergeSpecification FindMerges(MergeTrigger mergeTrigger, SegmentInfos segmentInfos)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.MergeTrigger.html">MergeTrigger</a></td>
+        <td><span class="parametername">mergeTrigger</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentInfos.html">SegmentInfos</a></td>
+        <td><span class="parametername">segmentInfos</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.MergePolicy.MergeSpecification.html">MergePolicy.MergeSpecification</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_FindMerges_Lucene_Net_Index_MergeTrigger_Lucene_Net_Index_SegmentInfos_">MergePolicy.FindMerges(MergeTrigger, SegmentInfos)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_UpgradeIndexMergePolicy_SetIndexWriter_Lucene_Net_Index_IndexWriter_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.UpgradeIndexMergePolicy.SetIndexWriter(Lucene.Net.Index.IndexWriter)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Index/UpgradeIndexMergePolicy.cs/#L77">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_UpgradeIndexMergePolicy_SetIndexWriter_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.SetIndexWriter*"></a>
+  <h4 id="Lucene_Net_Index_UpgradeIndexMergePolicy_SetIndexWriter_Lucene_Net_Index_IndexWriter_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.SetIndexWriter(Lucene.Net.Index.IndexWriter)">SetIndexWriter(IndexWriter)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void SetIndexWriter(IndexWriter writer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a></td>
+        <td><span class="parametername">writer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_SetIndexWriter_Lucene_Net_Index_IndexWriter_">MergePolicy.SetIndexWriter(IndexWriter)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_UpgradeIndexMergePolicy_ShouldUpgradeSegment_Lucene_Net_Index_SegmentCommitInfo_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.UpgradeIndexMergePolicy.ShouldUpgradeSegment(Lucene.Net.Index.SegmentCommitInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Index/UpgradeIndexMergePolicy.cs/#L72">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_UpgradeIndexMergePolicy_ShouldUpgradeSegment_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.ShouldUpgradeSegment*"></a>
+  <h4 id="Lucene_Net_Index_UpgradeIndexMergePolicy_ShouldUpgradeSegment_Lucene_Net_Index_SegmentCommitInfo_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.ShouldUpgradeSegment(Lucene.Net.Index.SegmentCommitInfo)">ShouldUpgradeSegment(SegmentCommitInfo)</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if the given segment should be upgraded. The default implementation
+will return <code>!Constants.LUCENE_MAIN_VERSION.Equals(si.Info.Version, StringComparison.Ordinal)</code>,
+so all segments created with a different version number than this Lucene version will
+get upgraded.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual bool ShouldUpgradeSegment(SegmentCommitInfo si)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a></td>
+        <td><span class="parametername">si</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_UpgradeIndexMergePolicy_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.UpgradeIndexMergePolicy.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Index/UpgradeIndexMergePolicy.cs/#L171">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_UpgradeIndexMergePolicy_ToString_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.ToString*"></a>
+  <h4 id="Lucene_Net_Index_UpgradeIndexMergePolicy_ToString" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_UpgradeIndexMergePolicy_UseCompoundFile_Lucene_Net_Index_SegmentInfos_Lucene_Net_Index_SegmentCommitInfo_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.UpgradeIndexMergePolicy.UseCompoundFile(Lucene.Net.Index.SegmentInfos%2CLucene.Net.Index.SegmentCommitInfo)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Index/UpgradeIndexMergePolicy.cs/#L158">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_UpgradeIndexMergePolicy_UseCompoundFile_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.UseCompoundFile*"></a>
+  <h4 id="Lucene_Net_Index_UpgradeIndexMergePolicy_UseCompoundFile_Lucene_Net_Index_SegmentInfos_Lucene_Net_Index_SegmentCommitInfo_" data-uid="Lucene.Net.Index.UpgradeIndexMergePolicy.UseCompoundFile(Lucene.Net.Index.SegmentInfos,Lucene.Net.Index.SegmentCommitInfo)">UseCompoundFile(SegmentInfos, SegmentCommitInfo)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool UseCompoundFile(SegmentInfos segments, SegmentCommitInfo newSegment)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentInfos.html">SegmentInfos</a></td>
+        <td><span class="parametername">segments</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentCommitInfo.html">SegmentCommitInfo</a></td>
+        <td><span class="parametername">newSegment</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.MergePolicy.html#Lucene_Net_Index_MergePolicy_UseCompoundFile_Lucene_Net_Index_SegmentInfos_Lucene_Net_Index_SegmentCommitInfo_">MergePolicy.UseCompoundFile(SegmentInfos, SegmentCommitInfo)</a></div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.IDisposable</span>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Index.IndexUpgrader.html">IndexUpgrader</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_UpgradeIndexMergePolicy.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.UpgradeIndexMergePolicy%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Index/UpgradeIndexMergePolicy.cs/#L51" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

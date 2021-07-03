@@ -1,0 +1,944 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class BooleanQuery
+   | Apache Lucene.NET 4.8.0-beta00014 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class BooleanQuery
+   | Apache Lucene.NET 4.8.0-beta00014 Documentation ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00014/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.BooleanQuery">
+  
+  
+  <h1 id="Lucene_Net_Search_BooleanQuery" data-uid="Lucene.Net.Search.BooleanQuery" class="text-break">Class BooleanQuery
+  </h1>
+  <div class="markdown level0 summary"><p>A <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> that matches documents matching boolean combinations of other
+queries, e.g. <a class="xref" href="Lucene.Net.Search.TermQuery.html">TermQuery</a>s, <a class="xref" href="Lucene.Net.Search.PhraseQuery.html">PhraseQuery</a>s or other
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>s.
+<p>
+Collection initializer note: To create and populate a <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>
+in a single statement, you can use the following example as a guide:</p>
+<pre><code>var booleanQuery = new BooleanQuery() {
+    { new WildcardQuery(new Term(&quot;field2&quot;, &quot;foobar&quot;)), Occur.SHOULD },
+    { new MultiPhraseQuery() {
+        new Term(&quot;field&quot;, &quot;microsoft&quot;), 
+        new Term(&quot;field&quot;, &quot;office&quot;)
+    }, Occur.SHOULD }
+};
+
+// or
+
+var booleanQuery = new BooleanQuery() {
+    new BooleanClause(new WildcardQuery(new Term(&quot;field2&quot;, &quot;foobar&quot;)), Occur.SHOULD),
+    new BooleanClause(new MultiPhraseQuery() {
+        new Term(&quot;field&quot;, &quot;microsoft&quot;), 
+        new Term(&quot;field&quot;, &quot;office&quot;)
+    }, Occur.SHOULD)
+};</code></pre>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></div>
+    <div class="level2"><span class="xref">BooleanQuery</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Search.BooleanClause.html">BooleanClause</a>&gt;</div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Boost">Query.Boost</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ToString">Query.ToString()</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Search.html">Lucene.Net.Search</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Search_BooleanQuery_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">[Serializable]
+public class BooleanQuery : Query, IEnumerable&lt;BooleanClause&gt;, IEnumerable</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L127">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery__ctor_" data-uid="Lucene.Net.Search.BooleanQuery.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery__ctor" data-uid="Lucene.Net.Search.BooleanQuery.#ctor">BooleanQuery()</h4>
+  <div class="markdown level1 summary"><p>Constructs an empty boolean query. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BooleanQuery()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery__ctor_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.%23ctor(System.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L141">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery__ctor_" data-uid="Lucene.Net.Search.BooleanQuery.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery__ctor_System_Boolean_" data-uid="Lucene.Net.Search.BooleanQuery.#ctor(System.Boolean)">BooleanQuery(Boolean)</h4>
+  <div class="markdown level1 summary"><p>Constructs an empty boolean query.
+<p>
+<a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html#Lucene_Net_Search_Similarities_Similarity_Coord_System_Int32_System_Int32_">Coord(Int32, Int32)</a> may be disabled in scoring, as
+appropriate. For example, this score factor does not make sense for most
+automatically generated queries, like <a class="xref" href="Lucene.Net.Search.WildcardQuery.html">WildcardQuery</a> and 
+<a class="xref" href="Lucene.Net.Search.FuzzyQuery.html">FuzzyQuery</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public BooleanQuery(bool disableCoord)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">disableCoord</span></td>
+        <td><p>Disables <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html#Lucene_Net_Search_Similarities_Similarity_Coord_System_Int32_System_Int32_">Coord(Int32, Int32)</a> in scoring. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_m_minNrShouldMatch.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.m_minNrShouldMatch%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L174">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_BooleanQuery_m_minNrShouldMatch" data-uid="Lucene.Net.Search.BooleanQuery.m_minNrShouldMatch">m_minNrShouldMatch</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected int m_minNrShouldMatch</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_Clauses.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.Clauses%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L209">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_Clauses_" data-uid="Lucene.Net.Search.BooleanQuery.Clauses*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_Clauses" data-uid="Lucene.Net.Search.BooleanQuery.Clauses">Clauses</h4>
+  <div class="markdown level1 summary"><p>Returns the list of clauses in this query. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IList&lt;BooleanClause&gt; Clauses { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Search.BooleanClause.html">BooleanClause</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_CoordDisabled.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.CoordDisabled%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L150">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_CoordDisabled_" data-uid="Lucene.Net.Search.BooleanQuery.CoordDisabled*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_CoordDisabled" data-uid="Lucene.Net.Search.BooleanQuery.CoordDisabled">CoordDisabled</h4>
+  <div class="markdown level1 summary"><p>Returns true if <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html#Lucene_Net_Search_Similarities_Similarity_Coord_System_Int32_System_Int32_">Coord(Int32, Int32)</a> is disabled in
+scoring for this query instance. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool CoordDisabled { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Search_BooleanQuery_CoordDisabled_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery__ctor_System_Boolean_">BooleanQuery(Boolean)</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_MaxClauseCount.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.MaxClauseCount%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L109">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_MaxClauseCount_" data-uid="Lucene.Net.Search.BooleanQuery.MaxClauseCount*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_MaxClauseCount" data-uid="Lucene.Net.Search.BooleanQuery.MaxClauseCount">MaxClauseCount</h4>
+  <div class="markdown level1 summary"><p>Return the maximum number of clauses permitted, 1024 by default.
+Attempts to add more than the permitted number of clauses cause 
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a> to be thrown. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static int MaxClauseCount { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_MinimumNumberShouldMatch.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.MinimumNumberShouldMatch%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L168">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_MinimumNumberShouldMatch_" data-uid="Lucene.Net.Search.BooleanQuery.MinimumNumberShouldMatch*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_MinimumNumberShouldMatch" data-uid="Lucene.Net.Search.BooleanQuery.MinimumNumberShouldMatch">MinimumNumberShouldMatch</h4>
+  <div class="markdown level1 summary"><p>Specifies a minimum number of the optional <a class="xref" href="Lucene.Net.Search.BooleanClause.html">BooleanClause</a>s
+which must be satisfied.</p>
+<p>
+By default no optional clauses are necessary for a match
+(unless there are no required clauses).  If this method is used,
+then the specified number of clauses is required.
+</p>
+<p>
+Use of this method is totally independent of specifying that
+any specific clauses are required (or prohibited).  This number will
+only be compared against the number of matching optional clauses.
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int MinimumNumberShouldMatch { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_Add_Lucene_Net_Search_BooleanClause_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.Add(Lucene.Net.Search.BooleanClause)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L190">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_Add_" data-uid="Lucene.Net.Search.BooleanQuery.Add*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_Add_Lucene_Net_Search_BooleanClause_" data-uid="Lucene.Net.Search.BooleanQuery.Add(Lucene.Net.Search.BooleanClause)">Add(BooleanClause)</h4>
+  <div class="markdown level1 summary"><p>Adds a clause to a boolean query. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Add(BooleanClause clause)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanClause.html">BooleanClause</a></td>
+        <td><span class="parametername">clause</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If the new number of clauses exceeds the maximum clause number </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Search_BooleanQuery_Add_Lucene_Net_Search_BooleanClause__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_Add_Lucene_Net_Search_Query_Lucene_Net_Search_Occur_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.Add(Lucene.Net.Search.Query%2CLucene.Net.Search.Occur)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L181">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_Add_" data-uid="Lucene.Net.Search.BooleanQuery.Add*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_Add_Lucene_Net_Search_Query_Lucene_Net_Search_Occur_" data-uid="Lucene.Net.Search.BooleanQuery.Add(Lucene.Net.Search.Query,Lucene.Net.Search.Occur)">Add(Query, Occur)</h4>
+  <div class="markdown level1 summary"><p>Adds a clause to a boolean query.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Add(Query query, Occur occur)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td><span class="parametername">query</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Occur.html">Occur</a></td>
+        <td><span class="parametername">occur</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanQuery.TooManyClausesException.html">BooleanQuery.TooManyClausesException</a></td>
+        <td><p>If the new number of clauses exceeds the maximum clause number </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Search_BooleanQuery_Add_Lucene_Net_Search_Query_Lucene_Net_Search_Occur__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Search.BooleanQuery.html#Lucene_Net_Search_BooleanQuery_MaxClauseCount">MaxClauseCount</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_Clone.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.Clone%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L600">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_Clone_" data-uid="Lucene.Net.Search.BooleanQuery.Clone*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_Clone" data-uid="Lucene.Net.Search.BooleanQuery.Clone">Clone()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override object Clone()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Clone">Query.Clone()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_CreateWeight_Lucene_Net_Search_IndexSearcher_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.CreateWeight(Lucene.Net.Search.IndexSearcher)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L531">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_CreateWeight_" data-uid="Lucene.Net.Search.BooleanQuery.CreateWeight*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_CreateWeight_Lucene_Net_Search_IndexSearcher_" data-uid="Lucene.Net.Search.BooleanQuery.CreateWeight(Lucene.Net.Search.IndexSearcher)">CreateWeight(IndexSearcher)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Weight CreateWeight(IndexSearcher searcher)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a></td>
+        <td><span class="parametername">searcher</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_CreateWeight_Lucene_Net_Search_IndexSearcher_">Query.CreateWeight(IndexSearcher)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L676">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_Equals_" data-uid="Lucene.Net.Search.BooleanQuery.Equals*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_Equals_System_Object_" data-uid="Lucene.Net.Search.BooleanQuery.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if <code data-dev-comment-type="paramref" class="paramref">o</code> is equal to this. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object o)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">o</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Equals_System_Object_">Query.Equals(Object)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.ExtractTerms(System.Collections.Generic.ISet%7BLucene.Net.Index.Term%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L589">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_ExtractTerms_" data-uid="Lucene.Net.Search.BooleanQuery.ExtractTerms*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__" data-uid="Lucene.Net.Search.BooleanQuery.ExtractTerms(System.Collections.Generic.ISet{Lucene.Net.Index.Term})">ExtractTerms(ISet&lt;Term&gt;)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void ExtractTerms(ISet&lt;Term&gt; terms)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ISet</span>&lt;<a class="xref" href="Lucene.Net.Index.Term.html">Term</a>&gt;</td>
+        <td><span class="parametername">terms</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__">Query.ExtractTerms(ISet&lt;Term&gt;)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_GetClauses.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.GetClauses%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L202">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_GetClauses_" data-uid="Lucene.Net.Search.BooleanQuery.GetClauses*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_GetClauses" data-uid="Lucene.Net.Search.BooleanQuery.GetClauses">GetClauses()</h4>
+  <div class="markdown level1 summary"><p>Returns the set of clauses in this query. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual BooleanClause[] GetClauses()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.BooleanClause.html">BooleanClause</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_GetEnumerator.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L216">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_GetEnumerator_" data-uid="Lucene.Net.Search.BooleanQuery.GetEnumerator*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_GetEnumerator" data-uid="Lucene.Net.Search.BooleanQuery.GetEnumerator">GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an iterator on the clauses in this query. It implements the <span class="xref">IEnumerable{BooleanClause}</span> interface to
+make it possible to do:</p>
+<pre><code>foreach (BooleanClause clause in booleanQuery) {}</code></pre>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerator&lt;BooleanClause&gt; GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<a class="xref" href="Lucene.Net.Search.BooleanClause.html">BooleanClause</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_GetHashCode.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L691">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_GetHashCode_" data-uid="Lucene.Net.Search.BooleanQuery.GetHashCode*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_GetHashCode" data-uid="Lucene.Net.Search.BooleanQuery.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"><p>Returns a hash code value for this object. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_GetHashCode">Query.GetHashCode()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_Rewrite_Lucene_Net_Index_IndexReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.Rewrite(Lucene.Net.Index.IndexReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L536">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_Rewrite_" data-uid="Lucene.Net.Search.BooleanQuery.Rewrite*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_Rewrite_Lucene_Net_Index_IndexReader_" data-uid="Lucene.Net.Search.BooleanQuery.Rewrite(Lucene.Net.Index.IndexReader)">Rewrite(IndexReader)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Query Rewrite(IndexReader reader)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a></td>
+        <td><span class="parametername">reader</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Rewrite_Lucene_Net_Index_IndexReader_">Query.Rewrite(IndexReader)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_ToString_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.ToString(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L609">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_ToString_" data-uid="Lucene.Net.Search.BooleanQuery.ToString*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_ToString_System_String_" data-uid="Lucene.Net.Search.BooleanQuery.ToString(System.String)">ToString(String)</h4>
+  <div class="markdown level1 summary"><p>Prints a user-readable version of this query. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString(string field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ToString_System_String_">Query.ToString(String)</a></div>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery_System_Collections_IEnumerable_GetEnumerator.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery.System%23Collections%23IEnumerable%23GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L221">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_BooleanQuery_System_Collections_IEnumerable_GetEnumerator_" data-uid="Lucene.Net.Search.BooleanQuery.System#Collections#IEnumerable#GetEnumerator*"></a>
+  <h4 id="Lucene_Net_Search_BooleanQuery_System_Collections_IEnumerable_GetEnumerator" data-uid="Lucene.Net.Search.BooleanQuery.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerator IEnumerable.GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerator</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_BooleanQuery.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.BooleanQuery%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/BooleanQuery.cs/#L68" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

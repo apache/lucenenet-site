@@ -1,0 +1,771 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class MultiPhraseQuery
+   | Apache Lucene.NET 4.8.0-beta00014 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class MultiPhraseQuery
+   | Apache Lucene.NET 4.8.0-beta00014 Documentation ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00014/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.MultiPhraseQuery">
+  
+  
+  <h1 id="Lucene_Net_Search_MultiPhraseQuery" data-uid="Lucene.Net.Search.MultiPhraseQuery" class="text-break">Class MultiPhraseQuery
+  </h1>
+  <div class="markdown level0 summary"><p><a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html">MultiPhraseQuery</a> is a generalized version of <a class="xref" href="Lucene.Net.Search.PhraseQuery.html">PhraseQuery</a>, with an added
+method <a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html#Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term___">Add(Term[])</a>.
+<p>
+To use this class, to search for the phrase &quot;Microsoft app*&quot; first use
+<a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html#Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term_">Add(Term)</a> on the term &quot;Microsoft&quot;, then find all terms that have &quot;app&quot; as
+prefix using <code>MultiFields.GetFields(IndexReader).GetTerms(string)</code>, and use <a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html#Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term___">Add(Term[])</a>
+to add them to the query.
+<p>
+Collection initializer note: To create and populate a <a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html">MultiPhraseQuery</a>
+in a single statement, you can use the following example as a guide:</p>
+<pre><code>var multiPhraseQuery = new MultiPhraseQuery() {
+    new Term(&quot;field&quot;, &quot;microsoft&quot;), 
+    new Term(&quot;field&quot;, &quot;office&quot;)
+};</code></pre>
+<p>Note that as long as you specify all of the parameters, you can use either
+<a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html#Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term_">Add(Term)</a>, <a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html#Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term___">Add(Term[])</a>, or <a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html#Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term___System_Int32_">Add(Term[], Int32)</a>
+as the method to use to initialize. If there are multiple parameters, each parameter set
+must be surrounded by curly braces.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></div>
+    <div class="level2"><span class="xref">MultiPhraseQuery</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><span class="xref">System.Collections.Generic.IEnumerable</span>&lt;<a class="xref" href="Lucene.Net.Index.Term.html">Term</a>[]&gt;</div>
+    <div><span class="xref">System.Collections.IEnumerable</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Boost">Query.Boost</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ToString">Query.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Clone">Query.Clone()</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Search.html">Lucene.Net.Search</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Search_MultiPhraseQuery_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class MultiPhraseQuery : Query, IEnumerable&lt;Term[]&gt;, IEnumerable</code></pre>
+  </div>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_MultiPhraseQuery_Slop.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.MultiPhraseQuery.Slop%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/MultiPhraseQuery.cs/#L82">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_MultiPhraseQuery_Slop_" data-uid="Lucene.Net.Search.MultiPhraseQuery.Slop*"></a>
+  <h4 id="Lucene_Net_Search_MultiPhraseQuery_Slop" data-uid="Lucene.Net.Search.MultiPhraseQuery.Slop">Slop</h4>
+  <div class="markdown level1 summary"><p>Sets the phrase slop for this query. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int Slop { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Search_MultiPhraseQuery_Slop_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Search.PhraseQuery.html#Lucene_Net_Search_PhraseQuery_Slop">Slop</a></div>
+  </div>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.MultiPhraseQuery.Add(Lucene.Net.Index.Term)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/MultiPhraseQuery.cs/#L97">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_MultiPhraseQuery_Add_" data-uid="Lucene.Net.Search.MultiPhraseQuery.Add*"></a>
+  <h4 id="Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term_" data-uid="Lucene.Net.Search.MultiPhraseQuery.Add(Lucene.Net.Index.Term)">Add(Term)</h4>
+  <div class="markdown level1 summary"><p>Add a single term at the next position in the phrase. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Add(Term term)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.Term.html">Term</a></td>
+        <td><span class="parametername">term</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Search.PhraseQuery.html#Lucene_Net_Search_PhraseQuery_Add_Lucene_Net_Index_Term_">Add</a>(<a class="xref" href="Lucene.Net.Index.Term.html">Term</a>)</div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term___.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.MultiPhraseQuery.Add(Lucene.Net.Index.Term%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/MultiPhraseQuery.cs/#L107">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_MultiPhraseQuery_Add_" data-uid="Lucene.Net.Search.MultiPhraseQuery.Add*"></a>
+  <h4 id="Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term___" data-uid="Lucene.Net.Search.MultiPhraseQuery.Add(Lucene.Net.Index.Term[])">Add(Term[])</h4>
+  <div class="markdown level1 summary"><p>Add multiple terms at the next position in the phrase.  Any of the terms
+may match.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Add(Term[] terms)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.Term.html">Term</a>[]</td>
+        <td><span class="parametername">terms</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term____seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Search.PhraseQuery.html#Lucene_Net_Search_PhraseQuery_Add_Lucene_Net_Index_Term_">Add</a>(<a class="xref" href="Lucene.Net.Index.Term.html">Term</a>)</div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term___System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.MultiPhraseQuery.Add(Lucene.Net.Index.Term%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/MultiPhraseQuery.cs/#L122">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_MultiPhraseQuery_Add_" data-uid="Lucene.Net.Search.MultiPhraseQuery.Add*"></a>
+  <h4 id="Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term___System_Int32_" data-uid="Lucene.Net.Search.MultiPhraseQuery.Add(Lucene.Net.Index.Term[],System.Int32)">Add(Term[], Int32)</h4>
+  <div class="markdown level1 summary"><p>Allows to specify the relative position of terms within the phrase.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Add(Term[] terms, int position)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.Term.html">Term</a>[]</td>
+        <td><span class="parametername">terms</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">position</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_Search_MultiPhraseQuery_Add_Lucene_Net_Index_Term___System_Int32__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Search.PhraseQuery.html#Lucene_Net_Search_PhraseQuery_Add_Lucene_Net_Index_Term_System_Int32_">Add</a>(<a class="xref" href="Lucene.Net.Index.Term.html">Term</a>, <span class="xref">System.Int32</span>)</div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_MultiPhraseQuery_CreateWeight_Lucene_Net_Search_IndexSearcher_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.MultiPhraseQuery.CreateWeight(Lucene.Net.Search.IndexSearcher)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/MultiPhraseQuery.cs/#L370">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_MultiPhraseQuery_CreateWeight_" data-uid="Lucene.Net.Search.MultiPhraseQuery.CreateWeight*"></a>
+  <h4 id="Lucene_Net_Search_MultiPhraseQuery_CreateWeight_Lucene_Net_Search_IndexSearcher_" data-uid="Lucene.Net.Search.MultiPhraseQuery.CreateWeight(Lucene.Net.Search.IndexSearcher)">CreateWeight(IndexSearcher)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Weight CreateWeight(IndexSearcher searcher)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a></td>
+        <td><span class="parametername">searcher</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Weight.html">Weight</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_CreateWeight_Lucene_Net_Search_IndexSearcher_">Query.CreateWeight(IndexSearcher)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_MultiPhraseQuery_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.MultiPhraseQuery.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/MultiPhraseQuery.cs/#L440">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_MultiPhraseQuery_Equals_" data-uid="Lucene.Net.Search.MultiPhraseQuery.Equals*"></a>
+  <h4 id="Lucene_Net_Search_MultiPhraseQuery_Equals_System_Object_" data-uid="Lucene.Net.Search.MultiPhraseQuery.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if <code data-dev-comment-type="paramref" class="paramref">o</code> is equal to this. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object o)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">o</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Equals_System_Object_">Query.Equals(Object)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_MultiPhraseQuery_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.MultiPhraseQuery.ExtractTerms(System.Collections.Generic.ISet%7BLucene.Net.Index.Term%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/MultiPhraseQuery.cs/#L168">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_MultiPhraseQuery_ExtractTerms_" data-uid="Lucene.Net.Search.MultiPhraseQuery.ExtractTerms*"></a>
+  <h4 id="Lucene_Net_Search_MultiPhraseQuery_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__" data-uid="Lucene.Net.Search.MultiPhraseQuery.ExtractTerms(System.Collections.Generic.ISet{Lucene.Net.Index.Term})">ExtractTerms(ISet&lt;Term&gt;)</h4>
+  <div class="markdown level1 summary"><p>Expert: adds all terms occurring in this query to the terms set. Only
+works if this query is in its rewritten (<a class="xref" href="Lucene.Net.Search.MultiPhraseQuery.html#Lucene_Net_Search_MultiPhraseQuery_Rewrite_Lucene_Net_Index_IndexReader_">Rewrite(IndexReader)</a>) form.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override void ExtractTerms(ISet&lt;Term&gt; terms)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.ISet</span>&lt;<a class="xref" href="Lucene.Net.Index.Term.html">Term</a>&gt;</td>
+        <td><span class="parametername">terms</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__">Query.ExtractTerms(ISet&lt;Term&gt;)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.InvalidOperationException</span></td>
+        <td><p>If this query is not yet rewritten </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_MultiPhraseQuery_GetEnumerator.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.MultiPhraseQuery.GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/MultiPhraseQuery.cs/#L506">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_MultiPhraseQuery_GetEnumerator_" data-uid="Lucene.Net.Search.MultiPhraseQuery.GetEnumerator*"></a>
+  <h4 id="Lucene_Net_Search_MultiPhraseQuery_GetEnumerator" data-uid="Lucene.Net.Search.MultiPhraseQuery.GetEnumerator">GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an enumerator that iterates through the <span class="xref">Lucene.Net.Search.MultiPhraseQuery.termArrays</span> collection.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IEnumerator&lt;Term[]&gt; GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IEnumerator</span>&lt;<a class="xref" href="Lucene.Net.Index.Term.html">Term</a>[]&gt;</td>
+        <td><p>An enumerator that can be used to iterate through the <span class="xref">Lucene.Net.Search.MultiPhraseQuery.termArrays</span> collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_MultiPhraseQuery_GetHashCode.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.MultiPhraseQuery.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/MultiPhraseQuery.cs/#L455">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_MultiPhraseQuery_GetHashCode_" data-uid="Lucene.Net.Search.MultiPhraseQuery.GetHashCode*"></a>
+  <h4 id="Lucene_Net_Search_MultiPhraseQuery_GetHashCode" data-uid="Lucene.Net.Search.MultiPhraseQuery.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"><p>Returns a hash code value for this object. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_GetHashCode">Query.GetHashCode()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_MultiPhraseQuery_GetPositions.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.MultiPhraseQuery.GetPositions%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/MultiPhraseQuery.cs/#L153">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_MultiPhraseQuery_GetPositions_" data-uid="Lucene.Net.Search.MultiPhraseQuery.GetPositions*"></a>
+  <h4 id="Lucene_Net_Search_MultiPhraseQuery_GetPositions" data-uid="Lucene.Net.Search.MultiPhraseQuery.GetPositions">GetPositions()</h4>
+  <div class="markdown level1 summary"><p>Returns the relative positions of terms in this phrase.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual int[] GetPositions()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_MultiPhraseQuery_GetTermArrays.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.MultiPhraseQuery.GetTermArrays%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/MultiPhraseQuery.cs/#L145">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_MultiPhraseQuery_GetTermArrays_" data-uid="Lucene.Net.Search.MultiPhraseQuery.GetTermArrays*"></a>
+  <h4 id="Lucene_Net_Search_MultiPhraseQuery_GetTermArrays" data-uid="Lucene.Net.Search.MultiPhraseQuery.GetTermArrays">GetTermArrays()</h4>
+  <div class="markdown level1 summary"><p>Returns a List of the terms in the multiphrase.
+Do not modify the List or its contents.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IList&lt;Term[]&gt; GetTermArrays()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.Index.Term.html">Term</a>[]&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_MultiPhraseQuery_Rewrite_Lucene_Net_Index_IndexReader_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.MultiPhraseQuery.Rewrite(Lucene.Net.Index.IndexReader)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/MultiPhraseQuery.cs/#L345">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_MultiPhraseQuery_Rewrite_" data-uid="Lucene.Net.Search.MultiPhraseQuery.Rewrite*"></a>
+  <h4 id="Lucene_Net_Search_MultiPhraseQuery_Rewrite_Lucene_Net_Index_IndexReader_" data-uid="Lucene.Net.Search.MultiPhraseQuery.Rewrite(Lucene.Net.Index.IndexReader)">Rewrite(IndexReader)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override Query Rewrite(IndexReader reader)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexReader.html">IndexReader</a></td>
+        <td><span class="parametername">reader</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Rewrite_Lucene_Net_Index_IndexReader_">Query.Rewrite(IndexReader)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_MultiPhraseQuery_ToString_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.MultiPhraseQuery.ToString(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/MultiPhraseQuery.cs/#L377">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_MultiPhraseQuery_ToString_" data-uid="Lucene.Net.Search.MultiPhraseQuery.ToString*"></a>
+  <h4 id="Lucene_Net_Search_MultiPhraseQuery_ToString_System_String_" data-uid="Lucene.Net.Search.MultiPhraseQuery.ToString(System.String)">ToString(String)</h4>
+  <div class="markdown level1 summary"><p>Prints a user-readable version of this query. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override sealed string ToString(string f)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">f</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ToString_System_String_">Query.ToString(String)</a></div>
+  <h3 id="eii">Explicit Interface Implementations
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_MultiPhraseQuery_System_Collections_IEnumerable_GetEnumerator.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.MultiPhraseQuery.System%23Collections%23IEnumerable%23GetEnumerator%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/MultiPhraseQuery.cs/#L516">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_MultiPhraseQuery_System_Collections_IEnumerable_GetEnumerator_" data-uid="Lucene.Net.Search.MultiPhraseQuery.System#Collections#IEnumerable#GetEnumerator*"></a>
+  <h4 id="Lucene_Net_Search_MultiPhraseQuery_System_Collections_IEnumerable_GetEnumerator" data-uid="Lucene.Net.Search.MultiPhraseQuery.System#Collections#IEnumerable#GetEnumerator">IEnumerable.GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an enumerator that iterates through the <span class="xref">Lucene.Net.Search.MultiPhraseQuery.termArrays</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">IEnumerator IEnumerable.GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.IEnumerator</span></td>
+        <td><p>An enumerator that can be used to iterate through the <span class="xref">Lucene.Net.Search.MultiPhraseQuery.termArrays</span> collection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <span class="xref">System.Collections.Generic.IEnumerable&lt;T&gt;</span>
+  </div>
+  <div>
+      <span class="xref">System.Collections.IEnumerable</span>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_MultiPhraseQuery.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.MultiPhraseQuery%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/MultiPhraseQuery.cs/#L71" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

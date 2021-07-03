@@ -1,0 +1,629 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class IBSimilarity
+   | Apache Lucene.NET 4.8.0-beta00014 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class IBSimilarity
+   | Apache Lucene.NET 4.8.0-beta00014 Documentation ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00014/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.Similarities.IBSimilarity">
+  
+  
+  <h1 id="Lucene_Net_Search_Similarities_IBSimilarity" data-uid="Lucene.Net.Search.Similarities.IBSimilarity" class="text-break">Class IBSimilarity
+  </h1>
+  <div class="markdown level0 summary"><p>Provides a framework for the family of information-based models, as described
+in StÉphane Clinchant and Eric Gaussier. 2010. Information-based
+models for ad hoc IR. In Proceeding of the 33rd international ACM SIGIR
+conference on Research and development in information retrieval (SIGIR &apos;10).
+ACM, New York, NY, USA, 234-241.
+<p>The retrieval function is of the form <em>RSV(q, d) = ∑
+-x<sup>q</sup><sub>w</sub> log Prob(X<sub>w</sub> &gt;=
+t<sup>d</sup><sub>w</sub> | λ<sub>w</sub>)</em>, where
+<ul><li><em>x<sup>q</sup><sub>w</sub></em> is the query boost;</li><li><em>X<sub>w</sub></em> is a random variable that counts the occurrences
+        of word <em>w</em>;</li><li><em>t<sup>d</sup><sub>w</sub></em> is the normalized term frequency;</li><li><em>λ<sub>w</sub></em> is a parameter.</li></ul>
+</p>
+<p>The framework described in the paper has many similarities to the DFR
+framework (see <a class="xref" href="Lucene.Net.Search.Similarities.DFRSimilarity.html">DFRSimilarity</a>). It is possible that the two
+Similarities will be merged at one point.</p>
+<p>To construct an <a class="xref" href="Lucene.Net.Search.Similarities.IBSimilarity.html">IBSimilarity</a>, you must specify the implementations for
+all three components of the Information-Based model.
+<table><thead><tr><th>ComponentImplementations</th><th></th></tr></thead><tbody><tr><td><a class="xref" href="Lucene.Net.Search.Similarities.IBSimilarity.html#Lucene_Net_Search_Similarities_IBSimilarity_Distribution">Distribution</a>: Probabilistic distribution used to
+            model term occurrence
+<ul><li><a class="xref" href="Lucene.Net.Search.Similarities.DistributionLL.html">DistributionLL</a>: Log-logistic</li><li><a class="xref" href="Lucene.Net.Search.Similarities.DistributionLL.html">DistributionLL</a>: Smoothed power-law</li></ul>
+</td><td></td></tr><tr><td><a class="xref" href="Lucene.Net.Search.Similarities.IBSimilarity.html#Lucene_Net_Search_Similarities_IBSimilarity_Lambda">Lambda</a>: λ<sub>w</sub> parameter of the
+    probability distribution
+<ul><li><a class="xref" href="Lucene.Net.Search.Similarities.LambdaDF.html">LambdaDF</a>: <code>N<sub>w</sub>/N</code> or average
+        number of documents where w occurs</li><li><a class="xref" href="Lucene.Net.Search.Similarities.LambdaTTF.html">LambdaTTF</a>: <code>F<sub>w</sub>/N</code> or
+        average number of occurrences of w in the collection</li></ul>
+</td><td></td></tr><tr><td><a class="xref" href="Lucene.Net.Search.Similarities.IBSimilarity.html#Lucene_Net_Search_Similarities_IBSimilarity_Normalization">Normalization</a>: Term frequency normalizationAny supported DFR normalization (listed in
+<a class="xref" href="Lucene.Net.Search.Similarities.DFRSimilarity.html">DFRSimilarity</a>)
+</td><td></td></tr></tbody></table>
+</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html">Similarity</a></div>
+    <div class="level2"><a class="xref" href="Lucene.Net.Search.Similarities.SimilarityBase.html">SimilarityBase</a></div>
+    <div class="level3"><span class="xref">IBSimilarity</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Similarities.SimilarityBase.html#Lucene_Net_Search_Similarities_SimilarityBase_DiscountOverlaps">SimilarityBase.DiscountOverlaps</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Similarities.SimilarityBase.html#Lucene_Net_Search_Similarities_SimilarityBase_ComputeWeight_System_Single_Lucene_Net_Search_CollectionStatistics_Lucene_Net_Search_TermStatistics___">SimilarityBase.ComputeWeight(Single, CollectionStatistics, TermStatistics[])</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Similarities.SimilarityBase.html#Lucene_Net_Search_Similarities_SimilarityBase_NewStats_System_String_System_Single_">SimilarityBase.NewStats(String, Single)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Similarities.SimilarityBase.html#Lucene_Net_Search_Similarities_SimilarityBase_FillBasicStats_Lucene_Net_Search_Similarities_BasicStats_Lucene_Net_Search_CollectionStatistics_Lucene_Net_Search_TermStatistics_">SimilarityBase.FillBasicStats(BasicStats, CollectionStatistics, TermStatistics)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Similarities.SimilarityBase.html#Lucene_Net_Search_Similarities_SimilarityBase_Explain_Lucene_Net_Search_Similarities_BasicStats_System_Int32_Lucene_Net_Search_Explanation_System_Single_">SimilarityBase.Explain(BasicStats, Int32, Explanation, Single)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Similarities.SimilarityBase.html#Lucene_Net_Search_Similarities_SimilarityBase_GetSimScorer_Lucene_Net_Search_Similarities_Similarity_SimWeight_Lucene_Net_Index_AtomicReaderContext_">SimilarityBase.GetSimScorer(Similarity.SimWeight, AtomicReaderContext)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Similarities.SimilarityBase.html#Lucene_Net_Search_Similarities_SimilarityBase_ComputeNorm_Lucene_Net_Index_FieldInvertState_">SimilarityBase.ComputeNorm(FieldInvertState)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Similarities.SimilarityBase.html#Lucene_Net_Search_Similarities_SimilarityBase_DecodeNormValue_System_Byte_">SimilarityBase.DecodeNormValue(Byte)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Similarities.SimilarityBase.html#Lucene_Net_Search_Similarities_SimilarityBase_EncodeNormValue_System_Single_System_Single_">SimilarityBase.EncodeNormValue(Single, Single)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Similarities.SimilarityBase.html#Lucene_Net_Search_Similarities_SimilarityBase_Log2_System_Double_">SimilarityBase.Log2(Double)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html#Lucene_Net_Search_Similarities_Similarity_Coord_System_Int32_System_Int32_">Similarity.Coord(Int32, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Similarities.Similarity.html#Lucene_Net_Search_Similarities_Similarity_QueryNorm_System_Single_">Similarity.QueryNorm(Single)</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Search.Similarities.html">Lucene.Net.Search.Similarities</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Search_Similarities_IBSimilarity_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class IBSimilarity : SimilarityBase</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_IBSimilarity__ctor_Lucene_Net_Search_Similarities_Distribution_Lucene_Net_Search_Similarities_Lambda_Lucene_Net_Search_Similarities_Normalization_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.IBSimilarity.%23ctor(Lucene.Net.Search.Similarities.Distribution%2CLucene.Net.Search.Similarities.Lambda%2CLucene.Net.Search.Similarities.Normalization)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/Similarities/IBSimilarity.cs/#L106">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Similarities_IBSimilarity__ctor_" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_Similarities_IBSimilarity__ctor_Lucene_Net_Search_Similarities_Distribution_Lucene_Net_Search_Similarities_Lambda_Lucene_Net_Search_Similarities_Normalization_" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.#ctor(Lucene.Net.Search.Similarities.Distribution,Lucene.Net.Search.Similarities.Lambda,Lucene.Net.Search.Similarities.Normalization)">IBSimilarity(Distribution, Lambda, Normalization)</h4>
+  <div class="markdown level1 summary"><p>Creates IBSimilarity from the three components.
+<p>
+Note that <code>null</code> values are not allowed:
+if you want no normalization, instead pass
+<a class="xref" href="Lucene.Net.Search.Similarities.Normalization.NoNormalization.html">Normalization.NoNormalization</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IBSimilarity(Distribution distribution, Lambda lambda, Normalization normalization)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.Distribution.html">Distribution</a></td>
+        <td><span class="parametername">distribution</span></td>
+        <td><p>probabilistic distribution modeling term occurrence </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.Lambda.html">Lambda</a></td>
+        <td><span class="parametername">lambda</span></td>
+        <td><p>distribution&apos;s λ<sub>w</sub> parameter </p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.Normalization.html">Normalization</a></td>
+        <td><span class="parametername">normalization</span></td>
+        <td><p>term frequency normalization </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_IBSimilarity_m_distribution.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.IBSimilarity.m_distribution%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/Similarities/IBSimilarity.cs/#L87">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_Similarities_IBSimilarity_m_distribution" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.m_distribution">m_distribution</h4>
+  <div class="markdown level1 summary"><p>The probabilistic distribution used to model term occurrence. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly Distribution m_distribution</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.Distribution.html">Distribution</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_IBSimilarity_m_lambda.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.IBSimilarity.m_lambda%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/Similarities/IBSimilarity.cs/#L91">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_Similarities_IBSimilarity_m_lambda" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.m_lambda">m_lambda</h4>
+  <div class="markdown level1 summary"><p>The <em>lambda (λ<sub>w</sub>)</em> parameter. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly Lambda m_lambda</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.Lambda.html">Lambda</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_IBSimilarity_m_normalization.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.IBSimilarity.m_normalization%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/Similarities/IBSimilarity.cs/#L95">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_Similarities_IBSimilarity_m_normalization" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.m_normalization">m_normalization</h4>
+  <div class="markdown level1 summary"><p>The term frequency normalization. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected readonly Normalization m_normalization</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.Normalization.html">Normalization</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_IBSimilarity_Distribution.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.IBSimilarity.Distribution%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/Similarities/IBSimilarity.cs/#L145">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Similarities_IBSimilarity_Distribution_" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.Distribution*"></a>
+  <h4 id="Lucene_Net_Search_Similarities_IBSimilarity_Distribution" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.Distribution">Distribution</h4>
+  <div class="markdown level1 summary"><p>Returns the distribution</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Distribution Distribution { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.Distribution.html">Distribution</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_IBSimilarity_Lambda.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.IBSimilarity.Lambda%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/Similarities/IBSimilarity.cs/#L150">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Similarities_IBSimilarity_Lambda_" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.Lambda*"></a>
+  <h4 id="Lucene_Net_Search_Similarities_IBSimilarity_Lambda" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.Lambda">Lambda</h4>
+  <div class="markdown level1 summary"><p>Returns the distribution&apos;s lambda parameter</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Lambda Lambda { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.Lambda.html">Lambda</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_IBSimilarity_Normalization.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.IBSimilarity.Normalization%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/Similarities/IBSimilarity.cs/#L155">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Similarities_IBSimilarity_Normalization_" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.Normalization*"></a>
+  <h4 id="Lucene_Net_Search_Similarities_IBSimilarity_Normalization" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.Normalization">Normalization</h4>
+  <div class="markdown level1 summary"><p>Returns the term frequency normalization</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Normalization Normalization { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.Normalization.html">Normalization</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_IBSimilarity_Explain_Lucene_Net_Search_Explanation_Lucene_Net_Search_Similarities_BasicStats_System_Int32_System_Single_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.IBSimilarity.Explain(Lucene.Net.Search.Explanation%2CLucene.Net.Search.Similarities.BasicStats%2CSystem.Int32%2CSystem.Single%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/Similarities/IBSimilarity.cs/#L118">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Similarities_IBSimilarity_Explain_" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.Explain*"></a>
+  <h4 id="Lucene_Net_Search_Similarities_IBSimilarity_Explain_Lucene_Net_Search_Explanation_Lucene_Net_Search_Similarities_BasicStats_System_Int32_System_Single_System_Single_" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.Explain(Lucene.Net.Search.Explanation,Lucene.Net.Search.Similarities.BasicStats,System.Int32,System.Single,System.Single)">Explain(Explanation, BasicStats, Int32, Single, Single)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override void Explain(Explanation expl, BasicStats stats, int doc, float freq, float docLen)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Explanation.html">Explanation</a></td>
+        <td><span class="parametername">expl</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.BasicStats.html">BasicStats</a></td>
+        <td><span class="parametername">stats</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">doc</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">freq</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">docLen</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Similarities.SimilarityBase.html#Lucene_Net_Search_Similarities_SimilarityBase_Explain_Lucene_Net_Search_Explanation_Lucene_Net_Search_Similarities_BasicStats_System_Int32_System_Single_System_Single_">SimilarityBase.Explain(Explanation, BasicStats, Int32, Single, Single)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_IBSimilarity_Score_Lucene_Net_Search_Similarities_BasicStats_System_Single_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.IBSimilarity.Score(Lucene.Net.Search.Similarities.BasicStats%2CSystem.Single%2CSystem.Single)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/Similarities/IBSimilarity.cs/#L113">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Similarities_IBSimilarity_Score_" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.Score*"></a>
+  <h4 id="Lucene_Net_Search_Similarities_IBSimilarity_Score_Lucene_Net_Search_Similarities_BasicStats_System_Single_System_Single_" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.Score(Lucene.Net.Search.Similarities.BasicStats,System.Single,System.Single)">Score(BasicStats, Single, Single)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override float Score(BasicStats stats, float freq, float docLen)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Similarities.BasicStats.html">BasicStats</a></td>
+        <td><span class="parametername">stats</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">freq</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td><span class="parametername">docLen</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Single</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Similarities.SimilarityBase.html#Lucene_Net_Search_Similarities_SimilarityBase_Score_Lucene_Net_Search_Similarities_BasicStats_System_Single_System_Single_">SimilarityBase.Score(BasicStats, Single, Single)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_IBSimilarity_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.IBSimilarity.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/Similarities/IBSimilarity.cs/#L137">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Similarities_IBSimilarity_ToString_" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.ToString*"></a>
+  <h4 id="Lucene_Net_Search_Similarities_IBSimilarity_ToString" data-uid="Lucene.Net.Search.Similarities.IBSimilarity.ToString">ToString()</h4>
+  <div class="markdown level1 summary"><p>The name of IB methods follow the pattern
+<code>IB &lt;distribution&gt; &lt;lambda&gt;&lt;normalization&gt;</code>. The name of the
+distribution is the same as in the original paper; for the names of lambda
+parameters, refer to the doc of the <a class="xref" href="Lucene.Net.Search.Similarities.Lambda.html">Lambda</a> classes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Similarities.SimilarityBase.html#Lucene_Net_Search_Similarities_SimilarityBase_ToString">SimilarityBase.ToString()</a></div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Search.Similarities.DFRSimilarity.html">DFRSimilarity</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00014/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Similarities_IBSimilarity.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Similarities.IBSimilarity%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00014/src/Lucene.Net/Search/Similarities/IBSimilarity.cs/#L82" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

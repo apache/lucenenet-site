@@ -1,0 +1,878 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Lucene.Net.Codecs.Lucene40
+   | Apache Lucene.NET 4.8.0-beta00013 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Lucene.Net.Codecs.Lucene40
+   | Apache Lucene.NET 4.8.0-beta00013 Documentation ">
+    <meta name="generator" content="docfx 2.56.2.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00009/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.Lucene40">
+  
+  <h1 id="Lucene_Net_Codecs_Lucene40" data-uid="Lucene.Net.Codecs.Lucene40" class="text-break">Namespace Lucene.Net.Codecs.Lucene40
+  </h1>
+  <div class="markdown level0 summary"><!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<p>Lucene 4.0 file format.</p>
+<h1 id="apache-lucene---index-file-formats">Apache Lucene - Index File Formats</h1>
+<div>
+
+*   <a href="#introduction">Introduction</a>
+
+*   <a href="#definitions">Definitions</a>
+
+    *   <a href="#inverted-indexing">Inverted Indexing</a>
+
+    *   <a href="#types-of-fields">Types of Fields</a>
+
+    *   <a href="#segments">Segments</a>
+
+    *   <a href="#document-numbers">Document Numbers</a>
+
+*   <a href="#overview">Index Structure Overview</a>
+
+*   <a href="#file-naming">File Naming</a>
+
+*   <a href="#file-names">Summary of File Extensions</a>
+
+    *   <a href="#lock-file">Lock File</a>
+
+    *   <a href="#history">History</a>
+
+    *   <a href="#limitations">Limitations</a>
+
+</div>
+
+<h2 id="introduction">Introduction</h2>
+<div>
+
+This document defines the index file formats used in this version of Lucene. If you are using a different version of Lucene, please consult the copy of <code>docs/</code> that was distributed with the version you are using.
+
+Apache Lucene is written in Java, but several efforts are underway to write <a href="http://wiki.apache.org/lucene-java/LuceneImplementations">versions of Lucene in other programming languages</a>. If these versions are to remain compatible with Apache Lucene, then a language-independent definition of the Lucene index format is required. This document thus attempts to provide a complete and independent definition of the Apache Lucene file formats.
+
+As Lucene evolves, this document should evolve. Versions of Lucene in different programming languages should endeavor to agree on file formats, and generate new versions of this document.
+
+</div>
+
+<h2 id="definitions">Definitions</h2>
+<div>
+
+The fundamental concepts in Lucene are index, document, field and term.
+
+An index contains a sequence of documents.
+
+*   A document is a sequence of fields.
+
+*   A field is a named sequence of terms.
+
+*   A term is a sequence of bytes.
+
+The same sequence of bytes in two different fields is considered a different term. Thus terms are represented as a pair: the string naming the field, and the bytes within the field.
+
+### Inverted Indexing
+
+The index stores statistics about terms in order to make term-based search more efficient. Lucene&#39;s index falls into the family of indexes known as an <em>inverted index.</em> This is because it can list, for a term, the documents that contain it. This is the inverse of the natural relationship, in which documents list terms.
+
+### Types of Fields
+
+In Lucene, fields may be <em>stored</em>, in which case their text is stored in the index literally, in a non-inverted manner. Fields that are inverted are called <em>indexed</em>. A field may be both stored and indexed.
+
+The text of a field may be <em>tokenized</em> into terms to be indexed, or the text of a field may be used literally as a term to be indexed. Most fields are tokenized, but sometimes it is useful for certain identifier fields to be indexed literally.
+
+See the <a class="xref" href="Lucene.Net.Documents.Field.html">Field</a> java docs for more information on Fields.
+
+### Segments
+
+Lucene indexes may be composed of multiple sub-indexes, or <em>segments</em>. Each segment is a fully independent index, which could be searched separately. Indexes evolve by:
+
+1.  Creating new segments for newly added documents.
+
+2.  Merging existing segments.
+
+Searches may involve multiple segments and/or multiple indexes, each index potentially composed of a set of segments.
+
+### Document Numbers
+
+Internally, Lucene refers to documents by an integer <em>document number</em>. The first document added to an index is numbered zero, and each subsequent document added gets a number one greater than the previous.
+
+Note that a document&#39;s number may change, so caution should be taken when storing these numbers outside of Lucene. In particular, numbers may change in the following situations:
+
+*<br>
+The numbers stored in each segment are unique only within the segment, and must be converted before they can be used in a larger context. The standard technique is to allocate each segment a range of values, based on the range of numbers used in that segment. To convert a document number from a segment to an external value, the segment&#39;s <em>base</em> document number is added. To convert an external value back to a segment-specific value, the segment is identified by the range that the external value is in, and the segment&#39;s base value is subtracted. For example two five document segments might be combined, so that the first segment has a base value of zero, and the second of five. Document three from the second segment would have an external value of eight.
+
+*<br>
+When documents are deleted, gaps are created in the numbering. These are eventually removed as the index evolves through merging. Deleted documents are dropped when segments are merged. A freshly-merged segment thus has no gaps in its numbering.
+
+</div>
+
+<h2 id="index-structure-overview">Index Structure Overview</h2>
+<div>
+
+Each segment index maintains the following:
+
+*   <a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40SegmentInfoFormat.html">Segment info</a>.
+   This contains metadata about a segment, such as the number of documents,
+   what files it uses, 
+
+*   <a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40FieldInfosFormat.html">Field names</a>. 
+   This contains the set of field names used in the index.
+
+*   <a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40StoredFieldsFormat.html">Stored Field values</a>. 
+This contains, for each document, a list of attribute-value pairs, where the attributes 
+are field names. These are used to store auxiliary information about the document, such as 
+its title, url, or an identifier to access a database. The set of stored fields are what is 
+returned for each hit when searching. This is keyed by document number.
+
+*   <a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.html">Term dictionary</a>. 
+A dictionary containing all of the terms used in all of the
+indexed fields of all of the documents. The dictionary also contains the number
+of documents which contain the term, and pointers to the term&#39;s frequency and
+proximity data.
+
+*   <a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.html">Term Frequency data</a>. 
+For each term in the dictionary, the numbers of all the
+documents that contain that term, and the frequency of the term in that
+document, unless frequencies are omitted (IndexOptions.DOCS_ONLY)
+
+*   <a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.html">Term Proximity data</a>. 
+For each term in the dictionary, the positions that the
+term occurs in each document. Note that this will not exist if all fields in
+all documents omit position data.
+
+*   <a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40NormsFormat.html">Normalization factors</a>. 
+For each field in each document, a value is stored
+that is multiplied into the score for hits on that field.
+
+*   <a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40TermVectorsFormat.html">Term Vectors</a>. 
+For each field in each document, the term vector (sometimes
+called document vector) may be stored. A term vector consists of term text and
+term frequency. To add Term Vectors to your index see the 
+<a class="xref" href="Lucene.Net.Documents.Field.html">Field</a> constructors
+
+*   <a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40DocValuesFormat.html">Per-document values</a>. 
+Like stored values, these are also keyed by document
+number, but are generally intended to be loaded into main memory for fast
+access. Whereas stored values are generally intended for summary results from
+searches, per-document values are useful for things like scoring factors.
+
+*   <a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.html">Deleted documents</a>. 
+An optional file indicating which documents are deleted.
+
+Details on each of these are provided in their linked pages.
+
+</div>
+
+<h2 id="file-naming">File Naming</h2>
+<div>
+
+All files belonging to a segment have the same name with varying extensions. The extensions correspond to the different file formats described below. When using the Compound File format (default in 1.4 and greater) these files (except for the Segment info file, the Lock file, and Deleted documents file) are collapsed into a single .cfs file (see below for details)
+
+Typically, all segments in an index are stored in a single directory, although this is not required.
+
+As of version 2.1 (lock-less commits), file names are never re-used (there is one exception, &quot;segments.gen&quot;, see below). That is, when any file is saved to the Directory it is given a never before used filename. This is achieved using a simple generations approach. For example, the first segments file is segments_1, then segments_2, etc. The generation is a sequential long integer represented in alpha-numeric (base 36) form.
+
+</div>
+
+<h2 id="summary-of-file-extensions">Summary of File Extensions</h2>
+<div>
+
+The following table summarizes the names and extensions of the files in Lucene:
+
+<table cellspacing="1" cellpadding="4">
+<tr>
+<th>Name</th>
+<th>Extension</th>
+<th>Brief Description</th>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Index.SegmentInfos.html">Segments File</a></td>
+<td>segments.gen, segments_N</td>
+<td>Stores information about a commit point</td>
+</tr>
+<tr>
+<td><a href="#lock-file">Lock File</a></td>
+<td>write.lock</td>
+<td>The Write lock prevents multiple IndexWriters from writing to the same
+file.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40SegmentInfoFormat.html">Segment Info</a></td>
+<td>.si</td>
+<td>Stores metadata about a segment</td>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Store.CompoundFileDirectory.html">Compound File</a></td>
+<td>.cfs, .cfe</td>
+<td>An optional &quot;virtual&quot; file consisting of all the other index files for
+systems that frequently run out of file handles.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40FieldInfosFormat.html">Fields</a></td>
+<td>.fnm</td>
+<td>Stores information about the fields</td>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40StoredFieldsFormat.html">Field Index</a></td>
+<td>.fdx</td>
+<td>Contains pointers to field data</td>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40StoredFieldsFormat.html">Field Data</a></td>
+<td>.fdt</td>
+<td>The stored fields for documents</td>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.html">Term Dictionary</a></td>
+<td>.tim</td>
+<td>The term dictionary, stores term info</td>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.html">Term Index</a></td>
+<td>.tip</td>
+<td>The index into the Term Dictionary</td>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.html">Frequencies</a></td>
+<td>.frq</td>
+<td>Contains the list of docs which contain each term along with frequency</td>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.html">Positions</a></td>
+<td>.prx</td>
+<td>Stores position information about where a term occurs in the index</td>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40NormsFormat.html">Norms</a></td>
+<td>.nrm.cfs, .nrm.cfe</td>
+<td>Encodes length and boost factors for docs and fields</td>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40DocValuesFormat.html">Per-Document Values</a></td>
+<td>.dv.cfs, .dv.cfe</td>
+<td>Encodes additional scoring factors or other per-document information.</td>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40TermVectorsFormat.html">Term Vector Index</a></td>
+<td>.tvx</td>
+<td>Stores offset into the document data file</td>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40TermVectorsFormat.html">Term Vector Documents</a></td>
+<td>.tvd</td>
+<td>Contains information about each document that has term vectors</td>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40TermVectorsFormat.html">Term Vector Fields</a></td>
+<td>.tvf</td>
+<td>The field level info about term vectors</td>
+</tr>
+<tr>
+<td><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.html">Deleted Documents</a></td>
+<td>.del</td>
+<td>Info about what files are deleted</td>
+</tr>
+</table>
+</div>
+
+<h2 id="lock-file">Lock File</h2>
+<p>The write lock, which is stored in the index directory by default, is named
+&quot;write.lock&quot;. If the lock directory is different from the index directory then
+the write lock will be named &quot;XXXX-write.lock&quot; where XXXX is a unique prefix
+derived from the full path to the index directory. When this file is present, a
+writer is currently modifying the index (adding or removing documents). This
+lock file ensures that only one writer is modifying the index at a time.</p>
+<h2 id="history">History</h2>
+<p>Compatibility notes are provided in this document, describing how file formats have changed from prior versions:</p>
+<ul>
+<li><p>In version 2.1, the file format was changed to allow lock-less commits (ie,
+no more commit lock). The change is fully backwards compatible: you can open a
+pre-2.1 index for searching or adding/deleting of docs. When the new segments
+file is saved (committed), it will be written in the new file format (meaning
+no specific &quot;upgrade&quot; process is needed). But note that once a commit has
+occurred, pre-2.1 Lucene will not be able to read the index.</p>
+</li>
+<li><p>In version 2.3, the file format was changed to allow segments to share a
+single set of doc store (vectors &amp; stored fields) files. This allows for
+faster indexing in certain cases. The change is fully backwards compatible (in
+the same way as the lock-less commits change in 2.1).</p>
+</li>
+<li><p>In version 2.4, Strings are now written as true UTF-8 byte sequence, not
+Java&#39;s modified UTF-8. See <a href="http://issues.apache.org/jira/browse/LUCENE-510">
+LUCENE-510</a> for details.</p>
+</li>
+<li><p>In version 2.9, an optional opaque Map&lt;String,String&gt; CommitUserData
+may be passed to IndexWriter&#39;s commit methods (and later retrieved), which is
+recorded in the segments_N file. See <a href="http://issues.apache.org/jira/browse/LUCENE-1382">
+LUCENE-1382</a> for details. Also,
+diagnostics were added to each segment written recording details about why it
+was written (due to flush, merge; which OS/JRE was used; etc.). See issue
+<a href="http://issues.apache.org/jira/browse/LUCENE-1654">LUCENE-1654</a> for details.</p>
+</li>
+<li><p>In version 3.0, compressed fields are no longer written to the index (they
+can still be read, but on merge the new segment will write them, uncompressed).
+See issue <a href="http://issues.apache.org/jira/browse/LUCENE-1960">LUCENE-1960</a> 
+for details.</p>
+</li>
+<li><p>In version 3.1, segments records the code version that created them. See
+<a href="http://issues.apache.org/jira/browse/LUCENE-2720">LUCENE-2720</a> for details. 
+Additionally segments track explicitly whether or not they have term vectors. 
+See <a href="http://issues.apache.org/jira/browse/LUCENE-2811">LUCENE-2811</a> 
+for details.</p>
+</li>
+<li><p>In version 3.2, numeric fields are written as natively to stored fields
+file, previously they were stored in text format only.</p>
+</li>
+<li><p>In version 3.4, fields can omit position data while still indexing term
+frequencies.</p>
+</li>
+<li><p>In version 4.0, the format of the inverted index became extensible via
+the <a class="xref" href="Lucene.Net.Codecs.Codec.html">Codec</a> api. Fast per-document storage
+({@code DocValues}) was introduced. Normalization factors need no longer be a 
+single byte, they can be any <a class="xref" href="Lucene.Net.Index.NumericDocValues.html">NumericDocValues</a>. 
+Terms need not be unicode strings, they can be any byte sequence. Term offsets 
+can optionally be indexed into the postings lists. Payloads can be stored in the 
+term vectors.</p>
+</li>
+</ul>
+<h2 id="limitations">Limitations</h2>
+<div>
+
+Lucene uses a Java <code>int</code> to refer to document numbers, and the index file format uses an <code>Int32</code> on-disk to store document numbers. This is a limitation of both the index file format and the current implementation. Eventually these should be replaced with either <code>UInt64</code> values, or better yet, <a class="xref" href="Lucene.Net.Store.DataOutput.html#methods">VInt</a> values which have no limit.
+
+</div></div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+  </h3>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40Codec.html">Lucene40Codec</a></h4>
+      <section><p>Implements the Lucene 4.0 index format, with configurable per-field postings formats.
+<p>
+If you want to reuse functionality of this codec in another codec, extend
+<a class="xref" href="Lucene.Net.Codecs.FilterCodec.html">FilterCodec</a>.
+<p>
+See <a class="xref" href="Lucene.Net.Codecs.Lucene40.html">Lucene.Net.Codecs.Lucene40</a> package documentation for file format details.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40DocValuesFormat.html">Lucene40DocValuesFormat</a></h4>
+      <section><p>Lucene 4.0 DocValues format.
+<p>
+Files:
+<ul><li><code>.dv.cfs</code>: compound container (<a class="xref" href="Lucene.Net.Store.CompoundFileDirectory.html">CompoundFileDirectory</a>)</li><li><code>.dv.cfe</code>: compound entries (<a class="xref" href="Lucene.Net.Store.CompoundFileDirectory.html">CompoundFileDirectory</a>)</li></ul>
+Entries within the compound file:
+<ul><li><code>&lt;segment&gt;<em>&lt;fieldNumber&gt;.dat</em></code>: data values</li><li><code>&lt;segment&gt;&lt;fieldNumber&gt;.idx</code>: index into the .dat for DEREF types</li></ul>
+<p>
+There are several many types of <a class="xref" href="Lucene.Net.Index.DocValues.html">DocValues</a> with different encodings.
+From the perspective of filenames, all types store their values in <code>.dat</code>
+entries within the compound file. In the case of dereferenced/sorted types, the <code>.dat</code>
+actually contains only the unique values, and an additional <code>.idx</code> file contains
+pointers to these unique values.
+</p>
+Formats:
+<ul><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.VAR_INTS</span> .dat --&gt; Header, PackedType, MinValue,
+       DefaultValue, PackedStream</li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.FIXED_INTS_8</span> .dat --&gt; Header, ValueSize,
+       Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) <sup>maxdoc</sup></li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.FIXED_INTS_16</span> .dat --&gt; Header, ValueSize,
+       Short (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt16_System_Int16_">WriteInt16(Int16)</a>) <sup>maxdoc</sup></li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.FIXED_INTS_32</span> .dat --&gt; Header, ValueSize,
+       Int32 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a>) <sup>maxdoc</sup></li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.FIXED_INTS_64</span> .dat --&gt; Header, ValueSize,
+       Int64 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a>) <sup>maxdoc</sup></li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.FLOAT_32</span> .dat --&gt; Header, ValueSize, Float32<sup>maxdoc</sup></li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.FLOAT_64</span> .dat --&gt; Header, ValueSize, Float64<sup>maxdoc</sup></li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_FIXED_STRAIGHT</span> .dat --&gt; Header, ValueSize,
+       (Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) * ValueSize)<sup>maxdoc</sup></li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_VAR_STRAIGHT</span> .idx --&gt; Header, TotalBytes, Addresses</li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_VAR_STRAIGHT</span> .dat --&gt; Header,
+         (Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) * <em>variable ValueSize</em>)<sup>maxdoc</sup></li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_FIXED_DEREF</span> .idx --&gt; Header, NumValues, Addresses</li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_FIXED_DEREF</span> .dat --&gt; Header, ValueSize,
+       (Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) * ValueSize)<sup>NumValues</sup></li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_VAR_DEREF</span> .idx --&gt; Header, TotalVarBytes, Addresses</li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_VAR_DEREF</span> .dat --&gt; Header,
+       (LengthPrefix + Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) * <em>variable ValueSize</em>)<sup>NumValues</sup></li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_FIXED_SORTED</span> .idx --&gt; Header, NumValues, Ordinals</li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_FIXED_SORTED</span> .dat --&gt; Header, ValueSize,
+       (Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) * ValueSize)<sup>NumValues</sup></li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_VAR_SORTED</span> .idx --&gt; Header, TotalVarBytes, Addresses, Ordinals</li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_VAR_SORTED</span> .dat --&gt; Header,
+       (Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) * <em>variable ValueSize</em>)<sup>NumValues</sup></li></ul>
+Data Types:
+<ul><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>PackedType --&gt; Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>)</li><li>MaxAddress, MinValue, DefaultValue --&gt; Int64 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a>) </li><li>PackedStream, Addresses, Ordinals --&gt; <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html">PackedInt32s</a></li><li>ValueSize, NumValues --&gt; Int32 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a>) </li><li>Float32 --&gt; 32-bit float encoded with <span class="xref">J2N.BitConversion.SingleToRawInt32Bits(System.Single)</span>
+                      then written as Int32 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a>) </li><li>Float64 --&gt; 64-bit float encoded with <span class="xref">J2N.BitConversion.DoubleToRawInt64Bits(System.Double)</span>
+                      then written as Int64 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a>) </li><li>TotalBytes --&gt; VLong (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt64_System_Int64_">WriteVInt64(Int64)</a>) </li><li>TotalVarBytes --&gt; Int64 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a>) </li><li>LengthPrefix --&gt; Length of the data value as VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) (maximum
+                      of 2 bytes)</li></ul>
+Notes:
+<ul><li>PackedType is a 0 when compressed, 1 when the stream is written as 64-bit integers.</li><li>Addresses stores pointers to the actual byte location (indexed by docid). In the VAR_STRAIGHT
+       case, each entry can have a different length, so to determine the length, docid+1 is
+       retrieved. A sentinel address is written at the end for the VAR_STRAIGHT case, so the Addresses
+       stream contains maxdoc+1 indices. For the deduplicated VAR_DEREF case, each length
+       is encoded as a prefix to the data itself as a VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>)
+       (maximum of 2 bytes).</li><li>Ordinals stores the term ID in sorted order (indexed by docid). In the FIXED_SORTED case,
+       the address into the .dat can be computed from the ordinal as
+<code>Header+ValueSize+(ordinal*ValueSize)</code> because the byte length is fixed.
+In the VAR_SORTED case, there is double indirection (docid -&gt; ordinal -&gt; address), but
+an additional sentinel ordinal+address is always written (so there are NumValues+1 ordinals). To
+determine the length, ord+1&apos;s address is looked up as well.</li><li><span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_VAR_STRAIGHT</span> in contrast to other straight
+variants uses a <code>.idx</code> file to improve lookup perfromance. In contrast to
+<span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_VAR_DEREF</span> it doesn&apos;t apply deduplication of the document values.
+</li></ul>
+<p>
+Limitations:
+<ul><li> Binary doc values can be at most <a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40DocValuesFormat.html#Lucene_Net_Codecs_Lucene40_Lucene40DocValuesFormat_MAX_BINARY_FIELD_LENGTH">MAX_BINARY_FIELD_LENGTH</a> in length.</li></ul> </p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40FieldInfosFormat.html">Lucene40FieldInfosFormat</a></h4>
+      <section><p>Lucene 4.0 Field Infos format.
+<p>
+<p>Field names are stored in the field info file, with suffix <tt>.fnm</tt>.</p>
+<p>FieldInfos (.fnm) --&gt; Header,FieldsCount, &lt;FieldName,FieldNumber,
+FieldBits,DocValuesBits,Attributes&gt; <sup>FieldsCount</sup></p>
+<p>Data types:
+<ul><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>FieldsCount --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>FieldName --&gt; String (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteString_System_String_">WriteString(String)</a>) </li><li>FieldBits, DocValuesBits --&gt; Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) </li><li>FieldNumber --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a>) </li><li>Attributes --&gt; IDictionary&lt;String,String&gt; (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteStringStringMap_System_Collections_Generic_IDictionary_System_String_System_String__">WriteStringStringMap(IDictionary&lt;String, String&gt;)</a>) </li></ul>
+</p>
+Field Descriptions:
+<ul><li>FieldsCount: the number of fields in this file.</li><li>FieldName: name of the field as a UTF-8 String.</li><li>FieldNumber: the field&apos;s number. Note that unlike previous versions of
+      Lucene, the fields are not numbered implicitly by their order in the
+      file, instead explicitly.</li><li>FieldBits: a byte containing field options.
+<ul><li>The low-order bit is one for indexed fields, and zero for non-indexed
+      fields.</li><li>The second lowest-order bit is one for fields that have term vectors
+      stored, and zero for fields without term vectors.</li><li>If the third lowest order-bit is set (0x4), offsets are stored into
+      the postings list in addition to positions.</li><li>Fourth bit is unused.</li><li>If the fifth lowest-order bit is set (0x10), norms are omitted for the
+      indexed field.</li><li>If the sixth lowest-order bit is set (0x20), payloads are stored for the
+      indexed field.</li><li>If the seventh lowest-order bit is set (0x40), term frequencies and
+      positions omitted for the indexed field.</li><li>If the eighth lowest-order bit is set (0x80), positions are omitted for the
+      indexed field.</li></ul>
+</li><li>DocValuesBits: a byte containing per-document value types. The type
+    recorded as two four-bit integers, with the high-order bits representing
+<code>norms</code> options, and the low-order bits representing
+<a class="xref" href="Lucene.Net.Index.DocValues.html">DocValues</a> options. Each four-bit integer can be decoded as such:
+<ul><li>0: no DocValues for this field.</li><li>1: variable-width signed integers. (<span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.VAR_INTS</span>)</li><li>2: 32-bit floating point values. (<span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.FLOAT_32</span>)</li><li>3: 64-bit floating point values. (<span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.FLOAT_64</span>)</li><li>4: fixed-length byte array values. (<span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_FIXED_STRAIGHT</span>)</li><li>5: fixed-length dereferenced byte array values. (<span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_FIXED_DEREF</span>)</li><li>6: variable-length byte array values. (<span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_VAR_STRAIGHT</span>)</li><li>7: variable-length dereferenced byte array values. (<span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_VAR_DEREF</span>)</li><li>8: 16-bit signed integers. (<span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.FIXED_INTS_16</span>)</li><li>9: 32-bit signed integers. (<span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.FIXED_INTS_32</span>)</li><li>10: 64-bit signed integers. (<span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.FIXED_INTS_64</span>)</li><li>11: 8-bit signed integers. (<span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.FIXED_INTS_8</span>)</li><li>12: fixed-length sorted byte array values. (<span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_FIXED_SORTED</span>)</li><li>13: variable-length sorted byte array values. (<span class="xref">Lucene.Net.Codecs.Lucene40.LegacyDocValuesType.BYTES_VAR_SORTED</span>)</li></ul>
+</li><li>Attributes: a key-value map of codec-private attributes.</li></ul></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div><p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40LiveDocsFormat.html">Lucene40LiveDocsFormat</a></h4>
+      <section><p>Lucene 4.0 Live Documents Format.
+<p>
+<p>The .del file is optional, and only exists when a segment contains
+deletions.</p>
+<p>Although per-segment, this file is maintained exterior to compound segment
+files.</p>
+<p>Deletions (.del) --&gt; Format,Header,ByteCount,BitCount, Bits | DGaps (depending
+on Format)</p>
+<ul><li>Format,ByteSize,BitCount --&gt; Uint32 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a>) </li><li>Bits --&gt; &lt; Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) &gt; <sup>ByteCount</sup></li><li>DGaps --&gt; &lt;DGap,NonOnesByte&gt; <sup>NonzeroBytesCount</sup></li><li>DGap --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>NonOnesByte --&gt;  Byte(<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) </li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li></ul>
+<p>Format is 1: indicates cleared DGaps.</p>
+<p>ByteCount indicates the number of bytes in Bits. It is typically
+(SegSize/8)+1.</p>
+<p>BitCount indicates the number of bits that are currently set in Bits.</p>
+<p>Bits contains one bit for each document indexed. When the bit corresponding
+to a document number is cleared, that document is marked as deleted. Bit ordering
+is from least to most significant. Thus, if Bits contains two bytes, 0x00 and
+0x02, then document 9 is marked as alive (not deleted).</p>
+<p>DGaps represents sparse bit-vectors more efficiently than Bits. It is made
+of DGaps on indexes of nonOnes bytes in Bits, and the nonOnes bytes themselves.
+The number of nonOnes bytes in Bits (NonOnesBytesCount) is not stored.</p>
+<p>For example, if there are 8000 bits and only bits 10,12,32 are cleared, DGaps
+would be used:</p>
+<p>(VInt) 1 , (byte) 20 , (VInt) 3 , (Byte) 1</p></p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40NormsFormat.html">Lucene40NormsFormat</a></h4>
+      <section><p>Lucene 4.0 Norms Format.
+<p>
+Files:
+<ul><li><code>.nrm.cfs</code>: compound container (<a class="xref" href="Lucene.Net.Store.CompoundFileDirectory.html">CompoundFileDirectory</a>) </li><li><code>.nrm.cfe</code>: compound entries (<a class="xref" href="Lucene.Net.Store.CompoundFileDirectory.html">CompoundFileDirectory</a>) </li></ul>
+Norms are implemented as DocValues, so other than file extension, norms are
+written exactly the same way as <a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40DocValuesFormat.html">Lucene40DocValuesFormat</a>.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40PostingsBaseFormat.html">Lucene40PostingsBaseFormat</a></h4>
+      <section><p>Provides a <a class="xref" href="Lucene.Net.Codecs.PostingsReaderBase.html">PostingsReaderBase</a> and
+<a class="xref" href="Lucene.Net.Codecs.PostingsWriterBase.html">PostingsWriterBase</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40PostingsFormat.html">Lucene40PostingsFormat</a></h4>
+      <section><p>Lucene 4.0 Postings format.
+<p>
+Files:
+<ul><li><tt>.tim</tt>: <a href="#Termdictionary">Term Dictionary</a></li><li><tt>.tip</tt>: <a href="#Termindex">Term Index</a></li><li><tt>.frq</tt>: <a href="#Frequencies">Frequencies</a></li><li><tt>.prx</tt>: <a href="#Positions">Positions</a></li></ul>
+</p>
+<p>
+<a name="Termdictionary" id="Termdictionary"></a>
+<h3>Term Dictionary</h3></p>
+<p>The .tim file contains the list of terms in each
+field along with per-term statistics (such as docfreq)
+and pointers to the frequencies, positions and
+skip data in the .frq and .prx files.
+See <a class="xref" href="Lucene.Net.Codecs.BlockTreeTermsWriter.html">BlockTreeTermsWriter</a> for more details on the format.
+</p>
+
+<p>NOTE: The term dictionary can plug into different postings implementations:
+the postings writer/reader are actually responsible for encoding
+and decoding the Postings Metadata and Term Metadata sections described here:</p>
+<ul><li>Postings Metadata --&gt; Header, SkipInterval, MaxSkipLevels, SkipMinimum</li><li>Term Metadata --&gt; FreqDelta, SkipDelta?, ProxDelta?</li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>SkipInterval,MaxSkipLevels,SkipMinimum --&gt; Uint32 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a>) </li><li>SkipDelta,FreqDelta,ProxDelta --&gt; VLong (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt64_System_Int64_">WriteVInt64(Int64)</a>) </li></ul>
+<p>Notes:</p>
+<ul><li>Header is a CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>)  storing the version information
+       for the postings.</li><li>SkipInterval is the fraction of TermDocs stored in skip tables. It is used to accelerate
+<a class="xref" href="Lucene.Net.Search.DocIdSetIterator.html#Lucene_Net_Search_DocIdSetIterator_Advance_System_Int32_">Advance(Int32)</a>. Larger values result in smaller indexes, greater
+acceleration, but fewer accelerable cases, while smaller values result in bigger indexes,
+less acceleration (in case of a small value for MaxSkipLevels) and more accelerable cases.
+</li><li>MaxSkipLevels is the max. number of skip levels stored for each term in the .frq file. A
+low value results in smaller indexes but less acceleration, a larger value results in
+slightly larger indexes but greater acceleration. See format of .frq file for more
+information about skip levels.</li><li>SkipMinimum is the minimum document frequency a term must have in order to write any
+skip data at all.</li><li>FreqDelta determines the position of this term&apos;s TermFreqs within the .frq
+file. In particular, it is the difference between the position of this term&apos;s
+data in that file and the position of the previous term&apos;s data (or zero, for
+the first term in the block).</li><li>ProxDelta determines the position of this term&apos;s TermPositions within the
+.prx file. In particular, it is the difference between the position of this
+term&apos;s data in that file and the position of the previous term&apos;s data (or zero,
+for the first term in the block. For fields that omit position data, this will
+be 0 since prox information is not stored.</li><li>SkipDelta determines the position of this term&apos;s SkipData within the .frq
+file. In particular, it is the number of bytes after TermFreqs that the
+SkipData starts. In other words, it is the length of the TermFreq data.
+SkipDelta is only stored if DocFreq is not smaller than SkipMinimum.</li></ul>
+<a name="Termindex" id="Termindex"></a>
+<h3>Term Index</h3>
+<p>The .tip file contains an index into the term dictionary, so that it can be
+accessed randomly.  See <a class="xref" href="Lucene.Net.Codecs.BlockTreeTermsWriter.html">BlockTreeTermsWriter</a> for more details on the format.</p>
+<a name="Frequencies" id="Frequencies"></a>
+<h3>Frequencies</h3>
+<p>The .frq file contains the lists of documents which contain each term, along
+with the frequency of the term in that document (except when frequencies are
+omitted: <a class="xref" href="Lucene.Net.Index.IndexOptions.html#Lucene_Net_Index_IndexOptions_DOCS_ONLY">DOCS_ONLY</a>).</p>
+<ul><li>FreqFile (.frq) --&gt; Header, &lt;TermFreqs, SkipData?&gt; <sup>TermCount</sup></li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>TermFreqs --&gt; &lt;TermFreq&gt; <sup>DocFreq</sup></li><li>TermFreq --&gt; DocDelta[, Freq?]</li><li>SkipData --&gt; &lt;&lt;SkipLevelLength, SkipLevel&gt;
+<sup>NumSkipLevels-1</sup>, SkipLevel&gt; &lt;SkipDatum&gt;</li><li>SkipLevel --&gt; &lt;SkipDatum&gt; <sup>DocFreq/(SkipInterval^(Level +
+1))</sup></li><li>SkipDatum --&gt;
+DocSkip,PayloadLength?,OffsetLength?,FreqSkip,ProxSkip,SkipChildLevelPointer?</li><li>DocDelta,Freq,DocSkip,PayloadLength,OffsetLength,FreqSkip,ProxSkip --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>SkipChildLevelPointer --&gt; VLong (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt64_System_Int64_">WriteVInt64(Int64)</a>) </li></ul>
+<p>TermFreqs are ordered by term (the term is implicit, from the term dictionary).</p>
+<p>TermFreq entries are ordered by increasing document number.</p>
+<p>DocDelta: if frequencies are indexed, this determines both the document
+number and the frequency. In particular, DocDelta/2 is the difference between
+this document number and the previous document number (or zero when this is the
+first document in a TermFreqs). When DocDelta is odd, the frequency is one.
+When DocDelta is even, the frequency is read as another VInt. If frequencies
+are omitted, DocDelta contains the gap (not multiplied by 2) between document
+numbers and no frequency information is stored.</p>
+<p>For example, the TermFreqs for a term which occurs once in document seven
+and three times in document eleven, with frequencies indexed, would be the
+following sequence of VInts:</p>
+<p>15, 8, 3</p>
+<p>If frequencies were omitted (<a class="xref" href="Lucene.Net.Index.IndexOptions.html#Lucene_Net_Index_IndexOptions_DOCS_ONLY">DOCS_ONLY</a>) it would be this
+sequence of VInts instead:</p>
+<p>7,4</p>
+<p>DocSkip records the document number before every SkipInterval <sup>th</sup>
+document in TermFreqs. If payloads and offsets are disabled for the term&apos;s field, then
+DocSkip represents the difference from the previous value in the sequence. If
+payloads and/or offsets are enabled for the term&apos;s field, then DocSkip/2 represents the
+difference from the previous value in the sequence. In this case when
+DocSkip is odd, then PayloadLength and/or OffsetLength are stored indicating the length of
+the last payload/offset before the SkipInterval<sup>th</sup> document in TermPositions.</p>
+<p>PayloadLength indicates the length of the last payload.</p>
+<p>OffsetLength indicates the length of the last offset (endOffset-startOffset).</p>
+<p>
+FreqSkip and ProxSkip record the position of every SkipInterval <sup>th</sup>
+entry in FreqFile and ProxFile, respectively. File positions are relative to
+the start of TermFreqs and Positions, to the previous SkipDatum in the
+sequence.</p>
+<p>For example, if DocFreq=35 and SkipInterval=16, then there are two SkipData
+entries, containing the 15 <sup>th</sup> and 31 <sup>st</sup> document numbers
+in TermFreqs. The first FreqSkip names the number of bytes after the beginning
+of TermFreqs that the 16 <sup>th</sup> SkipDatum starts, and the second the
+number of bytes after that that the 32 <sup>nd</sup> starts. The first ProxSkip
+names the number of bytes after the beginning of Positions that the 16
+<sup>th</sup> SkipDatum starts, and the second the number of bytes after that
+that the 32 <sup>nd</sup> starts.</p>
+<p>Each term can have multiple skip levels. The amount of skip levels for a
+term is NumSkipLevels = Min(MaxSkipLevels,
+floor(log(DocFreq/log(SkipInterval)))). The number of SkipData entries for a
+skip level is DocFreq/(SkipInterval^(Level + 1)), whereas the lowest skip level
+is Level=0.
+<p>
+Example: SkipInterval = 4, MaxSkipLevels = 2, DocFreq = 35. Then skip level 0
+has 8 SkipData entries, containing the 3<sup>rd</sup>, 7<sup>th</sup>,
+11<sup>th</sup>, 15<sup>th</sup>, 19<sup>th</sup>, 23<sup>rd</sup>,
+27<sup>th</sup>, and 31<sup>st</sup> document numbers in TermFreqs. Skip level
+1 has 2 SkipData entries, containing the 15<sup>th</sup> and 31<sup>st</sup>
+document numbers in TermFreqs.
+<p>
+The SkipData entries on all upper levels &gt; 0 contain a SkipChildLevelPointer
+referencing the corresponding SkipData entry in level-1. In the example has
+entry 15 on level 1 a pointer to entry 15 on level 0 and entry 31 on level 1 a
+pointer to entry 31 on level 0.
+</p>
+<a name="Positions" id="Positions"></a>
+<h3>Positions</h3>
+<p>The .prx file contains the lists of positions that each term occurs at
+within documents. Note that fields omitting positional data do not store
+anything into this file, and if all fields in the index omit positional data
+then the .prx file will not exist.</p>
+<ul><li>ProxFile (.prx) --&gt; Header, &lt;TermPositions&gt; <sup>TermCount</sup></li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>TermPositions --&gt; &lt;Positions&gt; <sup>DocFreq</sup></li><li>Positions --&gt; &lt;PositionDelta,PayloadLength?,OffsetDelta?,OffsetLength?,PayloadData?&gt; <sup>Freq</sup></li><li>PositionDelta,OffsetDelta,OffsetLength,PayloadLength --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>PayloadData --&gt; byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) <sup>PayloadLength</sup></li></ul>
+<p>TermPositions are ordered by term (the term is implicit, from the term dictionary).</p>
+<p>Positions entries are ordered by increasing document number (the document
+number is implicit from the .frq file).</p>
+<p>PositionDelta is, if payloads are disabled for the term&apos;s field, the
+difference between the position of the current occurrence in the document and
+the previous occurrence (or zero, if this is the first occurrence in this
+document). If payloads are enabled for the term&apos;s field, then PositionDelta/2
+is the difference between the current and the previous position. If payloads
+are enabled and PositionDelta is odd, then PayloadLength is stored, indicating
+the length of the payload at the current term position.</p>
+<p>For example, the TermPositions for a term which occurs as the fourth term in
+one document, and as the fifth and ninth term in a subsequent document, would
+be the following sequence of VInts (payloads disabled):</p>
+<p>4, 5, 4</p>
+<p>PayloadData is metadata associated with the current term position. If
+PayloadLength is stored at the current position, then it indicates the length
+of this payload. If PayloadLength is not stored, then this payload has the same
+length as the payload at the previous position.</p>
+<p>OffsetDelta/2 is the difference between this position&apos;s startOffset from the
+previous occurrence (or zero, if this is the first occurrence in this document).
+If OffsetDelta is odd, then the length (endOffset-startOffset) differs from the
+previous occurrence and an OffsetLength follows. Offset data is only written for
+<a class="xref" href="Lucene.Net.Index.IndexOptions.html#Lucene_Net_Index_IndexOptions_DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS">DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS</a>.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40PostingsReader.html">Lucene40PostingsReader</a></h4>
+      <section><p>Concrete class that reads the 4.0 frq/prox
+postings format.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40SegmentInfoFormat.html">Lucene40SegmentInfoFormat</a></h4>
+      <section><p>Lucene 4.0 Segment info format.
+<p>
+Files:
+<ul><li><tt>.si</tt>: Header, SegVersion, SegSize, IsCompoundFile, Diagnostics, Attributes, Files</li></ul>
+</p>
+Data types:
+<p>
+<ul><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>SegSize --&gt; Int32 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt32_System_Int32_">WriteInt32(Int32)</a>) </li><li>SegVersion --&gt; String (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteString_System_String_">WriteString(String)</a>) </li><li>Files --&gt; ISet&lt;String&gt; (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteStringSet_System_Collections_Generic_ISet_System_String__">WriteStringSet(ISet&lt;String&gt;)</a>) </li><li>Diagnostics, Attributes --&gt; IDictionary&lt;String,String&gt; (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteStringStringMap_System_Collections_Generic_IDictionary_System_String_System_String__">WriteStringStringMap(IDictionary&lt;String, String&gt;)</a>) </li><li>IsCompoundFile --&gt; Int8 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) </li></ul>
+</p>
+Field Descriptions:
+<p>
+<ul><li>SegVersion is the code version that created the segment.</li><li>SegSize is the number of documents contained in the segment index.</li><li>IsCompoundFile records whether the segment is written as a compound file or
+      not. If this is -1, the segment is not a compound file. If it is 1, the segment
+      is a compound file.</li><li>Checksum contains the CRC32 checksum of all bytes in the segments_N file up
+      until the checksum. This is used to verify integrity of the file on opening the
+      index.</li><li>The Diagnostics Map is privately written by <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>, as a debugging aid,
+      for each segment it creates. It includes metadata like the current Lucene
+      version, OS, .NET/Java version, why the segment was created (merge, flush,
+      addIndexes), etc.</li><li>Attributes: a key-value map of codec-private attributes.</li><li>Files is a list of files referred to by this segment.</li></ul>
+</p></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40SegmentInfoReader.html">Lucene40SegmentInfoReader</a></h4>
+      <section><p>Lucene 4.0 implementation of <a class="xref" href="Lucene.Net.Codecs.SegmentInfoReader.html">SegmentInfoReader</a>.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div><p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40SegmentInfoWriter.html">Lucene40SegmentInfoWriter</a></h4>
+      <section><p>Lucene 4.0 implementation of <a class="xref" href="Lucene.Net.Codecs.SegmentInfoWriter.html">SegmentInfoWriter</a>.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40SkipListReader.html">Lucene40SkipListReader</a></h4>
+      <section><p>Implements the skip list reader for the 4.0 posting list format
+that stores positions and payloads.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40StoredFieldsFormat.html">Lucene40StoredFieldsFormat</a></h4>
+      <section><p>Lucene 4.0 Stored Fields Format.
+<p>Stored fields are represented by two files:</p>
+<ol><li><a name="field_index" id="field_index"></a>
+<p>The field index, or <code>.fdx</code> file.</p>
+<p>This is used to find the location within the field data file of the fields
+of a particular document. Because it contains fixed-length data, this file may
+be easily randomly accessed. The position of document <em>n</em> &apos;s field data is
+the Uint64 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a>) at <em>n*8</em> in this file.</p>
+<p>This contains, for each document, a pointer to its field data, as
+follows:</p>
+<ul><li>FieldIndex (.fdx) --&gt; &lt;Header&gt;, &lt;FieldValuesPosition&gt; <sup>SegSize</sup></li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>FieldValuesPosition --&gt; Uint64 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a>) </li></ul>
+</li><li>
+<p><a name="field_data" id="field_data"></a>The field data, or <code>.fdt</code> file.</p>
+<p>This contains the stored fields of each document, as follows:</p>
+<ul><li>FieldData (.fdt) --&gt; &lt;Header&gt;, &lt;DocFieldData&gt; <sup>SegSize</sup></li><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>DocFieldData --&gt; FieldCount, &lt;FieldNum, Bits, Value&gt;
+<sup>FieldCount</sup></li><li>FieldCount --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>FieldNum --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>Bits --&gt; Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>)
+<ul><li>low order bit reserved.</li><li>second bit is one for fields containing binary data</li><li>third bit reserved.</li><li>4th to 6th bit (mask: 0x7&lt;&lt;3) define the type of a numeric field:
+<ul><li>all bits in mask are cleared if no numeric field at all</li><li>1&lt;&lt;3: Value is Int</li><li>2&lt;&lt;3: Value is Long</li><li>3&lt;&lt;3: Value is Int as Float (as of <span class="xref">J2N.BitConversion.Int32BitsToSingle(System.Int32)</span></li><li>4&lt;&lt;3: Value is Long as Double (as of <span class="xref">J2N.BitConversion.Int64BitsToDouble(System.Int64)</span></li></ul>
+</li></ul>
+</li><li>Value --&gt; String | BinaryValue | Int | Long (depending on Bits)</li><li>BinaryValue --&gt; ValueSize, &lt; Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) &gt;^ValueSize</li><li>ValueSize --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li></ul>
+</li></ol></p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40StoredFieldsReader.html">Lucene40StoredFieldsReader</a></h4>
+      <section><p>Class responsible for access to stored document fields.
+<p>
+It uses &lt;segment&gt;.fdt and &lt;segment&gt;.fdx; files.
+<p>
+<div class="lucene-block lucene-internal">This is a Lucene.NET INTERNAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40StoredFieldsWriter.html">Lucene40StoredFieldsWriter</a></h4>
+      <section><p>Class responsible for writing stored document fields.
+<p>
+It uses &lt;segment&gt;.fdt and &lt;segment&gt;.fdx; files.
+<p>
+<div class="lucene-block lucene-experimental">This is a Lucene.NET EXPERIMENTAL API, use at your own risk</div></section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40TermVectorsFormat.html">Lucene40TermVectorsFormat</a></h4>
+      <section><p>Lucene 4.0 Term Vectors format.
+<p>Term Vector support is an optional on a field by field basis. It consists of
+3 files.</p>
+<ol><li><a name="tvx" id="tvx"></a>
+<p>The Document Index or .tvx file.</p>
+<p>For each document, this stores the offset into the document data (.tvd) and
+field data (.tvf) files.</p>
+<p>DocumentIndex (.tvx) --&gt; Header,&lt;DocumentPosition,FieldPosition&gt;
+<sup>NumDocs</sup></p>
+<ul><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>DocumentPosition --&gt; UInt64 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a>)  (offset in the .tvd file)</li><li>FieldPosition --&gt; UInt64 (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteInt64_System_Int64_">WriteInt64(Int64)</a>)  (offset in the .tvf file)</li></ul>
+</li><li><a name="tvd" id="tvd"></a>
+<p>The Document or .tvd file.</p>
+<p>This contains, for each document, the number of fields, a list of the fields
+with term vector info and finally a list of pointers to the field information
+in the .tvf (Term Vector Fields) file.</p>
+<p>The .tvd file is used to map out the fields that have term vectors stored
+and where the field information is in the .tvf file.</p>
+<p>Document (.tvd) --&gt; Header,&lt;NumFields, FieldNums,
+FieldPositions&gt; <sup>NumDocs</sup></p>
+<ul><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>NumFields --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>FieldNums --&gt; &lt;FieldNumDelta&gt; <sup>NumFields</sup></li><li>FieldNumDelta --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>FieldPositions --&gt; &lt;FieldPositionDelta&gt; <sup>NumFields-1</sup></li><li>FieldPositionDelta --&gt; VLong (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt64_System_Int64_">WriteVInt64(Int64)</a>) </li></ul>
+</li><li><a name="tvf" id="tvf"></a>
+<p>The Field or .tvf file.</p>
+<p>This file contains, for each field that has a term vector stored, a list of
+the terms, their frequencies and, optionally, position, offset, and payload
+information.</p>
+<p>Field (.tvf) --&gt; Header,&lt;NumTerms, Flags, TermFreqs&gt;
+<sup>NumFields</sup></p>
+<ul><li>Header --&gt; CodecHeader (<a class="xref" href="Lucene.Net.Codecs.CodecUtil.html#Lucene_Net_Codecs_CodecUtil_WriteHeader_Lucene_Net_Store_DataOutput_System_String_System_Int32_">WriteHeader(DataOutput, String, Int32)</a>) </li><li>NumTerms --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>Flags --&gt; Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) </li><li>TermFreqs --&gt; &lt;TermText, TermFreq, Positions?, PayloadData?, Offsets?&gt;
+<sup>NumTerms</sup></li><li>TermText --&gt; &lt;PrefixLength, Suffix&gt;</li><li>PrefixLength --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>Suffix --&gt; String (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteString_System_String_">WriteString(String)</a>) </li><li>TermFreq --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>Positions --&gt; &lt;PositionDelta PayloadLength?&gt;<sup>TermFreq</sup></li><li>PositionDelta --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>PayloadLength --&gt; VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) </li><li>PayloadData --&gt; Byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(Byte)</a>) <sup>NumPayloadBytes</sup></li><li>Offsets --&gt; &lt;VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>), VInt (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(Int32)</a>) &gt;<sup>TermFreq</sup></li></ul>
+<p>Notes:</p>
+<ul><li>Flags byte stores whether this term vector has position, offset, payload.
+information stored.</li><li>Term byte prefixes are shared. The PrefixLength is the number of initial
+bytes from the previous term which must be pre-pended to a term&apos;s suffix
+in order to form the term&apos;s bytes. Thus, if the previous term&apos;s text was &quot;bone&quot;
+and the term is &quot;boy&quot;, the PrefixLength is two and the suffix is &quot;y&quot;.</li><li>PositionDelta is, if payloads are disabled for the term&apos;s field, the
+difference between the position of the current occurrence in the document and
+the previous occurrence (or zero, if this is the first occurrence in this
+document). If payloads are enabled for the term&apos;s field, then PositionDelta/2
+is the difference between the current and the previous position. If payloads
+are enabled and PositionDelta is odd, then PayloadLength is stored, indicating
+the length of the payload at the current term position.</li><li>PayloadData is metadata associated with a term position. If
+PayloadLength is stored at the current position, then it indicates the length
+of this payload. If PayloadLength is not stored, then this payload has the same
+length as the payload at the previous position. PayloadData encodes the
+concatenated bytes for all of a terms occurrences.</li><li>Offsets are stored as delta encoded VInts. The first VInt is the
+startOffset, the second is the endOffset.</li></ul>
+</li></ol></p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40TermVectorsReader.html">Lucene40TermVectorsReader</a></h4>
+      <section><p>Lucene 4.0 Term Vectors reader.
+<p>
+It reads .tvd, .tvf, and .tvx files.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Codecs.Lucene40.Lucene40TermVectorsWriter.html">Lucene40TermVectorsWriter</a></h4>
+      <section><p>Lucene 4.0 Term Vectors writer.
+<p>
+It writes .tvd, .tvf, and .tvx files.</p>
+</section>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00013/src/Lucene.Net/Codecs/Lucene40/package.md/#L2" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © 2020 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,487 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Lucene.NET 4.8.0-beta00013 Release Notes | Apache Lucene.NET 4.8.0 </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Lucene.NET 4.8.0-beta00013 Release Notes | Apache Lucene.NET 4.8.0 ">
+    <meta name="generator" content="docfx 2.56.6.0">
+    
+    <link rel="shortcut icon" href="../logo/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    
+    
+  
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono">
+    <link rel="stylesheet" href="/styles/site.css">
+  
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="releasenotes/4.8.0-beta00013">
+<h1 id="lucenenet-480-beta00013-release-notes">Lucene.NET 4.8.0-beta00013 Release Notes</h1>
+
+<hr>
+<blockquote>
+<p>This release contains important bug fixes and performance enhancements.</p>
+</blockquote>
+<h2 id="benchmarks-from-310">Benchmarks (from <a href="https://github.com/apache/lucenenet/pull/310">#310</a>)</h2>
+<h4 id="index-files">Index Files</h4>
+<details>
+  <summary>Click to expand</summary>
+<pre><code class="lang-ini">
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.19041.630 (2004/?/20H1)
+Intel Core i7-8850H CPU 2.60GHz (Coffee Lake), 1 CPU, 12 logical and 6 physical cores
+.NET Core SDK=5.0.100
+  [Host]          : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00005 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00006 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00007 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00008 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00009 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00010 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00011 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00012 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00013 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+
+InvocationCount=1  IterationCount=15  LaunchCount=2  
+UnrollFactor=1  WarmupCount=10  
+
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Job</th>
+<th style="text-align: right;">Mean</th>
+<th style="text-align: right;">Error</th>
+<th style="text-align: right;">StdDev</th>
+<th style="text-align: right;">Gen 0</th>
+<th style="text-align: right;">Gen 1</th>
+<th style="text-align: right;">Gen 2</th>
+<th style="text-align: right;">Allocated</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IndexFiles</td>
+<td>4.8.0-beta00005</td>
+<td style="text-align: right;">628.1 ms</td>
+<td style="text-align: right;">8.41 ms</td>
+<td style="text-align: right;">12.05 ms</td>
+<td style="text-align: right;">43000.0000</td>
+<td style="text-align: right;">8000.0000</td>
+<td style="text-align: right;">7000.0000</td>
+<td style="text-align: right;">220.82 MB</td>
+</tr>
+<tr>
+<td>IndexFiles</td>
+<td>4.8.0-beta00006</td>
+<td style="text-align: right;">628.3 ms</td>
+<td style="text-align: right;">13.19 ms</td>
+<td style="text-align: right;">19.33 ms</td>
+<td style="text-align: right;">44000.0000</td>
+<td style="text-align: right;">8000.0000</td>
+<td style="text-align: right;">7000.0000</td>
+<td style="text-align: right;">220.67 MB</td>
+</tr>
+<tr>
+<td>IndexFiles</td>
+<td>4.8.0-beta00007</td>
+<td style="text-align: right;">617.2 ms</td>
+<td style="text-align: right;">8.44 ms</td>
+<td style="text-align: right;">11.83 ms</td>
+<td style="text-align: right;">44000.0000</td>
+<td style="text-align: right;">8000.0000</td>
+<td style="text-align: right;">7000.0000</td>
+<td style="text-align: right;">220.73 MB</td>
+</tr>
+<tr>
+<td>IndexFiles</td>
+<td>4.8.0-beta00008</td>
+<td style="text-align: right;">620.6 ms</td>
+<td style="text-align: right;">5.62 ms</td>
+<td style="text-align: right;">8.41 ms</td>
+<td style="text-align: right;">44000.0000</td>
+<td style="text-align: right;">8000.0000</td>
+<td style="text-align: right;">7000.0000</td>
+<td style="text-align: right;">221.06 MB</td>
+</tr>
+<tr>
+<td>IndexFiles</td>
+<td>4.8.0-beta00009</td>
+<td style="text-align: right;">632.8 ms</td>
+<td style="text-align: right;">12.57 ms</td>
+<td style="text-align: right;">18.43 ms</td>
+<td style="text-align: right;">44000.0000</td>
+<td style="text-align: right;">8000.0000</td>
+<td style="text-align: right;">7000.0000</td>
+<td style="text-align: right;">220.95 MB</td>
+</tr>
+<tr>
+<td>IndexFiles</td>
+<td>4.8.0-beta00010</td>
+<td style="text-align: right;">862.3 ms</td>
+<td style="text-align: right;">51.13 ms</td>
+<td style="text-align: right;">74.95 ms</td>
+<td style="text-align: right;">44000.0000</td>
+<td style="text-align: right;">8000.0000</td>
+<td style="text-align: right;">7000.0000</td>
+<td style="text-align: right;">221.22 MB</td>
+</tr>
+<tr>
+<td>IndexFiles</td>
+<td>4.8.0-beta00011</td>
+<td style="text-align: right;">636.5 ms</td>
+<td style="text-align: right;">11.06 ms</td>
+<td style="text-align: right;">15.87 ms</td>
+<td style="text-align: right;">44000.0000</td>
+<td style="text-align: right;">8000.0000</td>
+<td style="text-align: right;">7000.0000</td>
+<td style="text-align: right;">221.09 MB</td>
+</tr>
+<tr>
+<td>IndexFiles</td>
+<td>4.8.0-beta00012</td>
+<td style="text-align: right;">668.8 ms</td>
+<td style="text-align: right;">14.78 ms</td>
+<td style="text-align: right;">21.66 ms</td>
+<td style="text-align: right;">56000.0000</td>
+<td style="text-align: right;">7000.0000</td>
+<td style="text-align: right;">6000.0000</td>
+<td style="text-align: right;">286.63 MB</td>
+</tr>
+<tr>
+<td>IndexFiles</td>
+<td>4.8.0-beta00013</td>
+<td style="text-align: right;">626.7 ms</td>
+<td style="text-align: right;">7.78 ms</td>
+<td style="text-align: right;">10.91 ms</td>
+<td style="text-align: right;">43000.0000</td>
+<td style="text-align: right;">8000.0000</td>
+<td style="text-align: right;">7000.0000</td>
+<td style="text-align: right;">219.8 MB</td>
+</tr>
+</tbody>
+</table>
+</details>
+<h4 id="search-files">Search Files</h4>
+<details>
+  <summary>Click to expand</summary>
+<pre><code class="lang-ini">
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.19041.630 (2004/?/20H1)
+Intel Core i7-8850H CPU 2.60GHz (Coffee Lake), 1 CPU, 12 logical and 6 physical cores
+.NET Core SDK=5.0.100
+  [Host]          : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00005 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00006 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00007 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00008 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00009 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00010 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00011 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00012 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+  4.8.0-beta00013 : .NET Core 3.1.9 (CoreCLR 4.700.20.47201, CoreFX 4.700.20.47203), X64 RyuJIT
+
+IterationCount=15  LaunchCount=2  WarmupCount=10  
+
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Job</th>
+<th style="text-align: right;">Mean</th>
+<th style="text-align: right;">Error</th>
+<th style="text-align: right;">StdDev</th>
+<th style="text-align: right;">Gen 0</th>
+<th style="text-align: right;">Gen 1</th>
+<th style="text-align: right;">Gen 2</th>
+<th style="text-align: right;">Allocated</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SearchFiles</td>
+<td>4.8.0-beta00005</td>
+<td style="text-align: right;">274.8 ms</td>
+<td style="text-align: right;">7.01 ms</td>
+<td style="text-align: right;">10.28 ms</td>
+<td style="text-align: right;">18000.0000</td>
+<td style="text-align: right;">1000.0000</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">82.12 MB</td>
+</tr>
+<tr>
+<td>SearchFiles</td>
+<td>4.8.0-beta00006</td>
+<td style="text-align: right;">283.4 ms</td>
+<td style="text-align: right;">7.78 ms</td>
+<td style="text-align: right;">11.64 ms</td>
+<td style="text-align: right;">18000.0000</td>
+<td style="text-align: right;">1000.0000</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">82.13 MB</td>
+</tr>
+<tr>
+<td>SearchFiles</td>
+<td>4.8.0-beta00007</td>
+<td style="text-align: right;">291.5 ms</td>
+<td style="text-align: right;">8.91 ms</td>
+<td style="text-align: right;">13.33 ms</td>
+<td style="text-align: right;">18000.0000</td>
+<td style="text-align: right;">1000.0000</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">81.9 MB</td>
+</tr>
+<tr>
+<td>SearchFiles</td>
+<td>4.8.0-beta00008</td>
+<td style="text-align: right;">162.3 ms</td>
+<td style="text-align: right;">5.50 ms</td>
+<td style="text-align: right;">8.23 ms</td>
+<td style="text-align: right;">17000.0000</td>
+<td style="text-align: right;">1000.0000</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">80.13 MB</td>
+</tr>
+<tr>
+<td>SearchFiles</td>
+<td>4.8.0-beta00009</td>
+<td style="text-align: right;">165.6 ms</td>
+<td style="text-align: right;">2.61 ms</td>
+<td style="text-align: right;">3.90 ms</td>
+<td style="text-align: right;">17000.0000</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">80.13 MB</td>
+</tr>
+<tr>
+<td>SearchFiles</td>
+<td>4.8.0-beta00010</td>
+<td style="text-align: right;">159.4 ms</td>
+<td style="text-align: right;">2.84 ms</td>
+<td style="text-align: right;">4.17 ms</td>
+<td style="text-align: right;">17000.0000</td>
+<td style="text-align: right;">1000.0000</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">79.85 MB</td>
+</tr>
+<tr>
+<td>SearchFiles</td>
+<td>4.8.0-beta00011</td>
+<td style="text-align: right;">160.8 ms</td>
+<td style="text-align: right;">1.93 ms</td>
+<td style="text-align: right;">2.77 ms</td>
+<td style="text-align: right;">17000.0000</td>
+<td style="text-align: right;">1000.0000</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">79.85 MB</td>
+</tr>
+<tr>
+<td>SearchFiles</td>
+<td>4.8.0-beta00012</td>
+<td style="text-align: right;">169.2 ms</td>
+<td style="text-align: right;">6.48 ms</td>
+<td style="text-align: right;">9.49 ms</td>
+<td style="text-align: right;">18000.0000</td>
+<td style="text-align: right;">1000.0000</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">81.11 MB</td>
+</tr>
+<tr>
+<td>SearchFiles</td>
+<td>4.8.0-beta00013</td>
+<td style="text-align: right;">161.6 ms</td>
+<td style="text-align: right;">3.28 ms</td>
+<td style="text-align: right;">4.80 ms</td>
+<td style="text-align: right;">14000.0000</td>
+<td style="text-align: right;">1000.0000</td>
+<td style="text-align: right;">-</td>
+<td style="text-align: right;">65.78 MB</td>
+</tr>
+</tbody>
+</table>
+</details>
+<h2 id="change-log">Change Log</h2>
+<h3 id="breaking-changes">Breaking Changes</h3>
+<ul>
+<li><code>Lucene.Net.Search.FieldCache</code>: Added interface <code>ICreationPlaceholder</code> and changed <code>CreationPlaceholder</code> class to <code>CreationPlaceHolder&lt;TValue&gt;</code>.</li>
+</ul>
+<h3 id="bugs">Bugs</h3>
+<ul>
+<li><a href="https://github.com/apache/lucenenet/pull/356">#356</a> - <code>Lucene.Net.Store.NativeFSLockFactory</code>: Modified options to allow read access on non-Windows operating systems. This caused the copy constructor of <code>RAMDirectory</code> to throw &quot;The process cannot access the file 'file path' because it is being used by another process&quot; excpetions.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/296">#296</a> - <code>Lucene.Net.Util.Automaton.State</code>: Removed <code>Equals()</code> implementation; it was intended to use reference equality as a unique key. This caused random <code>IndexOperationException</code>s to occur when using <code>FuzzyTermsEnum</code>/<code>FuzzyQuery</code>.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/387">#387</a> - Fixed formatting in <code>ArgumentException</code> message for all analyzer factories so it will display the dictionary contents</li>
+<li><a href="https://github.com/apache/lucenenet/pull/387">#387</a> - Lucene.Net.Util.ExceptionExtensions.GetSuppressedAsList(): Use <code>J2N.Collections.Generic.List&lt;T&gt;</code> so the call to <code>ToString()</code> will automatically list the exception messages</li>
+<li><a href="https://github.com/apache/lucenenet/pull/387">#387</a> - <code>Lucene.Net.TestFramework.Analysis.MockTokenizer</code>: Pass the <code>AttributeFactory</code> argument that is provided as per the documentation comment. Note this bug exists in Lucene 4.8.0, also.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/387">#387</a> - <code>Lucene.Net.Analysis.Common.Tartarus.Snowball.Among</code>: Fixed <code>MethodObject</code> property to return private field instead of itself</li>
+<li><a href="https://github.com/apache/lucenenet/pull/387">#387</a> - <code>Lucene.Net.Document.CompressionTools</code>: Pass the offset and length to the underlying <code>MemoryStream</code></li>
+<li><a href="https://github.com/apache/lucenenet/pull/388">#388</a> - Downgraded minimum required <code>Microsoft.Extensions.Configuration</code> version to 2.0.0 on .NET Standard 2.0 and 2.1</li>
+</ul>
+<h3 id="improvements">Improvements</h3>
+<ul>
+<li>Updated code examples on website home page
+<ol>
+<li>Show cross-OS examples of building <code>Directory</code> paths</li>
+<li>Demonstrate where to put <code>using</code> statements</li>
+<li>Removed LinqPad's <code>Dump()</code> method and replaced with <code>Console.WriteLine()</code> for clarity</li>
+<li>Fixed syntax error in initialization example of <code>MultiPhraseQuery</code></li>
+</ol>
+</li>
+<li>Upgraded NuGet dependency J2N to 2.0.0-beta-0010</li>
+<li>Upgraded NuGet dependency ICU4N to 60.1.0-alpha.353</li>
+<li>Upgraded NuGet dependency Morfologik.Stemming to 2.1.7-beta-0001</li>
+<li><a href="https://github.com/apache/lucenenet/pull/344">#344</a> - <strong>PERFORMANCE</strong>: <code>Lucene.Net.Search.FieldCacheImpl</code>: Removed unnecessary dictionary lookup</li>
+<li><a href="https://github.com/apache/lucenenet/pull/352">#352</a> - Added Azure DevOps tests for x86 on all platforms</li>
+<li><a href="https://github.com/apache/lucenenet/pull/348">#348</a> - <strong>PERFORMANCE</strong>: Reduced <code>FieldCacheImpl</code> casting/boxing</li>
+<li><a href="https://github.com/apache/lucenenet/pull/355">#355</a> - Setup nightly build (<a href="https://dev.azure.com/lucene-net/Lucene.NET/_build?definitionId=4">https://dev.azure.com/lucene-net/Lucene.NET/_build?definitionId=4</a>)</li>
+<li><strong>PERFORMANCE</strong>: <code>Lucene.Net.Util.Automaton.SortedInt32Set</code>: Removed unnecessary <code>IEquatable&lt;T&gt;</code> implementations and converted <code>FrozenInt32Set</code> into a struct.</li>
+<li><strong>PERFORMANCE</strong>: <code>Lucene.Net.Util.Bits</code>: Removed unnecessary <code>GetHashCode()</code> method from <code>MatchAllBits</code> and <code>MatchNoBits</code> (didn't exist in Lucene)</li>
+<li><code>Lucene.Net.Util.Counter</code>: Changed Get() to Value property and added implicit operator.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/361">#361</a> - Make <code>CreateDirectory()</code> method virtual so that derived classes can provide their own <code>Directory</code> implementation, allowing for benchmarking of custom <code>Directory</code> providers (e.q LiteDB)</li>
+<li><a href="https://github.com/apache/lucenenet/pull/346">#346</a>, <a href="https://github.com/apache/lucenenet/pull/383">#383</a> - <strong>PERFORMANCE</strong>: Change delegate overloads of <code>Debugging.Assert()</code> to use generic parameters and <code>string.Format()</code> to reduce allocations. Use <code>J2N.Text.StringFormatter</code> to automatically format arrays and collections so the processing of converting it to a string is deferred until an assert fails.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/296">#296</a> - <strong>PERFORMANCE</strong>: <code>Lucene.Net..Index</code>: Calling <code>IndexOptions.CompareTo()</code> causes boxing. Added new <code>IndexOptionsComparer</code> class to be used in codecs instead.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/387">#387</a> - Fixed or Suppressed Code Analysis Rules
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1012">CA1012</a>: Abstract types should not have constructors</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1052">CA1052</a>: Static holder types should be Static or NotInheritable</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1063">CA1063</a>: Implement IDisposable Properly (except for IndexWriter). Partially addresses <a href="https://github.com/apache/lucenenet/pull/265">#265</a>.</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1507">CA1507</a>: Use nameof instead of string (<a href="https://github.com/apache/lucenenet/pull/366">#366</a>)</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1802">CA1802</a>: Use Literals Where Appropriate</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1810">CA1810</a>: Initialize reference type static fields inline</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1815">CA1815</a>: Override equals and operator equals on value types</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1819">CA1819</a>: Properties should not return arrays</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1820">CA1820</a>: Test for empty strings using string length</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1822">CA1822</a>: Mark members as static</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1825">CA1825</a>: Avoid zero-length array allocations</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2213">CA2213</a>: Disposable fields should be disposed (except for <code>IndexWriter</code> and subclasses which need more work)</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0016">IDE0016</a>: use throw expression (<a href="https://github.com/apache/lucenenet/pull/368">#368</a>)</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0018">IDE0018</a>: Inline variable declaration</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0019">IDE0019</a>: Use pattern matching to avoid 'is' check followed by a cast</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0020-ide0038">IDE0020</a>: Use pattern matching to avoid 'is' check followed by a cast</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0021">IDE0021</a>: Use block body for constructors</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0025">IDE0025</a>: Use expression body for properties</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0027">IDE0027</a>: Use expression body for accessors</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0028">IDE0028</a>: Use collection initializers</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0029-ide0030">IDE0029</a>: Use coalesce expression</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0029-ide0030">IDE0030</a>: Use coalesce expression (nullable)</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0031">IDE0031</a>: Use null propagation</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0034">IDE0034</a>: Simplify 'default' expression</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0020-ide0038">IDE0038</a>: Use pattern matching to avoid 'is' check followed by a cast</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0039">IDE0039</a>: Use local function</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0040">IDE0040</a>: Add accessibility modifiers</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0041">IDE0041</a>: Use is null check</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0049">IDE0049</a>: Use language keywords instead of framework type names for type references</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0051">IDE0051</a>: Remove unused private member</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0052">IDE0052</a>: Remove unread private member</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0059">IDE0059</a>: Remove unnecessary value assignment</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0060">IDE0060</a>: Remove unused parameter</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0063">IDE0063</a>: Use simple 'using' statement</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide0071">IDE0071</a>: Simplify interpolation</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/ide1005">IDE1005</a>: Use conditional delegate call</li>
+<li><a href="https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/naming-rules">IDE1006</a>: Naming Styles</li>
+</ul>
+</li>
+<li><a href="https://github.com/apache/lucenenet/pull/387">#387</a> - Removed dead code/commented code</li>
+<li><a href="https://github.com/apache/lucenenet/pull/387">#387</a> - <strong>PERFORMANCE</strong>: Added aggressive inlining in Codecs and Util namespaces</li>
+<li><a href="https://github.com/apache/lucenenet/pull/387">#387</a> - Simplified reuse logic of <code>TermsEnum</code> subclasses</li>
+<li><a href="https://github.com/apache/lucenenet/pull/387">#387</a> - <strong>PERFORMANCE</strong>: <code>Lucene.Net.Index.DocValuesProducer</code>: Optimized checks in <code>AddXXXField()</code> methods</li>
+<li><a href="https://github.com/apache/lucenenet/pull/387">#387</a> - <strong>PERFORMANCE</strong>: <code>Lucene.Net.Index</code>: Changed <code>FieldInfos</code>, <code>FreqProxTermsWriterPerField</code>, <code>IndexWriter</code>, <code>LogMergePolicy</code>, <code>SegmentCoreReaders</code>, and <code>SegmentReader</code> to take advantage of the fact that <code>TryGetValue()</code> returns a boolean</li>
+<li><a href="https://github.com/apache/lucenenet/pull/370">#370</a>, <a href="https://github.com/apache/lucenenet/pull/389">#389</a> - Reverted <code>FieldCacheImpl</code> delegate capture introduced in <a href="https://github.com/apache/lucenenet/pull/348">#348</a></li>
+<li><a href="https://github.com/apache/lucenenet/pull/390">#390</a> - Added tests for .NET 5</li>
+<li><a href="https://github.com/apache/lucenenet/pull/390">#390</a> - Upgraded to C# LangVersion 9.0</li>
+</ul>
+<h3 id="new-features">New Features</h3>
+<ul>
+<li><a href="https://github.com/apache/lucenenet/pull/358">#358</a> - Added Community Links page to website</li>
+<li><a href="https://github.com/apache/lucenenet/pull/359">#359</a> - Added builds mailing list to website</li>
+<li><a href="https://github.com/apache/lucenenet/pull/365">#365</a> - Added &quot;Fork me on GitHub&quot; to website and API docs</li>
+<li><code>Lucene.Net.TestFramework</code>: Added <code>Assert.DoesNotThrow()</code> overloads</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/master/websites/site/release-notes/version-4.8.0-beta00013.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

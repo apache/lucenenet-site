@@ -8,7 +8,7 @@
     <title>Making a release of Lucene.Net | Apache Lucene.NET 4.8.0 </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Making a release of Lucene.Net | Apache Lucene.NET 4.8.0 ">
-    <meta name="generator" content="docfx 2.50.0.0">
+    <meta name="generator" content="docfx 2.56.6.0">
     
     <link rel="shortcut icon" href="../logo/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -20,13 +20,12 @@
     
     
   
-    <script data-ad-client="ca-pub-3370160606703795" async="" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono">
     <link rel="stylesheet" href="/styles/site.css">
   
   </head>
   <body data-spy="scroll" data-target="#affix" data-offset="120">
-    <span id="forkongithub"><a href="https://github.com/apache/lucenenet">Fork me on GitHub</a></span>
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
     <div id="wrapper">
       <header>
         
@@ -200,12 +199,9 @@
 <li><p>From the <code>release</code> build artifact that you downloaded from Azure DevOps in the <strong>Check the Release Artifacts</strong> section, copy both the <code>.src.zip</code> and <code>.bin.zip</code> files to a new folder named <code>&lt;repo root&gt;/svn-dev/&lt;packageVersion&gt;/</code></p>
 </li>
 <li><p>On your local Git clone, tag the repository using the info in <code>RELEASE-TODO.txt</code></p>
-<ul>
-<li><code>git log</code></li>
-<li>Verify the HEAD commit hash of the local repo matches that in <code>RELEASE-TODO.txt</code></li>
-<li><code>git tag -a &lt;tag from RELEASE-TODO.txt&gt; -m &quot;&lt;tag from RELEASE-TODO.txt&gt;&quot;</code></li>
-<li><code>git push &lt;remote-name (defaults to origin)&gt; master --tags</code></li>
-</ul>
+<pre><code class="lang-powershell">git tag -a &lt;tag from RELEASE-TODO.txt&gt; &lt;commit hash from RELEASE-TODO.txt&gt; -m &quot;&lt;tag from RELEASE-TODO.txt&gt;&quot;
+git push &lt;remote-name (defaults to origin)&gt; master --tags
+</code></pre>
 </li>
 <li><p><a href="https://infra.apache.org/release-signing.html">Sign the <code>release</code> artifacts</a> using GnuPG</p>
 <pre><code class="lang-powershell">dotnet msbuild -t:SignReleaseCandidate -p:PackageVersion=&lt;packageVersion&gt;
@@ -335,20 +331,7 @@ The vote is ***successful/not successful***
 <li>Commit changes and <a href="https://lucenenet.apache.org/contributing/documentation.html#website">publish the website</a>.</li>
 </ul>
 <h3 id="update-the-api-documentation-with-new-release">Update the API Documentation with new release</h3>
-<ul>
-<li>Create and push a new Git branch from the relese tag called <code>docs/[version]</code>, for example: <code>docs/4.8.0-beta00008</code>.</li>
-<li>Update the DocFx config file <code>/websites/apidocs/docfx.json</code> and change the <code>globalMetadata</code> section:
-<ul>
-<li><code>_appTitle</code> should be: &quot;Apache Lucene.NET [Version] Documentation&quot;</li>
-<li>ensure the <code>_appFooter</code> has the correct copyright year</li>
-<li>the <code>_gitContribute.branch</code> should be the name of the branch just created</li>
-</ul>
-</li>
-<li>Follow the instructions on how to <a href="https://lucenenet.apache.org/contributing/documentation.html#api-docs">build, test and publish the docs</a> and run/test the docs locally. When testing locally ensure that the &quot;Improve this doc&quot; button on each documentation page links to the newly created branch on GitHub.</li>
-<li>Commit and push any changes done during the docs building process to the new branch.</li>
-<li>Merge the new branch to the <code>master</code> branch, or create a Pull Request to target the <code>master</code> branch if you want to review changes that way or want another team member to review changes.</li>
-<li><a href="https://lucenenet.apache.org/contributing/documentation.html#api-docs">Publish the docs</a>.</li>
-</ul>
+<p>Follow the instructions on how to <a href="https://lucenenet.apache.org/contributing/documentation.html#api-docs">build</a>, test and <a href="https://lucenenet.apache.org/contributing/documentation.html#publishing-the-docs">publish</a> the docs.</p>
 <h3 id="post-release-steps">Post-Release Steps</h3>
 <ul>
 <li><p>Log the new version at <a href="https://reporter.apache.org/addrelease.html?lucenenet">https://reporter.apache.org/addrelease.html?lucenenet</a></p>
@@ -400,7 +383,8 @@ The Apache Lucene.NET Team
                 </ul>
               </div>
               <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
-              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+                <h5>In This Article</h5>
+                <div></div>
               </nav>
             </div>
           </div>
@@ -414,7 +398,7 @@ The Apache Lucene.NET Team
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Copyright © 2020 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
             
           </div>
         </div>
