@@ -1,6 +1,6 @@
 # About this Repository
 
-## How its Used
+## How it's Used
 This repository is part of the Apache Lucene.Net Project.  More specifically, this repository houses the publishable web pages that are propagated to https://lucenenet.apache.org/  which is the **public facing website** for the Apache Lucene.NET project.
 
 The content of this repository is the output of a DocFx build process.  Actually it's the result of two separate DocFx build processes, one for the website content excluding the docs folder, and one specifically for the docs folder.  The DocFx source files for these two areas are located at:
