@@ -1,0 +1,426 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class IndexUpgrader
+   | Apache Lucene.NET 4.8.0-beta00015 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class IndexUpgrader
+   | Apache Lucene.NET 4.8.0-beta00015 Documentation ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00015/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Index.IndexUpgrader">
+  
+  
+  <h1 id="Lucene_Net_Index_IndexUpgrader" data-uid="Lucene.Net.Index.IndexUpgrader" class="text-break">Class IndexUpgrader
+  </h1>
+  <div class="markdown level0 summary"><p>This is an easy-to-use tool that upgrades all segments of an index from previous Lucene versions
+to the current segment file format. It can be used from command line:</p>
+<pre><code> java -cp lucene-core.jar Lucene.Net.Index.IndexUpgrader [-delete-prior-commits] [-verbose] indexDir</code></pre>
+<p>Alternatively this class can be instantiated and <a class="xref" href="Lucene.Net.Index.IndexUpgrader.html#Lucene_Net_Index_IndexUpgrader_Upgrade">Upgrade()</a> invoked. It uses <a class="xref" href="Lucene.Net.Index.UpgradeIndexMergePolicy.html">UpgradeIndexMergePolicy</a>
+and triggers the upgrade via an <a class="xref" href="Lucene.Net.Index.IndexWriter.html#Lucene_Net_Index_IndexWriter_ForceMerge_System_Int32_">ForceMerge(Int32)</a> request to <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a>.
+<p>
+This tool keeps only the last commit in an index; for this
+reason, if the incoming index has more than one commit, the tool
+refuses to run by default. Specify <code>-delete-prior-commits</code>
+to override this, allowing the tool to delete all but the last commit.
+From .NET code this can be enabled by passing <code>true</code> to
+<a class="xref" href="Lucene.Net.Index.IndexUpgrader.html#Lucene_Net_Index_IndexUpgrader__ctor_Lucene_Net_Store_Directory_Lucene_Net_Util_LuceneVersion_System_IO_TextWriter_System_Boolean_">IndexUpgrader(Directory, LuceneVersion, TextWriter, Boolean)</a>.
+<p>
+<strong>Warning:</strong> this tool may reorder documents if the index was partially
+upgraded before execution (e.g., documents were added). If your application relies
+on &quot;monotonicity&quot; of doc IDs (which means that the order in which the documents
+were added to the index is preserved), do a full ForceMerge instead.
+The <a class="xref" href="Lucene.Net.Index.MergePolicy.html">MergePolicy</a> set by <a class="xref" href="Lucene.Net.Index.IndexWriterConfig.html">IndexWriterConfig</a> may also reorder
+documents.</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">IndexUpgrader</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Index.html">Lucene.Net.Index</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Index_IndexUpgrader_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class IndexUpgrader</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexUpgrader__ctor_Lucene_Net_Store_Directory_Lucene_Net_Index_IndexWriterConfig_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexUpgrader.%23ctor(Lucene.Net.Store.Directory%2CLucene.Net.Index.IndexWriterConfig%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Index/IndexUpgrader.cs/#L172">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_IndexUpgrader__ctor_" data-uid="Lucene.Net.Index.IndexUpgrader.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_IndexUpgrader__ctor_Lucene_Net_Store_Directory_Lucene_Net_Index_IndexWriterConfig_System_Boolean_" data-uid="Lucene.Net.Index.IndexUpgrader.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Index.IndexWriterConfig,System.Boolean)">IndexUpgrader(Directory, IndexWriterConfig, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates index upgrader on the given directory, using an <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> using the given
+config. You have the possibility to upgrade indexes with multiple commit points by removing
+all older ones.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IndexUpgrader(Directory dir, IndexWriterConfig iwc, bool deletePriorCommits)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">dir</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexWriterConfig.html">IndexWriterConfig</a></td>
+        <td><span class="parametername">iwc</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">deletePriorCommits</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexUpgrader__ctor_Lucene_Net_Store_Directory_Lucene_Net_Util_LuceneVersion_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexUpgrader.%23ctor(Lucene.Net.Store.Directory%2CLucene.Net.Util.LuceneVersion)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Index/IndexUpgrader.cs/#L148">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_IndexUpgrader__ctor_" data-uid="Lucene.Net.Index.IndexUpgrader.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_IndexUpgrader__ctor_Lucene_Net_Store_Directory_Lucene_Net_Util_LuceneVersion_" data-uid="Lucene.Net.Index.IndexUpgrader.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Util.LuceneVersion)">IndexUpgrader(Directory, LuceneVersion)</h4>
+  <div class="markdown level1 summary"><p>Creates index upgrader on the given directory, using an <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> using the given
+<code data-dev-comment-type="paramref" class="paramref">matchVersion</code>. The tool refuses to upgrade indexes with multiple commit points.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IndexUpgrader(Directory dir, LuceneVersion matchVersion)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">dir</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a></td>
+        <td><span class="parametername">matchVersion</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexUpgrader__ctor_Lucene_Net_Store_Directory_Lucene_Net_Util_LuceneVersion_System_IO_TextWriter_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexUpgrader.%23ctor(Lucene.Net.Store.Directory%2CLucene.Net.Util.LuceneVersion%2CSystem.IO.TextWriter%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Index/IndexUpgrader.cs/#L158">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_IndexUpgrader__ctor_" data-uid="Lucene.Net.Index.IndexUpgrader.#ctor*"></a>
+  <h4 id="Lucene_Net_Index_IndexUpgrader__ctor_Lucene_Net_Store_Directory_Lucene_Net_Util_LuceneVersion_System_IO_TextWriter_System_Boolean_" data-uid="Lucene.Net.Index.IndexUpgrader.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Util.LuceneVersion,System.IO.TextWriter,System.Boolean)">IndexUpgrader(Directory, LuceneVersion, TextWriter, Boolean)</h4>
+  <div class="markdown level1 summary"><p>Creates index upgrader on the given directory, using an <a class="xref" href="Lucene.Net.Index.IndexWriter.html">IndexWriter</a> using the given
+<code data-dev-comment-type="paramref" class="paramref">matchVersion</code>. You have the possibility to upgrade indexes with multiple commit points by removing
+all older ones. If <code data-dev-comment-type="paramref" class="paramref">infoStream</code> is not <code>null</code>, all logging output will be sent to this stream.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IndexUpgrader(Directory dir, LuceneVersion matchVersion, TextWriter infoStream, bool deletePriorCommits)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">dir</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.LuceneVersion.html">LuceneVersion</a></td>
+        <td><span class="parametername">matchVersion</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.IO.TextWriter</span></td>
+        <td><span class="parametername">infoStream</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td><span class="parametername">deletePriorCommits</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexUpgrader_Main_System_String___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexUpgrader.Main(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Index/IndexUpgrader.cs/#L77">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_IndexUpgrader_Main_" data-uid="Lucene.Net.Index.IndexUpgrader.Main*"></a>
+  <h4 id="Lucene_Net_Index_IndexUpgrader_Main_System_String___" data-uid="Lucene.Net.Index.IndexUpgrader.Main(System.String[])">Main(String[])</h4>
+  <div class="markdown level1 summary"><p>Main method to run <a class="xref" href="Lucene.Net.Index.IndexUpgrader.html">IndexUpgrader</a> from the
+command-line.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void Main(string[] args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">args</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexUpgrader_ParseArgs_System_String___.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexUpgrader.ParseArgs(System.String%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Index/IndexUpgrader.cs/#L82">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_IndexUpgrader_ParseArgs_" data-uid="Lucene.Net.Index.IndexUpgrader.ParseArgs*"></a>
+  <h4 id="Lucene_Net_Index_IndexUpgrader_ParseArgs_System_String___" data-uid="Lucene.Net.Index.IndexUpgrader.ParseArgs(System.String[])">ParseArgs(String[])</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IndexUpgrader ParseArgs(string[] args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span>[]</td>
+        <td><span class="parametername">args</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.IndexUpgrader.html">IndexUpgrader</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexUpgrader_Upgrade.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexUpgrader.Upgrade%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Index/IndexUpgrader.cs/#L181">View Source</a>
+  </span>
+  <a id="Lucene_Net_Index_IndexUpgrader_Upgrade_" data-uid="Lucene.Net.Index.IndexUpgrader.Upgrade*"></a>
+  <h4 id="Lucene_Net_Index_IndexUpgrader_Upgrade" data-uid="Lucene.Net.Index.IndexUpgrader.Upgrade">Upgrade()</h4>
+  <div class="markdown level1 summary"><p>Perform the upgrade. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public void Upgrade()</code></pre>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Index_IndexUpgrader.md&amp;value=---%0Auid%3A%20Lucene.Net.Index.IndexUpgrader%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Index/IndexUpgrader.cs/#L55" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

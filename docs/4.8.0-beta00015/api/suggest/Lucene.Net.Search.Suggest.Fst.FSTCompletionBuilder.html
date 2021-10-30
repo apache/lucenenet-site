@@ -1,0 +1,429 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class FSTCompletionBuilder
+   | Apache Lucene.NET 4.8.0-beta00015 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class FSTCompletionBuilder
+   | Apache Lucene.NET 4.8.0-beta00015 Documentation ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="suggest/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00015/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder">
+  
+  
+  <h1 id="Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder" data-uid="Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder" class="text-break">Class FSTCompletionBuilder
+  </h1>
+  <div class="markdown level0 summary"><p>Finite state automata based implementation of &quot;autocomplete&quot; functionality.</p>
+<h2>Implementation details</h2>
+
+<p>
+The construction step in the object finalizer works as follows:
+<ul><li>A set of input terms and their buckets is given.</li><li>All terms in the input are prefixed with a synthetic pseudo-character
+(code) of the weight bucket the term fell into. For example a term
+<code>abc</code> with a discretized weight equal &apos;1&apos; would become
+<code>1abc</code>.</li><li>The terms are then sorted by their raw value of UTF-8 character values
+(including the synthetic bucket code in front).</li><li>A finite state automaton (<span class="xref">Lucene.Net.Util.Fst.FST</span>) is constructed from the input. The
+root node has arcs labeled with all possible weights. We cache all these
+arcs, highest-weight first.</li></ul>
+
+</p>
+<p>
+At runtime, in <a class="xref" href="Lucene.Net.Search.Suggest.Fst.FSTCompletion.html#Lucene_Net_Search_Suggest_Fst_FSTCompletion_DoLookup_System_String_System_Int32_">DoLookup(String, Int32)</a>, 
+the automaton is utilized as follows:
+<ul><li>For each possible term weight encoded in the automaton (cached arcs from
+the root above), starting with the highest one, we descend along the path of
+the input key. If the key is not a prefix of a sequence in the automaton
+(path ends prematurely), we exit immediately -- no completions.</li><li>Otherwise, we have found an internal automaton node that ends the key.
+<strong>The entire subautomaton (all paths) starting from this node form the key&apos;s
+completions.</strong> We start the traversal of this subautomaton. Every time we
+reach a final state (arc), we add a single suggestion to the list of results
+(the weight of this suggestion is constant and equal to the root path we
+started from). The tricky part is that because automaton edges are sorted and
+we scan depth-first, we can terminate the entire procedure as soon as we
+collect enough suggestions the user requested.</li><li>In case the number of suggestions collected in the step above is still
+insufficient, we proceed to the next (smaller) weight leaving the root node
+and repeat the same algorithm again.</li></ul>
+
+<h2>Runtime behavior and performance characteristic</h2>
+
+The algorithm described above is optimized for finding suggestions to short
+prefixes in a top-weights-first order. This is probably the most common use
+case: it allows presenting suggestions early and sorts them by the global
+frequency (and then alphabetically).
+
+</p>
+<p>
+If there is an exact match in the automaton, it is returned first on the
+results list (even with by-weight sorting).
+
+</p>
+<p>
+Note that the maximum lookup time for <strong>any prefix</strong> is the time of
+descending to the subtree, plus traversal of the subtree up to the number of
+requested suggestions (because they are already presorted by weight on the
+root level and alphabetically at any node level).
+
+</p>
+<p>
+To order alphabetically only (no ordering by priorities), use identical term
+weights for all terms. Alphabetical suggestions are returned even if
+non-constant weights are used, but the algorithm for doing this is
+suboptimal.
+
+</p>
+<p>
+&quot;alphabetically&quot; in any of the documentation above indicates UTF-8
+representation order, nothing else.
+
+</p>
+<p>
+<strong>NOTE</strong>: the FST file format is experimental and subject to suddenly
+change, requiring you to rebuild the FST suggest index.
+
+</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">FSTCompletionBuilder</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Search.Suggest.Fst.html">Lucene.Net.Search.Suggest.Fst</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Suggest.dll</h6>
+  <h5 id="Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class FSTCompletionBuilder</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Suggest/Suggest/Fst/FSTCompletionBuilder.cs/#L156">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder__ctor_" data-uid="Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder__ctor" data-uid="Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.#ctor">FSTCompletionBuilder()</h4>
+  <div class="markdown level1 summary"><p>Creates an <a class="xref" href="Lucene.Net.Search.Suggest.Fst.FSTCompletion.html">FSTCompletion</a> with default options: 10 buckets, exact match
+promoted to first position and <a class="xref" href="Lucene.Net.Search.Suggest.InMemorySorter.html">InMemorySorter</a> with a comparer obtained from
+<a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00015/api/core/Lucene.Net.Util.BytesRef.html#Lucene_Net_Util_BytesRef_UTF8SortedAsUnicodeComparer">UTF8SortedAsUnicodeComparer</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FSTCompletionBuilder()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder__ctor_System_Int32_Lucene_Net_Search_Suggest_Fst_IBytesRefSorter_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.%23ctor(System.Int32%2CLucene.Net.Search.Suggest.Fst.IBytesRefSorter%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Suggest/Suggest/Fst/FSTCompletionBuilder.cs/#L181">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder__ctor_" data-uid="Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder__ctor_System_Int32_Lucene_Net_Search_Suggest_Fst_IBytesRefSorter_System_Int32_" data-uid="Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.#ctor(System.Int32,Lucene.Net.Search.Suggest.Fst.IBytesRefSorter,System.Int32)">FSTCompletionBuilder(Int32, IBytesRefSorter, Int32)</h4>
+  <div class="markdown level1 summary"><p>Creates an FSTCompletion with the specified options. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public FSTCompletionBuilder(int buckets, IBytesRefSorter sorter, int shareMaxTailLength)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">buckets</span></td>
+        <td><p>The number of buckets for weight discretization. Buckets are used
+in <a class="xref" href="Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.html#Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder_Add_Lucene_Net_Util_BytesRef_System_Int32_">Add(BytesRef, Int32)</a> and must be smaller than the number
+given here.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Suggest.Fst.IBytesRefSorter.html">IBytesRefSorter</a></td>
+        <td><span class="parametername">sorter</span></td>
+        <td><p><a class="xref" href="Lucene.Net.Search.Suggest.Fst.IBytesRefSorter.html">IBytesRefSorter</a> used for re-sorting input for the automaton.
+For large inputs, use on-disk sorting implementations. The sorter
+is closed automatically in <a class="xref" href="Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.html#Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder_Build">Build()</a> if it implements
+<span class="xref">System.IDisposable</span>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">shareMaxTailLength</span></td>
+        <td><p>Max shared suffix sharing length.</p>
+<p>See the description of this parameter in <span class="xref">Lucene.Net.Util.Fst.Builder</span>&apos;s constructor.
+In general, for very large inputs you&apos;ll want to construct a non-minimal
+automaton which will be larger, but the construction will take far less ram.
+For minimal automata, set it to <span class="xref">System.Int32.MaxValue</span>. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder_DEFAULT_BUCKETS.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.DEFAULT_BUCKETS%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Suggest/Suggest/Fst/FSTCompletionBuilder.cs/#L112">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder_DEFAULT_BUCKETS" data-uid="Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.DEFAULT_BUCKETS">DEFAULT_BUCKETS</h4>
+  <div class="markdown level1 summary"><p>Default number of buckets.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const int DEFAULT_BUCKETS = 10</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder_Add_Lucene_Net_Util_BytesRef_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.Add(Lucene.Net.Util.BytesRef%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Suggest/Suggest/Fst/FSTCompletionBuilder.cs/#L204">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder_Add_" data-uid="Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.Add*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder_Add_Lucene_Net_Util_BytesRef_System_Int32_" data-uid="Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.Add(Lucene.Net.Util.BytesRef,System.Int32)">Add(BytesRef, Int32)</h4>
+  <div class="markdown level1 summary"><p>Appends a single suggestion and its weight to the internal buffers.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void Add(BytesRef utf8, int bucket)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Util.BytesRef</span></td>
+        <td><span class="parametername">utf8</span></td>
+        <td><p>The suggestion (utf8 representation) to be added. The content is
+copied and the object can be reused. </p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td><span class="parametername">bucket</span></td>
+        <td><p>The bucket to place this suggestion in. Must be non-negative and
+smaller than the number of buckets passed in the constructor.
+Higher numbers indicate suggestions that should be presented
+before suggestions placed in smaller buckets. </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder_Build.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.Build%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Suggest/Suggest/Fst/FSTCompletionBuilder.cs/#L230">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder_Build_" data-uid="Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.Build*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder_Build" data-uid="Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder.Build">Build()</h4>
+  <div class="markdown level1 summary"><p>Builds the final automaton from a list of added entries. This method may
+take a longer while as it needs to build the automaton.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual FSTCompletion Build()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Suggest.Fst.FSTCompletion.html">FSTCompletion</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.Search.Suggest.Fst.FSTCompletion.html">FSTCompletion</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Suggest_Fst_FSTCompletionBuilder.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Fst.FSTCompletionBuilder%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Suggest/Suggest/Fst/FSTCompletionBuilder.cs/#L107" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,648 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class CapitalizationFilterFactory
+   | Apache Lucene.NET 4.8.0-beta00015 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class CapitalizationFilterFactory
+   | Apache Lucene.NET 4.8.0-beta00015 Documentation ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="analysis-common/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00015/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory">
+  
+  
+  <h1 id="Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory" data-uid="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory" class="text-break">Class CapitalizationFilterFactory
+  </h1>
+  <div class="markdown level0 summary"><p>Factory for <a class="xref" href="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilter.html">CapitalizationFilter</a>.
+<p>
+The factory takes parameters:<p>
+&quot;onlyFirstWord&quot; - should each word be capitalized or all of the words?<p>
+&quot;keep&quot; - a keep word list.  Each word that should be kept separated by whitespace.<p>
+&quot;keepIgnoreCase - true or false.  If true, the keep list will be considered case-insensitive.<p>
+&quot;forceFirstLetter&quot; - Force the first letter to be capitalized even if it is in the keep list<p>
+&quot;okPrefix&quot; - do not change word capitalization if a word begins with something in this list.
+for example if &quot;McK&quot; is on the okPrefix list, the word &quot;McKinley&quot; should not be changed to
+&quot;Mckinley&quot;<p>
+&quot;minWordLength&quot; - how long the word needs to be to get capitalization applied.  If the
+minWordLength is 3, &quot;and&quot; &gt; &quot;And&quot; but &quot;or&quot; stays &quot;or&quot;<p>
+&quot;maxWordCount&quot; - if the token contains more then maxWordCount words, the capitalization is
+assumed to be correct.<p>
+&quot;culture&quot; - the culture to use to apply the capitalization rules. If not supplied or the string
+&quot;invariant&quot; is supplied, the invariant culture is used.<p>
+<pre><code>&lt;fieldType name=&quot;text_cptlztn&quot; class=&quot;solr.TextField&quot; positionIncrementGap=&quot;100&quot;>
+  &lt;analyzer>
+    &lt;tokenizer class=&quot;solr.WhitespaceTokenizerFactory&quot;/>
+    &lt;filter class=&quot;solr.CapitalizationFilterFactory&quot; onlyFirstWord=&quot;true&quot;
+          keep=&quot;java solr lucene&quot; keepIgnoreCase=&quot;false&quot;
+          okPrefix=&quot;McK McD McA&quot;/>   
+  &lt;/analyzer>
+&lt;/fieldType></code></pre>
+
+<p>@since solr 1.3</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html">AbstractAnalysisFactory</a></div>
+    <div class="level2"><a class="xref" href="Lucene.Net.Analysis.Util.TokenFilterFactory.html">TokenFilterFactory</a></div>
+    <div class="level3"><span class="xref">CapitalizationFilterFactory</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.TokenFilterFactory.html#Lucene_Net_Analysis_Util_TokenFilterFactory_ForName_System_String_System_Collections_Generic_IDictionary_System_String_System_String__">TokenFilterFactory.ForName(String, IDictionary&lt;String, String&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.TokenFilterFactory.html#Lucene_Net_Analysis_Util_TokenFilterFactory_LookupClass_System_String_">TokenFilterFactory.LookupClass(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.TokenFilterFactory.html#Lucene_Net_Analysis_Util_TokenFilterFactory_AvailableTokenFilters">TokenFilterFactory.AvailableTokenFilters</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.TokenFilterFactory.html#Lucene_Net_Analysis_Util_TokenFilterFactory_ReloadTokenFilters">TokenFilterFactory.ReloadTokenFilters()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_LUCENE_MATCH_VERSION_PARAM">AbstractAnalysisFactory.LUCENE_MATCH_VERSION_PARAM</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_m_luceneMatchVersion">AbstractAnalysisFactory.m_luceneMatchVersion</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_OriginalArgs">AbstractAnalysisFactory.OriginalArgs</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_AssureMatchVersion">AbstractAnalysisFactory.AssureMatchVersion()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_LuceneMatchVersion">AbstractAnalysisFactory.LuceneMatchVersion</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_Require_System_Collections_Generic_IDictionary_System_String_System_String__System_String_">AbstractAnalysisFactory.Require(IDictionary&lt;String, String&gt;, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_Require_System_Collections_Generic_IDictionary_System_String_System_String__System_String_System_Collections_Generic_ICollection_System_String__">AbstractAnalysisFactory.Require(IDictionary&lt;String, String&gt;, String, ICollection&lt;String&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_Require_System_Collections_Generic_IDictionary_System_String_System_String__System_String_System_Collections_Generic_ICollection_System_String__System_Boolean_">AbstractAnalysisFactory.Require(IDictionary&lt;String, String&gt;, String, ICollection&lt;String&gt;, Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_Get_System_Collections_Generic_IDictionary_System_String_System_String__System_String_System_String_">AbstractAnalysisFactory.Get(IDictionary&lt;String, String&gt;, String, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_Get_System_Collections_Generic_IDictionary_System_String_System_String__System_String_System_Collections_Generic_ICollection_System_String__">AbstractAnalysisFactory.Get(IDictionary&lt;String, String&gt;, String, ICollection&lt;String&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_Get_System_Collections_Generic_IDictionary_System_String_System_String__System_String_System_Collections_Generic_ICollection_System_String__System_String_">AbstractAnalysisFactory.Get(IDictionary&lt;String, String&gt;, String, ICollection&lt;String&gt;, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_Get_System_Collections_Generic_IDictionary_System_String_System_String__System_String_System_Collections_Generic_ICollection_System_String__System_String_System_Boolean_">AbstractAnalysisFactory.Get(IDictionary&lt;String, String&gt;, String, ICollection&lt;String&gt;, String, Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_RequireInt32_System_Collections_Generic_IDictionary_System_String_System_String__System_String_">AbstractAnalysisFactory.RequireInt32(IDictionary&lt;String, String&gt;, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_GetInt32_System_Collections_Generic_IDictionary_System_String_System_String__System_String_System_Int32_">AbstractAnalysisFactory.GetInt32(IDictionary&lt;String, String&gt;, String, Int32)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_RequireBoolean_System_Collections_Generic_IDictionary_System_String_System_String__System_String_">AbstractAnalysisFactory.RequireBoolean(IDictionary&lt;String, String&gt;, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_GetBoolean_System_Collections_Generic_IDictionary_System_String_System_String__System_String_System_Boolean_">AbstractAnalysisFactory.GetBoolean(IDictionary&lt;String, String&gt;, String, Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_RequireSingle_System_Collections_Generic_IDictionary_System_String_System_String__System_String_">AbstractAnalysisFactory.RequireSingle(IDictionary&lt;String, String&gt;, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_GetSingle_System_Collections_Generic_IDictionary_System_String_System_String__System_String_System_Single_">AbstractAnalysisFactory.GetSingle(IDictionary&lt;String, String&gt;, String, Single)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_RequireChar_System_Collections_Generic_IDictionary_System_String_System_String__System_String_">AbstractAnalysisFactory.RequireChar(IDictionary&lt;String, String&gt;, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_GetChar_System_Collections_Generic_IDictionary_System_String_System_String__System_String_System_Char_">AbstractAnalysisFactory.GetChar(IDictionary&lt;String, String&gt;, String, Char)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_GetSet_System_Collections_Generic_IDictionary_System_String_System_String__System_String_">AbstractAnalysisFactory.GetSet(IDictionary&lt;String, String&gt;, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_GetPattern_System_Collections_Generic_IDictionary_System_String_System_String__System_String_">AbstractAnalysisFactory.GetPattern(IDictionary&lt;String, String&gt;, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_GetCulture_System_Collections_Generic_IDictionary_System_String_System_String__System_String_System_Globalization_CultureInfo_">AbstractAnalysisFactory.GetCulture(IDictionary&lt;String, String&gt;, String, CultureInfo)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_GetWordSet_Lucene_Net_Analysis_Util_IResourceLoader_System_String_System_Boolean_">AbstractAnalysisFactory.GetWordSet(IResourceLoader, String, Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_GetLines_Lucene_Net_Analysis_Util_IResourceLoader_System_String_">AbstractAnalysisFactory.GetLines(IResourceLoader, String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_GetSnowballWordSet_Lucene_Net_Analysis_Util_IResourceLoader_System_String_System_Boolean_">AbstractAnalysisFactory.GetSnowballWordSet(IResourceLoader, String, Boolean)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_SplitFileNames_System_String_">AbstractAnalysisFactory.SplitFileNames(String)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_GetClassArg">AbstractAnalysisFactory.GetClassArg()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Analysis.Util.AbstractAnalysisFactory.html#Lucene_Net_Analysis_Util_AbstractAnalysisFactory_IsExplicitLuceneMatchVersion">AbstractAnalysisFactory.IsExplicitLuceneMatchVersion</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Analysis.Miscellaneous.html">Lucene.Net.Analysis.Miscellaneous</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Analysis.Common.dll</h6>
+  <h5 id="Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class CapitalizationFilterFactory : TokenFilterFactory</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory__ctor_System_Collections_Generic_IDictionary_System_String_System_String__.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.%23ctor(System.Collections.Generic.IDictionary%7BSystem.String%2CSystem.String%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/CapitalizationFilterFactory.cs/#L83">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory__ctor_" data-uid="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.#ctor*"></a>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory__ctor_System_Collections_Generic_IDictionary_System_String_System_String__" data-uid="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.#ctor(System.Collections.Generic.IDictionary{System.String,System.String})">CapitalizationFilterFactory(IDictionary&lt;String, String&gt;)</h4>
+  <div class="markdown level1 summary"><p>Creates a new <a class="xref" href="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.html">CapitalizationFilterFactory</a> </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public CapitalizationFilterFactory(IDictionary&lt;string, string&gt; args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IDictionary</span>&lt;<span class="xref">System.String</span>, <span class="xref">System.String</span>&gt;</td>
+        <td><span class="parametername">args</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_CULTURE.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.CULTURE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/CapitalizationFilterFactory.cs/#L68">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_CULTURE" data-uid="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.CULTURE">CULTURE</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string CULTURE = &quot;culture&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_FORCE_FIRST_LETTER.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.FORCE_FIRST_LETTER%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/CapitalizationFilterFactory.cs/#L67">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_FORCE_FIRST_LETTER" data-uid="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.FORCE_FIRST_LETTER">FORCE_FIRST_LETTER</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string FORCE_FIRST_LETTER = &quot;forceFirstLetter&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_KEEP.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.KEEP%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/CapitalizationFilterFactory.cs/#L60">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_KEEP" data-uid="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.KEEP">KEEP</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string KEEP = &quot;keep&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_KEEP_IGNORE_CASE.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.KEEP_IGNORE_CASE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/CapitalizationFilterFactory.cs/#L61">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_KEEP_IGNORE_CASE" data-uid="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.KEEP_IGNORE_CASE">KEEP_IGNORE_CASE</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string KEEP_IGNORE_CASE = &quot;keepIgnoreCase&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_MAX_TOKEN_LENGTH.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.MAX_TOKEN_LENGTH%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/CapitalizationFilterFactory.cs/#L65">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_MAX_TOKEN_LENGTH" data-uid="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.MAX_TOKEN_LENGTH">MAX_TOKEN_LENGTH</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string MAX_TOKEN_LENGTH = &quot;maxTokenLength&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_MAX_WORD_COUNT.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.MAX_WORD_COUNT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/CapitalizationFilterFactory.cs/#L64">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_MAX_WORD_COUNT" data-uid="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.MAX_WORD_COUNT">MAX_WORD_COUNT</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string MAX_WORD_COUNT = &quot;maxWordCount&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_MIN_WORD_LENGTH.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.MIN_WORD_LENGTH%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/CapitalizationFilterFactory.cs/#L63">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_MIN_WORD_LENGTH" data-uid="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.MIN_WORD_LENGTH">MIN_WORD_LENGTH</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string MIN_WORD_LENGTH = &quot;minWordLength&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_OK_PREFIX.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.OK_PREFIX%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/CapitalizationFilterFactory.cs/#L62">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_OK_PREFIX" data-uid="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.OK_PREFIX">OK_PREFIX</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string OK_PREFIX = &quot;okPrefix&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_ONLY_FIRST_WORD.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.ONLY_FIRST_WORD%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/CapitalizationFilterFactory.cs/#L66">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_ONLY_FIRST_WORD" data-uid="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.ONLY_FIRST_WORD">ONLY_FIRST_WORD</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public const string ONLY_FIRST_WORD = &quot;onlyFirstWord&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_Create_Lucene_Net_Analysis_TokenStream_.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.Create(Lucene.Net.Analysis.TokenStream)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/CapitalizationFilterFactory.cs/#L117">View Source</a>
+  </span>
+  <a id="Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_Create_" data-uid="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.Create*"></a>
+  <h4 id="Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory_Create_Lucene_Net_Analysis_TokenStream_" data-uid="Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory.Create(Lucene.Net.Analysis.TokenStream)">Create(TokenStream)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override TokenStream Create(TokenStream input)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Analysis.TokenStream</span></td>
+        <td><span class="parametername">input</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Lucene.Net.Analysis.TokenStream</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Analysis.Util.TokenFilterFactory.html#Lucene_Net_Analysis_Util_TokenFilterFactory_Create_Lucene_Net_Analysis_TokenStream_">TokenFilterFactory.Create(TokenStream)</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Analysis_Miscellaneous_CapitalizationFilterFactory.md&amp;value=---%0Auid%3A%20Lucene.Net.Analysis.Miscellaneous.CapitalizationFilterFactory%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Analysis.Common/Analysis/Miscellaneous/CapitalizationFilterFactory.cs/#L58" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

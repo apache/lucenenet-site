@@ -1,0 +1,667 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class QueryNodeProcessor
+   | Apache Lucene.NET 4.8.0-beta00015 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class QueryNodeProcessor
+   | Apache Lucene.NET 4.8.0-beta00015 Documentation ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="queryparser/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00015/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor">
+  
+  
+  <h1 id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor" class="text-break">Class QueryNodeProcessor
+  </h1>
+  <div class="markdown level0 summary"><p>This is a default implementation for the <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.IQueryNodeProcessor.html">IQueryNodeProcessor</a>
+interface, it&apos;s an abstract class, so it should be extended by classes that
+want to process a <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode.html">IQueryNode</a> tree.
+<p>
+This class process <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode.html">IQueryNode</a>s from left to right in the tree. While
+it&apos;s walking down the tree, for every node,
+<a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.html#Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_PreProcessNode_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode_">PreProcessNode(IQueryNode)</a> is invoked. After a node&apos;s children are
+processed, <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.html#Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_PostProcessNode_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode_">PostProcessNode(IQueryNode)</a> is invoked for that node.
+<a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.html#Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_SetChildrenOrder_System_Collections_Generic_IList_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode__">SetChildrenOrder(IList&lt;IQueryNode&gt;)</a> is invoked before
+<a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.html#Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_PostProcessNode_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode_">PostProcessNode(IQueryNode)</a> only if the node has at least one child,
+in <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.html#Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_SetChildrenOrder_System_Collections_Generic_IList_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode__">SetChildrenOrder(IList&lt;IQueryNode&gt;)</a> the implementor might redefine the
+children order or remove any children from the children list.
+</p>
+<p>
+Here is an example about how it process the nodes:
+</p></p>
+<pre>
+     a
+    / \
+   b   e
+  / \
+ c   d
+</pre>
+<p><p>
+Here is the order the methods would be invoked for the tree described above:
+</p></p>
+<pre><code>    PreProcessNode( a );
+    PreProcessNode( b );
+    PreProcessNode( c );
+    PostProcessNode( c );
+    PreProcessNode( d );
+    PostProcessNode( d );
+    SetChildrenOrder( bChildrenList );
+    PostProcessNode( b );
+    PreProcessNode( e );
+    PostProcessNode( e );
+    SetChildrenOrder( aChildrenList );
+    PostProcessNode( a )</code></pre>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">QueryNodeProcessor</span></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.NoChildOptimizationQueryNodeProcessor.html">NoChildOptimizationQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.RemoveDeletedQueryNodesProcessor.html">RemoveDeletedQueryNodesProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Precedence.Processors.BooleanModifiersQueryNodeProcessor.html">BooleanModifiersQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.AllowLeadingWildcardProcessor.html">AllowLeadingWildcardProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.AnalyzerQueryNodeProcessor.html">AnalyzerQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.BooleanSingleChildOptimizationQueryNodeProcessor.html">BooleanSingleChildOptimizationQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.BoostQueryNodeProcessor.html">BoostQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.DefaultPhraseSlopQueryNodeProcessor.html">DefaultPhraseSlopQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.FuzzyQueryNodeProcessor.html">FuzzyQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.LowercaseExpandedTermsQueryNodeProcessor.html">LowercaseExpandedTermsQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.MatchAllDocsQueryNodeProcessor.html">MatchAllDocsQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.MultiFieldQueryNodeProcessor.html">MultiFieldQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.MultiTermRewriteMethodProcessor.html">MultiTermRewriteMethodProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.NumericQueryNodeProcessor.html">NumericQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.NumericRangeQueryNodeProcessor.html">NumericRangeQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.OpenRangeQueryNodeProcessor.html">OpenRangeQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.PhraseSlopQueryNodeProcessor.html">PhraseSlopQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.RemoveEmptyNonLeafQueryNodeProcessor.html">RemoveEmptyNonLeafQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.TermRangeQueryNodeProcessor.html">TermRangeQueryNodeProcessor</a></div>
+      <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.Processors.WildcardQueryNodeProcessor.html">WildcardQueryNodeProcessor</a></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.IQueryNodeProcessor.html">IQueryNodeProcessor</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetHashCode()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ToString()</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.html">Lucene.Net.QueryParsers.Flexible.Core.Processors</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.QueryParser.dll</h6>
+  <h5 id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class QueryNodeProcessor : IQueryNodeProcessor</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.QueryParser/Flexible/Core/Processors/QueryNodeProcessorImpl.cs/#L75">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor__ctor_" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.#ctor*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor__ctor" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.#ctor">QueryNodeProcessor()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected QueryNodeProcessor()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor__ctor_Lucene_Net_QueryParsers_Flexible_Core_Config_QueryConfigHandler_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.%23ctor(Lucene.Net.QueryParsers.Flexible.Core.Config.QueryConfigHandler)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.QueryParser/Flexible/Core/Processors/QueryNodeProcessorImpl.cs/#L80">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor__ctor_" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.#ctor*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor__ctor_Lucene_Net_QueryParsers_Flexible_Core_Config_QueryConfigHandler_" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.#ctor(Lucene.Net.QueryParsers.Flexible.Core.Config.QueryConfigHandler)">QueryNodeProcessor(QueryConfigHandler)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected QueryNodeProcessor(QueryConfigHandler queryConfigHandler)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Config.QueryConfigHandler.html">QueryConfigHandler</a></td>
+        <td><span class="parametername">queryConfigHandler</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_GetQueryConfigHandler.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.GetQueryConfigHandler%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.QueryParser/Flexible/Core/Processors/QueryNodeProcessorImpl.cs/#L186">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_GetQueryConfigHandler_" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.GetQueryConfigHandler*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_GetQueryConfigHandler" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.GetQueryConfigHandler">GetQueryConfigHandler()</h4>
+  <div class="markdown level1 summary"><p>For reference about this method check:
+<a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.IQueryNodeProcessor.html#Lucene_Net_QueryParsers_Flexible_Core_Processors_IQueryNodeProcessor_GetQueryConfigHandler">GetQueryConfigHandler()</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual QueryConfigHandler GetQueryConfigHandler()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Config.QueryConfigHandler.html">QueryConfigHandler</a></td>
+        <td><p><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Config.QueryConfigHandler.html">QueryConfigHandler</a> the query configuration handler to be set.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_GetQueryConfigHandler_seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.IQueryNodeProcessor.html#Lucene_Net_QueryParsers_Flexible_Core_Processors_IQueryNodeProcessor_SetQueryConfigHandler_Lucene_Net_QueryParsers_Flexible_Core_Config_QueryConfigHandler_">SetQueryConfigHandler</a>(<a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Config.QueryConfigHandler.html">QueryConfigHandler</a>)</div>
+      <div><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Config.QueryConfigHandler.html">QueryConfigHandler</a></div>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_PostProcessNode_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.PostProcessNode(Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.QueryParser/Flexible/Core/Processors/QueryNodeProcessorImpl.cs/#L205">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_PostProcessNode_" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.PostProcessNode*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_PostProcessNode_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode_" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.PostProcessNode(Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode)">PostProcessNode(IQueryNode)</h4>
+  <div class="markdown level1 summary"><p>This method is invoked for every node when walking up the tree.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract IQueryNode PostProcessNode(IQueryNode node)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode.html">IQueryNode</a></td>
+        <td><span class="parametername">node</span></td>
+        <td><p>node the query node to be post-processed</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode.html">IQueryNode</a></td>
+        <td><p>a query node</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryNodeException.html">QueryNodeException</a></td>
+        <td><p>if something goes wrong during the query node processing</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_PreProcessNode_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.PreProcessNode(Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.QueryParser/Flexible/Core/Processors/QueryNodeProcessorImpl.cs/#L197">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_PreProcessNode_" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.PreProcessNode*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_PreProcessNode_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode_" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.PreProcessNode(Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode)">PreProcessNode(IQueryNode)</h4>
+  <div class="markdown level1 summary"><p>This method is invoked for every node when walking down the tree.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract IQueryNode PreProcessNode(IQueryNode node)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode.html">IQueryNode</a></td>
+        <td><span class="parametername">node</span></td>
+        <td><p>the query node to be pre-processed</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode.html">IQueryNode</a></td>
+        <td><p>a query node</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryNodeException.html">QueryNodeException</a></td>
+        <td><p>if something goes wrong during the query node processing</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_Process_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.Process(Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.QueryParser/Flexible/Core/Processors/QueryNodeProcessorImpl.cs/#L85">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_Process_" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.Process*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_Process_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode_" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.Process(Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode)">Process(IQueryNode)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual IQueryNode Process(IQueryNode queryTree)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode.html">IQueryNode</a></td>
+        <td><span class="parametername">queryTree</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode.html">IQueryNode</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_ProcessChildren_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.ProcessChildren(Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.QueryParser/Flexible/Core/Processors/QueryNodeProcessorImpl.cs/#L106">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_ProcessChildren_" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.ProcessChildren*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_ProcessChildren_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode_" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.ProcessChildren(Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode)">ProcessChildren(IQueryNode)</h4>
+  <div class="markdown level1 summary"><p>This method is called every time a child is processed.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected virtual void ProcessChildren(IQueryNode queryTree)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode.html">IQueryNode</a></td>
+        <td><span class="parametername">queryTree</span></td>
+        <td><p>the query node child to be processed</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryNodeException.html">QueryNodeException</a></td>
+        <td><p>if something goes wrong during the query node processing</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_SetChildrenOrder_System_Collections_Generic_IList_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode__.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.SetChildrenOrder(System.Collections.Generic.IList%7BLucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode%7D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.QueryParser/Flexible/Core/Processors/QueryNodeProcessorImpl.cs/#L214">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_SetChildrenOrder_" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.SetChildrenOrder*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_SetChildrenOrder_System_Collections_Generic_IList_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode__" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.SetChildrenOrder(System.Collections.Generic.IList{Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode})">SetChildrenOrder(IList&lt;IQueryNode&gt;)</h4>
+  <div class="markdown level1 summary"><p>This method is invoked for every node that has at least on child. It&apos;s
+invoked right before <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.html#Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_PostProcessNode_Lucene_Net_QueryParsers_Flexible_Core_Nodes_IQueryNode_">PostProcessNode(IQueryNode)</a> is invoked.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected abstract IList&lt;IQueryNode&gt; SetChildrenOrder(IList&lt;IQueryNode&gt; children)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode.html">IQueryNode</a>&gt;</td>
+        <td><span class="parametername">children</span></td>
+        <td><p>the list containing all current node&apos;s children</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Collections.Generic.IList</span>&lt;<a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Nodes.IQueryNode.html">IQueryNode</a>&gt;</td>
+        <td><p>a new list containing all children that should be set to the current node</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.QueryNodeException.html">QueryNodeException</a></td>
+        <td><p>if something goes wrong during the query node processing</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_SetQueryConfigHandler_Lucene_Net_QueryParsers_Flexible_Core_Config_QueryConfigHandler_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.SetQueryConfigHandler(Lucene.Net.QueryParsers.Flexible.Core.Config.QueryConfigHandler)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.QueryParser/Flexible/Core/Processors/QueryNodeProcessorImpl.cs/#L174">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_SetQueryConfigHandler_" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.SetQueryConfigHandler*"></a>
+  <h4 id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_SetQueryConfigHandler_Lucene_Net_QueryParsers_Flexible_Core_Config_QueryConfigHandler_" data-uid="Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor.SetQueryConfigHandler(Lucene.Net.QueryParsers.Flexible.Core.Config.QueryConfigHandler)">SetQueryConfigHandler(QueryConfigHandler)</h4>
+  <div class="markdown level1 summary"><p>For reference about this method check:
+<a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.IQueryNodeProcessor.html#Lucene_Net_QueryParsers_Flexible_Core_Processors_IQueryNodeProcessor_SetQueryConfigHandler_Lucene_Net_QueryParsers_Flexible_Core_Config_QueryConfigHandler_">SetQueryConfigHandler(QueryConfigHandler)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetQueryConfigHandler(QueryConfigHandler queryConfigHandler)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Config.QueryConfigHandler.html">QueryConfigHandler</a></td>
+        <td><span class="parametername">queryConfigHandler</span></td>
+        <td><p>the query configuration handler to be set.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 id="Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor_SetQueryConfigHandler_Lucene_Net_QueryParsers_Flexible_Core_Config_QueryConfigHandler__seealso">See Also</h5>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.IQueryNodeProcessor.html#Lucene_Net_QueryParsers_Flexible_Core_Processors_IQueryNodeProcessor_SetQueryConfigHandler_Lucene_Net_QueryParsers_Flexible_Core_Config_QueryConfigHandler_">SetQueryConfigHandler</a>(<a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Config.QueryConfigHandler.html">QueryConfigHandler</a>)</div>
+      <div><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Config.QueryConfigHandler.html">QueryConfigHandler</a></div>
+  </div>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.IQueryNodeProcessor.html">IQueryNodeProcessor</a>
+  </div>
+  <h3 id="seealso">See Also</h3>
+  <div class="seealso">
+      <div><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Core.Processors.IQueryNodeProcessor.html">IQueryNodeProcessor</a></div>
+  </div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_QueryParsers_Flexible_Core_Processors_QueryNodeProcessor.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.Flexible.Core.Processors.QueryNodeProcessor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.QueryParser/Flexible/Core/Processors/QueryNodeProcessorImpl.cs/#L69" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,685 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class NumericRangeQuery&lt;T&gt;
+   | Apache Lucene.NET 4.8.0-beta00015 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class NumericRangeQuery&lt;T&gt;
+   | Apache Lucene.NET 4.8.0-beta00015 Documentation ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00015/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.NumericRangeQuery`1">
+  
+  
+  <h1 id="Lucene_Net_Search_NumericRangeQuery_1" data-uid="Lucene.Net.Search.NumericRangeQuery`1" class="text-break">Class NumericRangeQuery&lt;T&gt;
+  </h1>
+  <div class="markdown level0 summary"><p>A <a class="xref" href="Lucene.Net.Search.Query.html">Query</a> that matches numeric values within a
+specified range.  To use this, you must first index the
+numeric values using <a class="xref" href="Lucene.Net.Documents.Int32Field.html">Int32Field</a>, 
+<a class="xref" href="Lucene.Net.Documents.SingleField.html">SingleField</a>, <a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a> or <a class="xref" href="Lucene.Net.Documents.DoubleField.html">DoubleField</a> (expert: 
+<a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a>).  If your terms are instead textual,
+you should use <a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a>.<br><a class="xref" href="Lucene.Net.Search.NumericRangeFilter.html">NumericRangeFilter</a> is the filter equivalent of this
+query.</p>
+
+<p>You create a new <a class="xref" href="Lucene.Net.Search.NumericRangeQuery-1.html">NumericRangeQuery&lt;T&gt;</a> with the static
+factory methods, eg:
+
+<pre><code>Query q = NumericRangeQuery.NewFloatRange(&quot;weight&quot;, 0.03f, 0.10f, true, true);</code></pre>
+
+matches all documents whose <span class="xref">System.Single</span> valued &quot;weight&quot; field
+ranges from 0.03 to 0.10, inclusive.</p>
+
+<p>The performance of <a class="xref" href="Lucene.Net.Search.NumericRangeQuery-1.html">NumericRangeQuery&lt;T&gt;</a> is much better
+than the corresponding <a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a> because the
+number of terms that must be searched is usually far
+fewer, thanks to trie indexing, described below.</p>
+
+<p>You can optionally specify a <a href="#precisionStepDesc"><span class="xref">Lucene.Net.Search.NumericRangeQuery`1.precisionStep</span></a>
+when creating this query.  This is necessary if you&apos;ve
+changed this configuration from its default (4) during
+indexing.  Lower values consume more disk space but speed
+up searching.  Suitable values are between <strong>1</strong> and
+<strong>8</strong>. A good starting point to test is <strong>4</strong>,
+which is the default value for all <code>Numeric*</code>
+classes.  See <a href="#precisionStepDesc">below</a> for
+details.</p>
+
+<p>This query defaults to 
+<a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_AUTO_REWRITE_DEFAULT">CONSTANT_SCORE_AUTO_REWRITE_DEFAULT</a>.
+With precision steps of &lt;=4, this query can be run with
+one of the <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a> rewrite methods without changing
+<a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a>&apos;s default max clause count.</p>
+
+<p><h3>How it works</h3>
+
+<p>See the publication about <a target="_blank" href="http://www.panfmp.org">panFMP</a>,
+where this algorithm was described (referred to as <code>TrieRangeQuery</code>):
+</p>
+<blockquote><strong>Schindler, U, Diepenbroek, M</strong>, 2008.
+<em>Generic XML-based Framework for Metadata Portals.</em>
+Computers &amp; Geosciences 34 (12), 1947-1955.
+<a href="http://dx.doi.org/10.1016/j.cageo.2008.02.023" target="_blank">doi:10.1016/j.cageo.2008.02.023</a></blockquote>
+
+<p><em>A quote from this paper:</em> Because Apache Lucene is a full-text
+search engine and not a conventional database, it cannot handle numerical ranges
+(e.g., field value is inside user defined bounds, even dates are numerical values).
+We have developed an extension to Apache Lucene that stores
+the numerical values in a special string-encoded format with variable precision
+(all numerical values like <span class="xref">System.Double</span>s, <span class="xref">System.Int64</span>s, <span class="xref">System.Single</span>s, and <span class="xref">System.Int32</span>s are converted to
+lexicographic sortable string representations and stored with different precisions
+(for a more detailed description of how the values are stored,
+see <a class="xref" href="Lucene.Net.Util.NumericUtils.html">NumericUtils</a>). A range is then divided recursively into multiple intervals for searching:
+The center of the range is searched only with the lowest possible precision in the <em>trie</em>,
+while the boundaries are matched more exactly. This reduces the number of terms dramatically.</p>
+
+<p>For the variant that stores long values in 8 different precisions (each reduced by 8 bits) that
+uses a lowest precision of 1 byte, the index contains only a maximum of 256 distinct values in the
+lowest precision. Overall, a range could consist of a theoretical maximum of
+<pre><code>7*255*2 + 255 = 3825</code></pre> distinct terms (when there is a term for every distinct value of an
+8-byte-number in the index and the range covers almost all of them; a maximum of 255 distinct values is used
+because it would always be possible to reduce the full 256 values to one term with degraded precision).
+In practice, we have seen up to 300 terms in most cases (index with 500,000 metadata records
+and a uniform value distribution).</p>
+
+<p><a name="precisionStepDesc"><h3>Precision Step</h3></a>
+<p>You can choose any <span class="xref">Lucene.Net.Search.NumericRangeQuery`1.precisionStep</span> when encoding values.
+Lower step values mean more precisions and so more terms in index (and index gets larger). The number
+of indexed terms per value is (those are generated by <a class="xref" href="Lucene.Net.Analysis.NumericTokenStream.html">NumericTokenStream</a>):
+<p>
+  indexedTermsPerValue = <strong>ceil</strong><big>(</big>bitsPerValue / precisionStep<big>)</big>
+</p>
+As the lower precision terms are shared by many values, the additional terms only
+slightly grow the term dictionary (approx. 7% for <code>precisionStep=4</code>), but have a larger
+impact on the postings (the postings file will have  more entries, as every document is linked to
+<code>indexedTermsPerValue</code> terms instead of one). The formula to estimate the growth
+of the term dictionary in comparison to one term per value:
+<p>
+<!-- the formula in the alt attribute was transformed from latex to PNG with http://1.618034.com/latex.php (with 110 dpi): -->
+<p><img src="doc-files/nrq-formula-1.png" alt="\mathrm{termDictOverhead} = \sum\limits_{i=0}^{\mathrm{indexedTermsPerValue}-1} \frac{1}{2^{\mathrm{precisionStep}\cdot i}}">
+</p>
+<p>On the other hand, if the <span class="xref">Lucene.Net.Search.NumericRangeQuery`1.precisionStep</span> is smaller, the maximum number of terms to match reduces,
+which optimizes query speed. The formula to calculate the maximum number of terms that will be visited while
+executing the query is:
+</p>
+<p>
+<!-- the formula in the alt attribute was transformed from latex to PNG with http://1.618034.com/latex.php (with 110 dpi): -->
+<p><img src="doc-files/nrq-formula-2.png" alt="\mathrm{maxQueryTerms} = \left[ \left( \mathrm{indexedTermsPerValue} - 1 \right) \cdot \left(2^\mathrm{precisionStep} - 1 \right) \cdot 2 \right] + \left( 2^\mathrm{precisionStep} - 1 \right)">
+</p>
+<p>For longs stored using a precision step of 4, <code>maxQueryTerms = 15<em>15</em>2 + 15 = 465</code>, and for a precision
+step of 2, <code>maxQueryTerms = 31<em>3</em>2 + 3 = 189</code>. But the faster search speed is reduced by more seeking
+in the term enum of the index. Because of this, the ideal <span class="xref">Lucene.Net.Search.NumericRangeQuery`1.precisionStep</span> value can only
+be found out by testing. <strong>Important:</strong> You can index with a lower precision step value and test search speed
+using a multiple of the original step value.</p></p>
+<p>Good values for <span class="xref">Lucene.Net.Search.NumericRangeQuery`1.precisionStep</span> are depending on usage and data type:</p>
+<ul><li>The default for all data types is <strong>4</strong>, which is used, when no <pre><code>precisionStep</code></pre> is given.</li><li>Ideal value in most cases for <em>64 bit</em> data types <em>(long, double)</em> is <strong>6</strong> or <strong>8</strong>.</li><li>Ideal value in most cases for <em>32 bit</em> data types <em>(int, float)</em> is <strong>4</strong>.</li><li>For low cardinality fields larger precision steps are good. If the cardinality is &lt; 100, it is
+ fair to use <span class="xref">System.Int32.MaxValue</span> (see below).</li><li>Steps <strong>&gt;=64</strong> for <em>long/double</em> and <strong>&gt;=32</strong> for <em>int/float</em> produces one token
+ per value in the index and querying is as slow as a conventional <a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a>. But it can be used
+ to produce fields, that are solely used for sorting (in this case simply use <span class="xref">System.Int32.MaxValue</span> as
+<span class="xref">Lucene.Net.Search.NumericRangeQuery`1.precisionStep</span>). Using <a class="xref" href="Lucene.Net.Documents.Int32Field.html">Int32Field</a>,
+<a class="xref" href="Lucene.Net.Documents.Int64Field.html">Int64Field</a>, <a class="xref" href="Lucene.Net.Documents.SingleField.html">SingleField</a> or <a class="xref" href="Lucene.Net.Documents.DoubleField.html">DoubleField</a> for sorting
+is ideal, because building the field cache is much faster than with text-only numbers.
+These fields have one term per value and therefore also work with term enumeration for building distinct lists
+(e.g. facets / preselected values to search for).
+Sorting is also possible with range query optimized fields using one of the above <span class="xref">Lucene.Net.Search.NumericRangeQuery`1.precisionStep</span>s.</li></ul>
+
+<p>Comparisons of the different types of RangeQueries on an index with about 500,000 docs showed
+that <a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a> in boolean rewrite mode (with raised <a class="xref" href="Lucene.Net.Search.BooleanQuery.html">BooleanQuery</a> clause count)
+took about 30-40 secs to complete, <a class="xref" href="Lucene.Net.Search.TermRangeQuery.html">TermRangeQuery</a> in constant score filter rewrite mode took 5 secs
+and executing this class took &lt;100ms to complete (on an Opteron64 machine, Java 1.5, 8 bit
+precision step). This query type was developed for a geographic portal, where the performance for
+e.g. bounding boxes or exact date/time stamps is important.</p>
+
+<p>@since 2.9</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Search.Query.html">Query</a></div>
+    <div class="level2"><a class="xref" href="Lucene.Net.Search.MultiTermQuery.html">MultiTermQuery</a></div>
+    <div class="level3"><span class="xref">NumericRangeQuery&lt;T&gt;</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_m_field">MultiTermQuery.m_field</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_m_rewriteMethod">MultiTermQuery.m_rewriteMethod</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_FILTER_REWRITE">MultiTermQuery.CONSTANT_SCORE_FILTER_REWRITE</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_SCORING_BOOLEAN_QUERY_REWRITE">MultiTermQuery.SCORING_BOOLEAN_QUERY_REWRITE</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_BOOLEAN_QUERY_REWRITE">MultiTermQuery.CONSTANT_SCORE_BOOLEAN_QUERY_REWRITE</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_CONSTANT_SCORE_AUTO_REWRITE_DEFAULT">MultiTermQuery.CONSTANT_SCORE_AUTO_REWRITE_DEFAULT</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_Field">MultiTermQuery.Field</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_GetTermsEnum_Lucene_Net_Index_Terms_">MultiTermQuery.GetTermsEnum(Terms)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_Rewrite_Lucene_Net_Index_IndexReader_">MultiTermQuery.Rewrite(IndexReader)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_MultiTermRewriteMethod">MultiTermQuery.MultiTermRewriteMethod</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Boost">Query.Boost</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ToString">Query.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_CreateWeight_Lucene_Net_Search_IndexSearcher_">Query.CreateWeight(IndexSearcher)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ExtractTerms_System_Collections_Generic_ISet_Lucene_Net_Index_Term__">Query.ExtractTerms(ISet&lt;Term&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_Clone">Query.Clone()</a>
+    </div>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Search.html">Lucene.Net.Search</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Search_NumericRangeQuery_1_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class NumericRangeQuery&lt;T&gt; : MultiTermQuery where T : struct, IComparable&lt;T&gt;</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">T</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_NumericRangeQuery_1_IncludesMax.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.NumericRangeQuery%601.IncludesMax%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/NumericRangeQuery.cs/#L202">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_NumericRangeQuery_1_IncludesMax_" data-uid="Lucene.Net.Search.NumericRangeQuery`1.IncludesMax*"></a>
+  <h4 id="Lucene_Net_Search_NumericRangeQuery_1_IncludesMax" data-uid="Lucene.Net.Search.NumericRangeQuery`1.IncludesMax">IncludesMax</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if the upper endpoint is inclusive </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IncludesMax { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_NumericRangeQuery_1_IncludesMin.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.NumericRangeQuery%601.IncludesMin%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/NumericRangeQuery.cs/#L198">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_NumericRangeQuery_1_IncludesMin_" data-uid="Lucene.Net.Search.NumericRangeQuery`1.IncludesMin*"></a>
+  <h4 id="Lucene_Net_Search_NumericRangeQuery_1_IncludesMin" data-uid="Lucene.Net.Search.NumericRangeQuery`1.IncludesMin">IncludesMin</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if the lower endpoint is inclusive </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IncludesMin { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_NumericRangeQuery_1_Max.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.NumericRangeQuery%601.Max%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/NumericRangeQuery.cs/#L210">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_NumericRangeQuery_1_Max_" data-uid="Lucene.Net.Search.NumericRangeQuery`1.Max*"></a>
+  <h4 id="Lucene_Net_Search_NumericRangeQuery_1_Max" data-uid="Lucene.Net.Search.NumericRangeQuery`1.Max">Max</h4>
+  <div class="markdown level1 summary"><p>Returns the upper value of this range query </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public T? Max { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_NumericRangeQuery_1_Min.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.NumericRangeQuery%601.Min%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/NumericRangeQuery.cs/#L206">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_NumericRangeQuery_1_Min_" data-uid="Lucene.Net.Search.NumericRangeQuery`1.Min*"></a>
+  <h4 id="Lucene_Net_Search_NumericRangeQuery_1_Min" data-uid="Lucene.Net.Search.NumericRangeQuery`1.Min">Min</h4>
+  <div class="markdown level1 summary"><p>Returns the lower value of this range query </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public T? Min { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Nullable</span>&lt;T&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_NumericRangeQuery_1_PrecisionStep.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.NumericRangeQuery%601.PrecisionStep%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/NumericRangeQuery.cs/#L214">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_NumericRangeQuery_1_PrecisionStep_" data-uid="Lucene.Net.Search.NumericRangeQuery`1.PrecisionStep*"></a>
+  <h4 id="Lucene_Net_Search_NumericRangeQuery_1_PrecisionStep" data-uid="Lucene.Net.Search.NumericRangeQuery`1.PrecisionStep">PrecisionStep</h4>
+  <div class="markdown level1 summary"><p>Returns the precision step. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public int PrecisionStep { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_NumericRangeQuery_1_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.NumericRangeQuery%601.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/NumericRangeQuery.cs/#L226">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_NumericRangeQuery_1_Equals_" data-uid="Lucene.Net.Search.NumericRangeQuery`1.Equals*"></a>
+  <h4 id="Lucene_Net_Search_NumericRangeQuery_1_Equals_System_Object_" data-uid="Lucene.Net.Search.NumericRangeQuery`1.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object o)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">o</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_Equals_System_Object_">MultiTermQuery.Equals(Object)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_NumericRangeQuery_1_GetHashCode.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.NumericRangeQuery%601.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/NumericRangeQuery.cs/#L243">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_NumericRangeQuery_1_GetHashCode_" data-uid="Lucene.Net.Search.NumericRangeQuery`1.GetHashCode*"></a>
+  <h4 id="Lucene_Net_Search_NumericRangeQuery_1_GetHashCode" data-uid="Lucene.Net.Search.NumericRangeQuery`1.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_GetHashCode">MultiTermQuery.GetHashCode()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_NumericRangeQuery_1_GetTermsEnum_Lucene_Net_Index_Terms_Lucene_Net_Util_AttributeSource_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.NumericRangeQuery%601.GetTermsEnum(Lucene.Net.Index.Terms%2CLucene.Net.Util.AttributeSource)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/NumericRangeQuery.cs/#L186">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_NumericRangeQuery_1_GetTermsEnum_" data-uid="Lucene.Net.Search.NumericRangeQuery`1.GetTermsEnum*"></a>
+  <h4 id="Lucene_Net_Search_NumericRangeQuery_1_GetTermsEnum_Lucene_Net_Index_Terms_Lucene_Net_Util_AttributeSource_" data-uid="Lucene.Net.Search.NumericRangeQuery`1.GetTermsEnum(Lucene.Net.Index.Terms,Lucene.Net.Util.AttributeSource)">GetTermsEnum(Terms, AttributeSource)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected override TermsEnum GetTermsEnum(Terms terms, AttributeSource atts)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.Terms.html">Terms</a></td>
+        <td><span class="parametername">terms</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Util.AttributeSource.html">AttributeSource</a></td>
+        <td><span class="parametername">atts</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.TermsEnum.html">TermsEnum</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.MultiTermQuery.html#Lucene_Net_Search_MultiTermQuery_GetTermsEnum_Lucene_Net_Index_Terms_Lucene_Net_Util_AttributeSource_">MultiTermQuery.GetTermsEnum(Terms, AttributeSource)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_NumericRangeQuery_1_ToString_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.NumericRangeQuery%601.ToString(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/NumericRangeQuery.cs/#L216">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_NumericRangeQuery_1_ToString_" data-uid="Lucene.Net.Search.NumericRangeQuery`1.ToString*"></a>
+  <h4 id="Lucene_Net_Search_NumericRangeQuery_1_ToString_System_String_" data-uid="Lucene.Net.Search.NumericRangeQuery`1.ToString(System.String)">ToString(String)</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString(string field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Query.html#Lucene_Net_Search_Query_ToString_System_String_">Query.ToString(String)</a></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_NumericRangeQuery_1.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.NumericRangeQuery%601%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/NumericRangeQuery.cs/#L166" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>
