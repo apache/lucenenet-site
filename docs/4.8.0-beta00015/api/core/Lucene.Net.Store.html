@@ -282,15 +282,12 @@ subclasses:</p>
         However, it has poor concurrent performance
         (multiple threads will bottleneck) as it
         synchronizes when multiple threads read from the
-        same file.</li><li> <a class="xref" href="Lucene.Net.Store.NIOFSDirectory.html">NIOFSDirectory</a> uses java.nio&apos;s
-        FileChannel&apos;s positional io when reading to avoid
-        synchronization when reading from the same file.
-        Unfortunately, due to a Windows-only <a href="http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6265734">Sun
-        JRE bug</a> this is a poor choice for Windows, but
-        on all other platforms this is the preferred
-        choice. Applications using <span class="xref">System.Threading.Thread.Interrupt</span> or
-<span class="xref">System.Threading.Tasks.Task&lt;TResult&gt;</span> should use
-<a class="xref" href="Lucene.Net.Store.SimpleFSDirectory.html">SimpleFSDirectory</a> instead. See <a class="xref" href="Lucene.Net.Store.NIOFSDirectory.html">NIOFSDirectory</a> java doc
+        same file.</li><li> <a class="xref" href="Lucene.Net.Store.NIOFSDirectory.html">NIOFSDirectory</a>
+        uses <span class="xref">System.IO.FileStream</span>&apos;s positional read,
+        which allows multiple threads to read from the same
+        file without synchronizing. Applications using
+<span class="xref">System.Threading.Tasks.Task`1</span> should use
+<a class="xref" href="Lucene.Net.Store.SimpleFSDirectory.html">SimpleFSDirectory</a> instead. See <a class="xref" href="Lucene.Net.Store.NIOFSDirectory.html">NIOFSDirectory</a> documentation
 for details.</li><li> <a class="xref" href="Lucene.Net.Store.MMapDirectory.html">MMapDirectory</a> uses memory-mapped IO when
 reading. This is a good choice if you have plenty
 of virtual memory relative to your index size, eg
@@ -298,8 +295,7 @@ if you are running on a 64 bit runtime, or you are
 running on a 32 bit runtime but your index sizes are
 small enough to fit into the virtual memory space.
 <p>
-Applications using <span class="xref">System.Threading.Thread.Interrupt</span> or
-<span class="xref">System.Threading.Tasks.Task&lt;TResult&gt;</span> should use
+Applications using <span class="xref">System.Threading.Tasks.Task`1</span> should use
 <a class="xref" href="Lucene.Net.Store.SimpleFSDirectory.html">SimpleFSDirectory</a> instead. See <a class="xref" href="Lucene.Net.Store.MMapDirectory.html">MMapDirectory</a>
 doc for details.</li></ul>
 
@@ -487,7 +483,7 @@ indirectly from a thread while it&apos;s interrupted can close the
 underlying file descriptor immediately if at the same time the thread is
 blocked on IO. The file descriptor will remain closed and subsequent access
 to <a class="xref" href="Lucene.Net.Store.NIOFSDirectory.html">NIOFSDirectory</a> will throw a <span class="xref">System.ObjectDisposedException</span>. If
-your application uses either <span class="xref">System.Threading.Thread.Interrupt</span> or
+your application uses
 <span class="xref">System.Threading.Tasks.Task</span> you should use <a class="xref" href="Lucene.Net.Store.SimpleFSDirectory.html">SimpleFSDirectory</a> in
 favor of <a class="xref" href="Lucene.Net.Store.NIOFSDirectory.html">NIOFSDirectory</a>.</font>
 </p></p>
