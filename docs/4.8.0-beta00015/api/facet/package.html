@@ -1,0 +1,155 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Lucene.Net.Facet Faceted Search | Apache Lucene.NET 4.8.0-beta00015 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Lucene.Net.Facet Faceted Search | Apache Lucene.NET 4.8.0-beta00015 Documentation ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="facet/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00015/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Facet">
+
+  <h1 id="lucenenetfacet-faceted-search">Lucene.Net.Facet Faceted Search</h1>
+
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<p> This module provides multiple methods for computing facet counts and value aggregations:</p>
+<ul>
+<li>Taxonomy-based methods rely on a separate taxonomy index to map hierarchical facet paths to global int ordinals for fast counting at search time; these methods can compute counts ((<a class="xref" href="Lucene.Net.Facet.Taxonomy.FastTaxonomyFacetCounts.html">FastTaxonomyFacetCounts</a>, <a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyFacetCounts.html">TaxonomyFacetCounts</a>) aggregate long or double values <a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyFacetSumInt32Associations.html">TaxonomyFacetSumInt32Associations</a>, <a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyFacetSumSingleAssociations.html">TaxonomyFacetSumSingleAssociations</a>, <a class="xref" href="Lucene.Net.Facet.Taxonomy.TaxonomyFacetSumValueSource.html">TaxonomyFacetSumValueSource</a>. Add <a class="xref" href="Lucene.Net.Facet.FacetField.html">FacetField</a> or <a class="xref" href="Lucene.Net.Facet.Taxonomy.AssociationFacetField.html">AssociationFacetField</a> to your documents at index time to use taxonomy-based methods.</li>
+<li>Sorted-set doc values method does not require a separate taxonomy index, and computes counts based on sorted set doc values fields (<a class="xref" href="Lucene.Net.Facet.SortedSet.SortedSetDocValuesFacetCounts.html">SortedSetDocValuesFacetCounts</a>). Add <a class="xref" href="Lucene.Net.Facet.SortedSet.SortedSetDocValuesFacetField.html">SortedSetDocValuesFacetField</a> to your documents at index time to use sorted set facet counts.</li>
+<li><p>Range faceting <a class="xref" href="Lucene.Net.Facet.Range.Int64RangeFacetCounts.html">Int64RangeFacetCounts</a>, <a class="xref" href="Lucene.Net.Facet.Range.DoubleRangeFacetCounts.html">DoubleRangeFacetCounts</a> compute counts for a dynamic numeric range from a provided &lt;xref:Lucene.Net.Queries.Function.ValueSource&gt; (previously indexed numeric field, or a dynamic expression such as distance). </p>
+<p>At search time you first run your search, but pass a <a class="xref" href="Lucene.Net.Facet.FacetsCollector.html">FacetsCollector</a> to gather all hits (and optionally, scores for each hit). Then, instantiate whichever facet methods you&#39;d like to use to compute aggregates. Finally, all methods implement a common <a class="xref" href="Lucene.Net.Facet.Facets.html">Facets</a> base API that you use to obtain specific facet counts. </p>
+<p>The various <a class="xref" href="Lucene.Net.Facet.FacetsCollector.html#Lucene_Net_Facet_FacetsCollector_Search_Lucene_Net_Search_IndexSearcher_Lucene_Net_Search_Query_Lucene_Net_Search_Filter_System_Int32_Lucene_Net_Search_ICollector_">FacetsCollector.Search()</a> utility methods are useful for doing an &quot;ordinary&quot; search (sorting by score, or by a specified Sort) but also collecting into a <a class="xref" href="Lucene.Net.Facet.FacetsCollector.html">FacetsCollector</a> for subsequent faceting. </p>
+</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net.Facet/package.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,691 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class Sort
+   | Apache Lucene.NET 4.8.0-beta00015 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class Sort
+   | Apache Lucene.NET 4.8.0-beta00015 Documentation ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+    
+    <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00009/">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00015/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.Sort">
+  
+  
+  <h1 id="Lucene_Net_Search_Sort" data-uid="Lucene.Net.Search.Sort" class="text-break">Class Sort
+  </h1>
+  <div class="markdown level0 summary"><p>Encapsulates sort criteria for returned hits.</p>
+<p><p>The fields used to determine sort order must be carefully chosen.
+<a class="xref" href="Lucene.Net.Documents.Document.html">Document</a>s must contain a single term in such a field,
+and the value of the term should indicate the document&apos;s relative position in
+a given sort order.  The field must be indexed, but should not be tokenized,
+and does not need to be stored (unless you happen to want it back with the
+rest of your document data).  In other words:</p>
+<p><p><pre><code>document.Add(new Field(&quot;byNumber&quot;, x.ToString(CultureInfo.InvariantCulture), Field.Store.NO, Field.Index.NOT_ANALYZED));</code></pre></p>
+<p><p><h3>Valid Types of Values</h3></p>
+<p><p>There are four possible kinds of term values which may be put into
+sorting fields: <span class="xref">System.Int32</span>s, <span class="xref">System.Int64</span>s, <span class="xref">System.Single</span>s, or <span class="xref">System.String</span>s.  Unless
+<a class="xref" href="Lucene.Net.Search.SortField.html">SortField</a> objects are specified, the type of value
+in the field is determined by parsing the first term in the field.</p>
+<p><p><span class="xref">System.Int32</span> term values should contain only digits and an optional
+preceding negative sign.  Values must be base 10 and in the range
+<span class="xref">System.Int32.MinValue</span> and <span class="xref">System.Int32.MaxValue</span> inclusive.
+Documents which should appear first in the sort
+should have low value integers, later documents high values
+(i.e. the documents should be numbered <code>1..n</code> where
+<code>1</code> is the first and <code>n</code> the last).</p>
+<p><p><span class="xref">System.Int64</span> term values should contain only digits and an optional
+preceding negative sign.  Values must be base 10 and in the range
+<span class="xref">System.Int64.MinValue</span> and <span class="xref">System.Int64.MaxValue</span> inclusive.
+Documents which should appear first in the sort
+should have low value integers, later documents high values.</p>
+<p><p><span class="xref">System.Single</span> term values should conform to values accepted by
+<span class="xref">System.Single</span> (except that <code>NaN</code>
+and <code>Infinity</code> are not supported).
+<a class="xref" href="Lucene.Net.Documents.Document.html">Document</a>s which should appear first in the sort
+should have low values, later documents high values.</p>
+<p><p><span class="xref">System.String</span> term values can contain any valid <span class="xref">System.String</span>, but should
+not be tokenized.  The values are sorted according to their
+comparable natural order (<span class="xref">System.StringComparer.Ordinal</span>).  Note that using this type
+of term value has higher memory requirements than the other
+two types.</p>
+<p><p><h3>Object Reuse</h3></p>
+<p><p>One of these objects can be
+used multiple times and the sort order changed between usages.</p>
+<p><p>This class is thread safe.</p>
+<p><p><h3>Memory Usage</h3></p>
+<p><p>Sorting uses of caches of term values maintained by the
+internal HitQueue(s).  The cache is static and contains an <span class="xref">System.Int32</span>
+or <span class="xref">System.Single</span> array of length <code>IndexReader.MaxDoc</code> for each field
+name for which a sort is performed.  In other words, the size of the
+cache in bytes is:</p>
+<p><p><pre><code>4 * IndexReader.MaxDoc * (# of different fields actually used to sort)</code></pre></p>
+<p><p>For <span class="xref">System.String</span> fields, the cache is larger: in addition to the
+above array, the value of every term in the field is kept in memory.
+If there are many unique terms in the field, this could
+be quite large.</p>
+<p><p>Note that the size of the cache is not affected by how many
+fields are in the index and <em>might</em> be used to sort - only by
+the ones actually used to sort a result set.</p>
+<p><p>Created: Feb 12, 2004 10:53:57 AM
+<p>
+@since   lucene 1.4</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level1"><span class="xref">Sort</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.GetType()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.MemberwiseClone()</span>
+    </div>
+    <div>
+      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.Net.Search.html">Lucene.Net.Search</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Search_Sort_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Sort</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Sort__ctor.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Sort.%23ctor%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/Sort.cs/#L122">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Sort__ctor_" data-uid="Lucene.Net.Search.Sort.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_Sort__ctor" data-uid="Lucene.Net.Search.Sort.#ctor">Sort()</h4>
+  <div class="markdown level1 summary"><p>Sorts by computed relevance. This is the same sort criteria as calling
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_System_Int32_">Search(Query, Int32)</a> without a sort criteria,
+only with slightly more overhead.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Sort()</code></pre>
+  </div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Sort__ctor_Lucene_Net_Search_SortField_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Sort.%23ctor(Lucene.Net.Search.SortField)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/Sort.cs/#L129">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Sort__ctor_" data-uid="Lucene.Net.Search.Sort.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_Sort__ctor_Lucene_Net_Search_SortField_" data-uid="Lucene.Net.Search.Sort.#ctor(Lucene.Net.Search.SortField)">Sort(SortField)</h4>
+  <div class="markdown level1 summary"><p>Sorts by the criteria in the given <a class="xref" href="Lucene.Net.Search.SortField.html">SortField</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Sort(SortField field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.SortField.html">SortField</a></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Sort__ctor_Lucene_Net_Search_SortField___.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Sort.%23ctor(Lucene.Net.Search.SortField%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/Sort.cs/#L136">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Sort__ctor_" data-uid="Lucene.Net.Search.Sort.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_Sort__ctor_Lucene_Net_Search_SortField___" data-uid="Lucene.Net.Search.Sort.#ctor(Lucene.Net.Search.SortField[])">Sort(SortField[])</h4>
+  <div class="markdown level1 summary"><p>Sorts in succession by the criteria in each <a class="xref" href="Lucene.Net.Search.SortField.html">SortField</a>. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Sort(params SortField[] fields)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.SortField.html">SortField</a>[]</td>
+        <td><span class="parametername">fields</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Sort_INDEXORDER.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Sort.INDEXORDER%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/Sort.cs/#L112">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_Sort_INDEXORDER" data-uid="Lucene.Net.Search.Sort.INDEXORDER">INDEXORDER</h4>
+  <div class="markdown level1 summary"><p>Represents sorting by index order. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly Sort INDEXORDER</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Sort_RELEVANCE.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Sort.RELEVANCE%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/Sort.cs/#L108">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Search_Sort_RELEVANCE" data-uid="Lucene.Net.Search.Sort.RELEVANCE">RELEVANCE</h4>
+  <div class="markdown level1 summary"><p>Represents sorting by computed relevance. Using this sort criteria returns
+the same results as calling
+<a class="xref" href="Lucene.Net.Search.IndexSearcher.html#Lucene_Net_Search_IndexSearcher_Search_Lucene_Net_Search_Query_System_Int32_">Search(Query, Int32)</a>without a sort criteria,
+only with slightly more overhead.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static readonly Sort RELEVANCE</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Sort_NeedsScores.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Sort.NeedsScores%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/Sort.cs/#L230">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Sort_NeedsScores_" data-uid="Lucene.Net.Search.Sort.NeedsScores*"></a>
+  <h4 id="Lucene_Net_Search_Sort_NeedsScores" data-uid="Lucene.Net.Search.Sort.NeedsScores">NeedsScores</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if the relevance score is needed to sort documents. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual bool NeedsScores { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+  </h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Sort_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Sort.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/Sort.cs/#L207">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Sort_Equals_" data-uid="Lucene.Net.Search.Sort.Equals*"></a>
+  <h4 id="Lucene_Net_Search_Sort_Equals_System_Object_" data-uid="Lucene.Net.Search.Sort.Equals(System.Object)">Equals(Object)</h4>
+  <div class="markdown level1 summary"><p>Returns <code>true</code> if <code data-dev-comment-type="paramref" class="paramref">o</code> is equal to this. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override bool Equals(object o)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Object</span></td>
+        <td><span class="parametername">o</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Boolean</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.Equals(System.Object)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Sort_GetHashCode.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Sort.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/Sort.cs/#L223">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Sort_GetHashCode_" data-uid="Lucene.Net.Search.Sort.GetHashCode*"></a>
+  <h4 id="Lucene_Net_Search_Sort_GetHashCode" data-uid="Lucene.Net.Search.Sort.GetHashCode">GetHashCode()</h4>
+  <div class="markdown level1 summary"><p>Returns a hash code value for this object. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.Int32</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.GetHashCode()</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Sort_GetSort.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Sort.GetSort%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/Sort.cs/#L156">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Sort_GetSort_" data-uid="Lucene.Net.Search.Sort.GetSort*"></a>
+  <h4 id="Lucene_Net_Search_Sort_GetSort" data-uid="Lucene.Net.Search.Sort.GetSort">GetSort()</h4>
+  <div class="markdown level1 summary"><p>Representation of the sort criteria.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual SortField[] GetSort()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.SortField.html">SortField</a>[]</td>
+        <td><p>Array of <a class="xref" href="Lucene.Net.Search.SortField.html">SortField</a> objects used in this sort criteria</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Sort_Rewrite_Lucene_Net_Search_IndexSearcher_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Sort.Rewrite(Lucene.Net.Search.IndexSearcher)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/Sort.cs/#L172">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Sort_Rewrite_" data-uid="Lucene.Net.Search.Sort.Rewrite*"></a>
+  <h4 id="Lucene_Net_Search_Sort_Rewrite_Lucene_Net_Search_IndexSearcher_" data-uid="Lucene.Net.Search.Sort.Rewrite(Lucene.Net.Search.IndexSearcher)">Rewrite(IndexSearcher)</h4>
+  <div class="markdown level1 summary"><p>Rewrites the <a class="xref" href="Lucene.Net.Search.SortField.html">SortField</a>s in this <a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a>, returning a new <a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a> if any of the fields
+changes during their rewriting.
+<p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is experimental and might change in incompatible ways in the next release.</p>
+</div>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual Sort Rewrite(IndexSearcher searcher)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a></td>
+        <td><span class="parametername">searcher</span></td>
+        <td><p><a class="xref" href="Lucene.Net.Search.IndexSearcher.html">IndexSearcher</a> to use in the rewriting </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a></td>
+        <td><p><code>this</code> if the Sort/Fields have not changed, or a new <a class="xref" href="Lucene.Net.Search.Sort.html">Sort</a> if there
+          is a change </p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.IO.IOException</span></td>
+        <td><p>Can be thrown by the rewriting</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Sort_SetSort_Lucene_Net_Search_SortField_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Sort.SetSort(Lucene.Net.Search.SortField)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/Sort.cs/#L142">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Sort_SetSort_" data-uid="Lucene.Net.Search.Sort.SetSort*"></a>
+  <h4 id="Lucene_Net_Search_Sort_SetSort_Lucene_Net_Search_SortField_" data-uid="Lucene.Net.Search.Sort.SetSort(Lucene.Net.Search.SortField)">SetSort(SortField)</h4>
+  <div class="markdown level1 summary"><p>Sets the sort to the given criteria. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetSort(SortField field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.SortField.html">SortField</a></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Sort_SetSort_Lucene_Net_Search_SortField___.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Sort.SetSort(Lucene.Net.Search.SortField%5B%5D)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/Sort.cs/#L148">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Sort_SetSort_" data-uid="Lucene.Net.Search.Sort.SetSort*"></a>
+  <h4 id="Lucene_Net_Search_Sort_SetSort_Lucene_Net_Search_SortField___" data-uid="Lucene.Net.Search.Sort.SetSort(Lucene.Net.Search.SortField[])">SetSort(SortField[])</h4>
+  <div class="markdown level1 summary"><p>Sets the sort to the given criteria in succession. </p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public virtual void SetSort(params SortField[] fields)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.SortField.html">SortField</a>[]</td>
+        <td><span class="parametername">fields</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Sort_ToString.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Sort.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/Sort.cs/#L189">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Sort_ToString_" data-uid="Lucene.Net.Search.Sort.ToString*"></a>
+  <h4 id="Lucene_Net_Search_Sort_ToString" data-uid="Lucene.Net.Search.Sort.ToString">ToString()</h4>
+  <div class="markdown level1 summary"></div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">System.String</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">System.Object.ToString()</span></div>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00015/websites/apidocs/apiSpec/new?filename=Lucene_Net_Search_Sort.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Sort%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00015/src/Lucene.Net/Search/Sort.cs/#L100" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00009/styles/main.js"></script>
+  </body>
+</html>
