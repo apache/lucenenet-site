@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Lucene.NET 4.8.0-beta00016 Release Notes | Apache Lucene.NET 4.8.0 </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Lucene.NET 4.8.0-beta00016 Release Notes | Apache Lucene.NET 4.8.0 ">
+    <meta name="generator" content="docfx 2.56.6.0">
+    
+    <link rel="shortcut icon" href="../logo/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    
+    
+  
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono">
+    <link rel="stylesheet" href="/styles/site.css">
+  
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="releasenotes/4.8.0-beta00016">
+<h1 id="lucenenet-480-beta00016-release-notes">Lucene.NET 4.8.0-beta00016 Release Notes</h1>
+
+<hr>
+<blockquote>
+<p>This release contains several important bug fixes and performance enhancements.</p>
+</blockquote>
+<h2 id="breaking-index-changes">Breaking Index Changes</h2>
+<p>There are 2 breaking changes that may affect some users when reading indexes that were created from version 4.8.0-beta00015 and all prior 4.8.0 beta versions (not including 3.0.3).</p>
+<ol>
+<li>A bug was fixed in the generation of segment file names. This only affects users with more than 10 segments in their index.</li>
+<li><code>Lucene.Net.Documents.DateTools</code> has been modified to return <em>milliseconds since Unix epoch</em> (that is, since Jan 1, 1970 at 00:00:00 UTC) by <em>default</em> to match Java Lucene. This only affects users who explicitly use <code>Lucene.Net.Documents.DateTools</code> in their application and store the result (in .NET ticks) in their index.</li>
+</ol>
+<p>If you are affected by either of the above issues, it is recommended to regenerate your indexes during upgrading. However, if that is not feasible, we have provided the following workarounds.</p>
+<ol>
+<li>If you have a large index with more than 10 segments, see <a href="https://github.com/apache/lucenenet/pull/576">#576</a> for details on how to enable legacy segment name support.</li>
+<li>If you are storing the result of <code>Lucene.Net.Documents.DateTools.StringToTime(string)</code> or <code>Lucene.Net.Documents.DateTools.Round(long)</code> (a <code>long</code>) in your index, you are storing .NET ticks. There are now optional parameters <code>inputRepresentation</code> and <code>outputRepresentation</code> on these methods to specify whether the <code>long</code> value represents .NET ticks, .NET ticks as milliseconds, or millisenonds since the Unix epoch. To exactly match version 4.8.0-beta00015 and prior (including prior major versions):
+<ul>
+<li><code>Lucene.Net.Documents.DateTools.StringToTime(string, NumericRepresentation)</code> should specify <code>NumericRepresentation.TICKS</code> for <code>outputRepresentation</code>.</li>
+<li><code>Lucene.Net.Documents.DateTools.Round(long, NumericRepresentation, NumericRepresentation)</code> should specify <code>NumericRepresentation.TICKS_AS_MILLISECONDS</code> for <code>inputRepresentation</code> and <code>NumericRepresentation.TICKS</code> for <code>outputRepresentation</code>.</li>
+</ul>
+</li>
+</ol>
+<h2 id="net-framework-recommendations">.NET Framework Recommendations</h2>
+<p>It is recommended that all .NET Framework users migrate as soon as possible.</p>
+<ol>
+<li>In cases where <code>Lucene.Net.Support.WeakDictionary&lt;TKey, TValue&gt;</code> was used in .NET Framework and .NET Standard 2.0 due to missing APIs, but there is now a better solution using <code>Prism.Core</code>'s weak events in combination with <code>ConditionalWeakTable&lt;TKey, TValue&gt;</code>, which means memory management is handled entirely by the GC in <code>Lucene.Net.Index.IndexReader</code>, <code>Lucene.Net.Search.FieldCacheImpl</code>, <code>Lucene.Net.Search.CachingWrappingFilter</code> and <code>Lucene.Net.Facet.Taxonomy.CachedOrdinalsReader</code>. See <a href="https://github.com/apache/lucenenet/pull/613">#613</a>.</li>
+<li>All known issues with loss of floating-point precision on .NET Framework x86 have been fixed.</li>
+</ol>
+<h2 id="change-log">Change Log</h2>
+<h3 id="breaking-changes">Breaking Changes</h3>
+<ul>
+<li><a href="https://github.com/apache/lucenenet/pull/547">#547</a> - <code>Lucene.Net.Util.StringHelper.GOOD_FAST_HASH_SEED</code>: converted from a static field to a property and marked obsolete. Added a new property <code>GoodFastHashSeed</code>. Removed <code>SystemProperties</code> call to populate the value of the field, since NUnit only allows us to generate a seed per test, and we need a way to inject the seed value for repeatability.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/547">#547</a> - <code>Lucene.Net.TestFramework</code>: Added <code>LuceneSetUpFixtureBuilder</code> class to load either a subclass or our default instance of <code>LuceneTestFrameworkInitializer</code>. Also added <code>LuceneTestCase.SetUpFixture</code> to control initialization of <code>LuceneTestFrameworkInitializer</code> so it is only called on setup and teardown for the assembly. Added <code>Initialize()</code> method to <code>LuceneTestFrameworkInitializer</code> that <em>must be used</em> when setting factories during testing.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/547">#547</a> - <code>Lucene.Net.TestFramework.Util.LuceneTestCase</code>: Deprecated <code>GetClassType()</code> method and added <code>TestType</code> property</li>
+<li><a href="https://github.com/apache/lucenenet/pull/547">#547</a> - <code>Lucene.Net.TestFramework.Util.AbstractBeforeAfterRule``: Removed </code>LuceneTestCase<code>parameter from</code>Before()<code>and</code>After()` methods.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/551">#551</a> - Changed constructors of <code>Lucene.Net.Util.NumberFormat</code> and <code>Lucene.Net.QueryParsers.Flexible.Standard.Config.NumberDateFormat</code> to accept <code>IFormatProvider</code> rather than <code>CultureInfo</code> and changed <code>Lucene.Net.Util.NumberFormat.Culture</code> property to <code>Lucene.Net.Util.NumberFormat.FormatProvider</code>.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/554">#554</a> - <code>Lucene.Net.Misc</code>: Made <code>DocFreqComparer</code> and <code>TotalTermFreqComparer</code> into static singletons, only accessible by the <code>Default</code> property.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/428">#428</a>, <a href="https://github.com/apache/lucenenet/pull/429">#429</a>, <a href="https://github.com/apache/lucenenet/pull/570">#570</a> - <code>Lucene.Net.Search.FieldComparer</code>: Redesigned implementation to use reference types for numerics (from J2N) to avoid boxing.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/570">#570</a> - <code>Lucene.Net.Search.FieldCache.IParser</code>: Renamed method from <code>TermsEnum()</code> to <code>GetTermsEnum()</code> to match other APIs</li>
+<li><a href="https://github.com/apache/lucenenet/pull/570">#570</a> - <code>Lucene.Net.Queries</code>: <code>ObjectVal()</code> returns a <code>J2N.Numerics.Number</code>-derived type rather than a value type cast to object. Direct casts to <code>int</code>, <code>long</code>, <code>double</code>, <code>single</code>, etc. will no longer work without first casting to the <code>J2N.Numerics.Number</code>-derived type. Alternatively, use the corresponding <code>Convert.ToXXX()</code> method for the type you wish to retrieve from the object.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/574">#574</a> - <code>Lucene.Net.Suggest.Fst.FSTCompletionLookup/WFSTCompletionLookup</code>: Changed <code>Get()</code> to return <code>long?</code> instead of <code>object</code> to eliminate boxing/unboxing</li>
+<li><a href="https://github.com/apache/lucenenet/pull/574">#574</a> - <code>Lucene.Net.Index.MergePolicy::FindForcedMerges()</code>: Removed unnecessary nullable from <code>FindForcedMerges()</code> and all <code>MergePolicy</code> subclasses</li>
+<li><a href="https://github.com/apache/lucenenet/pull/574">#574</a> - <code>Lucene.Net.Replicator</code>: Changed callback signature from <code>Func&lt;bool?&gt;</code> to <code>Action</code>, since the return value had no semantic meaning</li>
+<li><a href="https://github.com/apache/lucenenet/pull/575">#575</a> - <code>Lucene.Net.Index.DocValuesFieldUpdates</code>: Refactored so the subclasses will handle getting the values from <code>DocValuesFieldUpdatesIterator</code> or <code>DocValuesUpdate</code> via a cast rather than boxing the value. Also marked internal (as well as all members of <code>BufferedUpdates</code>), since this was not supposed to be part of the public API.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/573">#573</a>, <a href="https://github.com/apache/lucenenet/pull/576">#576</a> - Changed segment file names to match Lucene 4.8.0 and Lucene.NET 3.x</li>
+<li><a href="https://github.com/apache/lucenenet/pull/577">#577</a> - <code>Lucene.Net.Index.SegmentInfos</code>: Changed <code>Info()</code> method to an indexer (.NET Convention)</li>
+<li><a href="https://github.com/apache/lucenenet/pull/580">#580</a> - <code>Lucene.Net.Documents.DateTools</code> - Added <code>NumericRepresentation</code> enum to allow converting to/from long in the following formats:
+<ul>
+<li><p>Unix Epoch (default): Milliseconds since Jan 1, 1970 12:00:00 AM UTC.</p>
+</li>
+<li><p>Ticks: The raw ticks from <code>DateTime</code> or <code>DateTimeOffset</code>.</p>
+</li>
+<li><p>Ticks as Milliseconds: This is for compatibility with prior versions of Lucene.NET (3.0.3 and 4.8.0-beta00001 - 4.8.0-beta00015). The conversion done on input values is <code>time * TimeSpan.TicksPerMillisecond</code> and the conversion to output values is <code>time / TimeSpan.TicksPerMillisecond</code>.</p>
+<p><strong>The <code>long</code> return value from <code>Lucene.Net.Documents.DateTools.StringToTime(string, NumericRepresentation)</code> has been changed from <code>NumericRepresentation.TICKS</code> to <code>NumericRepresentation.UNIX_TIME_MILLISECONDS</code> by default.</strong></p>
+<p><strong>The <code>long</code> input parameter provided to <code>Lucene.Net.Documents.DateTools.Round(long, NumericRepresentation, NumericRepresentation)</code> has been changed from <code>NumericRepresentation.TICKS_AS_MILLISECONDS</code> to <code>NumericRepresentation.UNIX_TIME_MILLISECONDS</code> by default.</strong></p>
+<p><strong>The <code>long</code> return value from <code>Lucene.Net.Documents.DateTools.Round(long, NumericRepresentation, NumericRepresentation)</code> has changed from <code>NumericRepresentation.TICKS</code> to <code>NumericRepresentation.UNIX_TIME_MILLISECONDS</code> by default.</strong></p>
+</li>
+</ul>
+</li>
+<li><a href="https://github.com/apache/lucenenet/pull/580">#580</a> - <code>Lucene.Net.Documents.DateTools</code> - De-nested <code>Resolution</code> enum and renamed <code>DateResolution</code>.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/580">#580</a> - <code>Lucene.Net.QueryParsers.Flexible.Standard</code>: Changed numeric nodes to accept and return <code>J2N.Numerics.Number</code>-derived types instead of <code>object</code>.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/581">#581</a> - <strong>SWEEP:</strong> <code>Lucene.Net.Util.Fst</code>: Changed API to use <code>J2N.Numerics.Int64</code> instead of <code>long?</code> for generic closing type as it was designed to use reference equality comparison.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/581">#581</a> - <strong>SWEEP:</strong> <code>Lucene.Net.Util.Fst</code>: Added class constraints to each generic FST type and reverted to reference equality comparisons.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/581">#581</a>, <a href="https://github.com/apache/lucenenet/pull/279">#279</a> - <code>Lucene.Net.Util.Fst.Int32sRefFSTEnum</code>: Added <code>MoveNext()</code> method and marked <code>Next()</code> method obsolete. This change had already been done to BytesRefFSTEnum, which made them inconsistent.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/583">#583</a> - <code>Lucene.Net.QueryParsers.Flexible</code>: Removed unnecessary nullable value types from <code>ConfigurationKeys</code> and configuration setters/getters in <code>StandardQueryParser</code>. Added <code>AbstractQueryConfig.TryGetValue()</code> method to allow retrieving value types so they can be defaulted properly.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/583">#583</a> - <code>Lucene.Net.Queries.Function.ValueSources.EnumFieldSource::ctor()</code> - changed <code>enumIntToStringMap</code> to accept <code>IDictionary&lt;int, string&gt;</code> instead of <code>IDictionary&lt;int?, string&gt;</code> (removed unnecessary nullable)</li>
+<li><a href="https://github.com/apache/lucenenet/pull/587">#587</a> - <code>Lucene.Net.TestFramework.Store.MockDirectoryWrapper</code>: Renamed <code>AssertNoUnreferencedFilesOnClose</code> to <code>AssertNoUnreferencedFilesOnDispose</code></li>
+<li><a href="https://github.com/apache/lucenenet/pull/619">#619</a> - <code>Lucene.Net.Spatial</code>: Upgraded to new Spatial4n NuGet package that unifies the types from Spatial4n.Core and Spatial4n.Core.NTS</li>
+<li><a href="https://github.com/apache/lucenenet/pull/619">#619</a> - <code>Lucene.Net.Spatial.Prefix.Tree.Cell</code>: Renamed <code>m_outerInstance</code> &gt; <code>m_spatialPrefixTree</code> and constructor parameter <code>outerInstance</code> &gt; <code>spatialPrefixTree</code></li>
+<li><a href="https://github.com/apache/lucenenet/pull/619">#619</a> - <code>Lucene.Net.Spatial.Prefix.AbstractPrefixTreeFilter.BaseTermsEnumTransverser</code>: renamed <code>m_outerInstance</code> &gt; <code>m_filter</code>, constructor parameter <code>outerInstance</code> &gt; <code>filter</code></li>
+<li><a href="https://github.com/apache/lucenenet/pull/619">#619</a> - <code>Lucene.Net.Spatial.Prefix.AbstractPrefixTreeFilter</code>: De-nested <code>BaseTermsEnumTraverser</code>class</li>
+<li><a href="https://github.com/apache/lucenenet/pull/619">#619</a> - <code>Lucene.Net.Spatial.Prefix.Tree.GeohashPrefixTree.Factory</code>: de-nested and renamed <code>GeohashPrefixTreeFactory</code></li>
+<li><a href="https://github.com/apache/lucenenet/pull/619">#619</a> - <code>Lucene.Net.Spatial.Prefix.Tree.QuadPrefixTree.Factory</code>: de-nested and renamed <code>QuadPrefixTreeFactory</code></li>
+<li><a href="https://github.com/apache/lucenenet/pull/619">#619</a> - <code>Lucene.Net.Spatial.Prefix.AbstractVisitingPrefixTreeFilter</code>: De-nested <code>VisitorTemplate</code> class and changed protected field <code>m_prefixGridScanLevel</code> to a public property named <code>PrefixGridScanLevel</code>.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/619">#619</a> - <code>Lucene.Net.Spatial.Query</code>: Renamed <code>UnsupportedSpatialOperation</code> &gt; <code>UnsupportedSpatialOperationException</code> to match .NET conventions</li>
+</ul>
+<h3 id="bugs">Bugs</h3>
+<ul>
+<li><a href="https://github.com/apache/lucenenet/pull/363">#363</a>, <a href="https://github.com/apache/lucenenet/pull/534">#534</a> - <code>Lucene.Net.Replicator.Http.HttpReplicatorTest::TestBasic()</code>. This was failing intermittently due to the Timeout value being set to 1 second instead of the 60 second value that was used in Java. It has been increased to the .NET default of 100 seconds.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/363">#363</a>, <a href="https://github.com/apache/lucenenet/pull/534">#534</a> - <code>Lucene.Net.Replicator.IndexAndTaxonomyReplicationClientTest::TestConsistencyOnExceptions()</code> and <code>Lucene.Net.Replicator.IndexReplicationClientTest::TestConsistencyOnExceptions()</code> were failing due to to exceptions being raised on the worker thread and missing locks, which have both been addressed.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/535">#535</a> - Added <code>[SuppressCodecs]</code> attribute where required for custom Lucene.NET tests</li>
+<li><a href="https://github.com/apache/lucenenet/pull/536">#536</a> - Modified all <code>TermsEnum.MoveNext()</code> methods to return a check for <code>null</code> rather than returning <code>true</code></li>
+<li><a href="https://github.com/apache/lucenenet/pull/537">#537</a> - <code>Lucene.Net.TestFramework.Index.BasePostingsFormatTestCase</code>: Removed <code>IndexOptions.NONE</code> from the list of available options, since it is not a valid test option</li>
+<li><a href="https://github.com/apache/lucenenet/pull/539">#539</a> - <code>Lucene.Net.Grouping.Term.TermAllGroupHeadsCollector</code>: Use <code>NumericUtils.SingleToSortableInt32()</code> to compare floating point numbers (Fixes <code>AllGroupHeadCollectorTest.TestRandom()</code> on .NET Framework x86).</li>
+<li><a href="https://github.com/apache/lucenenet/pull/540">#540</a> - <code>Lucene.Net.Tests.Util.TestPriorityQueue</code>: Fixed issues with comparers after introducing <code>J2N.Randomizer</code>, which produces negative random numbers.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/541">#541</a> - <code>Lucene.Net.Codecs.SimpleText.SimpleTextFieldsReader::NextDoc()</code>: Fixed assert that was throwing on <code>BytesRef.Utf8ToString()</code></li>
+<li><a href="https://github.com/apache/lucenenet/pull/542">#542</a> - <code>Lucene.Net.Util.Automation.MinimizationOperations::MinimizeHopcroft()</code>: Fixed range in <code>OpenBitSet.Clear()</code></li>
+<li><a href="https://github.com/apache/lucenenet/pull/543">#543</a> - <code>Lucene.Net.Tests.QueryParser.Flexible.Standard.TestQPHelper</code>: Use <code>ParseExact()</code> method to specify the date format, so it works across cultures.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/527">#527</a>, <a href="https://github.com/apache/lucenenet/pull/548">#548</a> - <code>Lucene.Net.Search.Suggest.Analyzing.BlendedInfixSuggester</code>: Apply patch from <a href="https://issues.apache.org/jira/browse/LUCENE-6093">https://issues.apache.org/jira/browse/LUCENE-6093</a> to fix <code>ArgumentNullException</code> if there were discarded trailing characters in the query (Thanks @Maxwellwr)</li>
+<li><a href="https://github.com/apache/lucenenet/pull/550">#550</a> - <strong>SWEEP:</strong> <code>Use </code>StringComparer.Ordinal<code>for</code>Sort()` methods, where appropriate</li>
+<li><a href="https://github.com/apache/lucenenet/pull/551">#551</a> - <code>Lucene.Net.QueryParser.Flexible.Standard</code>: Fixed calendar handling on .NET Core</li>
+<li><a href="https://github.com/apache/lucenenet/pull/552">#552</a> - <code>Lucene.Net.Suggest.Jaspell.JaspellTernarySearchTree</code>: Fixed random number generator so it produces random numbers</li>
+<li><a href="https://github.com/apache/lucenenet/pull/553">#553</a>, <a href="https://github.com/apache/lucenenet/pull/609">#609</a> - <code>Lucene.Net.TestFramework.Util.TestUtil::RandomAnalysisString()</code>: Fixed <code>ArgumentOutOfRangeException</code> when passed a <code>maxLength</code> of 0.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/546">#546</a>, <a href="https://github.com/apache/lucenenet/pull/557">#557</a> - <code>Lucene.Net.Search.DisjunctionMaxScorer</code>: Fixed x86 floating point precision issue on .NET Framework</li>
+<li><a href="https://github.com/apache/lucenenet/pull/558">#558</a> - <code>Lucene.Net.Expressions.ScoreFunctionValues</code>: Fixed x86 floating point precision issue on .NET Framework</li>
+<li><a href="https://github.com/apache/lucenenet/pull/559">#559</a> - <code>Lucene.Net.Spatial.Prefix.SpatialOpRecursivePrefixTreeTest</code>: Ported over patch from <a href="https://github.com/apache/lucene/commit/e9906a334b8e123e93b917c3feb6e55fed0a8c57">https://github.com/apache/lucene/commit/e9906a334b8e123e93b917c3feb6e55fed0a8c57</a> (from 4.9.0).</li>
+<li><a href="https://github.com/apache/lucenenet/pull/545">#545</a>, <a href="https://github.com/apache/lucenenet/pull/565">#565</a> - <code>Lucene.Net.Index.TestDuelingCodecs::TestEquals()</code>: There was a missing ! in <code>Lucene.Net.Codecs.BlockTreeTermsReader.IntersectEnum.Frame::Load()</code> that was inverting the logic, causing this test to fail intermittently.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/549">#549</a>, <a href="https://github.com/apache/lucenenet/pull/566">#566</a> - <code>Lucene.Net.Search.TestJoinUtil::TestMultiValueRandomJoin()</code>: Fixed x86 floating point precision issue on .NET Framework</li>
+<li><a href="https://github.com/apache/lucenenet/pull/568">#568</a> - <code>Lucene.Net.Search.Spell.TestSpellChecker::TestConcurrentAccess()</code>: Fixed issues that were causing the test to hang due to concurrency problems.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/513">#513</a>, <a href="https://github.com/apache/lucenenet/pull/572">#572</a> - Updated <code>ControlledRealTimeReopenThread</code> to correctly handle timing (thanks @rclabo)</li>
+<li><code>Lucene.Net.Support.Collections.ReverseComparer&lt;T&gt;</code>: Replaced <code>CaseInsensitiveComparer</code> with <code>J2N.Collections.Generic.Comparer&lt;T&gt;</code>. This only affects tests.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/597">#597</a> - <code>.github/workflows</code>: Updated website/documentation configs to use subdirectory glob patterns for paths.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/598">#598</a> - Website: Fixed codeclimber article broken links</li>
+<li><a href="https://github.com/apache/lucenenet/pull/600">#600</a> - Fixed broken book link for Instant Lucene.NET (Thanks @rclabo)</li>
+<li><a href="https://github.com/apache/lucenenet/pull/606">#606</a> - <code>Lucene.Net.Search.FieldCacheImpl.Cache&lt;TKey, TValue&gt;::Put()</code>: Logic was inverted on <code>innerCache</code> field so the value was being updated if exists, when it should not be updated in this case</li>
+<li><a href="https://github.com/apache/lucenenet/pull/606">#606</a> - <code>Lucene.Net.Search.FieldCacheImpl::Cache&lt;TKey, TValue&gt; (Put + Get)</code>: Fixed issue with <code>InitReader()</code> being called prior to adding the item to the cache when it should be called after</li>
+<li><a href="https://github.com/apache/lucenenet/pull/619">#619</a> - <code>Lucene.Net.Spatial.Query.SpatialArgs::ctor()</code>: Set <code>operation</code> and <code>shape</code> fields rather than calling the virtual properties to set them (which can cause initialization issues for subclasses)</li>
+</ul>
+<h3 id="improvements">Improvements</h3>
+<ul>
+<li><a href="https://github.com/apache/lucenenet/pull/538">#538</a> - <code>Lucene.Net.TestFramework.Search.CheckHits::CheckHitCollector()</code>: Removed unnecessary call to <code>Convert.ToInt32()</code> and simplified collection initialization.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/554">#554</a> - <strong>SWEEP:</strong> Made stateless private sealed comparers into singletons to reduce allocations (unless they already have a static property)</li>
+<li><a href="https://github.com/apache/lucenenet/pull/555">#555</a>, <a href="https://github.com/apache/lucenenet/pull/526">#526</a> - Deprecated support for <code>System.Threading.Thread.Interrupt()</code> when writing indexes due to the high possibility in .NET that it could break a <code>Commit()</code> or cause a deadlock.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/567">#567</a> - Enabled <code>[Serializable]</code> exceptions on all target platforms (previously, exceptions were not serializable in .NET Core)</li>
+<li><a href="https://github.com/apache/lucenenet/pull/274">#274</a>, <a href="https://issues.apache.org/jira/browse/LUCENENET-574">LUCENENET-574</a>, <a href="https://github.com/apache/lucenenet/pull/567">#567</a> - Removed <code>[Serializable]</code> support for all classes except for the following (See <a href="https://github.com/apache/lucenenet/pull/567">#567</a> for a complete list)
+<ul>
+<li>Exceptions</li>
+<li>Collections</li>
+<li>Low-level holder types (such as BytesRef, CharsRef, etc.)</li>
+<li>Stateless <code>IComparer&lt;T&gt;</code> implementations that are publicly exposed directly or through collections</li>
+</ul>
+</li>
+<li><a href="https://github.com/apache/lucenenet/pull/568">#568</a> - <code>Lucene.Net.TestFramework.Util.LuceneTestCase::NewSearcher()</code>: Added missing event handler to shut down <code>LimitedConcurrencyLevelTaskScheduler</code> to prevent it from accepting new work when we are attempting to end the background process.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/568">#568</a> - <code>Lucene.Net.Support</code>: Factored out <code>ICallable&lt;V&gt;</code> and <code>ICompletionService&lt;V&gt;</code> interfaces, as they are not needed</li>
+<li><a href="https://github.com/apache/lucenenet/pull/570">#570</a> - <strong>PERFORMANCE:</strong> <code>Lucene.Net.Search.NumericRangeQuery</code>: Eliminated boxing when converting from T to the numeric type and when comparing equality</li>
+<li><a href="https://github.com/apache/lucenenet/pull/570">#570</a> - <strong>PERFORMANCE:</strong> <code>Lucene.Net.Suggest.Jaspell</code>: Use J2N numeric types to eliminate boxing</li>
+<li><a href="https://github.com/apache/lucenenet/pull/570">#570</a> - <strong>PERFORMANCE:</strong> <code>Lucene.Net.Search.FieldCache</code>: Use J2N parsers and formatters</li>
+<li><a href="https://github.com/apache/lucenenet/pull/570">#570</a> - <strong>PERFORMANCE:</strong> <code>Lucene.Net.Classification.Utils.DatasetSplitter</code>: Removed duplicate calls to field methods and stored values in local variables. Use default round-trip format from J2N.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/570">#570</a> - <strong>PERFORMANCE:</strong> <code>Lucene.Net.Search.FieldCacheRangeFilter</code>: Use <code>HasValue</code> and <code>Value</code> for nullable value types rather casting and comparing to null</li>
+<li><a href="https://github.com/apache/lucenenet/pull/574">#574</a>, <a href="https://github.com/apache/lucenenet/pull/583">#583</a> - <strong>SWEEP:</strong> - Removed unnecessary nullable value types</li>
+<li><a href="https://github.com/apache/lucenenet/pull/578">#578</a> - <code>Lucene.Net.Facet</code>: Added culture-sensitve <code>ToString()</code> overload on <code>FacetResult</code> and <code>LabelAndValue</code></li>
+<li><a href="https://github.com/apache/lucenenet/pull/578">#578</a> - <code>Lucene.Net.Facet.FacetResult</code>: Added nullable reference type support</li>
+<li><a href="https://github.com/apache/lucenenet/pull/579">#579</a> - <code>Lucene.Net.Facet.DrillDownQuery</code>: Added collection initializer support</li>
+<li><a href="https://github.com/apache/lucenenet/pull/580">#580</a> - <code>Lucene.Net.Documents.DateTools</code> - Added support for <code>TimeZoneInfo</code> when converting to/from string</li>
+<li><a href="https://github.com/apache/lucenenet/pull/580">#580</a> - <code>Lucene.Net.QueryParsers.Flexible.Standard.Config.NumberDateFormat</code>: Added constructor overload to format a date without a time.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/580">#580</a> - <code>Lucene.Net.QueryParsers.Flexible.Standard.Config.NumberDateFormat</code>: Added <code>NumericRepresentation</code> property to set the representation to use for both <code>Format()</code> and <code>Parse()</code>.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/580">#580</a> - <code>Lucene.Net.QueryParsers</code> - Added support for <code>TimeZoneInfo</code> when converting to/from string (Classic and Flexible query parsers)</li>
+<li><a href="https://github.com/apache/lucenenet/pull/580">#580</a> - <code>Lucene.Net.QueryParsers.Classic.QueryParserBase</code>: Use <code>TryParse()</code> instead of <code>Parse()</code> to parse numeric values. Use the current culture, but fall back to invariant culture.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/582">#582</a> - <strong>PERFORAMANCE:</strong> <code>Lucene.Net.Search.FieldCacheRangeFilter</code>: Eliminated boxing in <code>Equals()</code> check</li>
+<li><a href="https://github.com/apache/lucenenet/pull/584">#584</a> - <code>Lucene.Net.Expressions.SimpleBindings</code>: Added collection initializer support. Updated <code>DistanceFacetsExample</code> and <code>ExpressionAggregationFacetsExample</code> to demonstrate usage.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/586">#586</a> - <strong>SWEEP:</strong> Removed conditional compilation for MSTest/xUnit and the following features:
+<ul>
+<li>TESTFRAMEWORK_MSTEST</li>
+<li>TESTFRAMEWORK_NUNIT</li>
+<li>TESTFRAMEWORK_XUNIT</li>
+<li>FEATURE_INSTANCE_TESTDATA_INITIALIZATION</li>
+<li>FEATURE_INSTANCE_CODEC_IMPERSONATION</li>
+</ul>
+</li>
+<li><a href="https://github.com/apache/lucenenet/pull/587">#587</a> - Fixed the documentation comments for <code>LuceneTestCase</code></li>
+<li><a href="https://github.com/apache/lucenenet/pull/587">#587</a> - Added some documentation for random seed configuration</li>
+<li><a href="https://github.com/apache/lucenenet/pull/587">#587</a> - Implemented some missing console logging</li>
+<li><a href="https://github.com/apache/lucenenet/pull/588">#588</a> - <code>lucene-cli</code>: Added embedded readme to NuGet package and updated build to update docs with release version number</li>
+<li><a href="https://github.com/apache/lucenenet/pull/590">#590</a> - <strong>SWEEP:</strong> Added links to release notes and documentation in each NuGet package, and corrected package descriptions.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/594">#594</a> - Website: Improved content of contributing/source code page to show current information about the Apache's two-master setup and provided additional information about contributing source code with many links to external references. (Thanks @rclabo)</li>
+<li><a href="https://github.com/apache/lucenenet/pull/595">#595</a> - Website: Added &quot;How to Setup Java Debugging&quot; page. (Thanks @rclabo)</li>
+<li><a href="https://github.com/apache/lucenenet/pull/602">#602</a> - Shifted most of the <code>IndexWriter</code> tests to <code>Lucene.Net.Tests._I-J</code> to make both <code>Lucene.Net.Tests._E-I</code> and <code>Lucene.Net.Tests._I-J</code> run less than 2 minutes. This cuts the total time on Azure DevOps by around 5 minutes.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/603">#603</a>, <a href="https://github.com/apache/lucenenet/pull/601">#601</a> - Upgraded build tools for <code>LuceneDocsPlugins</code> project</li>
+<li>Upgraded J2N NuGet package dependency to 2.0.0</li>
+<li>Upgraded ICU4N NuGet package dependency to 60.1.0-alpha.356</li>
+<li>Upgraded RandomizedTesting.Generators NuGet package dependency to 2.7.8</li>
+<li>Upgraded Morfologik.Stemming NuGet package dependency to 2.1.7</li>
+<li><a href="https://github.com/apache/lucenenet/pull/611">#611</a> - <strong>PERFORMANCE:</strong> Fixed <code>NIOFSDirectory</code> bottleneck on multiple instances by switching from a static shared lock to a lock per <code>FileStream</code> instance.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/611">#611</a> - <code>Lucene.Net.Store</code>: Updated the <code>FSDirectory</code> documentation to remove irrelevant Java info and replace it with performance characteristics of the .NET implementation.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/613">#613</a>, <a href="https://github.com/apache/lucenenet/pull/256">#256</a>, <a href="https://github.com/apache/lucenenet/pull/604">#604</a>, <a href="https://github.com/apache/lucenenet/pull/605">#605</a> - <strong>PERFORMANCE:</strong> Factored out <code>WeakDictionary&lt;TKey, TValue&gt;</code> in favor of weak events using <a href="https://github.com/PrismLibrary/Prism">Prism.Core</a></li>
+<li><a href="https://github.com/apache/lucenenet/pull/617">#617</a> - <strong>SWEEP:</strong> Changed &quot;== null&quot; to &quot;is null&quot;</li>
+<li><a href="https://github.com/apache/lucenenet/pull/619">#619</a> - <strong>SWEEP:</strong> <code>Lucene.Net.Spatial</code>: Enabled nullable reference type support</li>
+<li><a href="https://github.com/apache/lucenenet/pull/619">#619</a> - <strong>SWEEP:</strong> <code>Lucene.Net.Spatial</code>: Added guard clauses, where appropriate</li>
+</ul>
+<h3 id="new-features">New Features</h3>
+<ul>
+<li><a href="https://github.com/apache/lucenenet/pull/288">#288</a>, <a href="https://github.com/apache/lucenenet/pull/547">#547</a> - <code>Lucene.Net.TestFramework</code>: Fixed random seed functionality so it is repeatable, so random tests can be more easily debugged. The random seed and how to configure a test assembly to repeat the same result is appended to the output message of the test (which becomes visible upon failure). The <code>J2N.Randomizer</code> class was used to provide random numbers, which uses the same implementation on every OS, so the random seeds are portable across operating systems.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/588">#588</a>, <a href="https://github.com/apache/lucenenet/pull/612">#612</a> - <code>lucene-cli</code>: Added multitarget support for .NET Core 3.1, .NET 5.0, and .NET 6.0</li>
+<li><a href="https://github.com/apache/lucenenet/pull/592">#592</a> - Added <a href="https://docs.microsoft.com/en-us/dotnet/standard/library-guidance/sourcelink">Source Link</a> support and added documentation page to the API docs.</li>
+<li><a href="https://github.com/apache/lucenenet/pull/593">#593</a>, <a href="https://github.com/apache/lucenenet/pull/596">#596</a>, <a href="https://github.com/apache/lucenenet/pull/364">#364</a> - Added Cross-Platform Build Script</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/master/websites/site/release-notes/version-4.8.0-beta00016.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2021 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
