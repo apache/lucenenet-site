@@ -130,9 +130,11 @@ To construct a Query object from a query string, use the
 Query query = queryParserHelper.Parse(&quot;a AND b&quot;, &quot;defaultField&quot;);</code></pre>
 <p>
 To change any configuration before parsing the query string do, for example:
-<pre><code>// the query config handler returned by StandardQueryParser is a
-// StandardQueryConfigHandler
-queryParserHelper.QueryConfigHandler.Analyzer = new WhitespaceAnalyzer();</code></pre>
+<pre><code>queryParserHelper.Analyzer = new WhitespaceAnalyzer();
+queryParserHelper.AllowLeadingWildcard = true;
+// Or alternativley use the query config handler returned by StandardQueryParser which is a
+// StandardQueryConfigHandler:
+queryParserHelper.QueryConfigHandler.Set(ConfigurationKeys.ALLOW_LEADING_WILDCARD, true);</code></pre>
 <p>
 The syntax for query strings is as follows (copied from the old QueryParser
 javadoc):
