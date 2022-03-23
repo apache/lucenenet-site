@@ -1,0 +1,503 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Tutorial | Apache Lucene.NET 4.8.0 </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Tutorial | Apache Lucene.NET 4.8.0 ">
+    <meta name="generator" content="docfx 2.58.0.0">
+    
+    <link rel="shortcut icon" href="../logo/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono">
+    <link rel="stylesheet" href="/styles/site.css">
+  
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="quick-start/tutorial">
+<h1 id="tutorial">Tutorial</h1>
+
+<hr>
+<h2 id="lets-build-a-search-app">Let's Build a Search App!</h2>
+<p>Sometimes the best way to learn is just to see some working code. So that's what we are going to do. If you haven't read the <a class="xref" href="introduction.html">Introduction</a> page yet, do that first so that you have some context for understanding the code we are going to write.</p>
+<p>Now let's build a simple console application that can index a few documents, search those documents, and return some results.  Actually, let's build two apps that do that.  The first example will show how to do exact match searches and the 2nd example will show how to do a full text search.  These example console applications will give you some working code that can serve as a great starting point for trying out various Lucene.NET features.</p>
+<h2 id="multi-platform">Multi-Platform</h2>
+<p>It's worth mentioning that Lucene.NET runs everywhere that .NET runs. That means that Lucene.NET can be used in Windows and Unix applications, ASP.NET websites (Windows, Mac or Unix), iOS Apps, Android Apps and even on the Raspberry Pi.</p>
+<h2 id="why-the-net-cli">Why the .NET CLI?</h2>
+<p>In these examples we will use the .NET CLI (Command Line Interface) because it's a cross platform way to generate the project file we need and to add references to Nuget packages.  We will be using PowerShell to invoke the .NET CLI because PowerShell provides a command line environment that is also cross platform.</p>
+<p>However you are totally free to use <a href="https://visualstudio.microsoft.com/">Visual Studio</a> (Windows/Mac) or <a href="https://code.visualstudio.com/">Visual Studio Code</a> (Windows/Unix/Max) to create the console application project and to add references to the Nuget packages. Whichever tool you use, you should end up with the same files and you can compare their contents to the contents that we show in the examples.</p>
+<h2 id="download-and-install-the-net-sdk">Download and Install the .NET SDK</h2>
+<p>First you must install the .NET Core SDK, if it's not already installed on your machine. The .NET Core SDK contains the .NET runtime, .NET Libraries and the .NET CLI. If you haven't installed it yet, download it from <a href="https://dotnet.microsoft.com/en-us/download">https://dotnet.microsoft.com/en-us/download</a> and run the installer. It's a pretty straightforward process. I'll be using the <strong>.NET 6.0 SDK</strong> in this tutorial.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>The C# code we present <strong>requires the .NET 6.0 SDK or later</strong>.  However, with a few simple modifications it can run on older SDKs including 4.x. To do that, the Program.cs file will need to have a namespace, Program class and a static void main method.  See Microsoft docs <a href="https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio?pivots=dotnet-5-0#code-try-3">here</a> for details.  You will also need to add <a href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-statement#example">braces to the using statements</a>.</p>
+</div>
+<h2 id="download-and-install-powershell">Download and Install PowerShell</h2>
+<p>PowerShell is cross platform and runs everywhere .NET runs, so we will be using PowerShell for all of our command line work. If you don't already have PowerShell installed you can download and find instructions for installing it on Window, Unix or Mac on this <a href="https://docs.microsoft.com/en-us/powershell/scripting/install/installing-powershell">Installing PowerShell</a> page. In my examples I'm using PowerShell 7.2 but the specific version probably doesn't make a difference.</p>
+<h2 id="verify-dotnet-cli-installed">Verify dotnet CLI Installed</h2>
+<p>Let's use PowerShell now to verify that you have the .NET SDK with the .NET CLI installed.  Launch PowerShell however you do that on your OS, for Windows I'll search for it in the start menu and select it from there. Once you have the PowerShell window open, execute the following command in PowerShell:</p>
+<p><code>dotnet –info</code></p>
+<p>This command will show the latest version of the .NET SDK installed and also show a list of all versions installed. If the .NET SDK is not installed this the command will return an error indicating the command was not found.</p>
+<p>Below I show the top of the results for the <code>dotnet -–info</code> command ran on my machine. You can see I'm using .NET SDK 6.0.200 on windows for this demo. In my case I had to scroll the screen up to see this info since I have many versions of the .NET SDK installed and it shows info on each version which scrolled the info about the latest version off the screen. Your latest version will likely be different than mine and perhaps you may be running on Unix or Mac. That's fine. But remember <strong>you need .NET SDK 6 or later</strong>. Or you need to modify the examples according to the note above.</p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/power-shell01.png'>
+<p>Now that our prerequisites are installed, we are ready to get started with our first example of using Lucene.NET.</p>
+<h2 id="example-1---step-by-step">Example 1 - Step by Step</h2>
+<p>We are going to create a console application that uses Lucene.NET to index three documents that each have two fields and then the app will search those docs on a certain field doing an exact match search and output some info about the results.</p>
+<p>This is actually pretty simple to do in Lucene.NET but since this in our very first Lucene.NET application we are going to walk through it step by step and provide a lot of explanation along the way.</p>
+<h3 id="create-a-directory-for-the-project">Create a Directory for the Project</h3>
+<p>Create a directory where you would like this project to live on your hard drive and call that directory <code>lucene-example1</code>. In my case that will be <code> C:\Users\Ron\source\repos\lucene-example1</code> but you can chose any location you like.  Then make that directory the current directory in PowerShell.</p>
+<p>In my case, since I'm on Windows, I'll create the directory using the GUI and use the <code>cd</code> command in PowerShell to change directory to the one I created.  So the exact PowerShell command I used was  <code>cd C:\Users\Ron\source\repos\lucene-example1</code> but you will need to modify that command to specify the directory you created.</p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/power-shell02.png'>
+<h3 id="create-the-project-files">Create the Project Files</h3>
+<p>To create a C# console application project in the current directory, type this command in PowerShell:</p>
+<p><code>dotnet new console</code></p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/power-shell03.png'>
+<h3 id="add-nuget-references">Add NuGet References</h3>
+<p>We need to add references from our project to the Lucene.NET Nuget packages we need -- two separate packages in this case.  Execute the first command in PowerShell: (Please note there are two dashes before prerelease not one.)</p>
+<p><code>dotnet add package Lucene.Net --prerelease</code></p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/power-shell04.png'>
+<p>And now add the 2nd Nuget package by executing this command in PowerShell:</p>
+<p><code>dotnet add package Lucene.Net.Analysis.Common --prerelease</code></p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/power-shell05.png'>
+<p>At this point, our directory has two files in it plus an obj directory with some additional files.  We are mostly concerned with the lucene-example1.csproj project file and the Program.cs C# code file.</p>
+<p>Our directory looks like this:</p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/directory-files-example1.png'>
+<h3 id="viewing-the-two-main-files">Viewing the Two Main files</h3>
+<p>From here on out, you can use your favorite editor to view and edit files as we walk through the rest of the example.  I'll be using Visual Studio 2022 on Windows, but you could just as easily use VIM, Visual Studio Code or any other editor and even be doing that on Ubuntu on a Raspberry Pi if you like. Remember, Lucene.NET and the .NET framework both support a wide variety of platforms.</p>
+<p>Below is what the project file looks like which we created using the dotnet CLI. Notice that it contains package references to the two Lucene.NET Nuget packages we specified.</p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/example1.csproj.png'>
+<p>Here is that file's contents:</p>
+<pre><code>&lt;Project Sdk=&quot;Microsoft.NET.Sdk&quot;&gt;
+
+  &lt;PropertyGroup&gt;
+    &lt;OutputType&gt;Exe&lt;/OutputType&gt;
+    &lt;TargetFramework&gt;net6.0&lt;/TargetFramework&gt;
+    &lt;RootNamespace&gt;lucene_example1&lt;/RootNamespace&gt;
+    &lt;ImplicitUsings&gt;enable&lt;/ImplicitUsings&gt;
+    &lt;Nullable&gt;enable&lt;/Nullable&gt;
+  &lt;/PropertyGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;PackageReference Include=&quot;Lucene.Net&quot; Version=&quot;4.8.0-beta00016&quot; /&gt;
+    &lt;PackageReference Include=&quot;Lucene.Net.Analysis.Common&quot; Version=&quot;4.8.0-beta00016&quot; /&gt;
+  &lt;/ItemGroup&gt;
+
+&lt;/Project&gt;
+</code></pre>
+<p>Now let's look at the <code>Program.cs</code> file that got generated.  It looks like:</p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/program01.png'>
+<h3 id="running-the-application">Running the Application</h3>
+<p>Before going further lets just run this console application and see that it generates the &quot;Hello World!&quot; output we expect.</p>
+<p>If you are using Visual Studio or Visual Studio Code you can just hit F5 to run it. But what if are using a plain text editor to do your work?  No problem, we can run console application from PowerShell.  Just type this command in PowerShell:</p>
+<p><code>dotnet run</code></p>
+<p>This will run the project from the PowerShell current directory after it does a restore of the Nuget packages for the project.</p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/hello-world-example1.png'>
+<p>And there you go.  You can see in the window above that we get the output we expected.</p>
+<h3 id="writing-some-lucenenet-code">Writing Some Lucene.NET Code</h3>
+<p>Now use your editor to replace the existing code in the Program.cs with the following code that uses Lucene.NET:</p>
+<pre><code class="lang-c#">using Lucene.Net.Analysis;
+using Lucene.Net.Analysis.Standard;
+using Lucene.Net.Documents;
+using Lucene.Net.Index;
+using Lucene.Net.Search;
+using Lucene.Net.Store;
+using Lucene.Net.Util;
+using System.Diagnostics;
+using LuceneDirectory = Lucene.Net.Store.Directory;
+
+// Specify the compatibility version we want
+const LuceneVersion luceneVersion = LuceneVersion.LUCENE_48; 
+
+//Open the Directory using a Lucene Directory class
+string indexName = &quot;example_index&quot;;
+string indexPath = Path.Combine(Environment.CurrentDirectory, indexName);
+
+using LuceneDirectory indexDir = FSDirectory.Open(indexPath);
+
+//Create an analyzer to process the text 
+Analyzer standardAnalyzer = new StandardAnalyzer(luceneVersion);
+
+//Create an index writer
+IndexWriterConfig indexConfig = new IndexWriterConfig(luceneVersion, standardAnalyzer);
+indexConfig.OpenMode = OpenMode.CREATE;                             // create/overwrite index
+IndexWriter writer = new IndexWriter(indexDir, indexConfig);
+
+//Add three documents to the index
+Document doc = new Document();
+doc.Add(new TextField(&quot;titleTag&quot;, &quot;The Apache Software Foundation - The world's largest open source foundation.&quot;, Field.Store.YES));
+doc.Add(new StringField(&quot;domain&quot;, &quot;www.apache.org/&quot;, Field.Store.YES));
+writer.AddDocument(doc);
+
+doc = new Document();
+doc.Add(new TextField(&quot;title&quot;, &quot;Powerful open source search library for .NET&quot;, Field.Store.YES));
+doc.Add(new StringField(&quot;domain&quot;, &quot;lucenenet.apache.org&quot;, Field.Store.YES));
+writer.AddDocument(doc);
+
+doc = new Document();
+doc.Add(new TextField(&quot;title&quot;, &quot;Unique gifts made by small businesses in North Carolina.&quot;, Field.Store.YES));
+doc.Add(new StringField(&quot;domain&quot;, &quot;www.giftoasis.com&quot;, Field.Store.YES));
+writer.AddDocument(doc);
+
+//Flush and commit the index data to the directory
+writer.Commit();
+
+using DirectoryReader reader = writer.GetReader(applyAllDeletes: true);
+IndexSearcher searcher = new IndexSearcher(reader);
+
+Query query = new TermQuery(new Term(&quot;domain&quot;, &quot;lucenenet.apache.org&quot;));
+TopDocs topDocs = searcher.Search(query, n: 2);         //indicate we want the first 2 results
+
+
+int numMatchingDocs = topDocs.TotalHits;
+Document resultDoc = searcher.Doc(topDocs.ScoreDocs[0].Doc);  //read back first doc from results (ie 0 offset)
+string title = resultDoc.Get(&quot;title&quot;);
+
+Console.WriteLine($&quot;Matching results: {topDocs.TotalHits}&quot;);
+Console.WriteLine($&quot;Title of first result: {title}&quot;);
+</code></pre>
+<div class="WARNING">
+<h5>Warning</h5>
+<p>As mentioned earlier, if you are not running .NET 6.0 SDK or later you will need to modify the above code in the following two ways: 1) Program.cs file will need to have a namespace, Program class and a static void main method.  See Microsoft docs <a href="https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio?pivots=dotnet-5-0#code-try-3">here</a> for details; and 2) you will need to add <a href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-statement#example">braces to the using statements</a>.</p>
+</div>
+<h3 id="code-walkthrough">Code Walkthrough</h3>
+<p>Before running the code let's talk about what it does.</p>
+<p>The using declarations at the top of the file specify the various namespaces we are going to use. Then we have this block of code that basically specifies that our Lucene.NET index will be in a subdirectory called &quot;example_index&quot;.</p>
+<pre><code class="lang-c#">// Specify the compatibility version we want
+const LuceneVersion luceneVersion = LuceneVersion.LUCENE_48; 
+
+//Open the Directory using a Lucene Directory class
+string indexName = &quot;example_index&quot;;
+string indexPath = Path.Combine(Environment.CurrentDirectory, indexName);
+
+using LuceneDirectory indexDir = FSDirectory.Open(indexPath);
+</code></pre>
+<p>Then in the next block we create an <code>IndexWriter</code> that will use our <code>LuceneDirectory</code>. The <code>IndexWriter</code> is a important class in Lucene.NET and is used to write documents to the Index (among other things).</p>
+<p>The <code>IndexWriter</code> will create our subdirectory for us since it doesn't yet exist and it will create the index since it also doesn't yet exist.  By using  <code>OpenMode.CREATE</code> we are telling Lucene.NET that we want to recreate the index if it already exists.  This works great for a demo like this since every time  the console app is ran we will be recreating our LuceneIndex which means we will get the same output each time.</p>
+<pre><code class="lang-c#">//Create an index writer
+IndexWriterConfig indexConfig = new IndexWriterConfig(luceneVersion, standardAnalyzer);
+indexConfig.OpenMode = OpenMode.CREATE;      //create/overwrite index
+IndexWriter writer = new IndexWriter(indexDir, indexConfig);
+</code></pre>
+<p>Then in the next block we add three documents to the index.  In this example we happen to specify that each document has two fields: title and domain. A document however could have as many fields as we like.</p>
+<p>We also specify here that title is a <code>TextField</code> which means that want the field to support full text searches, and we specify domain as a <code>StringField</code> which means we what to do exact match searches against that field.</p>
+<p>It's worth noting that the documents are buffered in RAM initially and are not written to the index in the <code>Directory</code> until we call <code>writer.Commit();</code></p>
+<pre><code class="lang-c#">//Add three documents to the index
+Document doc = new Document();
+doc.Add(new TextField(&quot;title&quot;, &quot;The Apache Software Foundation - The world's largest open source foundation.&quot;, Field.Store.YES));
+doc.Add(new StringField(&quot;domain&quot;, &quot;www.apache.org/&quot;, Field.Store.YES));
+writer.AddDocument(doc);
+
+doc = new Document();
+doc.Add(new TextField(&quot;title&quot;, &quot;Powerful open source search library for .NET&quot;, Field.Store.YES));
+doc.Add(new StringField(&quot;domain&quot;, &quot;lucenenet.apache.org&quot;, Field.Store.YES));
+writer.AddDocument(doc);
+
+doc = new Document();
+doc.Add(new TextField(&quot;title&quot;, &quot;Unique gifts made by small businesses in North Carolina.&quot;, Field.Store.YES));
+doc.Add(new StringField(&quot;domain&quot;, &quot;www.giftoasis.com&quot;, Field.Store.YES));
+writer.AddDocument(doc);
+
+//Flush and commit the index data to the directory
+writer.Commit();
+</code></pre>
+<p>So now our documents are in the index and we want to see how to read a document from that index. That is exactly what the following block of code does.</p>
+<p>In the block of code below we search the index for all the documents that have a domain field value of &quot;lucenenet.apache.org&quot;.</p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>Note that in the block of code below we specify <code>applyAllDeletes: true</code> when getting a <code>DirectoryReader</code>. This means that uncommitted deleted documents will be applied to the reader we obtain.  If this value were false then only committed deletes would be applied to the reader. In our example we don't delete any documents but when getting a <code>DirectoryReader</code> we must still specify some value for this parameter.</p>
+</div>
+<p>We happen to specify that we want just the top 2 matching results from the search but based on the data in our example only one result matches and so only that one result will be returned.  The code then writes out to the console the number of matching documents and the title of the first (and in this case only) matching result.</p>
+<pre><code class="lang-c#">using DirectoryReader reader = writer.GetReader(applyAllDeletes: true);
+IndexSearcher searcher = new IndexSearcher(reader);
+
+Query query = new TermQuery(new Term(&quot;domain&quot;, &quot;lucenenet.apache.org&quot;));
+TopDocs topDocs = searcher.Search(query, n: 2);         //indicate we want the first 2 results
+
+
+int numMatchingDocs = topDocs.TotalHits;
+Document resultDoc = searcher.Doc(topDocs.ScoreDocs[0].Doc);  //read back first doc from results (ie 0 offset)
+string title = resultDoc.Get(&quot;title&quot;);
+
+Console.WriteLine($&quot;Matching results: {topDocs.TotalHits}&quot;);
+Console.WriteLine($&quot;Title of first result: {title}&quot;);
+</code></pre>
+<h3 id="view-of-the-projectcs-file-with-our-code">View of the Project.cs file with Our Code</h3>
+<p>The <code>Program.cs</code> file should now look something like this in your editor:</p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/example1-new-program.cs.png'>
+<h3 id="run-the-lucenenet-code">Run the Lucene.NET Code</h3>
+<p>So now you can hit F5 in Visual Studio or VS Code or you can execute <code>dotnet run</code> in PowerShell to see the code run and to see if it outputs what we expect.</p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/run-example1.png'>
+<p>And in the above screenshot we can see that the 2nd time we executed <code>dotnet run</code> (ie. after we modified the Program.cs file, out output says:</p>
+<blockquote>
+<p>Matching results: 1<br>
+Title of first result: Powerful open source search library for .NET</p>
+</blockquote>
+<p>This is exactly what we would expect.</p>
+<h3 id="conclusion---example-1">Conclusion - Example 1</h3>
+<p>While this example is not particularly complicated, it will get you started. It provides fully working code that uses Lucne.NET that you now understand.</p>
+<p>When looking at this code it's pretty easy to imagine how one might use a while loop instead of inline code for adding documents and how one could perhaps add 10,000 documents (or a million documents) instead of just three.  And it's pretty easy to imagine how one would add several fields per document rather then just two.</p>
+<p>I would encourage you to play with this code, modify it (maybe by adding more fields, or changing the field name or field values) and then run it to see the results.  This iterative process is a great way to grow your knowledge of Lucene.NET.</p>
+<p>Then move onto the next example that demonstrates full text search.</p>
+<h2 id="example-2--full-text-search">Example 2 – Full Text Search</h2>
+<p>We are going to create a console application that uses Lucene.NET to index three documents that each have two fields and then the app will search those docs on a certain field doing an full text search and output some info about the results.</p>
+<p>This example assumes you did Example 1 so:</p>
+<ol>
+<li>You already have the .NET SDK installed,</li>
+<li>You already have PowerShell installed,</li>
+<li>You know how to create a C# console application project,</li>
+<li>You are familiar with the Example 1 code.</li>
+</ol>
+<h3 id="create-the-project">Create the Project</h3>
+<p>Create a directory where you would like this project to live, call it <code>lucene-example2</code>. Then create a .NET console application project in that folder of the same name and add Nuget references to the following packages:</p>
+<ul>
+<li>Lucene.Net</li>
+<li>Lucene.Net.Analysis.Common</li>
+<li>Lucene.Net.QueryParser</li>
+</ul>
+<p>You can use whatever tool you choose for Example 1 to accomplish these steps. In my case I will created the directory in the GUI then make it the current directory in PowerShell and then execute these commands in PowerShell one at at time (similar to how I did it in Example 1):</p>
+<p><code> dotnet new console</code></p>
+<p><code>dotnet add package Lucene.Net --prerelease</code></p>
+<p><code>dotnet add package Lucene.Net.Analysis.Common --prerelease</code></p>
+<p><code>dotnet add package Lucene.Net.QueryParser --prerelease</code></p>
+<p>Technically the line above to <code>dotnet add package Lucene.Net --prerelease</code> is not needed because the <code>Lucene.Net.Analysis.Common</code> Nuget package has a dependency on the <code>Lucene.Net</code> Nuget package which means that when you execute this line <code>dotnet add package Lucene.Net.Analysis.Common --prerelease</code> it will automatically pull that dependency into the project too.  But since this is another introductory example I chose to add each Nuget package explicitly so that I'm not counting on one package being a dependency of the other.  Either way is fine.</p>
+<h3 id="view-the-project-files">View the Project Files</h3>
+<p>Just like in the prior example the project folder will have two files and an obj directory with some files.  Now use your favorite editor to view the project's .proj file. It should look like this:</p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/example2.csproj.png'>
+<p>Here is that file's contents:</p>
+<pre><code>&lt;Project Sdk=&quot;Microsoft.NET.Sdk&quot;&gt;
+
+  &lt;PropertyGroup&gt;
+    &lt;OutputType&gt;Exe&lt;/OutputType&gt;
+    &lt;TargetFramework&gt;net6.0&lt;/TargetFramework&gt;
+    &lt;RootNamespace&gt;lucene_example2&lt;/RootNamespace&gt;
+    &lt;ImplicitUsings&gt;enable&lt;/ImplicitUsings&gt;
+    &lt;Nullable&gt;enable&lt;/Nullable&gt;
+  &lt;/PropertyGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;PackageReference Include=&quot;Lucene.Net&quot; Version=&quot;4.8.0-beta00016&quot; /&gt;
+    &lt;PackageReference Include=&quot;Lucene.Net.Analysis.Common&quot; Version=&quot;4.8.0-beta00016&quot; /&gt;
+    &lt;PackageReference Include=&quot;Lucene.Net.QueryParser&quot; Version=&quot;4.8.0-beta00016&quot; /&gt;
+  &lt;/ItemGroup&gt;
+
+&lt;/Project&gt;
+
+</code></pre>
+<p>And the <code>Program.cs</code> file that got generated will look like this again:</p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/program02.png'>
+<h3 id="run-the-app">Run the App</h3>
+<p>If you are using Visual Studio or VS Code you can hit F5 to run the app.  I will execute <code>dotnet run</code> in PowerShell to run it:</p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/hello-world-example2.png'>
+<p>And we can see it output Hello World! Just as it did in Example 1.</p>
+<h3 id="writing-some-lucenenet-code-1">Writing Some Lucene.NET Code</h3>
+<p>Now use your editor to replace the existing code in the Program.cs with the following:</p>
+<pre><code class="lang-c#">using Lucene.Net.Analysis;
+using Lucene.Net.Analysis.Standard;
+using Lucene.Net.Documents;
+using Lucene.Net.Index;
+using Lucene.Net.QueryParsers.Classic;
+using Lucene.Net.Search;
+using Lucene.Net.Store;
+using Lucene.Net.Util;
+using System.Diagnostics;
+using LuceneDirectory = Lucene.Net.Store.Directory;
+
+// Specify the compatibility version we want
+const LuceneVersion luceneVersion = LuceneVersion.LUCENE_48;
+
+//Open the Directory using a Lucene Directory class
+string indexName = &quot;example_index&quot;;
+string indexPath = Path.Combine(Environment.CurrentDirectory, indexName);
+
+using LuceneDirectory indexDir = FSDirectory.Open(indexPath);
+
+// Create an analyzer to process the text 
+Analyzer standardAnalyzer = new StandardAnalyzer(luceneVersion);
+
+//Create an index writer
+IndexWriterConfig indexConfig = new IndexWriterConfig(luceneVersion, standardAnalyzer);
+indexConfig.OpenMode = OpenMode.CREATE;                             // create/overwrite index
+IndexWriter writer = new IndexWriter(indexDir, indexConfig);
+
+//Add three documents to the index
+Document doc = new Document();
+doc.Add(new TextField(&quot;title&quot;, &quot;The Apache Software Foundation - The world's largest open source foundation.&quot;, Field.Store.YES));
+doc.Add(new StringField(&quot;domain&quot;, &quot;www.apache.org&quot;, Field.Store.YES));
+writer.AddDocument(doc);
+
+doc = new Document();
+doc.Add(new TextField(&quot;title&quot;, &quot;Powerful open source search library for .NET&quot;, Field.Store.YES));
+doc.Add(new StringField(&quot;domain&quot;, &quot;lucenenet.apache.org&quot;, Field.Store.YES));
+writer.AddDocument(doc);
+
+doc = new Document();
+doc.Add(new TextField(&quot;title&quot;, &quot;Unique gifts made by small businesses in North Carolina.&quot;, Field.Store.YES));
+doc.Add(new StringField(&quot;domain&quot;, &quot;www.giftoasis.com&quot;, Field.Store.YES));
+writer.AddDocument(doc);
+
+//Flush and commit the index data to the directory
+writer.Commit();
+
+using DirectoryReader reader = writer.GetReader(applyAllDeletes: true);
+IndexSearcher searcher = new IndexSearcher(reader);
+
+QueryParser parser = new QueryParser(luceneVersion, &quot;title&quot;, standardAnalyzer);
+Query query = parser.Parse(&quot;open source&quot;);
+TopDocs topDocs = searcher.Search(query, n: 3);         //indicate we want the first 3 results
+
+
+Console.WriteLine($&quot;Matching results: {topDocs.TotalHits}&quot;);
+
+for (int i = 0; i &lt; topDocs.TotalHits; i++)
+{
+    //read back a doc from results
+    Document resultDoc = searcher.Doc(topDocs.ScoreDocs[i].Doc);
+
+    string domain = resultDoc.Get(&quot;domain&quot;);
+    Console.WriteLine($&quot;Domain of result {i + 1}: {domain}&quot;);
+}
+</code></pre>
+<div class="WARNING">
+<h5>Warning</h5>
+<p>As mentioned earlier, if you are not running .NET 6.0 SDK or later you will need to modify the above code in the following two ways: 1) Program.cs file will need to have a namespace, Program class and a static void main method.  See Microsoft docs <a href="https://docs.microsoft.com/en-us/dotnet/core/tutorials/with-visual-studio?pivots=dotnet-5-0#code-try-3">here</a> for details; and 2) you will need to add <a href="https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/using-statement#example">braces to the using statements</a>.</p>
+</div>
+<h3 id="code-walkthrough-1">Code Walkthrough</h3>
+<p>Before we run the code let's talk about what's different then the code in Example 1.</p>
+<p>As you might guess we have an additional using declaration <code>using Lucene.Net.QueryParsers.Classic</code> related to the additional Nuget package we added.  But other than that the rest of the code at beginning and even middle of the code is just like what we already covered in Example1.</p>
+<p>We are creating a <code>LuceneDirectory</code> and <code>IndexWriter</code> the same way and we are adding the same documents and then committing them.   All stuff we saw in Example1.  Also in this example we get our index reader and searcher the same way we did in the last example.</p>
+<p><strong>But</strong> the way we query back documents in this example is different.</p>
+<p>This time around, instead of using a <code>TermQuery</code> to do an exact match search, have these two lines of code:</p>
+<pre><code class="lang-c#">QueryParser parser = new QueryParser(luceneVersion, &quot;title&quot;, standardAnalyzer);
+Query query = parser.Parse(&quot;open source&quot;);
+</code></pre>
+<p>These lines allow us to create a query that will perform a full text search. This type of search is similar to what you are use to when doing a google or bing search.</p>
+<p>What we are saying in these two lines is that we want to create a query that will search the <code>title</code> field of our documents and we want back document that contain &quot;open source&quot; or just &quot;open&quot; or just &quot;source&quot; and we want them sorted by how well they match our &quot;open source&quot; query.</p>
+<p>So when the line of code below runs, Lucene.NET will score each of our docs that match the query and return the top 3 matching documents sorted by score.</p>
+<pre><code class="lang-c#">TopDocs topDocs = searcher.Search(query, n: 3);         //indicate we want the first 3 results
+</code></pre>
+<p>In our case only two documents match and they will be returned in <code>topDocs</code>.  Then our final block of code just prints out the results.</p>
+<pre><code class="lang-c#">Console.WriteLine($&quot;Matching results: {topDocs.TotalHits}&quot;);
+
+for (int i = 0; i &lt; topDocs.TotalHits; i++)
+{
+    //read back a doc from results
+    Document resultDoc = searcher.Doc(topDocs.ScoreDocs[i].Doc);
+
+    string domain = resultDoc.Get(&quot;domain&quot;);
+    Console.WriteLine($&quot;Domain of result {i + 1}: {domain}&quot;);
+}
+</code></pre>
+<h3 id="view-of-the-projectcs-file-with-our-code-1">View of the Project.cs file with Our Code</h3>
+<p>The <code>Program.cs</code> file should now look something like this in your editor:</p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/example2-new-program.cs.png'>
+<h3 id="run-the-lucenenet-code-1">Run the Lucene.NET Code</h3>
+<p>So now you can hit F5 in Visual Studio or VS Code or you can execute <code>dotnet run</code> in PowerShell to see the code run and to see if it outputs what we expect.</p>
+<img src='https://lucenenet.apache.org/images/quick-start/tutorial/run-example2.png'>
+<p>If you go back and review the contents of the <code>title</code> field for each document you will see the output from running the code does indeed return the only two documents that that contain &quot;open source&quot; in the title field.</p>
+<h3 id="conclusion---example-2">Conclusion - Example 2</h3>
+<p>In this Example we saw Lucene.NET's full text search feature.  But we only scratched the surface.</p>
+<p>It's the responsibility of the analyzer to tokenize the text and it's the tokens that are stored in the index as terms.  In our case we used the <code>StandardAnalyzer</code> which removes punctuation, lower cases the text so it's not case sensitive and removes stop words (common words like &quot;a&quot; &quot;an&quot; and &quot;the&quot;).</p>
+<p>But there are other analyzers we could choose.  For example the <code>EnglishAnalyzer</code> does everything the <code>StandardAnalyzer</code> does but also &quot;stems&quot; the terms via the Porter Stemming algorithm.  Without going into the details of what the stemmer does, it provides the ability for us to perform a search and match documents that contain other forms of the word we are searching on.</p>
+<p>So for example if we used the <code>EnglishAnalyzer</code> both for indexing our documents and searching our documents then if we searched on &quot;run&quot; we could match documents that contained &quot;run&quot;, &quot;runs&quot;, and &quot;running&quot;.  And not only that, Lucene.NET contains Analyzers for 100s of other languages besides English.</p>
+<p>Based on what you just learned, I suspect you could find some fun ways to change the code in Example2 to further your experimenting and learning.  For example you could add other documents with different field values, or use a different Analyzer and see how the results change.</p>
+<h2 id="final-thoughts">Final Thoughts</h2>
+<p>Now that you have working code and have seen at least the basics of how to use Lucene.NET I would encourage you to play with the code and see what you can accomplish.  Depending on your skill level you might be able to read a tab delimited text file (which could for example be created via Excel) and build a Lucene.NET index from that data. Then search it.</p>
+<p>I would also encourage you to review the <a class="xref" href="learning-resources.html">Learning Resources</a> page to get up to speed on all the places you can go to learn more about Lucene.NET.</p>
+<p>Apache Lucene.NET is a powerful open source search library.  Have fun with it!</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/master/websites/site/quick-start/tutorial.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright &copy; 2022 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
