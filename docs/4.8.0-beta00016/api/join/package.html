@@ -108,9 +108,9 @@
 <h2 id="index-time-joins">Index-time joins</h2>
 <p>The index-time joining support joins while searching, where joined documents are indexed as a single document block using <a href="xref:Lucene.Net.Index.IndexWriter#Lucene_Net_Index_IndexWriter_AddDocuments_System_Collections_Generic_IEnumerable_System_Collections_Generic_IEnumerable_Lucene_Net_Index_IIndexableField___">IndexWriter.AddDocuments()</a>. This is useful for any normalized content (XML documents or database tables). In database terms, all rows for all joined tables matching a single row of the primary table must be indexed as a single document block, with the parent document being last in the group.</p>
 <p>When you index in this way, the documents in your index are divided into parent documents (the last document of each block) and child documents (all others). You provide a &lt;xref:Lucene.Net.Search.Filter&gt; that identifies the parent documents, as Lucene does not currently record any information about doc blocks.</p>
-<p>At search time, use <a class="xref" href="Lucene.Net.Search.Join.ToParentBlockJoinQuery.html">ToParentBlockJoinQuery</a> to remap/join matches from any child &lt;xref:Lucene.Net.Search.Query&gt; (ie, a query that matches only child documents) up to the parent document space. The resulting query can then be used as a clause in any query that matches parent.</p>
-<p>If you only care about the parent documents matching the query, you can use any collector to collect the parent hits, but if you&#39;d also like to see which child documents match for each parent document, use the <a class="xref" href="Lucene.Net.Search.Join.ToParentBlockJoinCollector.html">ToParentBlockJoinCollector</a> to collect the hits. Once the search is done, you retrieve a &lt;xref:Lucene.Net.Search.Grouping.ITopGroups`1&gt; instance from the <a class="xref" href="Lucene.Net.Search.Join.ToParentBlockJoinCollector.html#Lucene_Net_Search_Join_ToParentBlockJoinCollector_GetTopGroups_Lucene_Net_Search_Join_ToParentBlockJoinQuery_Lucene_Net_Search_Sort_System_Int32_System_Int32_System_Int32_System_Boolean_">ToParentBlockJoinCollector.GetTopGroups()</a> method.</p>
-<p>To map/join in the opposite direction, use <a class="xref" href="Lucene.Net.Search.Join.ToChildBlockJoinQuery.html">ToChildBlockJoinQuery</a>.  This wraps
+<p>At search time, use &lt;xref:Lucene.Net.Search.Join.ToParentBlockJoinQuery&gt; to remap/join matches from any child &lt;xref:Lucene.Net.Search.Query&gt; (ie, a query that matches only child documents) up to the parent document space. The resulting query can then be used as a clause in any query that matches parent.</p>
+<p>If you only care about the parent documents matching the query, you can use any collector to collect the parent hits, but if you&#39;d also like to see which child documents match for each parent document, use the &lt;xref:Lucene.Net.Search.Join.ToParentBlockJoinCollector&gt; to collect the hits. Once the search is done, you retrieve a &lt;xref:Lucene.Net.Search.Grouping.ITopGroups`1&gt; instance from the <a href="xref:Lucene.Net.Search.Join.ToParentBlockJoinCollector#Lucene_Net_Search_Join_ToParentBlockJoinCollector_GetTopGroups_Lucene_Net_Search_Join_ToParentBlockJoinQuery_Lucene_Net_Search_Sort_System_Int32_System_Int32_System_Int32_System_Boolean_">ToParentBlockJoinCollector.GetTopGroups()</a> method.</p>
+<p>To map/join in the opposite direction, use &lt;xref:Lucene.Net.Search.Join.ToChildBlockJoinQuery&gt;.  This wraps
 any query matching parent documents, creating the joined query
 matching only child documents.</p>
 <h2 id="query-time-joins">Query-time joins</h2>
@@ -124,13 +124,13 @@ matching only child documents.</p>
 <li><p><code>multipleValuesPerDocument</code>:  Whether the <code>fromField</code> contains more than one value per document</p>
 </li>
 <li><p><code>scoreMode</code>:  Defines how scores are translated to the other join side. If you don&#39;t care about scoring
-use <a class="xref" href="Lucene.Net.Search.Join.ScoreMode.html#Lucene_Net_Search_Join_ScoreMode_None">ScoreMode.None</a> mode. This will disable scoring and is therefore more
+use <a href="xref:Lucene.Net.Search.Join.ScoreMode#Lucene_Net_Search_Join_ScoreMode_None">ScoreMode.None</a> mode. This will disable scoring and is therefore more
 efficient (requires less memory and is faster).</p>
 </li>
 <li><p><code>toField</code>: The to field to join to</p>
 </li>
 </ul>
-<p>Basically the query-time joining is accessible from one static method. The user of this method supplies the method with the described input and a <code>IndexSearcher</code> where the from terms need to be collected from. The returned query can be executed with the same <code>IndexSearcher</code>, but also with another <code>IndexSearcher</code>. Example usage of the <a class="xref" href="Lucene.Net.Search.Join.JoinUtil.html#Lucene_Net_Search_Join_JoinUtil_CreateJoinQuery_System_String_System_Boolean_System_String_Lucene_Net_Search_Query_Lucene_Net_Search_IndexSearcher_Lucene_Net_Search_Join_ScoreMode_">JoinUtil.CreateJoinQuery()</a>: </p>
+<p>Basically the query-time joining is accessible from one static method. The user of this method supplies the method with the described input and a <code>IndexSearcher</code> where the from terms need to be collected from. The returned query can be executed with the same <code>IndexSearcher</code>, but also with another <code>IndexSearcher</code>. Example usage of the <a href="xref:Lucene.Net.Search.Join.JoinUtil#Lucene_Net_Search_Join_JoinUtil_CreateJoinQuery_System_String_System_Boolean_System_String_Lucene_Net_Search_Query_Lucene_Net_Search_IndexSearcher_Lucene_Net_Search_Join_ScoreMode_">JoinUtil.CreateJoinQuery()</a>: </p>
 <pre><code class="lang-cs">string fromField = &quot;from&quot;; // Name of the from field
 bool multipleValuesPerDocument = false; // Set only yo true in the case when your fromField has multiple values per document in your index
 string toField = &quot;to&quot;; // Name of the to field
@@ -167,7 +167,7 @@ TopDocs topDocs = toSearcher.Search(joinQuery, 10); // Note: toSearcher can be t
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Copyright &copy; 2022 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+            Copyright &copy; 2024 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
             
           </div>
         </div>
