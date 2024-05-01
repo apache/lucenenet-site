@@ -72,21 +72,25 @@ function Initialize()
     ResizeTree();
     SyncTOC();
 
+	// This is a naked redirect that takes the querystring and appends it to window.href later
+	// As these docs are very old and rarely used, rather than attempt to parse the redirect
+	// to ensure valid redirect within the docs, we are simply removing it.
+	
     // Use an alternate default page if a topic is specified in
     // the query string.
-    var queryString = document.location.search;
+    // var queryString = document.location.search;
 
-    if(queryString != "")
-    {
-        var idx, options = queryString.split(/[\?\=\&]/);
+    // if(queryString != "")
+    // {
+        // var idx, options = queryString.split(/[\?\=\&]/);
 
-        for(idx = 0; idx < options.length; idx++)
-            if(options[idx] == "topic" && idx + 1 < options.length)
-            {
-                topicContent.src = options[idx + 1];
-                break;
-            }
-    }
+        // for(idx = 0; idx < options.length; idx++)
+            // if(options[idx] == "topic" && idx + 1 < options.length)
+            // {
+                // topicContent.src = options[idx + 1];
+                // break;
+            // }
+    // }
 }
 
 //============================================================================
