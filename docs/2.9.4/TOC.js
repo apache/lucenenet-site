@@ -72,9 +72,9 @@ function Initialize()
     ResizeTree();
     SyncTOC();
 
-	// This is a naked redirect that takes the querystring and appends it to window.href later
-	// As these docs are very old and rarely used, rather than attempt to parse the redirect
-	// to ensure valid redirect within the docs, we are simply removing it.
+    // This is a naked redirect that takes the querystring and appends it to window.href later
+    // As these docs are very old and rarely used, rather than attempt to parse the redirect
+    // to ensure valid redirect within the docs, we are simply removing it.
 	
     // Use an alternate default page if a topic is specified in
     // the query string.
