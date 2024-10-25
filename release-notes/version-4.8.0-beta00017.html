@@ -1,0 +1,289 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Lucene.NET 4.8.0-beta00017 Release Notes | Apache Lucene.NET 4.8.0 </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Lucene.NET 4.8.0-beta00017 Release Notes | Apache Lucene.NET 4.8.0 ">
+    <meta name="generator" content="docfx ">
+  
+    <link rel="shortcut icon" href="../logo/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+  
+  
+  
+
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather%7CRoboto+Mono">
+    <link rel="stylesheet" href="/styles/site.css">
+
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="article row grid">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="releasenotes/4.8.0-beta00017">
+<h1 id="lucenenet-480-beta00017-release-notes">Lucene.NET 4.8.0-beta00017 Release Notes</h1>
+
+<hr>
+<blockquote>
+<p>This release contains many bug fixes, performance improvements, and other housekeeping/cleanup tasks. It is the largest update to Lucene.NET 4.8.0 to date.</p>
+<p><a href="https://github.com/NightOwl888/J2N/releases/tag/v2.1.0">J2N 2.1</a> and <a href="https://github.com/NightOwl888/ICU4N/releases/tag/v60.1.0-alpha.436">ICU4N 60.1.0-alpha.436</a> have had major updates which will lay the groundwork for supporting System.Memory types in Lucene.NET, but those updates will be included in a later release. However, both libraries have had a significant reduction in the number of heap allocations used across their codebases and those improvements have a direct impact on how Lucene.NET performs.</p>
+<p>We are including .NET Core support for Lucene.Net.OpenNLP for the first time using the IKVM <code>MavenRefernence</code> feature. The IKVM distribution is quite large and due to disk space limitations of our CI enviornment we had to reference an older version of both IKVM and IKVM.Maven.Sdk. These package references may be upgraded by end users to use a newer version without any risk of breaking changes.</p>
+</blockquote>
+<h2 id="change-log">Change Log</h2>
+<h3 id="breaking-changes">Breaking Changes</h3>
+<ul>
+<li>Lucene.Net.Util.OfflineSorter: Refactored to base file tracking on FileStream rather than FileInfo, which gives us better control over temp file deletion by specifying the <code>FileOptions.DeleteOnClose</code> option. We also use random access so we don't need to reopen streams over files except in the case of ExternalRefSorter.</li>
+<li>Refactored CharArraySet and CharArrayMap (now CharArrayDictionary) (<a href="https://github.com/apache/lucenenet/pull/762">#762</a>)</li>
+<li>Lucene.Net.Analysis.Kuromoji.Token: Changed these methods into properties: <code>IsKnown()</code> to <code>IsKnown</code>, <code>IsUnknown()</code> to <code>IsUnknown</code>, <code>IsUser()</code> to <code>IsUser</code>.</li>
+<li>Added guard clauses for all TokenAttribute members</li>
+<li>Lucene.Net.Index.IndexReader: De-nested IReaderClosedListener and renamed to IReaderDisposedListener.</li>
+<li>Lucene.Net.Index.IndexWriter: Fixed <code>Dispose()</code> overloads so there is no method signature conflict between the public <code>Dispose(waitForMerges)</code> method and the protected <code>Dispose(disposing)</code> method that can be overridden and called from a finalizer. See <a href="https://github.com/apache/lucenenet/pull/265">#265</a>.</li>
+<li>Lucene.Net.Search.FieldCacheRangeFilter&lt;T&gt;: Changed accessibility from protected internal to private protected. This class was not intended to be subclassed by users. (see <a href="https://github.com/apache/lucenenet/pull/677">#677</a>)</li>
+<li>Lucene.Net.Search.Suggest.Fst.ExternalRefSorter: Changed temp path generation to use <code>FileSupport.CreateTempFile()</code> with named prefix and extension because it more closely matches Lucene and makes the files more easily identifiable.</li>
+<li>Lucene.Net.Util.OfflineSorter: Changed <code>DefaultTempDir()</code> to <code>GetDefaultTempDir()</code>.</li>
+<li>Lucene.Net.Analysis.SmartCn.SmartChineseAnalyzer: Changed <code>GetDefaultStopSet()</code> to <code>DefaultStopSet</code>. Marked <code>GetDefaultStopSet()</code> obsolete.</li>
+<li>Lucene.Net.Analysis.Kuromoji.JapaneseAnalyzer: Changed <code>GetDefaultStopSet()</code> and <code>GetDefaultStopTags()</code> to <code>DefaultStopSet</code> and <code>DefaultStopTags</code>, respectively. Marked the old methods obsolete.</li>
+<li>Fixed ArgumentOutOfRange parameters so the message is passed into the 2nd parameter, not the first (which is for argumentName). Fixes <a href="https://github.com/apache/lucenenet/pull/665">#665</a>. Also addressed potential int overflow issues when checking for &quot;index + length must be &lt;= array length&quot;.</li>
+<li>Remove .NET 4.5, .NET 4.5.1, and .NET 4.5.2 support and update website framework versions (<a href="https://github.com/apache/lucenenet/pull/650">#650</a>)</li>
+<li>Lucene.Net.IndexWriter.IEvent: Marked internal (as it was in Java). This interface is only used in non-public contexts by Lucene.</li>
+<li>Remove virtual on methods that are being called from constructors (<a href="https://github.com/apache/lucenenet/issues/670">#670</a> - see PRs linked to this issue)</li>
+<li>Lucene.Net.Util.PriorityQueue&lt;T&gt;: Replaced <code>(int, bool)</code> constructor and removed constructor call to virtual <code>GetSentinelObject()</code> method (<a href="https://github.com/apache/lucenenet/pull/820">#820</a>)</li>
+<li>Lucene.Net.Util: Added ValuePriorityQueue&lt;T&gt; to utilize stack allocations where possible (<a href="https://github.com/apache/lucenenet/pull/826">#826</a>)</li>
+<li>Use factory classes for DirectoryTaxonomyWriter and DirectoryTaxonomyReader to get configs (<a href="https://github.com/apache/lucenenet/pull/847">#847</a>)</li>
+<li>Replicator no longer attempts to deserialize exception types (<a href="https://github.com/apache/lucenenet/pull/968">#968</a>)</li>
+<li>Rename <code>IndexWriter.NextMerge()</code> to <code>GetNextMerge()</code> (<a href="https://github.com/apache/lucenenet/pull/990">#990</a>)</li>
+<li>Lucene.Net.Search.ReferenceContext&lt;T&gt;: Converted to ref struct and reworked <code>TestControlledRealTimeReopenThread.TestStraightForwardDemonstration()</code> to verify functionality (<a href="https://github.com/apache/lucenenet/pull/925">#925</a>)</li>
+</ul>
+<h3 id="bug-fixes">Bug Fixes</h3>
+<ul>
+<li>Lucene.Net.Util.OfflineSorter: Added back original tests using FileInfo and fixed bugs that were preventing the original behavior</li>
+<li>Lucene.Net.Tests.Store.TestRAMDirectory: Fixed teardown to retry file deletion if they are locked by another process.</li>
+<li>Aligned disposable patterns (<a href="https://github.com/apache/lucenenet/pull/746">#746</a>)</li>
+<li>Changed TokenAttribute usage from concrete implementation type to interface type to align with Lucene 4.8.0. We were using the concrete type in several places where it shouldn't have been.</li>
+<li>Lucene.Net.Util.OfflineSorter: Fixed the <code>Sort()</code> and <code>SortPartition()</code> methods so they use the <code>tempDirectory</code> parameter that is passed through the constructor, as was the case in Lucene. Added a constructor overload to specify the directory as a string (a .NET convention).</li>
+<li>Lucene.Net.Analysis.Kuromoji.Util.CSVUtil: Applied SOLR-9413 patch to fix the <code>QuoteEscape()</code> method and add tests. Fixes <a href="https://github.com/apache/lucenenet/pull/660">#660</a>.</li>
+<li>Lucene.Net.Search.Similarities: Statically imported SimilarityBase where appropriate so the Log2 method doesn't have to be qualified (like in Lucene). Fixes <a href="https://github.com/apache/lucenenet/pull/694">#694</a>.</li>
+<li>Fixed a bug where the CharArraySet returned from DefaultStopSet in all analyzers was returning a static writable instance instead of a readonly instance as per the docs.</li>
+<li>Lucene.Net.Tests.Index.TestIndexWriter: Finished port of RandomFailingFieldEnumerable. Fixes <a href="https://github.com/apache/lucenenet/pull/695">#695</a>.</li>
+<li>Lucene.Net.Benchmark.Support.TagSoup.Parser::SetProperty(): Removed duplicate guard clause</li>
+<li>Lucene.Net.Analysis.Cjk.CJKBigramFilter: Changed the value of ALL to set all flags (was 0xff instead of 0xffff). Fixes <a href="https://github.com/apache/lucenenet/pull/657">#657</a>.</li>
+<li>Order of precedence for translation of <code>Remove()</code> method args in FrenchStemmer.cs  (<a href="https://github.com/apache/lucenenet/pull/654">#654</a>)</li>
+<li>Fixed Infinite loop in HttpClientBase</li>
+<li>Fixed throw statement in BinaryDictionary</li>
+<li>Fixed use of insecure <code>Path.GetTempFileName</code> in ExternalRefSorter (<a href="https://github.com/apache/lucenenet/pull/651">#651</a>)</li>
+<li>Lucene.Net.Search.package.md: Corrected link to TooManyClausesException</li>
+<li>Fix AssertionError in JapaneseTokenizer backtrace LUCENE-10059 (<a href="https://github.com/apache/lucenenet/pull/777">#777</a>)</li>
+<li>Lucene.Net.Util.RandomizedContext: Create a separate instance of <code>Randomizer()</code> for each thread initialized with the same seed. Fixes <a href="https://github.com/apache/lucenenet/issues/843">#843</a>.</li>
+<li>TestIndexWriterOnJRECrash: Removed using block to ensure that our original CheckIndex error bubbles up instead of any issue disposing (or double-disposing) the directory.</li>
+<li>Lucene.Net.Documents.DateTools: Convert <code>DateTimeKind.Unspecified</code> dates to UTC, otherwise they can produce ArgumentOutOfRangeException. Fixes <a href="https://github.com/apache/lucenenet/issues/772">#772</a>.</li>
+<li>Lucene.Net.Store: Fixed several <code>Dispose()</code> methods so they are safe to be called multiple times (<a href="https://github.com/apache/lucenenet/pull/854">#854</a>)</li>
+<li>Lucene.Net.QueryParsers.Classic.QueryParserTokenManager: Removed initialization code that caused writing a BOM to standard out upon creation. (<a href="https://github.com/apache/lucenenet/pull/902">#902</a>)</li>
+<li>Lucene.Net.Search.FieldComparer.TermValComparer: Fixed sorting ambiguity between empty fields and missing fields (<a href="https://github.com/apache/lucenenet/pull/912">#912</a>)</li>
+<li>Fix for DocumentsWriter concurrency (fixes #935, closes #886) (<a href="https://github.com/apache/lucenenet/pull/940">#940</a>)</li>
+<li>Finalizer fix in IndexReader (<a href="https://github.com/apache/lucenenet/pull/951">#951</a>)</li>
+<li>Fix for Lucene.Net.Util.SystemConsole throwing not supported exception in .NET MAUI app running on Android/iOS (<a href="https://github.com/apache/lucenenet/pull/952">#952</a>)</li>
+<li>Fix TermStats.TermText access, add CLI comments and 1 CLI bug fix (<a href="https://github.com/apache/lucenenet/pull/963">#963</a>)</li>
+</ul>
+<h3 id="performance">Performance</h3>
+<ul>
+<li>Lucene.Net.Support.Arrays::CopyOfRange(): Use the <code>Copy()</code> method rather than a for loop for a ~10x improvement in performance.</li>
+<li>Lucene.Net.Support.Arrays::CopyOf(): Use the <code>Copy()</code> method rather than a for loop for a ~10x improvement in performance.</li>
+<li>Lucene.Net.Support.Arrays::Fill(): Replaced for loop implementation with <code>Array.Fill()</code> or <code>Span.Fill&lt;T&gt;()</code> depending on platform.</li>
+<li>Lucene.Net.Support.Arrays: Added <code>Copy()</code> overloads that use the most efficient (known) copy method for the platform and data type based on benchmarks. Replaced all occurrences of <code>Array.Copy()</code> and <code>Buffer.BlockCopy()</code> with <code>Arrays.Copy()</code>.</li>
+<li>Lucene.Net.Support.DictionaryExtensions: Reduced dependency on the <code>Put()</code> method and added documentation to indicate that it doesn't work with non-nullable value types. Also documented the <code>PutAll()</code> method and added guard clause.</li>
+<li>Lucene.Net.Analysis.Sinks.DateRecognizerSinkFilter: Prefer <code>ReadOnlySpan&lt;char&gt;</code> overloads of <code>DateTime.TryParse()</code> and <code>DateTime.TryParseExact()</code>, when available.</li>
+<li>Lucene.Net.Analysis.Util.HTMLStripCharFilter: Refactored to remove YyText property (method) which allocates a string every time it is called. Instead, we pass the underlying array to <code>J2N.Numerics.TryParse()</code> and <code>OpenStringBuilder.Append()</code> with the calculated startIndex and length to directly copy the characters without allocating substrings.</li>
+<li>Lucene.Net.Analysis.Util.OpenStringBuilder: Added overloads of <code>UnsafeWrite()</code> for string and ICharSequence. Optimized <code>Append()</code> methods to call <code>UnsafeWrite</code> with index and count to optimize the operation depending on the type of object passed.</li>
+<li>Lucene.Net.Analysis.Ga.IrishLowerCaseFilter: Use stack and spans to reduce allocations and improve throughput.</li>
+<li>Lucene.Net.Analysis.Th.ThaiWordBreaker: Removed unnecessary string allocations and concatenation. Use CharsRef to reuse the same memory. Removed Regex and replaced with UnicodeSet to detect Thai code points.</li>
+<li>Lucene.Net.Analysis.In.IndicNormalizer: Refactored ScriptData to change <code>Dictionary&lt;Regex, ScriptData&gt;</code> to <code>List&lt;ScriptData&gt;</code> and eliminated unnecessary hashtable lookup. Use static fields for unknownScript and <code>[ThreadStatic]</code> <code>previousScriptData</code> to optimize character script matching.</li>
+<li>Lucene.Net.Analysis.In.IndicNormalizer: Replaced static constructor with inline <code>LoadScripts()</code> method. Moved location of scripts field to ensure decompositions is initialized first.</li>
+<li>Lucene.Net.Analysis.Ja.GraphvizFormatter: Removed unnecessary surfaceForm string allocation.</li>
+<li>Lucene.Net.Analysis.Util.SegmentingTokenizerBase: Removed unnecessary string allocations that were added during the port due to missing APIs.</li>
+<li>Lucene.Net.Util.TestUnicodeUtil::TestUTF8toUTF32(): Added additional tests for <code>ICharSequence</code> and <code>char[]</code> overloads, changed the original test to test string.</li>
+<li>Lucene.Net.Analysis.Miscellaneous.StemmerOverrideFilter: Added overloads to Add for <code>ICharSequence</code> and <code>char[]</code> to reduce allocations. Added guard clauses.</li>
+<li>Lucene.Net.Analysis.Util.CharacterUtils: Use spans and stackalloc to reduce heap allocations when lowercasing. Added system property named &quot;maxStackLimit&quot; that defaults to 2048 bytes.</li>
+<li>Lucene.Net.Analysis.CharFilters.HTMLStripCharFilter: Removed allocation during parse of hexadecimal number by using J2N.Numerics.Int32 to specify index and length. Also added a CharArrayFormatter struct to defer the allocation of constructing a string until after an assertion failure.</li>
+<li>Lucene.Net.Codecs.SimpleText.SimpleTextUtil::Write(): Removed unnecessary <code>ToCharArray()</code> allocation</li>
+<li>Lucene.Net.Document.CompressionTools::CompressString(): Eliminated unnecessary <code>ToCharArray()</code> allocation</li>
+<li>Use <code>StringBuilder.Append(char)</code> instead of <code>StringBuilder.Append(string)</code> when the input is a constant unit string. (<a href="https://github.com/apache/lucenenet/pull/708">#708</a>)</li>
+<li>Lucene.Net.Util.MergedEnumerator: Changed from using inline string conversions when the generic type is string to J2N.Collections.Generic.Comparer<t>, which is statically initialized with the optimal comparer that matches Java behaviors.</t></li>
+<li>Lucene.Net.Index.BaseCompositeReader: Removed unnecessary list allocation</li>
+<li>Lucene.Net.Analysis.TokenAttributes.CharTermAttribute: Optimized char copying on <code>Append()</code> and <code>Subsequence()</code> (<a href="https://github.com/apache/lucenenet/pull/899">#899</a>)</li>
+<li>Lucene.Net.Facet.Taxonomy.WriterCache.CharBlockArray: Compare equality and calculate hash code without allocating (<a href="https://github.com/apache/lucenenet/pull/900">#900</a>)</li>
+<li>Restore fsync behavior in FSDirectory via P/Invoke, fixes significant performance regression when running on .NET 8 (<a href="https://github.com/apache/lucenenet/pull/938">#938</a>)</li>
+<li>Use concrete ConcurrentHashSet instead of abstraction for performance (<a href="https://github.com/apache/lucenenet/pull/960">#960</a>)</li>
+</ul>
+<h3 id="improvements">Improvements</h3>
+<ul>
+<li>Bumped version of most dependencies, including J2N and ICU4N. Fixed minimum versions of transitive dependencies that were vulnerable or deprecated.</li>
+<li>Lucene.Net.Support.IO (BinaryReaderDataInput + BinaryReaderDataOutput): Deleted, as they are no longer in use.</li>
+<li>Lucene.Net.Support.IO.FileSupport: Added <code>CreateTempFileAsStream()</code> method overloads to return an open stream for the file so we don't have to rely on the operating system to close the file handle before we attempt to reopen it.</li>
+<li>Lucene.Net.Support.IO: Added FileStreamOptions class similar to the one in .NET 6 to easily pass as a method parameter.</li>
+<li>Align InputStreamDataInput and OutputStreamDataOutput closer to the Java Source (<a href="https://github.com/apache/lucenenet/pull/769">#769</a>)</li>
+<li>Reviewed to ensure we are consistently using <code>Arrays.Fill()</code> instead of the (slower) <code>Array.Clear()</code> method or a for loop.</li>
+<li>Lucene.Net.Analysis.Util.BufferedCharFilter: Implemented <code>Peek()</code> method. Added overrides for <code>Span&lt;T&gt;</code> and <code>Memory&lt;T&gt;</code> based methods to throw NotSupportedException. Added doc comments.</li>
+<li>Lucene.Net.Analysis.Util.BufferedCharFilter: Check for CharFilter type inline</li>
+<li>Lucene.Net.Analysis.Util.BufferedCharFilter: Use UninterruptableMonitor for consistency (missed a couple)</li>
+<li>Lucene.Net.Queries.Mlt.MoreLikeThis: Use <code>StringBuilder.Append(char)</code> instead of <code>StringBuilder.Append(string)</code> when the input is a constant unit string (see <a href="https://github.com/apache/lucenenet/pull/674">#674</a>)</li>
+<li>Changed all internal constructors of abstract classes to private protected. (fixes <a href="https://github.com/apache/lucenenet/pull/677">#677</a>)</li>
+<li>Changed all protected internal constructors of abstract classes to protected.  (fixes <a href="https://github.com/apache/lucenenet/pull/677">#677</a>)</li>
+<li>Changed all public constructors of abstract classes to protected, except where it would be a problem for Reflection calls. (fixes <a href="https://github.com/apache/lucenenet/pull/677">#677</a>)</li>
+<li>ci: Added sonar workflow (<a href="https://github.com/apache/lucenenet/pull/709">#709</a>)</li>
+<li>Lucene.Net.Support.IO.FileSupport::GetFileIOExceptionHResult(): Avoid <code>Path.GetTempFileName()</code> because it is not secure. <a href="https://rules.sonarsource.com/csharp/RSPEC-5445">https://rules.sonarsource.com/csharp/RSPEC-5445</a></li>
+<li>Lucene.Net.Util.OfflineSorter (ByteSequencesReader + ByteSequencesWriter): Added constructor overloads to pass the file name as a string (.NET convention)</li>
+<li>Lucene.Net.Util.OfflineSorter: Added guard clauses (and removed asserts). Enabled nullable reference type support. Added disposed flag to ensure dispose only happens once.</li>
+<li>changes made for Redundant jump statements <a href="https://github.com/apache/lucenenet/pull/684">#684</a> (<a href="https://github.com/apache/lucenenet/pull/724">#724</a>)</li>
+<li>Removed 2 private nested classes that were not in use (<a href="https://github.com/apache/lucenenet/pull/713">#713</a>)</li>
+<li>Migrated all callers of <code>CharArraySet.UnmodifiableSet()</code> and <code>CharArrayMap.UnmodifiableMap()</code> to the <code>AsReadOnly()</code> instance methods</li>
+<li>Lucene.Net.Analysis.Common.Analysis.Util (CharArrayMap + CharArraySet): Added <code>AsReadOnly()</code> instance methods to match .NET conventions and marked UnmodifiableMap/UnmodifiableSet obsolete.</li>
+<li>Removed call to <code>ToString()</code> for <code>StringBuilder.Append()</code> methods, so strongly typed StringBuilder overloads can be used on target frameworks that support it. Fixes <a href="https://github.com/apache/lucenenet/pull/668">#668</a>.</li>
+<li>Lucene.Net.Benchmark.Support.TagSoup.HTMLScanner: Reworked initialization to return <code>statetableIndexMaxChar</code> and set <code>statetableIndex</code> via out parameter.</li>
+<li>Marked all singleton &quot;Holder&quot; classes static. Fixes <a href="https://github.com/apache/lucenenet/pull/659">#659</a>.</li>
+<li>Renamed classes from using Iterable and Iterator to Enumerable and Enumerator, where appropriate - some were missed in <a href="https://github.com/apache/lucenenet/pull/698">#698</a>.</li>
+<li>Normalize anonymous class names/accessibility. Fixes <a href="https://github.com/apache/lucenenet/pull/666">#666</a>.</li>
+<li>Lucene.Net.Util.Fst.BytesStore: Suffix anonymous classes with &quot;AnonymousClass&quot;. See <a href="https://github.com/apache/lucenenet/pull/666">#666</a>.</li>
+<li>Renamed classes from using Iterable and Iterator to Enumerable and Enumerator, where appropropriate. See <a href="https://github.com/apache/lucenenet/pull/279">#279</a>.</li>
+<li>Add a nested comment explaining why this method is empty. Fixes <a href="https://github.com/apache/lucenenet/pull/681">#681</a>.</li>
+<li>Lucene.Net.Benchmark.Support.TagSoup: Reviewed API for accessibility issues. Fixed error handling and guard clauses. Changed to generic collections. Renamed method arguments.</li>
+<li>Prefer 'AsSpan' over 'Substring' when span-based overloads are available. Fixes <a href="https://github.com/apache/lucenenet/pull/675">#675</a>.</li>
+<li>Lucene.Net.Analysis.Cn.Smart.Utility: Changed SPACES to use an encoded character for <code>'\u3000'</code> so it is visible in the designer. Fixes <a href="https://github.com/apache/lucenenet/pull/680">#680</a>.</li>
+<li>Lucene.Net.Tests.Analysis.SmartCn.TestHMMChineseTokenizerFactory: Added LuceneNetSpecificAttribute to <code>TestHHMMSegmenter()</code> and renamed <code>TestHHMMSegmenterInitialization()</code>, since this is a smoke test that was added to test initialization of HHMMSegmenter.</li>
+<li>Increased timeouts on tests to keep them from intermittently failing during nightly builds.</li>
+<li>Ported missing test: TestIndexWriterOnJRECrash (<a href="https://github.com/apache/lucenenet/pull/786">#786</a>)</li>
+<li>Fix slow test: use different sleep method if resolution is low (<a href="https://github.com/apache/lucenenet/pull/838">#838</a>)</li>
+<li>Lucene.Net.Documents.DateTools: Added exceptions to documentation and added nullable reference type support.</li>
+<li>Lucene.Net.Store (BaseDirectory + BaseDirectoryWrapper): Fixed XML comments so they don't produce warnings (<a href="https://github.com/apache/lucenenet/pull/855">#855</a>)</li>
+<li>Removed dependency on Prism.Core (Fixes #872) (<a href="https://github.com/apache/lucenenet/pull/875">#875</a>)</li>
+<li>Lucene.Net.Util.PriorityQueue: Removed <code>[Serializable]</code> attribute. (<a href="https://github.com/apache/lucenenet/pull/876">#876</a>)</li>
+<li>Lucene.Net.Facet.Taxonomy.WriterCache.CharBlockArray: Implemented IAppendable to align with Lucene (<a href="https://github.com/apache/lucenenet/pull/901">#901</a>)</li>
+<li>Reviewed usage of atomic numeric type methods (<a href="https://github.com/apache/lucenenet/pull/927">#927</a>)</li>
+<li>Conversion to native <code>Array.Empty&lt;T&gt;()</code> (<a href="https://github.com/apache/lucenenet/pull/953">#953</a>)</li>
+<li>TryDequeue and TryPeek Queue extension methods (<a href="https://github.com/apache/lucenenet/pull/957">#957</a>)</li>
+<li>Renamed interface TokenAttribute type file names removing the prefix &quot;I&quot; so the file it was ported from is clear.</li>
+<li>Renamed concrete TokenAttribute type file names to be suffixed with &quot;Impl&quot; so the file it was ported from is clear.</li>
+<li>Removed .NET Core 3.1 tests and lucene-cli support for it.  (<a href="https://github.com/apache/lucenenet/pull/735">#735</a>)</li>
+</ul>
+<h3 id="website-and-docs">Website and Docs</h3>
+<ul>
+<li>Website support for <code>/latest/</code> and <code>/absolute-latest/</code> redirection (<a href="https://github.com/apache/lucenenet/pull/965">#965</a>)</li>
+<li>Docfx Documentation Fixes, Upgrade docfx, Cross-platform support (<a href="https://github.com/apache/lucenenet/pull/961">#961</a>)</li>
+<li>Added missing namespaces to tutorial (<a href="https://github.com/apache/lucenenet/pull/909">#909</a>)</li>
+<li>Added the slack channel to the contributing page of the website (Fixes #893) (<a href="https://github.com/apache/lucenenet/pull/908">#908</a>)</li>
+<li>Fix two typos in quick-start introduction.md (<a href="https://github.com/apache/lucenenet/pull/863">#863</a>)</li>
+<li>Remove a repetition from the quick-start index.md page (<a href="https://github.com/apache/lucenenet/pull/862">#862</a>)</li>
+<li>Update introduction.md and tutorial.md (<a href="https://github.com/apache/lucenenet/pull/870">#870</a>) and (<a href="https://github.com/apache/lucenenet/pull/871">#871</a>)</li>
+</ul>
+<h3 id="new-features">New Features</h3>
+<ul>
+<li>Added net6.0 target to Lucene.Net.Analysis.OpenNLP and changed to using MavenReference (<a href="https://github.com/apache/lucenenet/pull/892">#892</a>)</li>
+<li>.NET 8.0 target (<a href="https://github.com/apache/lucenenet/pull/982">#982</a>)</li>
+<li>Upgrade tests and CLI to .NET 8, fix benchmark formatting issue (<a href="https://github.com/apache/lucenenet/pull/930">#930</a>)</li>
+<li>The Lucene CLI now runs on the .NET 8 runtime.</li>
+<li>Added PersianStemmer (<a href="https://github.com/apache/lucenenet/pull/571">#571</a>)</li>
+</ul>
+<h2 id="new-contributors">New Contributors</h2>
+<ul>
+<li>@raminmjj made their first contribution in <a href="https://github.com/apache/lucenenet/pull/571">#571</a></li>
+<li>@BrandonStudio made their first contribution in <a href="https://github.com/apache/lucenenet/pull/634">#634</a></li>
+<li>@nikcio made their first contribution in <a href="https://github.com/apache/lucenenet/pull/647">#647</a></li>
+<li>@sachdevlaksh made their first contribution in <a href="https://github.com/apache/lucenenet/pull/724">#724</a></li>
+<li>@thbst16 made their first contribution in <a href="https://github.com/apache/lucenenet/pull/773">#773</a></li>
+<li>@vrdc90 made their first contribution in <a href="https://github.com/apache/lucenenet/pull/790">#790</a></li>
+<li>@chenhh021 made their first contribution in <a href="https://github.com/apache/lucenenet/pull/777">#777</a></li>
+<li>@Jeevananthan-23 made their first contribution in <a href="https://github.com/apache/lucenenet/pull/786">#786</a></li>
+<li>@cucoreanu made their first contribution in <a href="https://github.com/apache/lucenenet/pull/863">#863</a></li>
+<li>@tomwolfgang made their first contribution in <a href="https://github.com/apache/lucenenet/pull/870">#870</a></li>
+<li>@jaivardhan-bhola made their first contribution in <a href="https://github.com/apache/lucenenet/pull/908">#908</a></li>
+<li>@kant2002 made their first contribution in <a href="https://github.com/apache/lucenenet/pull/909">#909</a></li>
+<li>@J-Exodus made their first contribution in <a href="https://github.com/apache/lucenenet/pull/953">#953</a></li>
+<li>@stesee made their first contribution in <a href="https://github.com/apache/lucenenet/pull/951">#951</a></li>
+<li>@devklick made their first contribution in <a href="https://github.com/apache/lucenenet/pull/957">#957</a></li>
+<li>@JayOfemi made their first contribution in <a href="https://github.com/apache/lucenenet/pull/952">#952</a></li>
+</ul>
+<p><strong>Full Changelog</strong>: <a href="https://github.com/apache/lucenenet/compare/Lucene.Net_4_8_0_beta00016...v4.8.0-beta00017-prep">https://github.com/apache/lucenenet/compare/Lucene.Net_4_8_0_beta00016...v4.8.0-beta00017-prep</a></p>
+
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/master/websites/site/release-notes/version-4.8.0-beta00017.md/#L1" class="contribution-link">Edit this page</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In this article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      Copyright &copy; 2022 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+      
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
