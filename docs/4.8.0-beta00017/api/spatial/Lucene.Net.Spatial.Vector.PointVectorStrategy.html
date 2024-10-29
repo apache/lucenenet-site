@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class PointVectorStrategy
+ | Apache Lucene.NET 4.8.0-beta00017 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class PointVectorStrategy
+ | Apache Lucene.NET 4.8.0-beta00017 Documentation ">
+    <meta name="generator" content="docfx ">
+  
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.vendor.min.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="spatial/toc.html">
+  
+  <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00017/">
+  
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00017/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy">
+
+
+  <h1 id="Lucene_Net_Spatial_Vector_PointVectorStrategy" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy" class="text-break">Class PointVectorStrategy
+</h1>
+  <div class="markdown level0 summary"><p>Simple <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html">SpatialStrategy</a> which represents Points in two numeric <span class="xref">Lucene.Net.Documents.DoubleField</span>s.
+The Strategy's best feature is decent distance sort.</p>
+<h4>Characteristics:</h4><ul><li>Only indexes points; just one per field value.</li><li>Can query by a rectangle or circle.</li><li><a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html#Lucene_Net_Spatial_Queries_SpatialOperation_Intersects">Intersects</a> and <a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html#Lucene_Net_Spatial_Queries_SpatialOperation_IsWithin">IsWithin</a> is supported.</li><li>Uses the FieldCache for <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_">MakeDistanceValueSource(IPoint)</a> and for
+    searching with a Circle.</li></ul><h4>Implementation:</h4>
+This is a simple Strategy.  Search works with <span class="xref">Lucene.Net.Search.NumericRangeQuery</span>s on
+an x &amp; y pair of fields.  A Circle query does the same bbox query but adds a
+ValueSource filter on <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_">MakeDistanceValueSource(IPoint)</a>.
+<p></p>
+One performance shortcoming with this strategy is that a scenario involving
+both a search using a Circle and sort will result in calculations for the
+spatial distance being done twice -- once for the filter and second for the
+sort.
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is experimental and might change in incompatible ways in the next release.</p>
+</div>
+
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html">SpatialStrategy</a></div>
+    <div class="level2"><span class="xref">PointVectorStrategy</span></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_m_ctx">SpatialStrategy.m_ctx</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_SpatialContext">SpatialStrategy.SpatialContext</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_FieldName">SpatialStrategy.FieldName</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_">SpatialStrategy.MakeDistanceValueSource(IPoint)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeRecipDistanceValueSource_Spatial4n_Shapes_IShape_">SpatialStrategy.MakeRecipDistanceValueSource(IShape)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_ToString">SpatialStrategy.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.html">Lucene</a>.<a class="xref" href="Lucene.Net.html">Net</a>.<a class="xref" href="Lucene.Net.Spatial.html">Spatial</a>.<a class="xref" href="Lucene.Net.Spatial.Vector.html">Vector</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Spatial.dll</h6>
+  <h5 id="Lucene_Net_Spatial_Vector_PointVectorStrategy_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public class PointVectorStrategy : SpatialStrategy</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+</h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Spatial_Vector_PointVectorStrategy__ctor_Spatial4n_Context_SpatialContext_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Vector.PointVectorStrategy.%23ctor(Spatial4n.Context.SpatialContext%2CSystem.String)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Spatial/Vector/PointVectorStrategy.cs/#L64">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Vector_PointVectorStrategy__ctor_" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.#ctor*"></a>
+  <h4 id="Lucene_Net_Spatial_Vector_PointVectorStrategy__ctor_Spatial4n_Context_SpatialContext_System_String_" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.#ctor(Spatial4n.Context.SpatialContext,System.String)">PointVectorStrategy(SpatialContext, string)</h4>
+  <div class="markdown level1 summary"><p>Simple <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html">SpatialStrategy</a> which represents Points in two numeric <span class="xref">Lucene.Net.Documents.DoubleField</span>s.
+The Strategy's best feature is decent distance sort.</p>
+<h4>Characteristics:</h4><ul><li>Only indexes points; just one per field value.</li><li>Can query by a rectangle or circle.</li><li><a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html#Lucene_Net_Spatial_Queries_SpatialOperation_Intersects">Intersects</a> and <a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html#Lucene_Net_Spatial_Queries_SpatialOperation_IsWithin">IsWithin</a> is supported.</li><li>Uses the FieldCache for <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_">MakeDistanceValueSource(IPoint)</a> and for
+    searching with a Circle.</li></ul><h4>Implementation:</h4>
+This is a simple Strategy.  Search works with <span class="xref">Lucene.Net.Search.NumericRangeQuery</span>s on
+an x &amp; y pair of fields.  A Circle query does the same bbox query but adds a
+ValueSource filter on <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_">MakeDistanceValueSource(IPoint)</a>.
+<p></p>
+One performance shortcoming with this strategy is that a scenario involving
+both a search using a Circle and sort will result in calculations for the
+spatial distance being done twice -- once for the filter and second for the
+sort.
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is experimental and might change in incompatible ways in the next release.</p>
+</div>
+
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public PointVectorStrategy(SpatialContext ctx, string fieldNamePrefix)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">SpatialContext</span></td>
+        <td><span class="parametername">ctx</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">fieldNamePrefix</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+</h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Spatial_Vector_PointVectorStrategy_SUFFIX_X.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Vector.PointVectorStrategy.SUFFIX_X%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Spatial/Vector/PointVectorStrategy.cs/#L56">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Spatial_Vector_PointVectorStrategy_SUFFIX_X" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.SUFFIX_X">SUFFIX_X</h4>
+  <div class="markdown level1 summary"><p>Simple <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html">SpatialStrategy</a> which represents Points in two numeric <span class="xref">Lucene.Net.Documents.DoubleField</span>s.
+The Strategy's best feature is decent distance sort.</p>
+<h4>Characteristics:</h4><ul><li>Only indexes points; just one per field value.</li><li>Can query by a rectangle or circle.</li><li><a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html#Lucene_Net_Spatial_Queries_SpatialOperation_Intersects">Intersects</a> and <a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html#Lucene_Net_Spatial_Queries_SpatialOperation_IsWithin">IsWithin</a> is supported.</li><li>Uses the FieldCache for <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_">MakeDistanceValueSource(IPoint)</a> and for
+    searching with a Circle.</li></ul><h4>Implementation:</h4>
+This is a simple Strategy.  Search works with <span class="xref">Lucene.Net.Search.NumericRangeQuery</span>s on
+an x &amp; y pair of fields.  A Circle query does the same bbox query but adds a
+ValueSource filter on <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_">MakeDistanceValueSource(IPoint)</a>.
+<p></p>
+One performance shortcoming with this strategy is that a scenario involving
+both a search using a Circle and sort will result in calculations for the
+spatial distance being done twice -- once for the filter and second for the
+sort.
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is experimental and might change in incompatible ways in the next release.</p>
+</div>
+
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public const string SUFFIX_X = &quot;__x&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Spatial_Vector_PointVectorStrategy_SUFFIX_Y.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Vector.PointVectorStrategy.SUFFIX_Y%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Spatial/Vector/PointVectorStrategy.cs/#L57">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Spatial_Vector_PointVectorStrategy_SUFFIX_Y" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.SUFFIX_Y">SUFFIX_Y</h4>
+  <div class="markdown level1 summary"><p>Simple <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html">SpatialStrategy</a> which represents Points in two numeric <span class="xref">Lucene.Net.Documents.DoubleField</span>s.
+The Strategy's best feature is decent distance sort.</p>
+<h4>Characteristics:</h4><ul><li>Only indexes points; just one per field value.</li><li>Can query by a rectangle or circle.</li><li><a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html#Lucene_Net_Spatial_Queries_SpatialOperation_Intersects">Intersects</a> and <a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html#Lucene_Net_Spatial_Queries_SpatialOperation_IsWithin">IsWithin</a> is supported.</li><li>Uses the FieldCache for <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_">MakeDistanceValueSource(IPoint)</a> and for
+    searching with a Circle.</li></ul><h4>Implementation:</h4>
+This is a simple Strategy.  Search works with <span class="xref">Lucene.Net.Search.NumericRangeQuery</span>s on
+an x &amp; y pair of fields.  A Circle query does the same bbox query but adds a
+ValueSource filter on <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_">MakeDistanceValueSource(IPoint)</a>.
+<p></p>
+One performance shortcoming with this strategy is that a scenario involving
+both a search using a Circle and sort will result in calculations for the
+spatial distance being done twice -- once for the filter and second for the
+sort.
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is experimental and might change in incompatible ways in the next release.</p>
+</div>
+
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public const string SUFFIX_Y = &quot;__y&quot;</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Spatial_Vector_PointVectorStrategy_PrecisionStep.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Vector.PointVectorStrategy.PrecisionStep%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Spatial/Vector/PointVectorStrategy.cs/#L71">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Vector_PointVectorStrategy_PrecisionStep_" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.PrecisionStep*"></a>
+  <h4 id="Lucene_Net_Spatial_Vector_PointVectorStrategy_PrecisionStep" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.PrecisionStep">PrecisionStep</h4>
+  <div class="markdown level1 summary"><p>Simple <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html">SpatialStrategy</a> which represents Points in two numeric <span class="xref">Lucene.Net.Documents.DoubleField</span>s.
+The Strategy's best feature is decent distance sort.</p>
+<h4>Characteristics:</h4><ul><li>Only indexes points; just one per field value.</li><li>Can query by a rectangle or circle.</li><li><a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html#Lucene_Net_Spatial_Queries_SpatialOperation_Intersects">Intersects</a> and <a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html#Lucene_Net_Spatial_Queries_SpatialOperation_IsWithin">IsWithin</a> is supported.</li><li>Uses the FieldCache for <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_">MakeDistanceValueSource(IPoint)</a> and for
+    searching with a Circle.</li></ul><h4>Implementation:</h4>
+This is a simple Strategy.  Search works with <span class="xref">Lucene.Net.Search.NumericRangeQuery</span>s on
+an x &amp; y pair of fields.  A Circle query does the same bbox query but adds a
+ValueSource filter on <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_">MakeDistanceValueSource(IPoint)</a>.
+<p></p>
+One performance shortcoming with this strategy is that a scenario involving
+both a search using a Circle and sort will result in calculations for the
+spatial distance being done twice -- once for the filter and second for the
+sort.
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is experimental and might change in incompatible ways in the next release.</p>
+</div>
+
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public virtual int PrecisionStep { get; set; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Spatial_Vector_PointVectorStrategy_CreateIndexableFields_Spatial4n_Shapes_IPoint_.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Vector.PointVectorStrategy.CreateIndexableFields(Spatial4n.Shapes.IPoint)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Spatial/Vector/PointVectorStrategy.cs/#L101">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Vector_PointVectorStrategy_CreateIndexableFields_" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.CreateIndexableFields*"></a>
+  <h4 id="Lucene_Net_Spatial_Vector_PointVectorStrategy_CreateIndexableFields_Spatial4n_Shapes_IPoint_" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.CreateIndexableFields(Spatial4n.Shapes.IPoint)">CreateIndexableFields(IPoint)</h4>
+  <div class="markdown level1 summary"><p>See <a class="xref" href="Lucene.Net.Spatial.Vector.PointVectorStrategy.html#Lucene_Net_Spatial_Vector_PointVectorStrategy_CreateIndexableFields_Spatial4n_Shapes_IShape_">CreateIndexableFields(IShape)</a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public virtual Field[] CreateIndexableFields(IPoint point)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IPoint</span></td>
+        <td><span class="parametername">point</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/api/core/Lucene.Net.Documents.Field.html">Field</a>[]</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Spatial_Vector_PointVectorStrategy_CreateIndexableFields_Spatial4n_Shapes_IShape_.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Vector.PointVectorStrategy.CreateIndexableFields(Spatial4n.Shapes.IShape)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Spatial/Vector/PointVectorStrategy.cs/#L86">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Vector_PointVectorStrategy_CreateIndexableFields_" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.CreateIndexableFields*"></a>
+  <h4 id="Lucene_Net_Spatial_Vector_PointVectorStrategy_CreateIndexableFields_Spatial4n_Shapes_IShape_" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.CreateIndexableFields(Spatial4n.Shapes.IShape)">CreateIndexableFields(IShape)</h4>
+  <div class="markdown level1 summary"><p>Returns the IndexableField(s) from the <code class="paramref">shape</code> that are to be
+added to the <span class="xref">Lucene.Net.Documents.Document</span>.  These fields
+are expected to be marked as indexed and not stored.</p>
+<p></p>
+Note: If you want to <i>store</i> the shape as a string for retrieval in search
+results, you could add it like this:
+<pre><code class="lang-csharp">document.Add(new StoredField(fieldName, ctx.ToString(shape)));</code></pre>
+The particular string representation used doesn't matter to the Strategy since it
+doesn't use it.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override Field[] CreateIndexableFields(IShape shape)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IShape</span></td>
+        <td><span class="parametername">shape</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/api/core/Lucene.Net.Documents.Field.html">Field</a>[]</td>
+        <td><p>Not null nor will it have null elements.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_CreateIndexableFields_Spatial4n_Shapes_IShape_">SpatialStrategy.CreateIndexableFields(IShape)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
+        <td><p>if given a shape incompatible with the strategy</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Spatial_Vector_PointVectorStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_System_Double_.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Vector.PointVectorStrategy.MakeDistanceValueSource(Spatial4n.Shapes.IPoint%2CSystem.Double)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Spatial/Vector/PointVectorStrategy.cs/#L119">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Vector_PointVectorStrategy_MakeDistanceValueSource_" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.MakeDistanceValueSource*"></a>
+  <h4 id="Lucene_Net_Spatial_Vector_PointVectorStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_System_Double_" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.MakeDistanceValueSource(Spatial4n.Shapes.IPoint,System.Double)">MakeDistanceValueSource(IPoint, double)</h4>
+  <div class="markdown level1 summary"><p>Make a ValueSource returning the distance between the center of the
+indexed shape and <code class="paramref">queryPoint</code>.  If there are multiple indexed shapes
+then the closest one is chosen. The result is multiplied by <code class="paramref">multiplier</code>, which
+conveniently is used to get the desired units.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override ValueSource MakeDistanceValueSource(IPoint queryPoint, double multiplier)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">IPoint</span></td>
+        <td><span class="parametername">queryPoint</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a></td>
+        <td><span class="parametername">multiplier</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">ValueSource</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_System_Double_">SpatialStrategy.MakeDistanceValueSource(IPoint, double)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Spatial_Vector_PointVectorStrategy_MakeFilter_Lucene_Net_Spatial_Queries_SpatialArgs_.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Vector.PointVectorStrategy.MakeFilter(Lucene.Net.Spatial.Queries.SpatialArgs)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Spatial/Vector/PointVectorStrategy.cs/#L124">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Vector_PointVectorStrategy_MakeFilter_" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.MakeFilter*"></a>
+  <h4 id="Lucene_Net_Spatial_Vector_PointVectorStrategy_MakeFilter_Lucene_Net_Spatial_Queries_SpatialArgs_" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.MakeFilter(Lucene.Net.Spatial.Queries.SpatialArgs)">MakeFilter(SpatialArgs)</h4>
+  <div class="markdown level1 summary"><p>Make a Filter based principally on <a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html">SpatialOperation</a>
+and <span class="xref">Spatial4n.Shapes.IShape</span> from the supplied <code class="paramref">args</code>.</p>
+<p></p>
+If a subclasses implements
+<a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeQuery_Lucene_Net_Spatial_Queries_SpatialArgs_">MakeQuery(SpatialArgs)</a>
+then this method could be simply:
+<pre><code class="lang-csharp">return new QueryWrapperFilter(MakeQuery(args).Query);</code></pre>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override Filter MakeFilter(SpatialArgs args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Spatial.Queries.SpatialArgs.html">SpatialArgs</a></td>
+        <td><span class="parametername">args</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Filter</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeFilter_Lucene_Net_Spatial_Queries_SpatialArgs_">SpatialStrategy.MakeFilter(SpatialArgs)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
+        <td><p>If the strategy does not support the shape in <code class="paramref">args</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Spatial.Queries.UnsupportedSpatialOperationException.html">UnsupportedSpatialOperationException</a></td>
+        <td><p>If the strategy does not support the <a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html">SpatialOperation</a> in <code class="paramref">args</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Spatial_Vector_PointVectorStrategy_MakeQuery_Lucene_Net_Spatial_Queries_SpatialArgs_.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Vector.PointVectorStrategy.MakeQuery(Lucene.Net.Spatial.Queries.SpatialArgs)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Spatial/Vector/PointVectorStrategy.cs/#L139">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Vector_PointVectorStrategy_MakeQuery_" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.MakeQuery*"></a>
+  <h4 id="Lucene_Net_Spatial_Vector_PointVectorStrategy_MakeQuery_Lucene_Net_Spatial_Queries_SpatialArgs_" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.MakeQuery(Lucene.Net.Spatial.Queries.SpatialArgs)">MakeQuery(SpatialArgs)</h4>
+  <div class="markdown level1 summary"><p>Make a Query based principally on <a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html">SpatialOperation</a>
+and <span class="xref">Spatial4n.Shapes.IShape</span> from the supplied <code class="paramref">args</code>.
+The default implementation is</p>
+<pre><code class="lang-csharp">return new ConstantScoreQuery(MakeFilter(args));</code></pre>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override ConstantScoreQuery MakeQuery(SpatialArgs args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Spatial.Queries.SpatialArgs.html">SpatialArgs</a></td>
+        <td><span class="parametername">args</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">ConstantScoreQuery</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeQuery_Lucene_Net_Spatial_Queries_SpatialArgs_">SpatialStrategy.MakeQuery(SpatialArgs)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.notsupportedexception">NotSupportedException</a></td>
+        <td><p>If the strategy does not support the shape in <code class="paramref">args</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Spatial.Queries.UnsupportedSpatialOperationException.html">UnsupportedSpatialOperationException</a></td>
+        <td><p>If the strategy does not support the <a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html">SpatialOperation</a> in <code class="paramref">args</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Spatial_Vector_PointVectorStrategy_MakeQueryDistanceScore_Lucene_Net_Spatial_Queries_SpatialArgs_.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Vector.PointVectorStrategy.MakeQueryDistanceScore(Lucene.Net.Spatial.Queries.SpatialArgs)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Spatial/Vector/PointVectorStrategy.cs/#L174">View Source</a>
+  </span>
+  <a id="Lucene_Net_Spatial_Vector_PointVectorStrategy_MakeQueryDistanceScore_" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.MakeQueryDistanceScore*"></a>
+  <h4 id="Lucene_Net_Spatial_Vector_PointVectorStrategy_MakeQueryDistanceScore_Lucene_Net_Spatial_Queries_SpatialArgs_" data-uid="Lucene.Net.Spatial.Vector.PointVectorStrategy.MakeQueryDistanceScore(Lucene.Net.Spatial.Queries.SpatialArgs)">MakeQueryDistanceScore(SpatialArgs)</h4>
+  <div class="markdown level1 summary"><p>Simple <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html">SpatialStrategy</a> which represents Points in two numeric <span class="xref">Lucene.Net.Documents.DoubleField</span>s.
+The Strategy's best feature is decent distance sort.</p>
+<h4>Characteristics:</h4><ul><li>Only indexes points; just one per field value.</li><li>Can query by a rectangle or circle.</li><li><a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html#Lucene_Net_Spatial_Queries_SpatialOperation_Intersects">Intersects</a> and <a class="xref" href="Lucene.Net.Spatial.Queries.SpatialOperation.html#Lucene_Net_Spatial_Queries_SpatialOperation_IsWithin">IsWithin</a> is supported.</li><li>Uses the FieldCache for <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_">MakeDistanceValueSource(IPoint)</a> and for
+    searching with a Circle.</li></ul><h4>Implementation:</h4>
+This is a simple Strategy.  Search works with <span class="xref">Lucene.Net.Search.NumericRangeQuery</span>s on
+an x &amp; y pair of fields.  A Circle query does the same bbox query but adds a
+ValueSource filter on <a class="xref" href="Lucene.Net.Spatial.SpatialStrategy.html#Lucene_Net_Spatial_SpatialStrategy_MakeDistanceValueSource_Spatial4n_Shapes_IPoint_">MakeDistanceValueSource(IPoint)</a>.
+<p></p>
+One performance shortcoming with this strategy is that a scenario involving
+both a search using a Circle and sort will result in calculations for the
+spatial distance being done twice -- once for the filter and second for the
+sort.
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is experimental and might change in incompatible ways in the next release.</p>
+</div>
+
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public virtual Query MakeQueryDistanceScore(SpatialArgs args)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Spatial.Queries.SpatialArgs.html">SpatialArgs</a></td>
+        <td><span class="parametername">args</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Query</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Spatial_Vector_PointVectorStrategy.md&amp;value=---%0Auid%3A%20Lucene.Net.Spatial.Vector.PointVectorStrategy%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Spatial/Vector/PointVectorStrategy.cs/#L54" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      Copyright &copy; 2024 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+      
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/main.js"></script>
+  </body>
+</html>

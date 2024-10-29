@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Namespace Lucene.Net.Util.Packed
+ | Apache Lucene.NET 4.8.0-beta00017 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Namespace Lucene.Net.Util.Packed
+ | Apache Lucene.NET 4.8.0-beta00017 Documentation ">
+    <meta name="generator" content="docfx ">
+  
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.vendor.min.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+  
+  <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00017/">
+  
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00017/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Util.Packed">
+
+  <h1 id="Lucene_Net_Util_Packed" data-uid="Lucene.Net.Util.Packed" class="text-break">Namespace Lucene.Net.Util.Packed
+</h1>
+  <div class="markdown level0 summary"><!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<h2 id="packed-integer-arrays-and-streams">Packed integer arrays and streams.</h2>
+<p>The packed package provides</p>
+<ul>
+<li>sequential and random access capable arrays of positive longs,</li>
+<li>routines for efficient serialization and deserialization of streams of packed integers.</li>
+</ul>
+<p>The implementations provide different trade-offs between memory usage and access speed. The standard usage scenario is replacing large int or long arrays in order to reduce the memory footprint.</p>
+<p>The main access point is the <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html">PackedInt32s</a> factory.</p>
+<h3 id="in-memory-structures">In-memory structures</h3>
+<ul>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Mutable.html">PackedInt32s.Mutable</a></strong></p>
+<ul>
+<li><p>Only supports positive longs.</p>
+</li>
+<li><p>Requires the number of bits per value to be known in advance.</p>
+</li>
+<li><p>Random-access for both writing and reading.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.GrowableWriter.html">GrowableWriter</a></strong></p>
+<ul>
+<li><p>Same as PackedInts.Mutable but grows the number of bits per values when needed.</p>
+</li>
+<li><p>Useful to build a PackedInts.Mutable from a read-once stream of longs.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PagedGrowableWriter.html">PagedGrowableWriter</a></strong></p>
+<ul>
+<li><p>Slices data into fixed-size blocks stored in GrowableWriters.</p>
+</li>
+<li><p>Supports more than 2B values.</p>
+</li>
+<li><p>You should use Appending(Delta)PackedLongBuffer instead if you don't need random write access.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.AppendingDeltaPackedInt64Buffer.html">AppendingDeltaPackedInt64Buffer</a></strong></p>
+<ul>
+<li><p>Can store any sequence of longs.</p>
+</li>
+<li><p>Compression is good when values are close to each other.</p>
+</li>
+<li><p>Supports random reads, but only sequential writes.</p>
+</li>
+<li><p>Can address up to 2^42 values.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.AppendingPackedInt64Buffer.html">AppendingPackedInt64Buffer</a></strong></p>
+<ul>
+<li>Same as AppendingDeltaPackedInt64Buffer but assumes values are 0-based.</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.MonotonicAppendingInt64Buffer.html">MonotonicAppendingInt64Buffer</a></strong></p>
+<ul>
+<li>Same as AppendingDeltaPackedInt64Buffer except that compression is good when the stream is a succession of affine functions.</li>
+</ul>
+</li>
+</ul>
+<h3 id="disk-based-structures">Disk-based structures</h3>
+<ul>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Writer.html">PackedInt32s.Writer</a>, <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Reader.html">PackedInt32s.Reader</a>, <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.IReaderIterator.html">PackedInt32s.IReaderIterator</a></strong></p>
+<ul>
+<li><p>Only supports positive longs.</p>
+</li>
+<li><p>Requires the number of bits per value to be known in advance.</p>
+</li>
+<li><p>Supports both fast sequential access with low memory footprint with ReaderIterator and random-access by either loading values in memory or leaving them on disk with Reader.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>, <a class="xref" href="Lucene.Net.Util.Packed.BlockPackedReader.html">BlockPackedReader</a>, <a class="xref" href="Lucene.Net.Util.Packed.BlockPackedReaderIterator.html">BlockPackedReaderIterator</a></strong></p>
+<ul>
+<li><p>Splits the stream into fixed-size blocks.</p>
+</li>
+<li><p>Compression is good when values are close to each other.</p>
+</li>
+<li><p>Can address up to 2B * blockSize values.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.MonotonicBlockPackedWriter.html">MonotonicBlockPackedWriter</a>, <a class="xref" href="Lucene.Net.Util.Packed.MonotonicBlockPackedReader.html">MonotonicBlockPackedReader</a></strong></p>
+<ul>
+<li><p>Same as the non-monotonic variants except that compression is good when the stream is a succession of affine functions.</p>
+</li>
+<li><p>The reason why there is no sequential access is that if you need sequential access, you should rather delta-encode and use BlockPackedWriter.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PackedDataOutput.html">PackedDataOutput</a>, <a class="xref" href="Lucene.Net.Util.Packed.PackedDataInput.html">PackedDataInput</a></strong></p>
+<ul>
+<li>Writes sequences of longs where each long can use any number of bits.</li>
+</ul>
+</li>
+</ul>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="markdown level0 remarks"></div>
+    <h3 id="classes">Classes
+</h3>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.AbstractAppendingInt64Buffer.html">AbstractAppendingInt64Buffer</a></h4>
+      <section><p>Common functionality shared by <a class="xref" href="Lucene.Net.Util.Packed.AppendingDeltaPackedInt64Buffer.html">AppendingDeltaPackedInt64Buffer</a> and <a class="xref" href="Lucene.Net.Util.Packed.MonotonicAppendingInt64Buffer.html">MonotonicAppendingInt64Buffer</a>.</p>
+<p></p>
+NOTE: This was AbstractAppendingLongBuffer in Lucene
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.AbstractAppendingInt64Buffer.Iterator.html">AbstractAppendingInt64Buffer.Iterator</a></h4>
+      <section><!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<h2 id="packed-integer-arrays-and-streams">Packed integer arrays and streams.</h2>
+<p>The packed package provides</p>
+<ul>
+<li>sequential and random access capable arrays of positive longs,</li>
+<li>routines for efficient serialization and deserialization of streams of packed integers.</li>
+</ul>
+<p>The implementations provide different trade-offs between memory usage and access speed. The standard usage scenario is replacing large int or long arrays in order to reduce the memory footprint.</p>
+<p>The main access point is the <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html">PackedInt32s</a> factory.</p>
+<h3 id="in-memory-structures">In-memory structures</h3>
+<ul>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Mutable.html">PackedInt32s.Mutable</a></strong></p>
+<ul>
+<li><p>Only supports positive longs.</p>
+</li>
+<li><p>Requires the number of bits per value to be known in advance.</p>
+</li>
+<li><p>Random-access for both writing and reading.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.GrowableWriter.html">GrowableWriter</a></strong></p>
+<ul>
+<li><p>Same as PackedInts.Mutable but grows the number of bits per values when needed.</p>
+</li>
+<li><p>Useful to build a PackedInts.Mutable from a read-once stream of longs.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PagedGrowableWriter.html">PagedGrowableWriter</a></strong></p>
+<ul>
+<li><p>Slices data into fixed-size blocks stored in GrowableWriters.</p>
+</li>
+<li><p>Supports more than 2B values.</p>
+</li>
+<li><p>You should use Appending(Delta)PackedLongBuffer instead if you don't need random write access.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.AppendingDeltaPackedInt64Buffer.html">AppendingDeltaPackedInt64Buffer</a></strong></p>
+<ul>
+<li><p>Can store any sequence of longs.</p>
+</li>
+<li><p>Compression is good when values are close to each other.</p>
+</li>
+<li><p>Supports random reads, but only sequential writes.</p>
+</li>
+<li><p>Can address up to 2^42 values.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.AppendingPackedInt64Buffer.html">AppendingPackedInt64Buffer</a></strong></p>
+<ul>
+<li>Same as AppendingDeltaPackedInt64Buffer but assumes values are 0-based.</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.MonotonicAppendingInt64Buffer.html">MonotonicAppendingInt64Buffer</a></strong></p>
+<ul>
+<li>Same as AppendingDeltaPackedInt64Buffer except that compression is good when the stream is a succession of affine functions.</li>
+</ul>
+</li>
+</ul>
+<h3 id="disk-based-structures">Disk-based structures</h3>
+<ul>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Writer.html">PackedInt32s.Writer</a>, <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Reader.html">PackedInt32s.Reader</a>, <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.IReaderIterator.html">PackedInt32s.IReaderIterator</a></strong></p>
+<ul>
+<li><p>Only supports positive longs.</p>
+</li>
+<li><p>Requires the number of bits per value to be known in advance.</p>
+</li>
+<li><p>Supports both fast sequential access with low memory footprint with ReaderIterator and random-access by either loading values in memory or leaving them on disk with Reader.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>, <a class="xref" href="Lucene.Net.Util.Packed.BlockPackedReader.html">BlockPackedReader</a>, <a class="xref" href="Lucene.Net.Util.Packed.BlockPackedReaderIterator.html">BlockPackedReaderIterator</a></strong></p>
+<ul>
+<li><p>Splits the stream into fixed-size blocks.</p>
+</li>
+<li><p>Compression is good when values are close to each other.</p>
+</li>
+<li><p>Can address up to 2B * blockSize values.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.MonotonicBlockPackedWriter.html">MonotonicBlockPackedWriter</a>, <a class="xref" href="Lucene.Net.Util.Packed.MonotonicBlockPackedReader.html">MonotonicBlockPackedReader</a></strong></p>
+<ul>
+<li><p>Same as the non-monotonic variants except that compression is good when the stream is a succession of affine functions.</p>
+</li>
+<li><p>The reason why there is no sequential access is that if you need sequential access, you should rather delta-encode and use BlockPackedWriter.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PackedDataOutput.html">PackedDataOutput</a>, <a class="xref" href="Lucene.Net.Util.Packed.PackedDataInput.html">PackedDataInput</a></strong></p>
+<ul>
+<li>Writes sequences of longs where each long can use any number of bits.</li>
+</ul>
+</li>
+</ul>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.AbstractBlockPackedWriter.html">AbstractBlockPackedWriter</a></h4>
+      <section><!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<h2 id="packed-integer-arrays-and-streams">Packed integer arrays and streams.</h2>
+<p>The packed package provides</p>
+<ul>
+<li>sequential and random access capable arrays of positive longs,</li>
+<li>routines for efficient serialization and deserialization of streams of packed integers.</li>
+</ul>
+<p>The implementations provide different trade-offs between memory usage and access speed. The standard usage scenario is replacing large int or long arrays in order to reduce the memory footprint.</p>
+<p>The main access point is the <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html">PackedInt32s</a> factory.</p>
+<h3 id="in-memory-structures">In-memory structures</h3>
+<ul>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Mutable.html">PackedInt32s.Mutable</a></strong></p>
+<ul>
+<li><p>Only supports positive longs.</p>
+</li>
+<li><p>Requires the number of bits per value to be known in advance.</p>
+</li>
+<li><p>Random-access for both writing and reading.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.GrowableWriter.html">GrowableWriter</a></strong></p>
+<ul>
+<li><p>Same as PackedInts.Mutable but grows the number of bits per values when needed.</p>
+</li>
+<li><p>Useful to build a PackedInts.Mutable from a read-once stream of longs.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PagedGrowableWriter.html">PagedGrowableWriter</a></strong></p>
+<ul>
+<li><p>Slices data into fixed-size blocks stored in GrowableWriters.</p>
+</li>
+<li><p>Supports more than 2B values.</p>
+</li>
+<li><p>You should use Appending(Delta)PackedLongBuffer instead if you don't need random write access.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.AppendingDeltaPackedInt64Buffer.html">AppendingDeltaPackedInt64Buffer</a></strong></p>
+<ul>
+<li><p>Can store any sequence of longs.</p>
+</li>
+<li><p>Compression is good when values are close to each other.</p>
+</li>
+<li><p>Supports random reads, but only sequential writes.</p>
+</li>
+<li><p>Can address up to 2^42 values.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.AppendingPackedInt64Buffer.html">AppendingPackedInt64Buffer</a></strong></p>
+<ul>
+<li>Same as AppendingDeltaPackedInt64Buffer but assumes values are 0-based.</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.MonotonicAppendingInt64Buffer.html">MonotonicAppendingInt64Buffer</a></strong></p>
+<ul>
+<li>Same as AppendingDeltaPackedInt64Buffer except that compression is good when the stream is a succession of affine functions.</li>
+</ul>
+</li>
+</ul>
+<h3 id="disk-based-structures">Disk-based structures</h3>
+<ul>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Writer.html">PackedInt32s.Writer</a>, <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Reader.html">PackedInt32s.Reader</a>, <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.IReaderIterator.html">PackedInt32s.IReaderIterator</a></strong></p>
+<ul>
+<li><p>Only supports positive longs.</p>
+</li>
+<li><p>Requires the number of bits per value to be known in advance.</p>
+</li>
+<li><p>Supports both fast sequential access with low memory footprint with ReaderIterator and random-access by either loading values in memory or leaving them on disk with Reader.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>, <a class="xref" href="Lucene.Net.Util.Packed.BlockPackedReader.html">BlockPackedReader</a>, <a class="xref" href="Lucene.Net.Util.Packed.BlockPackedReaderIterator.html">BlockPackedReaderIterator</a></strong></p>
+<ul>
+<li><p>Splits the stream into fixed-size blocks.</p>
+</li>
+<li><p>Compression is good when values are close to each other.</p>
+</li>
+<li><p>Can address up to 2B * blockSize values.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.MonotonicBlockPackedWriter.html">MonotonicBlockPackedWriter</a>, <a class="xref" href="Lucene.Net.Util.Packed.MonotonicBlockPackedReader.html">MonotonicBlockPackedReader</a></strong></p>
+<ul>
+<li><p>Same as the non-monotonic variants except that compression is good when the stream is a succession of affine functions.</p>
+</li>
+<li><p>The reason why there is no sequential access is that if you need sequential access, you should rather delta-encode and use BlockPackedWriter.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PackedDataOutput.html">PackedDataOutput</a>, <a class="xref" href="Lucene.Net.Util.Packed.PackedDataInput.html">PackedDataInput</a></strong></p>
+<ul>
+<li>Writes sequences of longs where each long can use any number of bits.</li>
+</ul>
+</li>
+</ul>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.AbstractPagedMutable-1.html">AbstractPagedMutable&lt;T&gt;</a></h4>
+      <section><p>Base implementation for <a class="xref" href="Lucene.Net.Util.Packed.PagedMutable.html">PagedMutable</a> and <a class="xref" href="Lucene.Net.Util.Packed.PagedGrowableWriter.html">PagedGrowableWriter</a>.</p>
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.AppendingDeltaPackedInt64Buffer.html">AppendingDeltaPackedInt64Buffer</a></h4>
+      <section><p>Utility class to buffer a list of signed longs in memory. This class only
+supports appending and is optimized for the case where values are close to
+each other.</p>
+<p></p>
+NOTE: This was AppendingDeltaPackedLongBuffer in Lucene
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.AppendingPackedInt64Buffer.html">AppendingPackedInt64Buffer</a></h4>
+      <section><p>Utility class to buffer a list of signed longs in memory. This class only
+supports appending and is optimized for non-negative numbers with a uniform distribution over a fixed (limited) range.</p>
+<p></p>
+NOTE: This was AppendingPackedLongBuffer in Lucene
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.BlockPackedReader.html">BlockPackedReader</a></h4>
+      <section><p>Provides random access to a stream written with <a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>.</p>
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.BlockPackedReaderIterator.html">BlockPackedReaderIterator</a></h4>
+      <section><p>Reader for sequences of <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a>s written with <a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>.</p>
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a></h4>
+      <section><p>A writer for large sequences of longs.</p>
+<p></p>
+The sequence is divided into fixed-size blocks and for each block, the
+difference between each value and the minimum value of the block is encoded
+using as few bits as possible. Memory usage of this class is proportional to
+the block size. Each block has an overhead between 1 and 10 bytes to store
+the minimum value and the number of bits per value of the block.
+<p></p>
+Format:
+<ul><li>&lt;BLock&gt;<sup>BlockCount</sup></li><li>BlockCount: ⌈ ValueCount / BlockSize ⌉</li><li>Block: &lt;Header, (Ints)&gt;</li><li>Header: &lt;Token, (MinValue)&gt;</li><li>Token: a byte (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteByte_System_Byte_">WriteByte(byte)</a>), first 7 bits are the
+    number of bits per value (<code>bitsPerValue</code>). If the 8th bit is 1,
+    then MinValue (see next) is <code>0</code>, otherwise MinValue and needs to
+    be decoded</li><li>MinValue: a
+    <a href="https://developers.google.com/protocol-buffers/docs/encoding#types">zigzag-encoded</a>
+     variable-length <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a> (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt64_System_Int64_">WriteVInt64(long)</a>) whose value
+    should be added to every int from the block to restore the original
+    values</li><li>Ints: If the number of bits per value is <code>0</code>, then there is
+    nothing to decode and all ints are equal to MinValue. Otherwise: BlockSize
+    packed ints (<a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html">PackedInt32s</a>) encoded on exactly <code>bitsPerValue</code>
+    bits per value. They are the subtraction of the original values and
+    MinValue</li></ul><p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.EliasFanoDecoder.html">EliasFanoDecoder</a></h4>
+      <section><p>A decoder for an <a class="xref" href="Lucene.Net.Util.Packed.EliasFanoEncoder.html">EliasFanoEncoder</a>.</p>
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.EliasFanoDocIdSet.html">EliasFanoDocIdSet</a></h4>
+      <section><p>A DocIdSet in Elias-Fano encoding.</p>
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.EliasFanoEncoder.html">EliasFanoEncoder</a></h4>
+      <section><p>Encode a non decreasing sequence of non negative whole numbers in the Elias-Fano encoding
+that was introduced in the 1970's by Peter Elias and Robert Fano.</p>
+<p></p>
+The Elias-Fano encoding is a high bits / low bits representation of
+a monotonically increasing sequence of <code>numValues &gt; 0</code> natural numbers <code>x[i]</code><p></p><code>0 &lt;= x[0] &lt;= x[1] &lt;= ... &lt;= x[numValues-2] &lt;= x[numValues-1] &lt;= upperBound</code><p></p>
+where <code>upperBound &gt; 0</code> is an upper bound on the last value.
+<p></p>
+The Elias-Fano encoding uses less than half a bit per encoded number more
+than the smallest representation
+that can encode any monotone sequence with the same bounds.
+<p></p>
+The lower <code>L</code> bits of each <code>x[i]</code> are stored explicitly and contiguously
+in the lower-bits array, with <code>L</code> chosen as (<code>Log()</code> base 2):
+<p></p><code>L = max(0, floor(log(upperBound/numValues)))</code><p></p>
+The upper bits are stored in the upper-bits array as a sequence of unary-coded gaps (<code>x[-1] = 0</code>):
+<p></p><code>(x[i]/2**L) - (x[i-1]/2**L)</code><p></p>
+The unary code encodes a natural number <code>n</code> by <code>n</code> 0 bits followed by a 1 bit:
+<code>0...01</code>. 
+<p></p>
+In the upper bits the total the number of 1 bits is <code>numValues</code>
+and the total number of 0 bits is:
+<p></p><code>floor(x[numValues-1]/2**L) &lt;= upperBound/(2**max(0, floor(log(upperBound/numValues)))) &lt;= 2*numValues</code><p></p>
+The Elias-Fano encoding uses at most
+<p></p><code>2 + Ceil(Log(upperBound/numValues))</code><p></p>
+bits per encoded number. With <code>upperBound</code> in these bounds (<code>p</code> is an integer):
+<p></p><code>2**p &lt; x[numValues-1] &lt;= upperBound &lt;= 2**(p+1)</code><p></p>
+the number of bits per encoded number is minimized.
+<p></p>
+In this implementation the values in the sequence can be given as <code>long</code>,
+<code>numValues = 0</code> and <code>upperBound = 0</code> are allowed,
+and each of the upper and lower bit arrays should fit in a <code>long[]</code>.
+<p></p>
+An index of positions of zero's in the upper bits is also built.
+<p></p>
+this implementation is based on this article:
+<p></p>
+Sebastiano Vigna, "Quasi Succinct Indices", June 19, 2012, sections 3, 4 and 9.
+Retrieved from http://arxiv.org/pdf/1206.4300 .
+<p></p>The articles originally describing the Elias-Fano representation are:
+<p></p>Peter Elias, "Efficient storage and retrieval by content and address of static files",
+J. Assoc. Comput. Mach., 21(2):246â€"260, 1974.
+<p></p>Robert M. Fano, "On the number of bits required to implement an associative memory",
+ Memorandum 61, Computer Structures Group, Project MAC, MIT, Cambridge, Mass., 1971.
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.GrowableWriter.html">GrowableWriter</a></h4>
+      <section><p>Implements <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Mutable.html">PackedInt32s.Mutable</a>, but grows the
+bit count of the underlying packed ints on-demand.</p>
+<p></p>Beware that this class will accept to set negative values but in order
+to do this, it will grow the number of bits per value to 64.
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.MonotonicAppendingInt64Buffer.html">MonotonicAppendingInt64Buffer</a></h4>
+      <section><p>Utility class to buffer signed longs in memory, which is optimized for the
+case where the sequence is monotonic, although it can encode any sequence of
+arbitrary longs. It only supports appending.</p>
+<p></p>
+NOTE: This was MonotonicAppendingLongBuffer in Lucene.
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.MonotonicBlockPackedReader.html">MonotonicBlockPackedReader</a></h4>
+      <section><p>Provides random access to a stream written with
+<a class="xref" href="Lucene.Net.Util.Packed.MonotonicBlockPackedWriter.html">MonotonicBlockPackedWriter</a>.</p>
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.MonotonicBlockPackedWriter.html">MonotonicBlockPackedWriter</a></h4>
+      <section><p>A writer for large monotonically increasing sequences of positive <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a>s.</p>
+<p></p>
+The sequence is divided into fixed-size blocks and for each block, values
+are modeled after a linear function f: x → A × x + B. The block
+encodes deltas from the expected values computed from this function using as
+few bits as possible. Each block has an overhead between 6 and 14 bytes.
+<p></p>
+Format:
+<ul><li>&lt;BLock&gt;<sup>BlockCount</sup></li><li>BlockCount: ⌈ ValueCount / BlockSize ⌉</li><li>Block: &lt;Header, (Ints)&gt;</li><li>Header: &lt;B, A, BitsPerValue&gt;</li><li>B: the B from f: x → A × x + B using a
+    variable-length <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a> (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt64_System_Int64_">WriteVInt64(long)</a>)</li><li>A: the A from f: x → A × x + B encoded using
+    <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">SingleToInt32Bits(float)</a> on
+    4 bytes (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(int)</a>)</li><li>BitsPerValue: a variable-length <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a> (<a class="xref" href="Lucene.Net.Store.DataOutput.html#Lucene_Net_Store_DataOutput_WriteVInt32_System_Int32_">WriteVInt32(int)</a>)</li><li>Ints: if BitsPerValue is <code>0</code>, then there is nothing to read and
+    all values perfectly match the result of the function. Otherwise, these
+    are the
+    <a href="https://developers.google.com/protocol-buffers/docs/encoding#types">zigzag-encoded</a>
+    packed (<a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html">PackedInt32s</a>) deltas from the expected value (computed from
+    the function) using exaclty BitsPerValue bits per value</li></ul><p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.Packed64.html">Packed64</a></h4>
+      <section><p>Space optimized random access capable array of values with a fixed number of
+bits/value. Values are packed contiguously.</p>
+<p></p>
+The implementation strives to perform af fast as possible under the
+constraint of contiguous bits, by avoiding expensive operations. This comes
+at the cost of code clarity.
+<p></p>
+Technical details: this implementation is a refinement of a non-branching
+version. The non-branching get and set methods meant that 2 or 4 atomics in
+the underlying array were always accessed, even for the cases where only
+1 or 2 were needed. Even with caching, this had a detrimental effect on
+performance.
+Related to this issue, the old implementation used lookup tables for shifts
+and masks, which also proved to be a bit slower than calculating the shifts
+and masks on the fly.
+See https://issues.apache.org/jira/browse/LUCENE-4062 for details.
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PackedDataInput.html">PackedDataInput</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Store.DataInput.html">DataInput</a> wrapper to read unaligned, variable-length packed
+integers. This API is much slower than the <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html">PackedInt32s</a> fixed-length
+API but can be convenient to save space.</p>
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PackedDataOutput.html">PackedDataOutput</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Store.DataOutput.html">DataOutput</a> wrapper to write unaligned, variable-length packed
+integers.</p>
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html">PackedInt32s</a></h4>
+      <section><p>Simplistic compression for array of unsigned long values.
+Each value is &gt;= 0 and &lt;= a specified maximum value.  The
+values are stored as packed ints, with each value
+consuming a fixed number of bits.</p>
+<p></p>
+NOTE: This was PackedInts in Lucene.
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Format.html">PackedInt32s.Format</a></h4>
+      <section><p>A format to write packed <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>s.</p>
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.FormatAndBits.html">PackedInt32s.FormatAndBits</a></h4>
+      <section><p>Simple class that holds a format and a number of bits per value.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Header.html">PackedInt32s.Header</a></h4>
+      <section><p>Header identifying the structure of a packed integer array.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Mutable.html">PackedInt32s.Mutable</a></h4>
+      <section><p>A packed integer array that can be modified.</p>
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.MutableImpl.html">PackedInt32s.MutableImpl</a></h4>
+      <section><!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<h2 id="packed-integer-arrays-and-streams">Packed integer arrays and streams.</h2>
+<p>The packed package provides</p>
+<ul>
+<li>sequential and random access capable arrays of positive longs,</li>
+<li>routines for efficient serialization and deserialization of streams of packed integers.</li>
+</ul>
+<p>The implementations provide different trade-offs between memory usage and access speed. The standard usage scenario is replacing large int or long arrays in order to reduce the memory footprint.</p>
+<p>The main access point is the <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html">PackedInt32s</a> factory.</p>
+<h3 id="in-memory-structures">In-memory structures</h3>
+<ul>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Mutable.html">PackedInt32s.Mutable</a></strong></p>
+<ul>
+<li><p>Only supports positive longs.</p>
+</li>
+<li><p>Requires the number of bits per value to be known in advance.</p>
+</li>
+<li><p>Random-access for both writing and reading.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.GrowableWriter.html">GrowableWriter</a></strong></p>
+<ul>
+<li><p>Same as PackedInts.Mutable but grows the number of bits per values when needed.</p>
+</li>
+<li><p>Useful to build a PackedInts.Mutable from a read-once stream of longs.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PagedGrowableWriter.html">PagedGrowableWriter</a></strong></p>
+<ul>
+<li><p>Slices data into fixed-size blocks stored in GrowableWriters.</p>
+</li>
+<li><p>Supports more than 2B values.</p>
+</li>
+<li><p>You should use Appending(Delta)PackedLongBuffer instead if you don't need random write access.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.AppendingDeltaPackedInt64Buffer.html">AppendingDeltaPackedInt64Buffer</a></strong></p>
+<ul>
+<li><p>Can store any sequence of longs.</p>
+</li>
+<li><p>Compression is good when values are close to each other.</p>
+</li>
+<li><p>Supports random reads, but only sequential writes.</p>
+</li>
+<li><p>Can address up to 2^42 values.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.AppendingPackedInt64Buffer.html">AppendingPackedInt64Buffer</a></strong></p>
+<ul>
+<li>Same as AppendingDeltaPackedInt64Buffer but assumes values are 0-based.</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.MonotonicAppendingInt64Buffer.html">MonotonicAppendingInt64Buffer</a></strong></p>
+<ul>
+<li>Same as AppendingDeltaPackedInt64Buffer except that compression is good when the stream is a succession of affine functions.</li>
+</ul>
+</li>
+</ul>
+<h3 id="disk-based-structures">Disk-based structures</h3>
+<ul>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Writer.html">PackedInt32s.Writer</a>, <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Reader.html">PackedInt32s.Reader</a>, <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.IReaderIterator.html">PackedInt32s.IReaderIterator</a></strong></p>
+<ul>
+<li><p>Only supports positive longs.</p>
+</li>
+<li><p>Requires the number of bits per value to be known in advance.</p>
+</li>
+<li><p>Supports both fast sequential access with low memory footprint with ReaderIterator and random-access by either loading values in memory or leaving them on disk with Reader.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.BlockPackedWriter.html">BlockPackedWriter</a>, <a class="xref" href="Lucene.Net.Util.Packed.BlockPackedReader.html">BlockPackedReader</a>, <a class="xref" href="Lucene.Net.Util.Packed.BlockPackedReaderIterator.html">BlockPackedReaderIterator</a></strong></p>
+<ul>
+<li><p>Splits the stream into fixed-size blocks.</p>
+</li>
+<li><p>Compression is good when values are close to each other.</p>
+</li>
+<li><p>Can address up to 2B * blockSize values.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.MonotonicBlockPackedWriter.html">MonotonicBlockPackedWriter</a>, <a class="xref" href="Lucene.Net.Util.Packed.MonotonicBlockPackedReader.html">MonotonicBlockPackedReader</a></strong></p>
+<ul>
+<li><p>Same as the non-monotonic variants except that compression is good when the stream is a succession of affine functions.</p>
+</li>
+<li><p>The reason why there is no sequential access is that if you need sequential access, you should rather delta-encode and use BlockPackedWriter.</p>
+</li>
+</ul>
+</li>
+<li><p><strong><a class="xref" href="Lucene.Net.Util.Packed.PackedDataOutput.html">PackedDataOutput</a>, <a class="xref" href="Lucene.Net.Util.Packed.PackedDataInput.html">PackedDataInput</a></strong></p>
+<ul>
+<li>Writes sequences of longs where each long can use any number of bits.</li>
+</ul>
+</li>
+</ul>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.NullReader.html">PackedInt32s.NullReader</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Reader.html">PackedInt32s.Reader</a> which has all its values equal to 0 (bitsPerValue = 0).</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Reader.html">PackedInt32s.Reader</a></h4>
+      <section><p>A read-only random access array of positive integers.</p>
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Writer.html">PackedInt32s.Writer</a></h4>
+      <section><p>A write-once Writer.</p>
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PagedGrowableWriter.html">PagedGrowableWriter</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Util.Packed.PagedGrowableWriter.html">PagedGrowableWriter</a>. This class slices data into fixed-size blocks
+which have independent numbers of bits per value and grow on-demand.</p>
+<p></p>
+You should use this class instead of the <a class="xref" href="Lucene.Net.Util.Packed.AbstractAppendingInt64Buffer.html">AbstractAppendingInt64Buffer</a> related ones only when
+you need random write-access. Otherwise this class will likely be slower and
+less memory-efficient.
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PagedMutable.html">PagedMutable</a></h4>
+      <section><p>A <a class="xref" href="Lucene.Net.Util.Packed.PagedMutable.html">PagedMutable</a>. This class slices data into fixed-size blocks
+which have the same number of bits per value. It can be a useful replacement
+for <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.Mutable.html">PackedInt32s.Mutable</a> to store more than 2B values.</p>
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</section>
+    <h3 id="interfaces">Interfaces
+</h3>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.IDecoder.html">PackedInt32s.IDecoder</a></h4>
+      <section><p>A decoder for packed integers.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.IEncoder.html">PackedInt32s.IEncoder</a></h4>
+      <section><p>An encoder for packed integers.</p>
+</section>
+      <h4><a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.IReaderIterator.html">PackedInt32s.IReaderIterator</a></h4>
+      <section><p>Run-once iterator interface, to decode previously saved <a class="xref" href="Lucene.Net.Util.Packed.PackedInt32s.html">PackedInt32s</a>.</p>
+</section>
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net/Util/Packed/package.md/#L2" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      Copyright &copy; 2024 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+      
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/main.js"></script>
+  </body>
+</html>

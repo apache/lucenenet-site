@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class AnalyzingSuggester
+ | Apache Lucene.NET 4.8.0-beta00017 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class AnalyzingSuggester
+ | Apache Lucene.NET 4.8.0-beta00017 Documentation ">
+    <meta name="generator" content="docfx ">
+  
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.vendor.min.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="suggest/toc.html">
+  
+  <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00017/">
+  
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00017/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester">
+
+
+  <h1 id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester" class="text-break">Class AnalyzingSuggester
+</h1>
+  <div class="markdown level0 summary"><p>Suggester that first analyzes the surface form, adds the
+analyzed form to a weighted FST, and then does the same
+thing at lookup time.  This means lookup is based on the
+analyzed form while suggestions are still the surface
+form(s).</p>
+<p>
+This can result in powerful suggester functionality.  For
+example, if you use an analyzer removing stop words, 
+then the partial text "ghost chr..." could see the
+suggestion "The Ghost of Christmas Past". Note that
+position increments MUST NOT be preserved for this example
+to work, so you should call the constructor with 
+<a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html#Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_preservePositionIncrements">preservePositionIncrements</a> parameter set to 
+false
+</p><p>
+If SynonymFilter is used to map wifi and wireless network to
+hotspot then the partial text "wirele..." could suggest
+"wifi router".  Token normalization like stemmers, accent
+removal, etc., would allow suggestions to ignore such
+variations.
+</p><p>
+When two matching suggestions have the same weight, they
+are tie-broken by the analyzed form.  If their analyzed
+form is the same then the order is undefined.
+</p><p>
+There are some limitations:
+<ol><li> A lookup from a query like "net" in English won't
+       be any different than "net " (ie, user added a
+       trailing space) because analyzers don't reflect
+       when they've seen a token separator and when they
+       haven't.</li><li> If you're using <span class="xref">Lucene.Net.Analysis.Core.StopFilter</span>, and the user will
+       type "fast apple", but so far all they've typed is
+       "fast a", again because the analyzer doesn't convey whether
+       it's seen a token separator after the "a",
+       <span class="xref">Lucene.Net.Analysis.Core.StopFilter</span> will remove that "a" causing
+       far more matches than you'd expect.</li><li> Lookups with the empty string return no results
+       instead of all results.</li></ol>
+<p><div class="NOTE">
+<h5>Note</h5>
+<p>This API is experimental and might change in incompatible ways in the next release.</p>
+</div>
+</p>
+
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html">Lookup</a></div>
+    <div class="level2"><span class="xref">AnalyzingSuggester</span></div>
+      <div class="level3"><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FuzzySuggester.html">FuzzySuggester</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_CHARSEQUENCE_COMPARER">Lookup.CHARSEQUENCE_COMPARER</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_Build_Lucene_Net_Search_Spell_IDictionary_">Lookup.Build(IDictionary)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_Load_System_IO_Stream_">Lookup.Load(Stream)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_Store_System_IO_Stream_">Lookup.Store(Stream)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_DoLookup_System_String_System_Boolean_System_Int32_">Lookup.DoLookup(string, bool, int)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.html">Lucene</a>.<a class="xref" href="Lucene.Net.html">Net</a>.<a class="xref" href="Lucene.Net.Search.html">Search</a>.<a class="xref" href="Lucene.Net.Search.Suggest.html">Suggest</a>.<a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.html">Analyzing</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.Suggest.dll</h6>
+  <h5 id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public class AnalyzingSuggester : Lookup</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+</h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester__ctor_Lucene_Net_Analysis_Analyzer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.%23ctor(Lucene.Net.Analysis.Analyzer)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Suggest/Suggest/Analyzing/AnalyzingSuggester.cs/#L173">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester__ctor_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester__ctor_Lucene_Net_Analysis_Analyzer_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.#ctor(Lucene.Net.Analysis.Analyzer)">AnalyzingSuggester(Analyzer)</h4>
+  <div class="markdown level1 summary"><p>Calls <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html#Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester__ctor_Lucene_Net_Analysis_Analyzer_Lucene_Net_Analysis_Analyzer_Lucene_Net_Search_Suggest_Analyzing_SuggesterOptions_System_Int32_System_Int32_System_Boolean_">
+    AnalyzingSuggester(analyzer, analyzer, SuggesterOptions.EXACT_FIRST | SuggesterOptions.PRESERVE_SEP, 256, -1, true)
+    </a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public AnalyzingSuggester(Analyzer analyzer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Analyzer</span></td>
+        <td><span class="parametername">analyzer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester__ctor_Lucene_Net_Analysis_Analyzer_Lucene_Net_Analysis_Analyzer_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.%23ctor(Lucene.Net.Analysis.Analyzer%2CLucene.Net.Analysis.Analyzer)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Suggest/Suggest/Analyzing/AnalyzingSuggester.cs/#L183">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester__ctor_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester__ctor_Lucene_Net_Analysis_Analyzer_Lucene_Net_Analysis_Analyzer_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.#ctor(Lucene.Net.Analysis.Analyzer,Lucene.Net.Analysis.Analyzer)">AnalyzingSuggester(Analyzer, Analyzer)</h4>
+  <div class="markdown level1 summary"><p>Calls <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.html#Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester__ctor_Lucene_Net_Analysis_Analyzer_Lucene_Net_Analysis_Analyzer_Lucene_Net_Search_Suggest_Analyzing_SuggesterOptions_System_Int32_System_Int32_System_Boolean_">
+    AnalyzingSuggester(indexAnalyzer, queryAnalyzer, SuggesterOptions.EXACT_FIRST | SuggesterOptions.PRESERVE_SEP, 256, -1, true)
+    </a></p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public AnalyzingSuggester(Analyzer indexAnalyzer, Analyzer queryAnalyzer)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Analyzer</span></td>
+        <td><span class="parametername">indexAnalyzer</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Analyzer</span></td>
+        <td><span class="parametername">queryAnalyzer</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester__ctor_Lucene_Net_Analysis_Analyzer_Lucene_Net_Analysis_Analyzer_Lucene_Net_Search_Suggest_Analyzing_SuggesterOptions_System_Int32_System_Int32_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.%23ctor(Lucene.Net.Analysis.Analyzer%2CLucene.Net.Analysis.Analyzer%2CLucene.Net.Search.Suggest.Analyzing.SuggesterOptions%2CSystem.Int32%2CSystem.Int32%2CSystem.Boolean)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Suggest/Suggest/Analyzing/AnalyzingSuggester.cs/#L205">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester__ctor_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.#ctor*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester__ctor_Lucene_Net_Analysis_Analyzer_Lucene_Net_Analysis_Analyzer_Lucene_Net_Search_Suggest_Analyzing_SuggesterOptions_System_Int32_System_Int32_System_Boolean_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.#ctor(Lucene.Net.Analysis.Analyzer,Lucene.Net.Analysis.Analyzer,Lucene.Net.Search.Suggest.Analyzing.SuggesterOptions,System.Int32,System.Int32,System.Boolean)">AnalyzingSuggester(Analyzer, Analyzer, SuggesterOptions, int, int, bool)</h4>
+  <div class="markdown level1 summary"><p>Creates a new suggester.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public AnalyzingSuggester(Analyzer indexAnalyzer, Analyzer queryAnalyzer, SuggesterOptions options, int maxSurfaceFormsPerAnalyzedForm, int maxGraphExpansions, bool preservePositionIncrements)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Analyzer</span></td>
+        <td><span class="parametername">indexAnalyzer</span></td>
+        <td><p>Analyzer that will be used for
+analyzing suggestions while building the index.</p>
+</td>
+      </tr>
+      <tr>
+        <td><span class="xref">Analyzer</span></td>
+        <td><span class="parametername">queryAnalyzer</span></td>
+        <td><p>Analyzer that will be used for
+analyzing query text during lookup</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.SuggesterOptions.html">SuggesterOptions</a></td>
+        <td><span class="parametername">options</span></td>
+        <td><p>see <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.SuggesterOptions.html#Lucene_Net_Search_Suggest_Analyzing_SuggesterOptions_EXACT_FIRST">EXACT_FIRST</a>, <a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.SuggesterOptions.html#Lucene_Net_Search_Suggest_Analyzing_SuggesterOptions_PRESERVE_SEP">PRESERVE_SEP</a></p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">maxSurfaceFormsPerAnalyzedForm</span></td>
+        <td><p>Maximum number of
+surface forms to keep for a single analyzed form.
+When there are too many surface forms we discard the
+lowest weighted ones.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">maxGraphExpansions</span></td>
+        <td><p>Maximum number of graph paths
+to expand from the analyzed form.  Set this to -1 for
+no limit.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><span class="parametername">preservePositionIncrements</span></td>
+        <td><p>Whether position holes
+should appear in the automata</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Count.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.Count%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Suggest/Suggest/Analyzing/AnalyzingSuggester.cs/#L945">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Count_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.Count*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Count" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.Count">Count</h4>
+  <div class="markdown level1 summary"><p>Get the number of entries the lookup was built with</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override long Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></td>
+        <td><p>total number of suggester entries</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_Count">Lookup.Count</a></div>
+  <h3 id="methods">Methods
+</h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Build_Lucene_Net_Search_Suggest_IInputEnumerator_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.Build(Lucene.Net.Search.Suggest.IInputEnumerator)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Suggest/Suggest/Analyzing/AnalyzingSuggester.cs/#L395">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Build_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.Build*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Build_Lucene_Net_Search_Suggest_IInputEnumerator_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.Build(Lucene.Net.Search.Suggest.IInputEnumerator)">Build(IInputEnumerator)</h4>
+  <div class="markdown level1 summary"><p>Builds up a new internal <a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html">Lookup</a> representation based on the given <a class="xref" href="Lucene.Net.Search.Suggest.IInputEnumerator.html">IInputEnumerator</a>.
+The implementation might re-sort the data internally.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override void Build(IInputEnumerator enumerator)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Search.Suggest.IInputEnumerator.html">IInputEnumerator</a></td>
+        <td><span class="parametername">enumerator</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_Build_Lucene_Net_Search_Suggest_IInputEnumerator_">Lookup.Build(IInputEnumerator)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_ConvertAutomaton_Lucene_Net_Util_Automaton_Automaton_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.ConvertAutomaton(Lucene.Net.Util.Automaton.Automaton)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Suggest/Suggest/Analyzing/AnalyzingSuggester.cs/#L312">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_ConvertAutomaton_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.ConvertAutomaton*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_ConvertAutomaton_Lucene_Net_Util_Automaton_Automaton_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.ConvertAutomaton(Lucene.Net.Util.Automaton.Automaton)">ConvertAutomaton(Automaton)</h4>
+  <div class="markdown level1 summary"><p>Used by subclass to change the lookup automaton, if
+necessary.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">protected virtual Automaton ConvertAutomaton(Automaton a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Automaton</span></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Automaton</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_DoLookup_System_String_System_Collections_Generic_IEnumerable_Lucene_Net_Util_BytesRef__System_Boolean_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.DoLookup(System.String%2CSystem.Collections.Generic.IEnumerable%7BLucene.Net.Util.BytesRef%7D%2CSystem.Boolean%2CSystem.Int32)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Suggest/Suggest/Analyzing/AnalyzingSuggester.cs/#L715">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_DoLookup_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.DoLookup*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_DoLookup_System_String_System_Collections_Generic_IEnumerable_Lucene_Net_Util_BytesRef__System_Boolean_System_Int32_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.DoLookup(System.String,System.Collections.Generic.IEnumerable{Lucene.Net.Util.BytesRef},System.Boolean,System.Int32)">DoLookup(string, IEnumerable&lt;BytesRef&gt;, bool, int)</h4>
+  <div class="markdown level1 summary"><p>Look up a key and return possible completion for this key.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override IList&lt;Lookup.LookupResult&gt; DoLookup(string key, IEnumerable&lt;BytesRef&gt; contexts, bool onlyMorePopular, int num)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">key</span></td>
+        <td><p>lookup key. Depending on the implementation this may be
+a prefix, misspelling, or even infix.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<span class="xref">BytesRef</span>&gt;</td>
+        <td><span class="parametername">contexts</span></td>
+        <td><p>contexts to filter the lookup by, or null if all contexts are allowed; if the suggestion contains any of the contexts, it's a match</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><span class="parametername">onlyMorePopular</span></td>
+        <td><p>return only more popular results</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">num</span></td>
+        <td><p>maximum number of results to return</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist-1">IList</a>&lt;<a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html">Lookup</a>.<a class="xref" href="Lucene.Net.Search.Suggest.Lookup.LookupResult.html">LookupResult</a>&gt;</td>
+        <td><p>a list of possible completions, with their relative weight (e.g. popularity)</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_DoLookup_System_String_System_Collections_Generic_IEnumerable_Lucene_Net_Util_BytesRef__System_Boolean_System_Int32_">Lookup.DoLookup(string, IEnumerable&lt;BytesRef&gt;, bool, int)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Get_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.Get(System.String)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Suggest/Suggest/Analyzing/AnalyzingSuggester.cs/#L1023">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Get_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.Get*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Get_System_String_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.Get(System.String)">Get(string)</h4>
+  <div class="markdown level1 summary"><p>Returns the weight associated with an input string,
+or null if it does not exist.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public virtual object Get(string key)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">key</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_GetFullPrefixPaths_System_Collections_Generic_IList_Lucene_Net_Search_Suggest_Analyzing_FSTUtil_Path_Lucene_Net_Util_Fst_PairOutputs_J2N_Numerics_Int64_Lucene_Net_Util_BytesRef__Pair___Lucene_Net_Util_Automaton_Automaton_Lucene_Net_Util_Fst_FST_Lucene_Net_Util_Fst_PairOutputs_J2N_Numerics_Int64_Lucene_Net_Util_BytesRef__Pair__.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.GetFullPrefixPaths(System.Collections.Generic.IList%7BLucene.Net.Search.Suggest.Analyzing.FSTUtil.Path%7BLucene.Net.Util.Fst.PairOutputs%7BJ2N.Numerics.Int64%2CLucene.Net.Util.BytesRef%7D.Pair%7D%7D%2CLucene.Net.Util.Automaton.Automaton%2CLucene.Net.Util.Fst.FST%7BLucene.Net.Util.Fst.PairOutputs%7BJ2N.Numerics.Int64%2CLucene.Net.Util.BytesRef%7D.Pair%7D)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Suggest/Suggest/Analyzing/AnalyzingSuggester.cs/#L950">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_GetFullPrefixPaths_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.GetFullPrefixPaths*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_GetFullPrefixPaths_System_Collections_Generic_IList_Lucene_Net_Search_Suggest_Analyzing_FSTUtil_Path_Lucene_Net_Util_Fst_PairOutputs_J2N_Numerics_Int64_Lucene_Net_Util_BytesRef__Pair___Lucene_Net_Util_Automaton_Automaton_Lucene_Net_Util_Fst_FST_Lucene_Net_Util_Fst_PairOutputs_J2N_Numerics_Int64_Lucene_Net_Util_BytesRef__Pair__" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.GetFullPrefixPaths(System.Collections.Generic.IList{Lucene.Net.Search.Suggest.Analyzing.FSTUtil.Path{Lucene.Net.Util.Fst.PairOutputs{J2N.Numerics.Int64,Lucene.Net.Util.BytesRef}.Pair}},Lucene.Net.Util.Automaton.Automaton,Lucene.Net.Util.Fst.FST{Lucene.Net.Util.Fst.PairOutputs{J2N.Numerics.Int64,Lucene.Net.Util.BytesRef}.Pair})">GetFullPrefixPaths(IList&lt;Path&lt;Pair&gt;&gt;, Automaton, FST&lt;Pair&gt;)</h4>
+  <div class="markdown level1 summary"><p>Returns all prefix paths to initialize the search.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">protected virtual IList&lt;FSTUtil.Path&lt;PairOutputs&lt;Int64, BytesRef&gt;.Pair&gt;&gt; GetFullPrefixPaths(IList&lt;FSTUtil.Path&lt;PairOutputs&lt;Int64, BytesRef&gt;.Pair&gt;&gt; prefixPaths, Automaton lookupAutomaton, FST&lt;PairOutputs&lt;Int64, BytesRef&gt;.Pair&gt; fst)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist-1">IList</a>&lt;<a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FSTUtil.html">FSTUtil</a>.<a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FSTUtil.Path-1.html">Path</a>&lt;<a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/api/core/Lucene.Net.Util.Fst.PairOutputs-2.html">PairOutputs</a>&lt;<span class="xref">Int64</span>, <span class="xref">BytesRef</span>&gt;.<span class="xref">Pair</span>&gt;&gt;</td>
+        <td><span class="parametername">prefixPaths</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Automaton</span></td>
+        <td><span class="parametername">lookupAutomaton</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">FST</span>&lt;<a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/api/core/Lucene.Net.Util.Fst.PairOutputs-2.html">PairOutputs</a>&lt;<span class="xref">Int64</span>, <span class="xref">BytesRef</span>&gt;.<span class="xref">Pair</span>&gt;</td>
+        <td><span class="parametername">fst</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ilist-1">IList</a>&lt;<a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FSTUtil.html">FSTUtil</a>.<a class="xref" href="Lucene.Net.Search.Suggest.Analyzing.FSTUtil.Path-1.html">Path</a>&lt;<a class="xref" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/api/core/Lucene.Net.Util.Fst.PairOutputs-2.html">PairOutputs</a>&lt;<span class="xref">Int64</span>, <span class="xref">BytesRef</span>&gt;.<span class="xref">Pair</span>&gt;&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_GetSizeInBytes.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.GetSizeInBytes%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Suggest/Suggest/Analyzing/AnalyzingSuggester.cs/#L240">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_GetSizeInBytes_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.GetSizeInBytes*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_GetSizeInBytes" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.GetSizeInBytes">GetSizeInBytes()</h4>
+  <div class="markdown level1 summary"><p>Returns byte size of the underlying FST.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override long GetSizeInBytes()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_GetSizeInBytes">Lookup.GetSizeInBytes()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Load_Lucene_Net_Store_DataInput_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.Load(Lucene.Net.Store.DataInput)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Suggest/Suggest/Analyzing/AnalyzingSuggester.cs/#L648">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Load_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.Load*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Load_Lucene_Net_Store_DataInput_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.Load(Lucene.Net.Store.DataInput)">Load(DataInput)</h4>
+  <div class="markdown level1 summary"><p>Discard current lookup data and load it from a previously saved copy.
+Optional operation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override bool Load(DataInput input)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">DataInput</span></td>
+        <td><span class="parametername">input</span></td>
+        <td><p>the <span class="xref">Lucene.Net.Store.DataInput</span> to load the lookup data.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><p>true if completed successfully, false if unsuccessful or not supported.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_Load_Lucene_Net_Store_DataInput_">Lookup.Load(DataInput)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td><p>when fatal IO error occurs.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Store_Lucene_Net_Store_DataOutput_.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.Store(Lucene.Net.Store.DataOutput)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Suggest/Suggest/Analyzing/AnalyzingSuggester.cs/#L634">View Source</a>
+  </span>
+  <a id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Store_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.Store*"></a>
+  <h4 id="Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester_Store_Lucene_Net_Store_DataOutput_" data-uid="Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester.Store(Lucene.Net.Store.DataOutput)">Store(DataOutput)</h4>
+  <div class="markdown level1 summary"><p>Persist the constructed lookup data to a directory. Optional operation.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override bool Store(DataOutput output)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">DataOutput</span></td>
+        <td><span class="parametername">output</span></td>
+        <td><p><span class="xref">Lucene.Net.Store.DataOutput</span> to write the data to.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><p>true if successful, false if unsuccessful or not supported.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Search.Suggest.Lookup.html#Lucene_Net_Search_Suggest_Lookup_Store_Lucene_Net_Store_DataOutput_">Lookup.Store(DataOutput)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.io.ioexception">IOException</a></td>
+        <td><p>when fatal IO error occurs.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Search_Suggest_Analyzing_AnalyzingSuggester.md&amp;value=---%0Auid%3A%20Lucene.Net.Search.Suggest.Analyzing.AnalyzingSuggester%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.Suggest/Suggest/Analyzing/AnalyzingSuggester.cs/#L90" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      Copyright &copy; 2024 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+      
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/main.js"></script>
+  </body>
+</html>

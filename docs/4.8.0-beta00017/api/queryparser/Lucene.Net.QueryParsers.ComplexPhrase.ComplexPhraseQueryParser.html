@@ -1,0 +1,1028 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class ComplexPhraseQueryParser
+ | Apache Lucene.NET 4.8.0-beta00017 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class ComplexPhraseQueryParser
+ | Apache Lucene.NET 4.8.0-beta00017 Documentation ">
+    <meta name="generator" content="docfx ">
+  
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.vendor.min.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="queryparser/toc.html">
+  
+  <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00017/">
+  
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00017/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser">
+
+
+  <h1 id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser" class="text-break">Class ComplexPhraseQueryParser
+</h1>
+  <div class="markdown level0 summary"><p><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html">QueryParser</a> which permits complex phrase query syntax eg &quot;(john jon
+jonathan~) peters*&quot;.</p>
+<p>
+Performs potentially multiple passes over Query text to parse any nested
+logic in PhraseQueries. - First pass takes any PhraseQuery content between
+quotes and stores for subsequent pass. All other query content is parsed as
+normal - Second pass parses any stored PhraseQuery content, checking all
+embedded clauses are referring to the same field and therefore can be
+rewritten as Span queries. All PhraseQuery clauses are expressed as
+ComplexPhraseQuery objects
+</p><p>
+This could arguably be done in one pass using a new <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html">QueryParser</a> but here I am
+working within the constraints of the existing parser as a base class. This
+currently simply feeds all phrase content through an analyzer to select
+phrase terms - any "special" syntax such as * ~ * etc are not given special
+status
+</p>
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><span class="xref">QueryBuilder</span></div>
+    <div class="level2"><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html">QueryParserBase</a></div>
+    <div class="level3"><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html">QueryParser</a></div>
+    <div class="level4"><span class="xref">ComplexPhraseQueryParser</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.ICommonQueryParserConfiguration.html">ICommonQueryParserConfiguration</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_Conjunction">QueryParser.Conjunction()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_Modifiers">QueryParser.Modifiers()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_TopLevelQuery_System_String_">QueryParser.TopLevelQuery(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_Query_System_String_">QueryParser.Query(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_Clause_System_String_">QueryParser.Clause(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_Term_System_String_">QueryParser.Term(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_TokenSource">QueryParser.TokenSource</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_Token">QueryParser.Token</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_Jj_nt">QueryParser.Jj_nt</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_ReInit_Lucene_Net_QueryParsers_Classic_ICharStream_">QueryParser.ReInit(ICharStream)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_ReInit_Lucene_Net_QueryParsers_Classic_QueryParserTokenManager_">QueryParser.ReInit(QueryParserTokenManager)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_GetNextToken">QueryParser.GetNextToken()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_GetToken_System_Int32_">QueryParser.GetToken(int)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_GenerateParseException">QueryParser.GenerateParseException()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_Enable_tracing">QueryParser.Enable_tracing()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html#Lucene_Net_QueryParsers_Classic_QueryParser_Disable_tracing">QueryParser.Disable_tracing()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_CONJ_NONE">QueryParserBase.CONJ_NONE</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_CONJ_AND">QueryParserBase.CONJ_AND</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_CONJ_OR">QueryParserBase.CONJ_OR</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_MOD_NONE">QueryParserBase.MOD_NONE</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_MOD_NOT">QueryParserBase.MOD_NOT</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_MOD_REQ">QueryParserBase.MOD_REQ</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_AND_OPERATOR">QueryParserBase.AND_OPERATOR</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_OR_OPERATOR">QueryParserBase.OR_OPERATOR</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_m_field">QueryParserBase.m_field</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_Init_Lucene_Net_Util_LuceneVersion_System_String_Lucene_Net_Analysis_Analyzer_">QueryParserBase.Init(LuceneVersion, string, Analyzer)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_Field">QueryParserBase.Field</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_AutoGeneratePhraseQueries">QueryParserBase.AutoGeneratePhraseQueries</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_FuzzyMinSim">QueryParserBase.FuzzyMinSim</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_FuzzyPrefixLength">QueryParserBase.FuzzyPrefixLength</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_PhraseSlop">QueryParserBase.PhraseSlop</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_AllowLeadingWildcard">QueryParserBase.AllowLeadingWildcard</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_DefaultOperator">QueryParserBase.DefaultOperator</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_LowercaseExpandedTerms">QueryParserBase.LowercaseExpandedTerms</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_MultiTermRewriteMethod">QueryParserBase.MultiTermRewriteMethod</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_Locale">QueryParserBase.Locale</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_TimeZone">QueryParserBase.TimeZone</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_SetDateResolution_Lucene_Net_Documents_DateResolution_">QueryParserBase.SetDateResolution(DateResolution)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_SetDateResolution_System_String_Lucene_Net_Documents_DateResolution_">QueryParserBase.SetDateResolution(string, DateResolution)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_GetDateResolution_System_String_">QueryParserBase.GetDateResolution(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_AnalyzeRangeTerms">QueryParserBase.AnalyzeRangeTerms</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_AddClause_System_Collections_Generic_IList_Lucene_Net_Search_BooleanClause__System_Int32_System_Int32_Lucene_Net_Search_Query_">QueryParserBase.AddClause(IList&lt;BooleanClause&gt;, int, int, Query)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_GetFieldQuery_System_String_System_String_System_Boolean_">QueryParserBase.GetFieldQuery(string, string, bool)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_NewFieldQuery_Lucene_Net_Analysis_Analyzer_System_String_System_String_System_Boolean_">QueryParserBase.NewFieldQuery(Analyzer, string, string, bool)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_NewBooleanClause_Lucene_Net_Search_Query_Lucene_Net_Search_Occur_">QueryParserBase.NewBooleanClause(Query, Occur)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_NewPrefixQuery_Lucene_Net_Index_Term_">QueryParserBase.NewPrefixQuery(Term)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_NewRegexpQuery_Lucene_Net_Index_Term_">QueryParserBase.NewRegexpQuery(Term)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_NewFuzzyQuery_Lucene_Net_Index_Term_System_Single_System_Int32_">QueryParserBase.NewFuzzyQuery(Term, float, int)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_AnalyzeMultitermTerm_System_String_System_String_Lucene_Net_Analysis_Analyzer_">QueryParserBase.AnalyzeMultitermTerm(string, string, Analyzer)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_NewMatchAllDocsQuery">QueryParserBase.NewMatchAllDocsQuery()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_NewWildcardQuery_Lucene_Net_Index_Term_">QueryParserBase.NewWildcardQuery(Term)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_GetBooleanQuery_System_Collections_Generic_IList_Lucene_Net_Search_BooleanClause__">QueryParserBase.GetBooleanQuery(IList&lt;BooleanClause&gt;)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_GetBooleanQuery_System_Collections_Generic_IList_Lucene_Net_Search_BooleanClause__System_Boolean_">QueryParserBase.GetBooleanQuery(IList&lt;BooleanClause&gt;, bool)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_GetRegexpQuery_System_String_System_String_">QueryParserBase.GetRegexpQuery(string, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_GetPrefixQuery_System_String_System_String_">QueryParserBase.GetPrefixQuery(string, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_Escape_System_String_">QueryParserBase.Escape(string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">QueryBuilder.CreateBooleanQuery(string, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">QueryBuilder.CreateBooleanQuery(string, string, Occur)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">QueryBuilder.CreatePhraseQuery(string, string)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">QueryBuilder.CreatePhraseQuery(string, string, int)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">QueryBuilder.CreateMinShouldMatchQuery(string, string, float)</a>
+    </div>
+    <div>
+      <span class="xref">QueryBuilder.Analyzer</span>
+    </div>
+    <div>
+      <span class="xref">QueryBuilder.EnablePositionIncrements</span>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">QueryBuilder.CreateFieldQuery(Analyzer, Occur, string, string, bool, int)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">QueryBuilder.NewBooleanQuery(bool)</a>
+    </div>
+    <div>
+      <span class="xref">QueryBuilder.NewPhraseQuery()</span>
+    </div>
+    <div>
+      <span class="xref">QueryBuilder.NewMultiPhraseQuery()</span>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.html">Lucene</a>.<a class="xref" href="Lucene.Net.html">Net</a>.<a class="xref" href="Lucene.Net.QueryParsers.html">QueryParsers</a>.<a class="xref" href="Lucene.Net.QueryParsers.ComplexPhrase.html">ComplexPhrase</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.QueryParser.dll</h6>
+  <h5 id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public class ComplexPhraseQueryParser : QueryParser, ICommonQueryParserConfiguration</code></pre>
+  </div>
+  <h3 id="constructors">Constructors
+</h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser__ctor_Lucene_Net_Util_LuceneVersion_System_String_Lucene_Net_Analysis_Analyzer_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.%23ctor(Lucene.Net.Util.LuceneVersion%2CSystem.String%2CLucene.Net.Analysis.Analyzer)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.QueryParser/ComplexPhrase/ComplexPhraseQueryParser.cs/#L71">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser__ctor_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.#ctor*"></a>
+  <h4 id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser__ctor_Lucene_Net_Util_LuceneVersion_System_String_Lucene_Net_Analysis_Analyzer_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.#ctor(Lucene.Net.Util.LuceneVersion,System.String,Lucene.Net.Analysis.Analyzer)">ComplexPhraseQueryParser(LuceneVersion, string, Analyzer)</h4>
+  <div class="markdown level1 summary"><p><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html">QueryParser</a> which permits complex phrase query syntax eg &quot;(john jon
+jonathan~) peters*&quot;.</p>
+<p>
+Performs potentially multiple passes over Query text to parse any nested
+logic in PhraseQueries. - First pass takes any PhraseQuery content between
+quotes and stores for subsequent pass. All other query content is parsed as
+normal - Second pass parses any stored PhraseQuery content, checking all
+embedded clauses are referring to the same field and therefore can be
+rewritten as Span queries. All PhraseQuery clauses are expressed as
+ComplexPhraseQuery objects
+</p><p>
+This could arguably be done in one pass using a new <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html">QueryParser</a> but here I am
+working within the constraints of the existing parser as a base class. This
+currently simply feeds all phrase content through an analyzer to select
+phrase terms - any "special" syntax such as * ~ * etc are not given special
+status
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public ComplexPhraseQueryParser(LuceneVersion matchVersion, string f, Analyzer a)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">LuceneVersion</span></td>
+        <td><span class="parametername">matchVersion</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">f</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">Analyzer</span></td>
+        <td><span class="parametername">a</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_InOrder.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.InOrder%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.QueryParser/ComplexPhrase/ComplexPhraseQueryParser.cs/#L67">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_InOrder_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.InOrder*"></a>
+  <h4 id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_InOrder" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.InOrder">InOrder</h4>
+  <div class="markdown level1 summary"><p>When <a class="xref" href="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.html#Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_InOrder">InOrder</a> is true, the search terms must
+exists in the documents as the same order as in query.
+Choose between ordered (true) or un-ordered (false) proximity search.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public virtual bool InOrder { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="methods">Methods
+</h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_GetFieldQuery_System_String_System_String_System_Int32_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.GetFieldQuery(System.String%2CSystem.String%2CSystem.Int32)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.QueryParser/ComplexPhrase/ComplexPhraseQueryParser.cs/#L78">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_GetFieldQuery_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.GetFieldQuery*"></a>
+  <h4 id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_GetFieldQuery_System_String_System_String_System_Int32_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.GetFieldQuery(System.String,System.String,System.Int32)">GetFieldQuery(string, string, int)</h4>
+  <div class="markdown level1 summary"><p>Base implementation delegates to <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_GetFieldQuery_System_String_System_String_System_Boolean_">GetFieldQuery(string, string, bool)</a>.
+This method may be overridden, for example, to return
+a <span class="xref">Lucene.Net.Search.Spans.SpanNearQuery</span> instead of a <span class="xref">Lucene.Net.Search.PhraseQuery</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">protected override Query GetFieldQuery(string field, string queryText, int slop)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">queryText</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">slop</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Query</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_GetFieldQuery_System_String_System_String_System_Int32_">QueryParserBase.GetFieldQuery(string, string, int)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Classic.ParseException.html">ParseException</a></td>
+        <td><p>throw in overridden method to disallow</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_GetFuzzyQuery_System_String_System_String_System_Single_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.GetFuzzyQuery(System.String%2CSystem.String%2CSystem.Single)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.QueryParser/ComplexPhrase/ComplexPhraseQueryParser.cs/#L200">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_GetFuzzyQuery_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.GetFuzzyQuery*"></a>
+  <h4 id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_GetFuzzyQuery_System_String_System_String_System_Single_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.GetFuzzyQuery(System.String,System.String,System.Single)">GetFuzzyQuery(string, string, float)</h4>
+  <div class="markdown level1 summary"><p>Factory method for generating a query (similar to
+<a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_GetWildcardQuery_System_String_System_String_">GetWildcardQuery(string, string)</a>). Called when parser parses
+an input term token that has the fuzzy suffix (~) appended.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">protected override Query GetFuzzyQuery(string field, string termStr, float minSimilarity)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">field</span></td>
+        <td><p>Name of the field query will use.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">termStr</span></td>
+        <td><p>Term token to use for building term for the query</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a></td>
+        <td><span class="parametername">minSimilarity</span></td>
+        <td><p>minimum similarity</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Query</span></td>
+        <td><p>Resulting <span class="xref">Lucene.Net.Search.Query</span> built for the term</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_GetFuzzyQuery_System_String_System_String_System_Single_">QueryParserBase.GetFuzzyQuery(string, string, float)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Classic.ParseException.html">ParseException</a></td>
+        <td><p>throw in overridden method to disallow</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_GetRangeQuery_System_String_System_String_System_String_System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.GetRangeQuery(System.String%2CSystem.String%2CSystem.String%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.QueryParser/ComplexPhrase/ComplexPhraseQueryParser.cs/#L178">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_GetRangeQuery_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.GetRangeQuery*"></a>
+  <h4 id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_GetRangeQuery_System_String_System_String_System_String_System_Boolean_System_Boolean_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.GetRangeQuery(System.String,System.String,System.String,System.Boolean,System.Boolean)">GetRangeQuery(string, string, string, bool, bool)</h4>
+  <div class="markdown level1 summary"><p><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html">QueryParser</a> which permits complex phrase query syntax eg &quot;(john jon
+jonathan~) peters*&quot;.</p>
+<p>
+Performs potentially multiple passes over Query text to parse any nested
+logic in PhraseQueries. - First pass takes any PhraseQuery content between
+quotes and stores for subsequent pass. All other query content is parsed as
+normal - Second pass parses any stored PhraseQuery content, checking all
+embedded clauses are referring to the same field and therefore can be
+rewritten as Span queries. All PhraseQuery clauses are expressed as
+ComplexPhraseQuery objects
+</p><p>
+This could arguably be done in one pass using a new <a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParser.html">QueryParser</a> but here I am
+working within the constraints of the existing parser as a base class. This
+currently simply feeds all phrase content through an analyzer to select
+phrase terms - any "special" syntax such as * ~ * etc are not given special
+status
+</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">protected override Query GetRangeQuery(string field, string part1, string part2, bool startInclusive, bool endInclusive)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">part1</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">part2</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><span class="parametername">startInclusive</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><span class="parametername">endInclusive</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Query</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_GetRangeQuery_System_String_System_String_System_String_System_Boolean_System_Boolean_">QueryParserBase.GetRangeQuery(string, string, string, bool, bool)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_GetWildcardQuery_System_String_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.GetWildcardQuery(System.String%2CSystem.String)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.QueryParser/ComplexPhrase/ComplexPhraseQueryParser.cs/#L169">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_GetWildcardQuery_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.GetWildcardQuery*"></a>
+  <h4 id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_GetWildcardQuery_System_String_System_String_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.GetWildcardQuery(System.String,System.String)">GetWildcardQuery(string, string)</h4>
+  <div class="markdown level1 summary"><p>Factory method for generating a query. Called when parser
+parses an input term token that contains one or more wildcard
+characters (? and *), but is not a prefix term token (one
+that has just a single * character at the end)</p>
+<p></p>
+Depending on settings, prefix term may be lower-cased
+automatically. It will not go through the default Analyzer,
+however, since normal Analyzers are unlikely to work properly
+with wildcard templates.
+<p></p>
+Can be overridden by extending classes, to provide custom handling for
+wildcard queries, which may be necessary due to missing analyzer calls.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">protected override Query GetWildcardQuery(string field, string termStr)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">field</span></td>
+        <td><p>Name of the field query will use.</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">termStr</span></td>
+        <td><p>Term token that contains one or more wild card
+characters (? or *), but is not simple prefix term</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Query</span></td>
+        <td><p>Resulting <span class="xref">Lucene.Net.Search.Query</span> built for the term</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_GetWildcardQuery_System_String_System_String_">QueryParserBase.GetWildcardQuery(string, string)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Classic.ParseException.html">ParseException</a></td>
+        <td><p>throw in overridden method to disallow</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_NewRangeQuery_System_String_System_String_System_String_System_Boolean_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.NewRangeQuery(System.String%2CSystem.String%2CSystem.String%2CSystem.Boolean%2CSystem.Boolean)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.QueryParser/ComplexPhrase/ComplexPhraseQueryParser.cs/#L187">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_NewRangeQuery_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.NewRangeQuery*"></a>
+  <h4 id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_NewRangeQuery_System_String_System_String_System_String_System_Boolean_System_Boolean_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.NewRangeQuery(System.String,System.String,System.String,System.Boolean,System.Boolean)">NewRangeQuery(string, string, string, bool, bool)</h4>
+  <div class="markdown level1 summary"><p>Builds a new <span class="xref">Lucene.Net.Search.TermRangeQuery</span> instance</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">protected override Query NewRangeQuery(string field, string part1, string part2, bool startInclusive, bool endInclusive)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">field</span></td>
+        <td><p>Field</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">part1</span></td>
+        <td><p>min</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">part2</span></td>
+        <td><p>max</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><span class="parametername">startInclusive</span></td>
+        <td><p>true if the start of the range is inclusive</p>
+</td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><span class="parametername">endInclusive</span></td>
+        <td><p>true if the end of the range is inclusive</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Query</span></td>
+        <td><p>new <span class="xref">Lucene.Net.Search.TermRangeQuery</span> instance</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_NewRangeQuery_System_String_System_String_System_String_System_Boolean_System_Boolean_">QueryParserBase.NewRangeQuery(string, string, string, bool, bool)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_NewTermQuery_Lucene_Net_Index_Term_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.NewTermQuery(Lucene.Net.Index.Term)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.QueryParser/ComplexPhrase/ComplexPhraseQueryParser.cs/#L142">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_NewTermQuery_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.NewTermQuery*"></a>
+  <h4 id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_NewTermQuery_Lucene_Net_Index_Term_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.NewTermQuery(Lucene.Net.Index.Term)">NewTermQuery(Term)</h4>
+  <div class="markdown level1 summary"><p>Builds a new <span class="xref">Lucene.Net.Search.TermQuery</span> instance.</p>
+<p></p>
+This is intended for subclasses that wish to customize the generated queries.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">protected override Query NewTermQuery(Term term)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Term</span></td>
+        <td><span class="parametername">term</span></td>
+        <td><p>Term.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Query</span></td>
+        <td><p>New <span class="xref">Lucene.Net.Search.TermQuery</span> instance.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><span class="xref">Lucene.Net.Util.QueryBuilder.NewTermQuery(Lucene.Net.Index.Term)</span></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_Parse_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.Parse(System.String)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.QueryParser/ComplexPhrase/ComplexPhraseQueryParser.cs/#L87">View Source</a>
+  </span>
+  <a id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_Parse_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.Parse*"></a>
+  <h4 id="Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser_Parse_System_String_" data-uid="Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser.Parse(System.String)">Parse(string)</h4>
+  <div class="markdown level1 summary"><p>Parses a query string, returning a <span class="xref">Lucene.Net.Search.Query</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override Query Parse(string query)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">query</span></td>
+        <td><p>the query string to be parsed.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">Query</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.QueryParsers.Classic.QueryParserBase.html#Lucene_Net_QueryParsers_Classic_QueryParserBase_Parse_System_String_">QueryParserBase.Parse(string)</a></div>
+  <h5 class="exceptions">Exceptions</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Condition</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.QueryParsers.Classic.ParseException.html">ParseException</a></td>
+        <td><p>if the parsing fails</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="Lucene.Net.QueryParsers.Flexible.Standard.ICommonQueryParserConfiguration.html">ICommonQueryParserConfiguration</a>
+  </div>
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_QueryParsers_ComplexPhrase_ComplexPhraseQueryParser.md&amp;value=---%0Auid%3A%20Lucene.Net.QueryParsers.ComplexPhrase.ComplexPhraseQueryParser%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net.QueryParser/ComplexPhrase/ComplexPhraseQueryParser.cs/#L56" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      Copyright &copy; 2024 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+      
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/main.js"></script>
+  </body>
+</html>

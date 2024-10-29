@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Class BlockTreeTermsReader&lt;TSubclassState&gt;
+ | Apache Lucene.NET 4.8.0-beta00017 Documentation </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Class BlockTreeTermsReader&lt;TSubclassState&gt;
+ | Apache Lucene.NET 4.8.0-beta00017 Documentation ">
+    <meta name="generator" content="docfx ">
+  
+    <link rel="shortcut icon" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/logo/favicon.ico">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.vendor.min.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.css">
+    <link rel="stylesheet" href="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/main.css">
+    <meta property="docfx:navrel" content="toc.html">
+    <meta property="docfx:tocrel" content="core/toc.html">
+  
+  <meta property="docfx:rel" content="https://lucenenet.apache.org/docs/4.8.0-beta00017/">
+  
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <span id="forkongithub"><a href="https://github.com/apache/lucenenet" target="_blank">Fork me on GitHub</a></span>
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="/">
+                <img id="logo" class="svg" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/logo/lucene-net-color.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search">
+            <ul class="level0 breadcrumb">
+                <li>
+                    <a href="https://lucenenet.apache.org/docs/4.8.0-beta00017/">API</a>
+                     <span id="breadcrumb">
+                        <ul class="breadcrumb">
+                          <li></li>
+                        </ul>
+                    </span>   
+                </li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list"></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1">
+
+
+  <h1 id="Lucene_Net_Codecs_BlockTreeTermsReader_1" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1" class="text-break">Class BlockTreeTermsReader&lt;TSubclassState&gt;
+</h1>
+  <div class="markdown level0 summary"><p>A block-based terms index and dictionary that assigns
+terms to variable length blocks according to how they
+share prefixes.  The terms index is a prefix trie
+whose leaves are term blocks.  The advantage of this
+approach is that SeekExact() is often able to
+determine a term cannot exist without doing any IO, and
+intersection with Automata is very fast.  Note that this
+terms dictionary has it's own fixed terms index (ie, it
+does not support a pluggable terms index
+implementation).</p>
+<p><b>NOTE</b>: this terms dictionary does not support
+index divisor when opening an IndexReader.  Instead, you
+can change the min/maxItemsPerBlock during indexing.</p><p>The data structure used by this implementation is very
+similar to a burst trie
+(http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.18.3499),
+but with added logic to break up too-large blocks of all
+terms sharing a given prefix into smaller ones.</p><p>Use <a class="xref" href="Lucene.Net.Index.CheckIndex.html">CheckIndex</a> with the <code>-verbose</code>
+option to see summary statistics on the blocks in the
+dictionary.</p>
+<p>See <a class="xref" href="Lucene.Net.Codecs.BlockTreeTermsWriter-1.html">BlockTreeTermsWriter&lt;TSubclassState&gt;</a>.</p>
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is experimental and might change in incompatible ways in the next release.</p>
+</div>
+
+</div>
+  <div class="markdown level0 conceptual"></div>
+  <div class="inheritance">
+    <h5>Inheritance</h5>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><a class="xref" href="Lucene.Net.Index.Fields.html">Fields</a></div>
+    <div class="level2"><a class="xref" href="Lucene.Net.Codecs.FieldsProducer.html">FieldsProducer</a></div>
+    <div class="level3"><span class="xref">BlockTreeTermsReader&lt;TSubclassState&gt;</span></div>
+  </div>
+  <div classs="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>&gt;</div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.ienumerable">IEnumerable</a></div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a></div>
+  </div>
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Lucene.Net.Codecs.FieldsProducer.html#Lucene_Net_Codecs_FieldsProducer_Dispose">FieldsProducer.Dispose()</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.Fields.html#Lucene_Net_Index_Fields_UniqueTermCount">Fields.UniqueTermCount</a>
+    </div>
+    <div>
+      <a class="xref" href="Lucene.Net.Index.Fields.html#Lucene_Net_Index_Fields_EMPTY_ARRAY">Fields.EMPTY_ARRAY</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </div>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Lucene.html">Lucene</a>.<a class="xref" href="Lucene.Net.html">Net</a>.<a class="xref" href="Lucene.Net.Codecs.html">Codecs</a></h6>
+  <h6><strong>Assembly</strong>: Lucene.Net.dll</h6>
+  <h5 id="Lucene_Net_Codecs_BlockTreeTermsReader_1_syntax">Syntax</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public class BlockTreeTermsReader&lt;TSubclassState&gt; : FieldsProducer, IEnumerable&lt;string&gt;, IEnumerable, IDisposable</code></pre>
+  </div>
+  <h5 class="typeParameters">Type Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="parametername">TSubclassState</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="constructors">Constructors
+</h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsReader_1__ctor_Lucene_Net_Store_Directory_Lucene_Net_Index_FieldInfos_Lucene_Net_Index_SegmentInfo_Lucene_Net_Codecs_PostingsReaderBase_Lucene_Net_Store_IOContext_System_String_System_Int32__0_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsReader%601.%23ctor(Lucene.Net.Store.Directory%2CLucene.Net.Index.FieldInfos%2CLucene.Net.Index.SegmentInfo%2CLucene.Net.Codecs.PostingsReaderBase%2CLucene.Net.Store.IOContext%2CSystem.String%2CSystem.Int32%2C%600)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net/Codecs/BlockTreeTermsReader.cs/#L133">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsReader_1__ctor_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.#ctor*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsReader_1__ctor_Lucene_Net_Store_Directory_Lucene_Net_Index_FieldInfos_Lucene_Net_Index_SegmentInfo_Lucene_Net_Codecs_PostingsReaderBase_Lucene_Net_Store_IOContext_System_String_System_Int32__0_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.#ctor(Lucene.Net.Store.Directory,Lucene.Net.Index.FieldInfos,Lucene.Net.Index.SegmentInfo,Lucene.Net.Codecs.PostingsReaderBase,Lucene.Net.Store.IOContext,System.String,System.Int32,`0)">BlockTreeTermsReader(Directory, FieldInfos, SegmentInfo, PostingsReaderBase, IOContext, string, int, TSubclassState)</h4>
+  <div class="markdown level1 summary"><p>Sole constructor.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public BlockTreeTermsReader(Directory dir, FieldInfos fieldInfos, SegmentInfo info, PostingsReaderBase postingsReader, IOContext ioContext, string segmentSuffix, int indexDivisor, TSubclassState subclassState)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.Directory.html">Directory</a></td>
+        <td><span class="parametername">dir</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.FieldInfos.html">FieldInfos</a></td>
+        <td><span class="parametername">fieldInfos</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.SegmentInfo.html">SegmentInfo</a></td>
+        <td><span class="parametername">info</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Codecs.PostingsReaderBase.html">PostingsReaderBase</a></td>
+        <td><span class="parametername">postingsReader</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IOContext.html">IOContext</a></td>
+        <td><span class="parametername">ioContext</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">segmentSuffix</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td><span class="parametername">indexDivisor</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><span class="xref">TSubclassState</span></td>
+        <td><span class="parametername">subclassState</span></td>
+        <td><p>LUCENENET specific parameter which allows a subclass
+to set state. It is <em>optional</em> and can be used when overriding the ReadHeader(),
+ReadIndexHeader() and SeekDir() methods. It only matters in the case where the state
+is required inside of any of those methods that is passed in to the subclass constructor.</p>
+<pre><code> When passed to the constructor, it is set to the protected field m_subclassState before
+ any of the above methods are called where it is available for reading when overriding the above methods.
+
+ If your subclass needs to pass more than one piece of data, you can create a class or struct to do so.
+ All other virtual members of BlockTreeTermsReader are not called in the constructor,
+ so the overrides of those methods won't specifically need to use this field (although they could for consistency).
+</code></pre>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="fields">Fields
+</h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsReader_1_m_subclassState.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsReader%601.m_subclassState%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net/Codecs/BlockTreeTermsReader.cs/#L117">View Source</a>
+  </span>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsReader_1_m_subclassState" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.m_subclassState">m_subclassState</h4>
+  <div class="markdown level1 summary"><p>A block-based terms index and dictionary that assigns
+terms to variable length blocks according to how they
+share prefixes.  The terms index is a prefix trie
+whose leaves are term blocks.  The advantage of this
+approach is that SeekExact() is often able to
+determine a term cannot exist without doing any IO, and
+intersection with Automata is very fast.  Note that this
+terms dictionary has it's own fixed terms index (ie, it
+does not support a pluggable terms index
+implementation).</p>
+<p><b>NOTE</b>: this terms dictionary does not support
+index divisor when opening an IndexReader.  Instead, you
+can change the min/maxItemsPerBlock during indexing.</p><p>The data structure used by this implementation is very
+similar to a burst trie
+(http://citeseer.ist.psu.edu/viewdoc/summary?doi=10.1.1.18.3499),
+but with added logic to break up too-large blocks of all
+terms sharing a given prefix into smaller ones.</p><p>Use <a class="xref" href="Lucene.Net.Index.CheckIndex.html">CheckIndex</a> with the <code>-verbose</code>
+option to see summary statistics on the blocks in the
+dictionary.</p>
+<p>See <a class="xref" href="Lucene.Net.Codecs.BlockTreeTermsWriter-1.html">BlockTreeTermsWriter&lt;TSubclassState&gt;</a>.</p>
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is experimental and might change in incompatible ways in the next release.</p>
+</div>
+
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">protected readonly TSubclassState m_subclassState</code></pre>
+  </div>
+  <h5 class="fieldValue">Field Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="xref">TSubclassState</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="properties">Properties
+</h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsReader_1_Count.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsReader%601.Count%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net/Codecs/BlockTreeTermsReader.cs/#L319">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsReader_1_Count_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.Count*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsReader_1_Count" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.Count">Count</h4>
+  <div class="markdown level1 summary"><p>Gets the number of fields or -1 if the number of
+distinct field names is unknown. If &gt;= 0,
+<a class="xref" href="Lucene.Net.Index.Fields.html#Lucene_Net_Index_Fields_GetEnumerator">GetEnumerator()</a> will return as many field names.</p>
+<p></p>
+NOTE: This was size() in Lucene.
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override int Count { get; }</code></pre>
+  </div>
+  <h5 class="propertyValue">Property Value</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.Fields.html#Lucene_Net_Index_Fields_Count">Fields.Count</a></div>
+  <h3 id="methods">Methods
+</h3>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsReader_1_CheckIntegrity.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsReader%601.CheckIntegrity%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net/Codecs/BlockTreeTermsReader.cs/#L3452">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsReader_1_CheckIntegrity_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.CheckIntegrity*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsReader_1_CheckIntegrity" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.CheckIntegrity">CheckIntegrity()</h4>
+  <div class="markdown level1 summary"><p>Checks consistency of this reader.</p>
+<p></p>
+Note that this may be costly in terms of I/O, e.g.
+may involve computing a checksum value against large data files.
+<p></p>
+<div class="NOTE">
+<h5>Note</h5>
+<p>This API is for internal purposes only and might change in incompatible ways in the next release.</p>
+</div>
+
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override void CheckIntegrity()</code></pre>
+  </div>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Codecs.FieldsProducer.html#Lucene_Net_Codecs_FieldsProducer_CheckIntegrity">FieldsProducer.CheckIntegrity()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsReader_1_Dispose_System_Boolean_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsReader%601.Dispose(System.Boolean)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net/Codecs/BlockTreeTermsReader.cs/#L290">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsReader_1_Dispose_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.Dispose*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsReader_1_Dispose_System_Boolean_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.Dispose(System.Boolean)">Dispose(bool)</h4>
+  <div class="markdown level1 summary"><p>Disposes all resources used by this object.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">protected override void Dispose(bool disposing)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+        <td><span class="parametername">disposing</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Codecs.FieldsProducer.html#Lucene_Net_Codecs_FieldsProducer_Dispose_System_Boolean_">FieldsProducer.Dispose(bool)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsReader_1_GetEnumerator.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsReader%601.GetEnumerator%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net/Codecs/BlockTreeTermsReader.cs/#L307">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsReader_1_GetEnumerator_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.GetEnumerator*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsReader_1_GetEnumerator" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.GetEnumerator">GetEnumerator()</h4>
+  <div class="markdown level1 summary"><p>Returns an enumerator that will step through all field
+names.  This will not return <code>null</code>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override IEnumerator&lt;string&gt; GetEnumerator()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerator-1">IEnumerator</a>&lt;<a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a>&gt;</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.Fields.html#Lucene_Net_Index_Fields_GetEnumerator">Fields.GetEnumerator()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsReader_1_GetTerms_System_String_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsReader%601.GetTerms(System.String)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net/Codecs/BlockTreeTermsReader.cs/#L312">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsReader_1_GetTerms_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.GetTerms*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsReader_1_GetTerms_System_String_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.GetTerms(System.String)">GetTerms(string)</h4>
+  <div class="markdown level1 summary"><p>Get the <a class="xref" href="Lucene.Net.Index.Terms.html">Terms</a> for this field.  This will return
+<code>null</code> if the field does not exist.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override Terms GetTerms(string field)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">string</a></td>
+        <td><span class="parametername">field</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Index.Terms.html">Terms</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Index.Fields.html#Lucene_Net_Index_Fields_GetTerms_System_String_">Fields.GetTerms(string)</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsReader_1_RamBytesUsed.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsReader%601.RamBytesUsed%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net/Codecs/BlockTreeTermsReader.cs/#L3442">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsReader_1_RamBytesUsed_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.RamBytesUsed*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsReader_1_RamBytesUsed" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.RamBytesUsed">RamBytesUsed()</h4>
+  <div class="markdown level1 summary"><p>Returns approximate RAM bytes used.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">public override long RamBytesUsed()</code></pre>
+  </div>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="overrides">Overrides</h5>
+  <div><a class="xref" href="Lucene.Net.Codecs.FieldsProducer.html#Lucene_Net_Codecs_FieldsProducer_RamBytesUsed">FieldsProducer.RamBytesUsed()</a></div>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsReader_1_ReadHeader_Lucene_Net_Store_IndexInput_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsReader%601.ReadHeader(Lucene.Net.Store.IndexInput)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net/Codecs/BlockTreeTermsReader.cs/#L243">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsReader_1_ReadHeader_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.ReadHeader*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsReader_1_ReadHeader_Lucene_Net_Store_IndexInput_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.ReadHeader(Lucene.Net.Store.IndexInput)">ReadHeader(IndexInput)</h4>
+  <div class="markdown level1 summary"><p>Reads terms file header.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">protected virtual int ReadHeader(IndexInput input)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IndexInput.html">IndexInput</a></td>
+        <td><span class="parametername">input</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsReader_1_ReadIndexHeader_Lucene_Net_Store_IndexInput_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsReader%601.ReadIndexHeader(Lucene.Net.Store.IndexInput)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net/Codecs/BlockTreeTermsReader.cs/#L255">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsReader_1_ReadIndexHeader_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.ReadIndexHeader*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsReader_1_ReadIndexHeader_Lucene_Net_Store_IndexInput_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.ReadIndexHeader(Lucene.Net.Store.IndexInput)">ReadIndexHeader(IndexInput)</h4>
+  <div class="markdown level1 summary"><p>Reads index file header.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">protected virtual int ReadIndexHeader(IndexInput input)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IndexInput.html">IndexInput</a></td>
+        <td><span class="parametername">input</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h5 class="returns">Returns</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <span class="small pull-right mobile-hide">
+    <span class="divider">|</span>
+    <a href="https://github.com/NightOwl888/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsReader_1_SeekDir_Lucene_Net_Store_IndexInput_System_Int64_.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsReader%601.SeekDir(Lucene.Net.Store.IndexInput%2CSystem.Int64)%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+  </span>
+  <span class="small pull-right mobile-hide">
+    <a href="https://github.com/NightOwl888/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net/Codecs/BlockTreeTermsReader.cs/#L267">View Source</a>
+  </span>
+  <a id="Lucene_Net_Codecs_BlockTreeTermsReader_1_SeekDir_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.SeekDir*"></a>
+  <h4 id="Lucene_Net_Codecs_BlockTreeTermsReader_1_SeekDir_Lucene_Net_Store_IndexInput_System_Int64_" data-uid="Lucene.Net.Codecs.BlockTreeTermsReader`1.SeekDir(Lucene.Net.Store.IndexInput,System.Int64)">SeekDir(IndexInput, long)</h4>
+  <div class="markdown level1 summary"><p>Seek <code class="paramref">input</code> to the directory offset.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+  <h5 class="decalaration">Declaration</h5>
+  <div class="codewrapper">
+    <pre><code class="lang- hljs">protected virtual void SeekDir(IndexInput input, long dirOffset)</code></pre>
+  </div>
+  <h5 class="parameters">Parameters</h5>
+  <table class="table table-bordered table-striped table-condensed">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Name</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><a class="xref" href="Lucene.Net.Store.IndexInput.html">IndexInput</a></td>
+        <td><span class="parametername">input</span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a></td>
+        <td><span class="parametername">dirOffset</span></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="implements">Implements</h3>
+  <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ienumerable-1">IEnumerable&lt;T&gt;</a>
+  </div>
+  <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.collections.ienumerable">IEnumerable</a>
+  </div>
+  <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.idisposable">IDisposable</a>
+  </div>
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/new/docs/4.8.0-beta00017/apiSpec/new?filename=Lucene_Net_Codecs_BlockTreeTermsReader_1.md&amp;value=---%0Auid%3A%20Lucene.Net.Codecs.BlockTreeTermsReader%601%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/apache/lucenenet/blob/docs/4.8.0-beta00017/src/Lucene.Net/Codecs/BlockTreeTermsReader.cs/#L89" class="contribution-link">View Source</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+              <!-- <p><a class="back-to-top" href="#top">Back to top</a><p> -->
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      Copyright &copy; 2024 The Apache Software Foundation, Licensed under the <a href='http://www.apache.org/licenses/LICENSE-2.0' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache feather logo, and the Apache Lucene.Net project logo are trademarks of The Apache Software Foundation. <br>All other marks mentioned may be trademarks or registered trademarks of their respective owners.</small>
+      
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/docfx.js"></script>
+    <script type="text/javascript" src="https://lucenenet.apache.org/docs/4.8.0-beta00017/styles/main.js"></script>
+  </body>
+</html>
