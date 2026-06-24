@@ -41,7 +41,7 @@
               </button>
 
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo/lucene-net-color.png" alt="">
+                <img id="logo" class="svg" src="../logo/lucene-net-color.png" alt="Apache Lucene.NET Search Engine Library">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -100,9 +100,9 @@
 <hr>
 <h2 id="background">Background</h2>
 <p>Apache Lucene.NET is a C# port of Java based Apache Lucene.  Apache Lucene has a huge following and is used directly or indirectly to power search by many companies you probably know including Amazon, Twitter, LinkedIn, Netflix, Salesforce, SAS, and Microsoft Power BI.</p>
-<p>Apache Lucene is the core search library used by popular open source search servers like Apache Solr, ElasticSearch and OpenSearch.  The reason Apache Lucene is so widely used is because it's extremely powerful and can index large amounts of data quickly -- think 100s of GB/Hours. And it can perform full text search on that data in sub-second time. And unlike traditional sql databases, it's data engine is optimized for full text search.</p>
-<p>The codebase for Apache Lucene is very mature.  In March 2020, the open source project celebrated it's 20th birthday. You can scroll through the years and see the major <a href="https://www.elastic.co/celebrating-lucene">Apache Lucene milestones</a>.</p>
-<p>Apache Lucene.NET 4.8 is an open source project who's aim is to be a line by line c# port of java based Apache Lucene 4.8.  This port makes the power of Lucene available to all .NET developers. And makes it easy for them to contribute to the project or customize it since it's pure C#.</p>
+<p>Apache Lucene is the core search library used by popular open source search servers like Apache Solr, ElasticSearch and OpenSearch.  The reason Apache Lucene is so widely used is because it's extremely powerful and can index large amounts of data quickly -- think 100s of GB/Hours. And it can perform full text search on that data in sub-second time. And unlike traditional SQL databases, it's data engine is optimized for full text search.</p>
+<p>The codebase for Apache Lucene is very mature.  In March 2020, the open source project celebrated its 20th birthday. You can scroll through the years and see the major <a href="https://www.elastic.co/celebrating-lucene">Apache Lucene milestones</a>.</p>
+<p>Apache Lucene.NET 4.8 is an open source project whose aim is to be a line by line c# port of java based Apache Lucene 4.8.  This port makes the power of Lucene available to all .NET developers. And makes it easy for them to contribute to the project or customize it since it's pure C#.</p>
 <p>Currently Lucene.NET 4.8 is in Beta but it is extremely stable and many developers already use it in production. It has far more features than Lucene.NET 3.03 and has much better unit test coverage than the older version.  Lucene.NET has more than 7800+ passing unit tests.  This test coverage is what makes Lucene.NET so stable.</p>
 <h2 id="evolution-of-lucene">Evolution of Lucene</h2>
 <p>Porting Lucene from java to C# is a huge undertaking.  There are over <a href="https://lucenenet.apache.org/images/contributing/source/lucenenet-repo-lines-of-code--jan-2022.png">644K lines of code</a> not counting outside dependencies.  This is why only a few specific versions have been ported.  The prior Lucene.NET release was version 3.0.3 and the current release (which receives all the focus) is Lucene.NET 4.8. Version 4.8 is now in late Beta and, as I already mentioned, is used in production by many developers.</p>
@@ -112,7 +112,7 @@
 <h2 id="lucenes-lsm-inspired-architecture">Lucene's LSM Inspired Architecture</h2>
 <p>At this early stage of your journey it's probably good to cover a few things about how Lucene stores data. We are just going to hit the highlights here because it's a deep topic.</p>
 <p>Lucene and hence Lucene.NET stores data in immutable &quot;segments.&quot;  Segments are made of multiple files. Segments automatically get merged together to form new bigger segments and then the old segments are typically deleted by the merge process.  This approach is based on what is called a Log Structured Merge (LSM) design.</p>
-<p>LSM has become the defacto standard for NoSql databases and is used not only by Lucene but also by Google BigTable, Apache Hbase, Apache Cassandra and many others. The details of each implementation vary as does the number and types of files used. So let's take a look at what those files might look like for a Lucene.NET index.</p>
+<p>LSM has become the defacto standard for NoSql databases and is used not only by Lucene but also by Google BigTable, Apache HBase, Apache Cassandra and many others. The details of each implementation vary as does the number and types of files used. So let's take a look at what those files might look like for a Lucene.NET index.</p>
 <p>Here is an example of Lucene.NET's files for a brand new index with one segment:</p>
 <p><img src="https://lucenenet.apache.org/images/quick-start/introduction/one-segment-example.gif" alt="Example files for single segment"></p>
 <p>Here is a two segment example that has gone through merges many times:</p>
@@ -124,7 +124,7 @@
 <h3 id="writing-and-reading-documents">Writing and Reading Documents</h3>
 <p>Documents are written via an <code>IndexWriter</code> and read via an <code>IndexReader</code>.  Although in practice we often use an <code>IndexSearcher</code> (which wraps an <code>IndexReader</code>) for searching and reading documents.</p>
 <h3 id="lucene-directories">Lucene Directories</h3>
-<p>We already mentioned that the data is stored in segments.  Those segments can be stored via different classes that inherit from <code>Lucene.Net.Store.Directory</code>.  Some of those classes, like <code>FSDirectory</code> store to your local file system, other can store elsewhere.  For example a <code>RAMDirectory</code> can be useful for unit tests as it stores the segments in RAM.  So one of the things that we must provide an <code>IndexWriter</code> is a instance of a <code>Lucene.Net.Store.Directory</code> that is the type of directory we want to work with.</p>
+<p>We already mentioned that the data is stored in segments.  Those segments can be stored via different classes that inherit from <code>Lucene.Net.Store.Directory</code>.  Some of those classes, like <code>FSDirectory</code> store to your local file system, other can store elsewhere.  For example a <code>RAMDirectory</code> can be useful for unit tests as it stores the segments in RAM.  So one of the things that we must provide an <code>IndexWriter</code> is an instance of a <code>Lucene.Net.Store.Directory</code> that is the type of directory we want to work with.</p>
 <h3 id="how-the-pieces-fit-together">How the Pieces Fit Together</h3>
 <p>The diagram below provides a birds eye view of how the various parts of the system work together.  It makes it easier to conceptualize the parts of Lucene that we have been talking about.  It might be good idea to keep this diagram in mind when you work through the <a class="xref" href="tutorial.html">tutorial examples</a> and review the code provided there.</p>
   <div class="diagram">
@@ -132,7 +132,7 @@
   </div>
 <p>* In the diagram above &quot;Files&quot; is in quotes because if you are using a <code>RAMDirectory</code>, say for testing, then there will be no physical file, but rather their representation will be in memory only.</p>
 <h3 id="wrapping-up">Wrapping Up</h3>
-<p>I hope this introduction has helped you to understand a bit about Lucene.NET.  The information we have covered so far should give you a bit of a foundation to work from as you work through the <a class="xref" href="tutorial.html">tutorial examples</a> and then dig deaper into the <a class="xref" href="../docs.html">Lucene.NET Documentation</a> and <a class="xref" href="learning-resources.html">Learning Resources</a>.</p>
+<p>I hope this introduction has helped you to understand a bit about Lucene.NET.  The information we have covered so far should give you a bit of a foundation to work from as you work through the <a class="xref" href="tutorial.html">tutorial examples</a> and then dig deeper into the <a class="xref" href="../docs.html">Lucene.NET Documentation</a> and <a class="xref" href="learning-resources.html">Learning Resources</a>.</p>
 
 </article>
           </div>
@@ -157,7 +157,7 @@
       <footer>
         <div class="container">
           <span class="pull-left">
-      Copyright &copy; 2026 The Apache Software Foundation, Licensed under the <a href='https://www.apache.org/licenses/' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache logo, and the Apache Lucene.Net project logo are either registered trademarks or trademarks of The Apache Software Foundation in the United States and other countries.</small>
+      Copyright &copy; 2025 The Apache Software Foundation, Licensed under the <a href='https://www.apache.org/licenses/' target='_blank'>Apache License, Version 2.0</a><br> <small>Apache Lucene.Net, Lucene.Net, Apache, the Apache logo, and the Apache Lucene.Net project logo are either registered trademarks or trademarks of The Apache Software Foundation in the United States and other countries.</small>
           </span>
           <div class="asf-links text-center">
             <a href="https://www.apache.org/">Foundation</a> |
