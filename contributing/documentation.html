@@ -41,7 +41,7 @@
               </button>
 
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo/lucene-net-color.png" alt="">
+                <img id="logo" class="svg" src="../logo/lucene-net-color.png" alt="Apache Lucene.NET Search Engine Library">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -101,15 +101,40 @@
 <p><em>Details about this website and the API documentation site and how to help contribute to them</em></p>
 <h2 id="overview">Overview</h2>
 <p>The website and the api documentation source code is found in the same Git repository as the Lucene.Net code in the folder: <code>./websites/</code>. The website and documentation site is built with a static site generator called <a href="https://dotnet.github.io/docfx/">DocFx</a> and all of the content/pages are created using Markdown files.</p>
-<p>To submit changes for the website, create a Pull Request to the <a href="https://github.com/apache/lucenenet">Lucene Git repositoriy</a>. (See <a class="xref" href="index.html#submit-a-pull-request">Contributing</a> for details)</p>
+<p>To submit changes for the website, create a Pull Request to the <a href="https://github.com/apache/lucenenet">Lucene Git repository</a>. (See <a class="xref" href="index.html#submit-a-pull-request">Contributing</a> for details)</p>
 <h2 id="website">Website</h2>
+<h3 id="lifecycle">Lifecycle</h3>
+<p>The source of truth of the website is on the <code>master</code> branch.</p>
+<pre><code>feature branch
+    ↓
+PR
+    ↓
+master
+    ↓
+website workflow
+    ↓
+lucenenet-site PR
+    ↓
+publish website
+</code></pre>
+<ul>
+<li>All website changes that should be publicly visible must eventually exist on the <code>master</code> branch.</li>
+<li>Release branches may temporarily contain website changes, but those changes must be cherry-picked (or in some cases merged) back to <code>master</code> if they should remain part of the published website.</li>
+</ul>
+<p>This ensures the website is always synched with the <code>master</code> branch and PRs that affect the website are automatically built for deployment.</p>
 <h3 id="build-script">Build script</h3>
-<p>To build the website and run it on your machine, run the Powershell script: <code>./websites/site/site.ps1</code> with the <code>-ServeDocs</code> flag. For example:</p>
-<pre><code>./websites/site/site.ps1 -ServeDocs
+<h4 id="local-build-and-host">Local Build and Host</h4>
+<p>To build the website and run it on your machine, run the PowerShell script: <code>./websites/site/site.ps1</code> with the <code>-ServeDocs</code> flag. For example:</p>
+<pre><code class="lang-console">./websites/site/site.ps1 -ServeDocs
 </code></pre>
 <p>When executed this will build the site and host it at <a href="http://localhost:8081">http://localhost:8081</a>.</p>
+<h4 id="release-build">Release Build</h4>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>The following steps are automated in the <code>Lucene-Net-Website.yml</code> workflow. This workflow runs automatically when a PR or branch that contains website changes is merged/pushed to the <code>master</code> branch. The workflow submits a new PR with the compiled website content to the <code>lucenenet-site</code> repository. The below information is provided in case the automation fails and the release needs to be done manually.</p>
+</div>
 <p>To build the website for release, run the script:</p>
-<pre><code>./websites/site/site.ps1
+<pre><code class="lang-console">./websites/site/site.ps1
 </code></pre>
 <p>This will build the site with all live parameters configured correctly and output the built static site into the <code>_site</code> folder.</p>
 <p>The script parameters are:</p>
@@ -136,20 +161,69 @@
 <li>Review and merge the Pull Request. The new version of the website will be live. If the amount of new files committed is large, the new files may take some time to become live.</li>
 </ul>
 <h2 id="api-docs">API Docs</h2>
+<h3 id="lifecycle-1">Lifecycle</h3>
+<p>The source of truth of an API docs build is the corresponding <code>docs/[PackageVersion]</code> branch. For example, the <code>docs/4.8.0-beta00017</code> branch is set up to build the docs for 4.8.0-beta00017.</p>
+<ul>
+<li>Only documentation-related changes should be committed to docs branches.</li>
+<li>Changes that apply to legacy docs versions may be cherry-picked to older docs branches to build releases for them, but this is optional.</li>
+<li>Docs infrastructure changes generally are committed to <code>master</code> first, then cherry-picked to the relevant <code>docs</code> branches for release. Ensure the <code>master</code> branch contains the docs build infrastructure changes for all future docs API releases.</li>
+</ul>
+<h4 id="release-lifecycle">Release Lifecycle</h4>
+<pre><code>master
+    ↓
+release/x.y.z
+    ↓
+create docs/x.y.z
+    ↓
+cherry-pick documentation fixes
+    ↓
+push docs/x.y.z
+    ↓
+docs workflow
+    ↓
+lucenenet-site PR
+    ↓
+publish docs site
+</code></pre>
+<h4 id="docs-infrastructure-lifecycle">Docs Infrastructure Lifecycle</h4>
+<pre><code>master
+    ↓
+feature branch
+    ↓
+PR
+    ↓
+master
+    ↓
+cherry-pick documentation infrastructure fixes
+    ↓
+checkout docs/x.y.z
+    ↓
+push docs/x.y.z
+    ↓
+docs workflow
+    ↓
+lucenenet-site PR
+    ↓
+publish docs site
+</code></pre>
 <h3 id="build-script-1">Build script</h3>
-<p>To build the api docs and run it on your machine, run the Powershell script: <code>./websites/apidocs/docs.ps1</code>. For example:</p>
-<pre><code>./websites/apidocs/docs.ps1 -ServeDocs -LuceneNetVersion 4.8.0-beta00008 -BaseUrl http://localhost:8080
+<h4 id="local-build-and-host-1">Local Build and Host</h4>
+<p>To build the api docs and run it on your machine, run the PowerShell script: <code>./websites/apidocs/docs.ps1</code>. For example:</p>
+<pre><code class="lang-console">./websites/apidocs/docs.ps1 -ServeDocs -LuceneNetVersion 4.8.0-beta00008 -BaseUrl http://localhost:8080
 </code></pre>
 <p>When executed this will build the site and host it at <a href="http://localhost:8080">http://localhost:8080</a>. <em>(Ensure to pass in the current version of Lucene.Net you are building.)</em></p>
+<h4 id="release-build-1">Release Build</h4>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>The following steps are automated in the <code>Lucene-Net-Documentation.yml</code> workflow. This workflow runs automatically when changes are pushed to the corresponding <code>docs/[Version]</code> branch. The workflow submits a new PR with the compiled API documentation content to the <code>lucenenet-site</code> repository. The below information is provided in case the automation fails and the release needs to be done manually.</p>
+</div>
 <p>To build the api docs for release, run the script:</p>
-<pre><code>./websites/apidocs/docs.ps1 -LuceneNetVersion 4.8.0-beta00008
+<pre><code class="lang-console">./websites/apidocs/docs.ps1 -LuceneNetVersion 4.8.0-beta00008
 </code></pre>
 <p>This will build the site with all live parameters configured correctly and output the built static site into the <code>_site</code> folder.</p>
 <p>The script parameters are:</p>
 <ul>
 <li><code>-LuceneNetVersion</code> <em>(mandatory)</em> This is the Lucene.Net version including pre-release information that is being built. For example: <code>4.8.0-beta00008</code>. <em>(This value will correspond to the folder and branch name where the docs get hosted, see below)</em></li>
-</ul>
-<ul>
 <li><code>-ServeDocs</code> <em>(optional)</em> A boolean switch. If present, it will build the docs and host the site. If not present it will build the static site to be hosted elsewhere.</li>
 <li><code>-Clean</code> <em>(optional)</em> A boolean switch.  If present, it will clear all caches and tool files before it builds again. This is handy if a new version of docfx is available or if there's odd things occurring with the incremental build.</li>
 <li><code>-DisableMetaData</code> <em>(optional)</em> A boolean switch. If present it will disable the docfx metadata build operation of the docs build. Can be handy when debugging the docs build.</li>
@@ -164,9 +238,9 @@
 <li><code>docs.ps1</code> - The build script</li>
 <li><code>docfx.*.json</code> - The DocFx configuration files <em>(see docfx manual for further info)</em>
 <ul>
-<li><code>docfx.{library}.json</code> - Where {library} is an individual Lucene.NET project (i.e. <code>codecs</code>). Each library is built as it's own individual DocFx site and it's xref maps are exported to file to be shared between DocFx builds.</li>
-<li><code>docfx.global.json</code> - Each library DocFx json references this file for global metadata. This is where all global metadata such as Title, Logo, Footer, etc... are declared.</li>
-<li><code>docfx.global.subsite.json</code> - Each library DocFx json references this file for global metadata which denotes the <a href="https://dotnet.github.io/docfx/tutorial/intro_template.html#system-generated-properties"><code>_rel</code></a> (The relative path of the root output folder from current output file. i.e. the base URL). For example: <code>https://lucenenet.apache.org/docs/4.8.0-beta00009/</code>.</li>
+<li><code>docfx.{library}.json</code> - Where {library} is an individual Lucene.NET project (i.e. <code>codecs</code>). Each library is built as its own individual DocFx site and it's xref maps are exported to file to be shared between DocFx builds.</li>
+<li><code>docfx.global.json</code> - Each library DocFx JSON references this file for global metadata. This is where all global metadata such as Title, Logo, Footer, etc... are declared.</li>
+<li><code>docfx.global.subsite.json</code> - Each library DocFx JSON references this file for global metadata which denotes the <a href="https://dotnet.github.io/docfx/tutorial/intro_template.html#system-generated-properties"><code>_rel</code></a> (The relative path of the root output folder from current output file. i.e. the base URL). For example: <code>https://lucenenet.apache.org/docs/4.8.0-beta00009/</code>.</li>
 <li><code>docfx.site.json</code> - Once each library is built and it's xref maps are exported, the main documentation site container is built with this definition.</li>
 </ul>
 </li>
@@ -186,14 +260,14 @@
 <h4 id="manual-execution">Manual execution</h4>
 <p>To use the dotnet tool you must download the current tag of the Java Lucene project, for example: <a href="https://github.com/apache/lucene-solr/releases/tag/releases%2Flucene-solr%2F4.8.1">&quot;4.8.1&quot;</a></p>
 <p>Then install the tool:</p>
-<pre><code>dotnet tool install javadoc2markdown --add-source https://pkgs.dev.azure.com/lucene-net/_packaging/lucene-net-tools/nuget/v3/index.json --tool-path ./
+<pre><code class="lang-console">dotnet tool install javadoc2markdown --add-source https://pkgs.dev.azure.com/lucene-net/_packaging/lucene-net-tools/nuget/v3/index.json --tool-path ./
 </code></pre>
 <p>Then run the command:</p>
-<pre><code>javadoc2markdown &lt;LUCENE DIRECTORY&gt; &lt;LUCENENET DIRECTORY&gt;
+<pre><code class="lang-console">javadoc2markdown &lt;LUCENE DIRECTORY&gt; &lt;LUCENENET DIRECTORY&gt;
 </code></pre>
 <p>Where <code>&lt;LUCENE DIRECTORY&gt;</code> is the <code>lucene</code> sub folder location of the Java Lucene tag downloaded above. The <code>&lt;LUCENENET DIRECTORY&gt;</code> is the folder of your locally checked out Lucene.Net git repository of the documentation tag (i.e. <code>docs/markdown-converted/4.8.1</code>).</p>
 <h4 id="automated-execution">Automated execution</h4>
-<p>A powershell script has been created to automate the above. Execute the <code>./src/docs/convert.ps1</code> script and enter the current Lucene version to convert from. For example, for Lucene.Net 4.8.0 we are converting from the Java Lucene build release of <a href="https://github.com/apache/lucene-solr/releases/tag/releases%2Flucene-solr%2F4.8.1">&quot;4.8.1&quot;</a> so in this case enter: 4.8.1 at the prompt or call the whole script like <code>./src/docs/convert.ps1 -JavaLuceneVersion 4.8.1</code></p>
+<p>A PowerShell script has been created to automate the above. Execute the <code>./src/docs/convert.ps1</code> script and enter the current Lucene version to convert from. For example, for Lucene.Net 4.8.0 we are converting from the Java Lucene build release of <a href="https://github.com/apache/lucene-solr/releases/tag/releases%2Flucene-solr%2F4.8.1">&quot;4.8.1&quot;</a> so in this case enter: 4.8.1 at the prompt or call the whole script like <code>./src/docs/convert.ps1 -JavaLuceneVersion 4.8.1</code></p>
 <h4 id="review-commit-and-merge">Review, commit and merge</h4>
 <p>Once the conversion is done, review, commit and push those changes. Many times there will just be whitespace changes in the files especially if this process has been executed before for the same source/destination version. If this is a new source/destination version there will be a <strong>lot</strong> of file changes, at least one file per folder. If there are formatting issues or irregularities in the converted output then these will need to be addressed by making changes to the conversion tool itself (generally only needed for new major version releases).</p>
 <p>Once pushed, you can merge those changes to the <code>master</code> branch. Doing this may trigger merge conflicts because the documentation files may have been manually edited. In these cases you will need to manually review and fix the merge conflicts with your favorite merge tool ensuring that the most recent manual changes done are kept.</p>
